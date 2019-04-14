@@ -64,10 +64,11 @@ export class MessageTube extends Queue {
 	}
 
 	protected callKillQueuTimeout() {
+		const timeoutMs = this.messagesElapsedTime.length > 4 ? 1002 - this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs() : 100;
 		this.isKillerCalled = setTimeout(() => {
 			this.isKillerCalled = null;
 			this.tryKillQueu();
-		}, Math.max(1002 - this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs(), 0));
+		}, timeoutMs, 0);
 	}
 
 	protected tryKillQueu() {
