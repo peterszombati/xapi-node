@@ -45,8 +45,6 @@ export class SocketConnection extends MessageTube {
 			this.transactions[transactionId].response.data = data;
 			this.transactions[transactionId].response.received = new Time();
 			this.transactions[transactionId].status = TransactionStatus.successful;
-			console.log(this.transactions[transactionId].request.sent.elapsedMs() + ": " + this.transactions[transactionId].command);
-		//	console.log(this.transactions[transactionId]);
 
 			if (this.listeners[command] !== undefined) {
 				this.callListener(command, [data, time, this.transactions[transactionId]]);
