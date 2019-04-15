@@ -1,7 +1,7 @@
 
 import {MessagesQueue} from "../interface/XapiTypeGuard";
-import {Listener} from "../utils/Listener";
-import {Time} from "../utils/Time";
+import {Listener} from "../modules/Listener";
+import {Time} from "../modules/Time";
 
 export class Queue extends Listener {
 	protected messageQueues: MessagesQueue[] = [];

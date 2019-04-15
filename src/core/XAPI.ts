@@ -1,7 +1,7 @@
 import Stream from "./Stream/Stream";
 import Socket from "./Socket/Socket";
 import Utils from "../utils/Utils";
-import {Listener} from "../utils/Listener";
+import {Listener} from "../modules/Listener";
 
 class XAPI extends Listener {
 

@@ -1,8 +1,8 @@
 import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
 import {TransactionStatus} from "../../interface/XapiTypeGuard";
-import {Time} from "../../utils/Time";
-import {WebSocketUtil} from "../../utils/WebSocketUtil";
+import {Time} from "../../modules/Time";
+import {WebSocketModule} from "../../modules/WebSocketModule";
 
 export class StreamConnection extends MessageTube{
 	private XAPI: XAPI;
@@ -22,7 +22,7 @@ export class StreamConnection extends MessageTube{
 	}
 
 	public connect() {
-		this.WebSocket = new WebSocketUtil("wss://ws.xapi.pro/" + this.XAPI.getAccountType() + "Stream");
+		this.WebSocket = new WebSocketModule("wss://ws.xapi.pro/" + this.XAPI.getAccountType() + "Stream");
 		this.WebSocket.onOpen(() => {
 			this.handleSocketOpen(new Time());
 		});

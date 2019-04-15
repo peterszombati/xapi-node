@@ -43,7 +43,7 @@ import {
 } from '../../interface/Request';
 import {CMD_FIELD, PERIOD_FIELD} from '../../enum/Enum';
 import {SocketConnection} from "./SocketConnection";
-import {Time} from "../../utils/Time";
+import {Time} from "../../modules/Time";
 
 class Socket extends SocketConnection {
 

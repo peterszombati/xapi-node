@@ -1,4 +1,4 @@
-import {Time} from "../utils/Time";
+import {Time} from "../modules/Time";
 
 export interface Transactions {
 	[transactionId: string]: Transaction

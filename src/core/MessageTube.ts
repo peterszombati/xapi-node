@@ -1,14 +1,14 @@
 import {Transaction, Transactions, TransactionStatus} from "../interface/XapiTypeGuard";
 import {Queue} from "./Queue";
-import {Time} from "../utils/Time";
-import {WebSocketUtil} from "../utils/WebSocketUtil";
+import {Time} from "../modules/Time";
+import {WebSocketModule} from "../modules/WebSocketModule";
 
 export class MessageTube extends Queue {
 
 	public transactions: Transactions = {};
 	private _lastReceivedMessage: Time = new Time(false);
 	public get lastReceivedMessage() { return this._lastReceivedMessage; }
-	protected WebSocket: WebSocketUtil ;
+	protected WebSocket: WebSocketModule ;
 
 	constructor() {
 		super();
