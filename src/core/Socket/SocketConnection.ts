@@ -89,7 +89,8 @@ export class SocketConnection extends MessageTube {
 		this.status = false;
 		this.resetMessageTube();
 		for (const transactionId in this.transactions) {
-			if (this.transactions[transactionId].status === TransactionStatus.waiting) {
+			if (this.transactions[transactionId].status === TransactionStatus.waiting
+			||	this.transactions[transactionId].status === TransactionStatus.sent) {
 				this.transactions[transactionId].status = TransactionStatus.timeout;
 			}
 		}
