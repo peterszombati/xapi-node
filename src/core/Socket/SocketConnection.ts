@@ -1,5 +1,5 @@
 
-import {TransactionStatus} from "../../interface/XapiTypeGuard";
+import {Transaction, TransactionStatus} from "../../interface/XapiTypeGuard";
 import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
@@ -38,16 +38,18 @@ export class SocketConnection extends MessageTube {
 		return { transactionId, command };
 	}
 
-	private handleData(data: any, customTag: string, time: Time) {
+	private handleData(returnData: any, customTag: string, time: Time) {
 		const { transactionId, command } = this.getInfo(customTag);
 
 		if (transactionId !== null) {
-			this.transactions[transactionId].response.data = data;
+			this.transactions[transactionId].response.data = returnData;
 			this.transactions[transactionId].response.received = new Time();
 			this.transactions[transactionId].status = TransactionStatus.successful;
 
+			this.resolveTransaction(returnData, time, this.transactions[transactionId]);
+
 			if (this.listeners[command] !== undefined) {
-				this.callListener(command, [data, time, this.transactions[transactionId]]);
+				this.callListener(command, [returnData, time, this.transactions[transactionId]]);
 			} else {
 				console.error('Unhandled message (customTag = ' + customTag + ')');
 			}
@@ -92,6 +94,7 @@ export class SocketConnection extends MessageTube {
 			if (this.transactions[transactionId].status === TransactionStatus.waiting
 			||	this.transactions[transactionId].status === TransactionStatus.sent) {
 				this.transactions[transactionId].status = TransactionStatus.timeout;
+				this.rejectTransaction("Socket closed", this.transactions[transactionId]);
 			}
 		}
 		setTimeout(() => {
@@ -99,7 +102,13 @@ export class SocketConnection extends MessageTube {
 		}, 2000);
 	}
 
-	private handleError(code: any, explain: any, time: Time) {
+	private handleError(code: any, explain: any, customTag: string, time: Time) {
+		const { transactionId, command } = this.getInfo(customTag);
+
+		if (transactionId !== null) {
+			this.transactions[transactionId].status = TransactionStatus.timeout;
+			this.rejectTransaction({code, explain}, this.transactions[transactionId]);
+		}
 		console.error(`code = '${code}' explain = '${explain}' time = '${time.getUTC()}'`);
 	}
 
@@ -121,32 +130,37 @@ export class SocketConnection extends MessageTube {
 		} else if (message.status !== undefined
 			&& message.errorCode !== undefined
 			&& message.errorDescr !== undefined) {
-			this.handleError(message.errorCode, message.errorDescr, time);
+			const { errorCode, errorDescr, customTag } = message;
+			this.handleError(errorCode, errorDescr, customTag, time);
 		}
 	}
 
-	protected sendCommand(command: string, args: any = {}, transactionId: string = null): string {
-		if (transactionId === null) {
-			transactionId = this.XAPI.createTransactionId();
-		}
-		const customTag = command + '_' + transactionId;
-		const json = JSON.stringify({
-			command,
-			arguments: (Object.keys(args).length === 0) ? undefined : args,
-			customTag });
-		this.addTransaction({
-			command,
-			isStream: false,
-			request: { data: json, arguments: args, sent: null },
-			response: { data: null, received: null },
-			transactionId,
-			createdAt: new Time(),
-			status: TransactionStatus.waiting
-		}, transactionId);
+	protected sendCommand<T>(command: string, args: any = {}, transactionId: string = null):
+		Promise<{ returnData: T, time: Time, transaction: Transaction<null> }> {
+		return new Promise((resolve, reject) => {
+			if (transactionId === null) {
+				transactionId = this.XAPI.createTransactionId();
+			}
 
-		this.sendJSON(command, json, transactionId);
+			const customTag = command + '_' + transactionId;
+			const json = JSON.stringify({
+				command,
+				arguments: (Object.keys(args).length === 0) ? undefined : args,
+				customTag });
 
-		return transactionId;
+			this.addTransaction<T>({
+				command,
+				isStream: false,
+				request: { data: json, arguments: args, sent: null },
+				response: { data: null, received: null },
+				transactionId,
+				createdAt: new Time(),
+				status: TransactionStatus.waiting,
+				promise: { resolve, reject }
+			}, transactionId);
+
+			this.sendJSON(command, json, transactionId);
+		});
 	}
 
 }

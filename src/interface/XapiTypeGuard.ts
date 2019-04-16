@@ -1,7 +1,7 @@
 import {Time} from "../modules/Time";
 
 export interface Transactions {
-	[transactionId: string]: Transaction
+	[transactionId: string]: Transaction<any>
 }
 
 
@@ -11,7 +11,7 @@ export interface MessagesQueue {
 	json: string
 }
 
-export interface Transaction {
+export interface Transaction<T> {
 	status: TransactionStatus,
 	command: string
 	createdAt: Time
@@ -25,6 +25,10 @@ export interface Transaction {
 	response: {
 		received: Time
 		data: string
+	}
+	promise: {
+		resolve: null | ((resolve: { returnData: T, time: Time, transaction: Transaction<null>}) => void),
+		reject: null | ((reject: { reason: any, transaction: Transaction<null>}) => void)
 	}
 }
 

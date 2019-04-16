@@ -14,7 +14,7 @@ export class MessageTube extends Queue {
 		super();
 	}
 
-	public addTransaction(transaction: Transaction, transactionId: string): void {
+	public addTransaction<T>(transaction: Transaction<T>, transactionId: string): void {
 		this.transactions[transactionId] = transaction;
 	}
 
@@ -27,11 +27,29 @@ export class MessageTube extends Queue {
 		return true;
 	}
 
+	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any>) {
+		if (transaction.promise.resolve !== null) {
+			const resolve = transaction.promise.resolve;
+			transaction.promise = { resolve: null, reject: null };
+			resolve({returnData, time, transaction: transaction});
+		}
+	}
+
+	protected rejectTransaction(reason: any, transaction: Transaction<any>) {
+		if (transaction.promise.reject !== null) {
+			const reject = transaction.promise.reject;
+			transaction.promise = { resolve: null, reject: null };
+			reject({ reason, transaction });
+		}
+	}
+
 	protected sendJSON(command: string, json: string, transactionId: string, addQueu: boolean = true): boolean {
 		if (json.length > 1000) {
-			console.error(`Each command invocation should not contain more than 1kB of data. (length = ${json.length}, transactionId = ${transactionId})`);
+			const reason = `Each command invocation should not contain more than 1kB of data. (length = ${json.length}, transactionId = ${transactionId})`;
+			console.error(reason);
 			if (this.transactions[transactionId] !== undefined) {
 				this.transactions[transactionId].status = TransactionStatus.timeout;
+				this.rejectTransaction(reason, this.transactions[transactionId]);
 			}
 			return false;
 		}

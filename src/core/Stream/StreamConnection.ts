@@ -81,7 +81,8 @@ export class StreamConnection extends MessageTube{
 			response: { data: null, received: null },
 			transactionId,
 			createdAt: new Time(),
-			status: TransactionStatus.waiting
+			status: TransactionStatus.waiting,
+			promise: { resolve: null, reject: null }
 		}, transactionId);
 
 		this.sendJSON(command, json, transactionId);
