@@ -8,7 +8,7 @@ WebSocket communication docs: http://developers.xstore.pro/documentation/
 
 ### Example usage
 ```ts
-const x = new XAPI("accountID", "password", "real");
+const x = new XAPI("(xStation5) accountID", "(xStation5) password", "real");
 
 x.connect();
 
