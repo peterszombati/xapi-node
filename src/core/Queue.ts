@@ -10,10 +10,10 @@ export class Queue extends Listener {
 	protected isKillerCalled: any = null;
 
 	protected addQueu(command: string, transactionId: string, json: string) {
-		if (this.messageQueues.length < 200) {
+		if (this.messageQueues.length < 150) {
 			this.messageQueues.push({command, transactionId, json});
 		} else if (this.messageQueuesWarning == null || this.messageQueuesWarning.elapsedMs() > 10000) {
-			console.error(`messageQueues length exceeded 200 (length = ${this.messageQueues.length})`);
+			console.error(`messageQueues length exceeded 150 (length = ${this.messageQueues.length})`);
 			this.messageQueuesWarning = new Time();
 		}
 	}
