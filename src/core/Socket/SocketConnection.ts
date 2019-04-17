@@ -51,10 +51,10 @@ export class SocketConnection extends MessageTube {
 			if (this.listeners[command] !== undefined) {
 				this.callListener(command, [returnData, time, this.transactions[transactionId]]);
 			} else {
-				console.error('Unhandled message (customTag = ' + customTag + ')');
+				//TODO: console.error('Unhandled message (customTag = ' + customTag + ')');
 			}
 		} else {
-			console.error('Received a message without vaild customTag (customTag = ' + customTag + ')');
+			//TODO: console.error('Received a message without vaild customTag (customTag = ' + customTag + ')');
 		}
 	}
 
@@ -109,7 +109,7 @@ export class SocketConnection extends MessageTube {
 			this.transactions[transactionId].status = TransactionStatus.timeout;
 			this.rejectTransaction({code, explain}, this.transactions[transactionId]);
 		}
-		console.error(`code = '${code}' explain = '${explain}' time = '${time.getUTC()}'`);
+		//TODO: console.error(`code = '${code}' explain = '${explain}' time = '${time.getUTC()}'`);
 	}
 
 	private handleSocketError(error: any, time: Time) {
