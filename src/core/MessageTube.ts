@@ -46,7 +46,7 @@ export class MessageTube extends Queue {
 	protected sendJSON(command: string, json: string, transactionId: string, addQueu: boolean = true): boolean {
 		if (json.length > 1000) {
 			const reason = `Each command invocation should not contain more than 1kB of data. (length = ${json.length}, transactionId = ${transactionId})`;
-			console.error(reason);
+			//TODO: console.error(reason);
 			if (this.transactions[transactionId] !== undefined) {
 				this.transactions[transactionId].status = TransactionStatus.timeout;
 				this.rejectTransaction(reason, this.transactions[transactionId]);

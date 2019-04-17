@@ -4,7 +4,6 @@ export interface Transactions {
 	[transactionId: string]: Transaction<any>
 }
 
-
 export interface MessagesQueue {
 	command: string
 	transactionId: string
