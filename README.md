@@ -1,10 +1,10 @@
 # xapi-node
 
-this package is make possible to execute order or limit orders from NodeJS through WebSocket connection
+This package is make possible to get data from market, execute order or limit orders with NodeJS through WebSocket connection
 
-and its compatible with [X-Trade Brokers](https://www.xtb.com/en) xStation5 platform
+It can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
-WebSocket communication docs: http://developers.xstore.pro/documentation/
+WebSocket communication documentation: http://developers.xstore.pro/documentation/
 
 ### Example usage
 ```ts
