@@ -93,7 +93,6 @@ export class SocketConnection extends MessageTube {
 		for (const transactionId in this.transactions) {
 			if (this.transactions[transactionId].status === TransactionStatus.waiting
 			||	this.transactions[transactionId].status === TransactionStatus.sent) {
-				this.transactions[transactionId].status = TransactionStatus.timeout;
 				this.rejectTransaction("Socket closed", this.transactions[transactionId]);
 			}
 		}
@@ -106,7 +105,6 @@ export class SocketConnection extends MessageTube {
 		const { transactionId, command } = this.getInfo(customTag);
 
 		if (transactionId !== null) {
-			this.transactions[transactionId].status = TransactionStatus.timeout;
 			this.rejectTransaction({code, explain}, this.transactions[transactionId]);
 		}
 		//TODO: console.error(`code = '${code}' explain = '${explain}' time = '${time.getUTC()}'`);

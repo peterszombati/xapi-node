@@ -36,6 +36,7 @@ export class MessageTube extends Queue {
 	}
 
 	protected rejectTransaction(reason: any, transaction: Transaction<any>) {
+		transaction.status = TransactionStatus.timeout;
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;
 			transaction.promise = { resolve: null, reject: null };
@@ -48,7 +49,6 @@ export class MessageTube extends Queue {
 			const reason = `Each command invocation should not contain more than 1kB of data. (length = ${json.length}, transactionId = ${transactionId})`;
 			//TODO: console.error(reason);
 			if (this.transactions[transactionId] !== undefined) {
-				this.transactions[transactionId].status = TransactionStatus.timeout;
 				this.rejectTransaction(reason, this.transactions[transactionId]);
 			}
 			return false;
