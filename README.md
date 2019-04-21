@@ -6,6 +6,8 @@ It can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
 WebSocket communication documentation: http://developers.xstore.pro/documentation/
 
+This is only source code, more details will be released later.
+
 ### Example usage
 ```ts
 const x = new XAPI("(xStation5) accountID", "(xStation5) password", "real");
