@@ -45,6 +45,8 @@ import {CMD_FIELD, PERIOD_FIELD} from '../../enum/Enum';
 import {SocketConnection} from "./SocketConnection";
 import {Time} from "../../modules/Time";
 
+interface SocketListen<T> { (data: T, time: Time, transaction: Transaction<null>): void }
+
 class Socket extends SocketConnection {
 
 	constructor(XAPI: XAPI) {
@@ -52,73 +54,73 @@ class Socket extends SocketConnection {
 	}
 
 	public listen = {
-		getAllSymbols: (callBack: (data: SYMBOL_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getAllSymbols: (callBack: SocketListen<SYMBOL_RECORD[]>, key: string = undefined) => {
 			this.addListener('getAllSymbols', callBack, key);
 		},
-		getCalendar: (callBack: (data: CALENDAR_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getCalendar: (callBack: SocketListen<CALENDAR_RECORD[]>, key: string = undefined) => {
 			this.addListener('getCalendar', callBack, key);
 		},
-		getChartLastRequest: (callBack: (data: getChartLastRequestResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getChartLastRequest: (callBack: SocketListen<getChartLastRequestResponse>, key: string = undefined) => {
 			this.addListener('getChartLastRequest', callBack, key);
 		},
-		getChartRangeRequest: (callBack: (data: getChartRangeRequestResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getChartRangeRequest: (callBack: SocketListen<getChartRangeRequestResponse>, key: string = undefined) => {
 			this.addListener('getChartRangeRequest', callBack, key);
 		},
-		getCommissionDef: (callBack: (data: getCommissionDefResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getCommissionDef: (callBack: SocketListen<getCommissionDefResponse>, key: string = undefined) => {
 			this.addListener('getCommissionDef', callBack, key);
 		},
-		getCurrentUserData: (callBack: (data: getCurrentUserDataResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getCurrentUserData: (callBack: SocketListen<getCurrentUserDataResponse>, key: string = undefined) => {
 			this.addListener('getCurrentUserData', callBack, key);
 		},
-		getIbsHistory: (callBack: (data: IB_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getIbsHistory: (callBack: SocketListen<IB_RECORD[]>, key: string = undefined) => {
 			this.addListener('getIbsHistory', callBack, key);
 		},
-		getMarginLevel: (callBack: (data: getMarginLevelResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getMarginLevel: (callBack: SocketListen<getMarginLevelResponse>, key: string = undefined) => {
 			this.addListener('getMarginLevel', callBack, key);
 		},
-		getMarginTrade: (callBack: (data: getMarginTradeResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getMarginTrade: (callBack: SocketListen<getMarginTradeResponse>, key: string = undefined) => {
 			this.addListener('getMarginTrade', callBack, key);
 		},
-		getNews: (callBack: (data: NEWS_TOPIC_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getNews: (callBack: SocketListen<NEWS_TOPIC_RECORD[]>, key: string = undefined) => {
 			this.addListener('getNews', callBack, key);
 		},
-		getProfitCalculation: (callBack: (data: getProfitCalculationResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getProfitCalculation: (callBack: SocketListen<getProfitCalculationResponse>, key: string = undefined) => {
 			this.addListener('getProfitCalculation', callBack, key);
 		},
-		getServerTime: (callBack: (data: getServerTimeResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getServerTime: (callBack: SocketListen<getServerTimeResponse>, key: string = undefined) => {
 			this.addListener('getServerTime', callBack, key);
 		},
-		getStepRules: (callBack: (data: STEP_RULE_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getStepRules: (callBack: SocketListen<STEP_RULE_RECORD[]>, key: string = undefined) => {
 			this.addListener('getStepRules', callBack, key);
 		},
-		getSymbol: (callBack: (data: SYMBOL_RECORD, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getSymbol: (callBack: SocketListen<SYMBOL_RECORD>, key: string = undefined) => {
 			this.addListener('getSymbol', callBack, key);
 		},
-		getTickPrices: (callBack: (data: getTickPricesResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getTickPrices: (callBack: SocketListen<getTickPricesResponse>, key: string = undefined) => {
 			this.addListener('getTickPrices', callBack, key);
 		},
-		getTradeRecords: (callBack: (data: TRADE_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getTradeRecords: (callBack: SocketListen<TRADE_RECORD[]>, key: string = undefined) => {
 			this.addListener('getTradeRecords', callBack, key);
 		},
-		getTrades: (callBack: (data: TRADE_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getTrades: (callBack: SocketListen<TRADE_RECORD[]>, key: string = undefined) => {
 			this.addListener('getTrades', callBack, key);
 		},
-		getTradesHistory: (callBack: (data: TRADE_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getTradesHistory: (callBack: SocketListen<TRADE_RECORD[]>, key: string = undefined) => {
 			this.addListener('getTradesHistory', callBack, key);
 		},
-		getTradingHours: (callBack: (data: TRADING_HOURS_RECORD[], time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getTradingHours: (callBack: SocketListen<TRADING_HOURS_RECORD[]>, key: string = undefined) => {
 			this.addListener('getTradingHours', callBack, key);
 		},
-		getVersion: (callBack: (data: getVersionResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		getVersion: (callBack: SocketListen<getVersionResponse>, key: string = undefined) => {
 			this.addListener('getVersion', callBack, key);
 		},
-		tradeTransaction: (callBack: (data: tradeTransactionResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		tradeTransaction: (callBack: SocketListen<tradeTransactionResponse>, key: string = undefined) => {
 			this.addListener('tradeTransaction', callBack, key);
 		},
-		tradeTransactionStatus: (callBack: (data: tradeTransactionStatusResponse, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		tradeTransactionStatus: (callBack: SocketListen<tradeTransactionStatusResponse>, key: string = undefined) => {
 			this.addListener('tradeTransactionStatus', callBack, key);
 		},
-		ping: (callBack: (data: any, time: Time, transaction: Transaction<null>) => void, key: string = undefined) => {
+		ping: (callBack: SocketListen<any>, key: string = undefined) => {
 			this.addListener('ping', callBack, key);
 		}
 	};
