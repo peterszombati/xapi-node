@@ -31,7 +31,7 @@ export class MessageTube extends Queue {
 		if (transaction.promise.resolve !== null) {
 			const resolve = transaction.promise.resolve;
 			transaction.promise = { resolve: null, reject: null };
-			resolve({returnData, time, transaction: transaction});
+			resolve({returnData, time, transaction});
 		}
 	}
 

@@ -226,7 +226,6 @@ export interface STREAMING_TICK_RECORD {
 	timestamp: number
 }
 
-
 export interface TRADE_RECORD {
 	close_price: number
 	close_time: number

@@ -28,11 +28,11 @@ export class Time {
 		this.UTCTimestamp = Date.now();
 	}
 
-	public get(): Date {
+	public get(): Date | null {
 		return (this.unit == null) ? null : new Date(Date.now() - calculateElapsedTime(this.unit));
 	}
 
-	public elapsedMs(): number {
+	public elapsedMs(): number | null {
 		return (this.unit == null) ? null : calculateElapsedTime(this.unit);
 	}
 
