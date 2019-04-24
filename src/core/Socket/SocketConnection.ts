@@ -42,9 +42,11 @@ export class SocketConnection extends MessageTube {
 		const { transactionId, command } = this.getInfo(customTag);
 
 		if (transactionId !== null) {
-			this.transactions[transactionId].response.data = returnData;
-			this.transactions[transactionId].response.received = new Time();
-			this.transactions[transactionId].status = TransactionStatus.successful;
+			this.transactions[transactionId].response = {
+				status: true,
+				received: new Time(),
+				json: returnData
+			};
 
 			this.resolveTransaction(returnData, time, this.transactions[transactionId]);
 
@@ -93,7 +95,7 @@ export class SocketConnection extends MessageTube {
 		for (const transactionId in this.transactions) {
 			if (this.transactions[transactionId].status === TransactionStatus.waiting
 			||	this.transactions[transactionId].status === TransactionStatus.sent) {
-				this.rejectTransaction("Socket closed", this.transactions[transactionId]);
+				this.rejectTransaction({ code: "NODEJS1", explain: "Socket closed"}, this.transactions[transactionId]);
 			}
 		}
 		setTimeout(() => {
@@ -102,10 +104,15 @@ export class SocketConnection extends MessageTube {
 	}
 
 	private handleError(code: any, explain: any, customTag: string, time: Time) {
-		const { transactionId, command } = this.getInfo(customTag);
+		const { transactionId } = this.getInfo(customTag);
 
 		if (transactionId !== null) {
-			this.rejectTransaction({code, explain}, this.transactions[transactionId]);
+			this.transactions[transactionId].response = {
+				status: false,
+				json: { code, explain },
+				received: new Time()
+			};
+			this.rejectTransaction({ code, explain }, this.transactions[transactionId]);
 		}
 		//TODO: console.error(`code = '${code}' explain = '${explain}' time = '${time.getUTC()}'`);
 	}
@@ -149,8 +156,8 @@ export class SocketConnection extends MessageTube {
 			this.addTransaction<T>({
 				command,
 				isStream: false,
-				request: { data: json, arguments: args, sent: null },
-				response: { data: null, received: null },
+				request: { json: json, arguments: args, sent: null },
+				response: { json: null, received: null, status: null },
 				transactionId,
 				createdAt: new Time(),
 				status: TransactionStatus.waiting,

@@ -28,6 +28,7 @@ export class MessageTube extends Queue {
 	}
 
 	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any>) {
+		transaction.status = TransactionStatus.successful;
 		if (transaction.promise.resolve !== null) {
 			const resolve = transaction.promise.resolve;
 			transaction.promise = { resolve: null, reject: null };
@@ -35,7 +36,7 @@ export class MessageTube extends Queue {
 		}
 	}
 
-	protected rejectTransaction(reason: any, transaction: Transaction<any>) {
+	protected rejectTransaction(reason: { code: string, explain: string }, transaction: Transaction<any>) {
 		transaction.status = TransactionStatus.timeout;
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;
@@ -46,10 +47,14 @@ export class MessageTube extends Queue {
 
 	protected sendJSON(command: string, json: string, transactionId: string, addQueu: boolean = true): boolean {
 		if (json.length > 1000) {
-			const reason = `Each command invocation should not contain more than 1kB of data. (length = ${json.length}, transactionId = ${transactionId})`;
-			//TODO: console.error(reason);
+			const reason = "Each command invocation should not contain more than 1kB of data.";
 			if (this.transactions[transactionId] !== undefined) {
-				this.rejectTransaction(reason, this.transactions[transactionId]);
+				this.transactions[transactionId].response = {
+					status: false,
+					received: new Time(),
+					json: { code: "NODEJS", explain: reason }
+				};
+				this.rejectTransaction({ code: "NODEJS0", explain: reason }, this.transactions[transactionId]);
 			}
 			return false;
 		}
@@ -72,7 +77,7 @@ export class MessageTube extends Queue {
 		}
 
 		if (addQueu) {
-			this.addQueu(command, transactionId, json);
+			this.addQueu(transactionId);
 		}
 
 		if (this.messageQueues.length > 0 && this.isKillerCalled === null) {
@@ -94,7 +99,8 @@ export class MessageTube extends Queue {
 			return;
 		}
 		for (let i = 0; i < this.messageQueues.length; i++) {
-			const { command, json, transactionId} = this.messageQueues[i];
+			const { transactionId } = this.messageQueues[i];
+			const { request: { json }, command } = this.transactions[transactionId];
 			const isSent = this.sendJSON(command, json, transactionId, false);
 			if (isSent) {
 				this.messageQueues.splice(i, 1);

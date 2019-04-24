@@ -5,9 +5,7 @@ export interface Transactions {
 }
 
 export interface MessagesQueue {
-	command: string
 	transactionId: string
-	json: string
 }
 
 export interface Transaction<T> {
@@ -19,15 +17,16 @@ export interface Transaction<T> {
 	request: {
 		sent: Time,
 		arguments: any
-		data: string
+		json: any
 	},
 	response: {
+		status: boolean
 		received: Time
-		data: string
+		json: any
 	}
 	promise: {
 		resolve: null | ((resolve: { returnData: T, time: Time, transaction: Transaction<null>}) => void),
-		reject: null | ((reject: { reason: any, transaction: Transaction<null>}) => void)
+		reject: null | ((reject: { reason: { code: string, explain: string }, transaction: Transaction<null>}) => void)
 	}
 }
 

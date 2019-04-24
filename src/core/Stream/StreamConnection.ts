@@ -77,8 +77,8 @@ export class StreamConnection extends MessageTube{
 		this.addTransaction({
 			command,
 			isStream: true,
-			request: { data: json, arguments: completion, sent: null},
-			response: { data: null, received: null },
+			request: { json, arguments: completion, sent: null},
+			response: { json: null, received: null, status: null },
 			transactionId,
 			createdAt: new Time(),
 			status: TransactionStatus.waiting,
