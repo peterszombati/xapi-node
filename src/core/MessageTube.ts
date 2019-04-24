@@ -113,10 +113,4 @@ export class MessageTube extends Queue {
 		}
 	}
 
-	protected resetMessageTube() {
-		this.messageQueues = [];
-		this.messagesElapsedTime = [];
-		this.stopQueuKiller();
-	}
-
 }

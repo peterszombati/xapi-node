@@ -35,4 +35,10 @@ export class Queue extends Listener {
 			clearTimeout(this.isKillerCalled);
 		}
 	}
+
+	protected resetMessageTube() {
+		this.messageQueues = [];
+		this.messagesElapsedTime = [];
+		this.stopQueuKiller();
+	}
 }
