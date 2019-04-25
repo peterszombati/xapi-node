@@ -44,7 +44,7 @@ export class SocketConnection extends MessageTube {
 		if (transactionId !== null) {
 			this.transactions[transactionId].response = {
 				status: true,
-				received: new Time(),
+				received: time,
 				json: returnData
 			};
 
@@ -114,11 +114,10 @@ export class SocketConnection extends MessageTube {
 			};
 			this.rejectTransaction({ code, explain }, this.transactions[transactionId]);
 		}
-		//TODO: console.error(`code = '${code}' explain = '${explain}' time = '${time.getUTC()}'`);
 	}
 
 	private handleSocketError(error: any, time: Time) {
-		//console.error(error);
+		//TODO: console.error(error);
 	}
 
 	private handleSocketMessage(message: any, time: Time) {
@@ -156,7 +155,7 @@ export class SocketConnection extends MessageTube {
 			this.addTransaction<T>({
 				command,
 				isStream: false,
-				request: { json: json, arguments: args, sent: null },
+				request: { json, arguments: args, sent: null },
 				response: { json: null, received: null, status: null },
 				transactionId,
 				createdAt: new Time(),
