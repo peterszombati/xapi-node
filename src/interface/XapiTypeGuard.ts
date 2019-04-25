@@ -35,4 +35,5 @@ export enum TransactionStatus {
 	sent = 1,
 	successful = 2,
 	timeout = 3,
+	interrupted = 4
 }

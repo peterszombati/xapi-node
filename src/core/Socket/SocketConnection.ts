@@ -93,9 +93,9 @@ export class SocketConnection extends MessageTube {
 		this.status = false;
 		this.resetMessageTube();
 		for (const transactionId in this.transactions) {
-			if (this.transactions[transactionId].status === TransactionStatus.waiting
-			||	this.transactions[transactionId].status === TransactionStatus.sent) {
-				this.rejectTransaction({ code: "NODEJS1", explain: "Socket closed"}, this.transactions[transactionId]);
+			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
+			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
+				this.rejectTransaction({ code: "NODEJS1", explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
 			}
 		}
 		setTimeout(() => {

@@ -36,8 +36,8 @@ export class MessageTube extends Queue {
 		}
 	}
 
-	protected rejectTransaction(reason: { code: string, explain: string }, transaction: Transaction<any>) {
-		transaction.status = TransactionStatus.timeout;
+	protected rejectTransaction(reason: { code: string, explain: string }, transaction: Transaction<any>, interrupted: boolean = false ) {
+		transaction.status = interrupted === false ? TransactionStatus.timeout : TransactionStatus.interrupted;
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;
 			transaction.promise = { resolve: null, reject: null };
