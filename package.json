@@ -2,8 +2,8 @@
   "name": "xapi-node",
   "version": "1.0.2",
   "description": "This package is make possible to get data from market, execute order or limit orders with NodeJS through WebSocket connection",
-  "main": "build/core/XAPI.js",
-  "types": "build/core/XAPI.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "dependencies": {
     "@types/node": "^11.13.7",
     "ws": "^6.2.1"
