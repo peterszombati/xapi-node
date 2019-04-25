@@ -29,15 +29,21 @@ class XAPI extends Listener {
 			}
 
 			this.pingTimer = setInterval(() => {
-				this.Socket.ping();
-				this.Stream.ping();
+				if (this.Socket.status) {
+					this.Socket.ping();
+				}
+				if (this.Stream.status) {
+					this.Stream.ping();
+				}
 				setTimeout(() => {
 					if (this.Socket.status) {
 						this.Socket.send.getServerTime();
 					}
 				}, 1000);
 				setTimeout(() => {
-					this.Socket.send.getTrades();
+					if (this.Socket.status) {
+						this.Socket.send.getTrades();
+					}
 				}, 2000);
 			}, 19000);
 		}, "constructor");
