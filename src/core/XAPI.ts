@@ -3,7 +3,7 @@ import Socket from "./Socket/Socket";
 import Utils from "../utils/Utils";
 import {Listener} from "../modules/Listener";
 
-class XAPI extends Listener {
+export class XAPI extends Listener {
 
 	public Stream: Stream;
 	public Socket: Socket;
