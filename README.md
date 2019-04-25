@@ -6,15 +6,15 @@ It can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
 WebSocket communication documentation: http://developers.xstore.pro/documentation/
 
-### Getting started
+## Getting started
 
-## 1. Install 
+### 1. Install 
 
 ```
 npm i xapi-node
 ```
 
-## 2. Example usage
+### 2. Example usage
 ```ts
 const XAPI = require('xapi-node');
 
