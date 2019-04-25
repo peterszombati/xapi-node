@@ -1,3 +1,1 @@
-import XAPI from "./core/XAPI";
-
-module.exports = XAPI;
+module.exports = require('./core/XAPI');
