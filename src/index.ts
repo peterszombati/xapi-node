@@ -1,1 +1,3 @@
-module.exports = require('./core/XAPI');
+import XAPI from "./core/XAPI";
+
+export default XAPI;
