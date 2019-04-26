@@ -107,6 +107,18 @@ export class XAPI extends Listener {
 		this.Socket.connect();
 	}
 
+	public disconnect() {
+		if (this.Socket.status) {
+			this.Socket.logout().finally(() => {
+				this.Socket.closeConnection();
+			});
+		} else {
+			this.Socket.closeConnection();
+		}
+		this.Stream.closeConnection();
+		this.account.session = '';
+	}
+
 	public onReady(callBack: () => void, key: string = "default") {
 		if (this.getSession().length > 0 && this.Socket.status && this.Stream.status) {
 			callBack();
