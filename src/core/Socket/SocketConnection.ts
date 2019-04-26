@@ -167,4 +167,8 @@ export class SocketConnection extends MessageTube {
 		});
 	}
 
+	public closeConnection() {
+		this.WebSocket.close();
+	}
+
 }

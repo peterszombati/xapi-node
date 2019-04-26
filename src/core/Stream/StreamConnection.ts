@@ -90,4 +90,8 @@ export class StreamConnection extends MessageTube{
 		return transactionId;
 	}
 
+	public closeConnection() {
+		this.WebSocket.close();
+	}
+
 }
