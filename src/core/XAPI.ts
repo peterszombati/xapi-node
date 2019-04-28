@@ -109,7 +109,9 @@ export class XAPI extends Listener {
 
 	public disconnect() {
 		if (this.Socket.status) {
-			this.Socket.logout().finally(() => {
+			this.Socket.logout().then(() => {
+				this.Socket.closeConnection();
+			}).catch(() => {
 				this.Socket.closeConnection();
 			});
 		} else {
