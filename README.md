@@ -16,7 +16,8 @@ npm i xapi-node
 
 ### 2. Example usage
 ```ts
-const XAPI = require('xapi-node');
+// TypeScript
+import XAPI from "xapi-node";
 
 const x = new XAPI("(xStation5) accountID", "(xStation5) password", "real");
 
