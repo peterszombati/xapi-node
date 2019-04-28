@@ -1,8 +1,6 @@
 import XAPI from '../XAPI';
 import {
 	CALENDAR_RECORD,
-	getChartLastRequest,
-	getChartRangeRequest,
 	IB_RECORD,
 	NEWS_TOPIC_RECORD,
 	STEP_RULE_RECORD,

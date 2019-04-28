@@ -286,11 +286,3 @@ export interface STREAMING_TRADE_RECORD {
 	type: number
 	state: string
 }
-
-export interface getChartLastRequest {
-	info: CHART_LAST_INFO_RECORD
-}
-
-export interface getChartRangeRequest {
-	info: CHART_RANGE_INFO_RECORD
-}
