@@ -1,4 +1,4 @@
-export const enum Candle {
+export enum Candle {
 	timestamp = 0,
 	open = 1,
 	close = 2,
