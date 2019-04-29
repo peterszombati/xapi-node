@@ -1,11 +1,11 @@
-export enum REQUEST_STATUS_FIELD {
+export const enum REQUEST_STATUS_FIELD {
 	ERROR = 0,
 	PENDING = 1,
 	ACCEPTED = 3,
 	REJECTED = 4
 }
 
-export enum DAY_FIELD {
+export const enum DAY_FIELD {
 	MONDAY = 1,
 	TUESDAY = 2,
 	WEDNESDAY = 3,
@@ -15,7 +15,7 @@ export enum DAY_FIELD {
 	SUNDAY = 7
 }
 
-export enum CMD_FIELD {
+export const enum CMD_FIELD {
 	BUY = 0,
 	SELL = 1,
 	BUY_LIMIT = 2,
@@ -26,7 +26,7 @@ export enum CMD_FIELD {
 	CREDIT = 7
 }
 
-export enum TYPE_FIELD {
+export const enum TYPE_FIELD {
 	OPEN = 0,
 	PENDING = 1,
 	CLOSE = 2,
@@ -34,7 +34,7 @@ export enum TYPE_FIELD {
 	DELETE = 4
 }
 
-export enum PERIOD_FIELD {
+export const enum PERIOD_FIELD {
 	PERIOD_M1 = 1,
 	PERIOD_M5 = 5,
 	PERIOD_M15 = 15,
