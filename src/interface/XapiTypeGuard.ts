@@ -17,7 +17,7 @@ export interface Transaction<T> {
 	request: {
 		sent: Time,
 		arguments: any
-		json: any
+		json: string
 	},
 	response: {
 		status: boolean
