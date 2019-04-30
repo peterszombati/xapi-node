@@ -1,6 +1,10 @@
 function calculateElapsedTime(time: [number, number]): number {
-	const hrtime = process.hrtime(time);
-	return Math.floor(hrtime[0] * 1000 + hrtime[1] / 1000000);
+	if (typeof window === 'undefined') {
+		const hrtime = process.hrtime(time);
+		return Math.floor(hrtime[0] * 1000 + hrtime[1] / 1000000);
+	} else {
+		return performance.now() - time[0];
+	}
 }
 
 export class Time {
@@ -24,7 +28,7 @@ export class Time {
  	}
 
 	public reset() {
-		this.unit = process.hrtime();
+		this.unit = (typeof window === 'undefined') ? process.hrtime() : [ performance.now(), 0 ];
 		this.UTCTimestamp = Date.now();
 	}
 
