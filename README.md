@@ -6,6 +6,8 @@ It can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
 WebSocket communication documentation: http://developers.xstore.pro/documentation/
 
+This module is usable on Front-end too.
+
 ## Getting started
 
 ### 1. Install 
