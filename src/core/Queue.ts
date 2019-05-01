@@ -1,4 +1,3 @@
-
 import {MessagesQueue} from "../interface/XapiTypeGuard";
 import {Listener} from "../modules/Listener";
 import {Time} from "../modules/Time";
