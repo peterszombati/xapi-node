@@ -107,7 +107,7 @@ export class XAPI extends Listener {
 	public connect() {
 		this.Stream.connect();
 		this.Socket.connect();
-		this.tryReconnect = true;
+		this._tryReconnect = true;
 	}
 
 	public disconnect() {
@@ -122,7 +122,7 @@ export class XAPI extends Listener {
 		}
 		this.Stream.closeConnection();
 		this.account.session = '';
-		this.tryReconnect = false;
+		this._tryReconnect = false;
 	}
 
 	public onReady(callBack: () => void, key: string = "default") {
