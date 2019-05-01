@@ -78,7 +78,16 @@ export class MessageTube extends Queue {
 		}
 
 		if (addQueu) {
-			this.addQueu(transactionId);
+			const isSuccess = this.addQueu(transactionId);
+			if (!isSuccess) {
+				const json = { code: "NODEJS_2", explain: 'messageQueues exceeded 150 limit' };
+				this.transactions[transactionId].response = {
+					status: false,
+					received: new Time(),
+					json
+				};
+				this.rejectTransaction(json, this.transactions[transactionId]);
+			}
 		}
 
 		if (this.messageQueues.length > 0 && this.isKillerCalled === null) {

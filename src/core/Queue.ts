@@ -5,16 +5,14 @@ import {Time} from "../modules/Time";
 export class Queue extends Listener {
 	protected messageQueues: MessagesQueue[] = [];
 	protected messagesElapsedTime: Time[] = [];
-	private messageQueuesWarning: Time = null;
 	protected isKillerCalled: any = null;
 
-	protected addQueu(transactionId: string) {
+	protected addQueu(transactionId: string): boolean {
 		if (this.messageQueues.length < 150) {
 			this.messageQueues.push({ transactionId });
-		} else if (this.messageQueuesWarning == null || this.messageQueuesWarning.elapsedMs() > 10000) {
-			//TODO: console.error(`messageQueues length exceeded 150 (length = ${this.messageQueues.length})`);
-			this.messageQueuesWarning = new Time();
+			return true;
 		}
+		return false;
 	}
 
 	protected addElapsedTime(time: Time) {
