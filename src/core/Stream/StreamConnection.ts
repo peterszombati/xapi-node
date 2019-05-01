@@ -85,7 +85,11 @@ export class StreamConnection extends MessageTube{
 			promise: { resolve: null, reject: null }
 		}, transactionId);
 
-		this.sendJSON(command, json, transactionId);
+		if (this.XAPI.getSession().length === 0) {
+			this.rejectTransaction({ code: 'NODEJS_BE103', explain: 'User is not logged' }, this.transactions[transactionId], false);
+		} else {
+			this.sendJSON(command, json, transactionId);
+		}
 
 		return transactionId;
 	}
