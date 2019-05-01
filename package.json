@@ -6,7 +6,8 @@
   "types": "build/index.d.ts",
   "dependencies": {
     "@types/node": "^11.13.8",
-    "ws": "^6.2.1"
+    "ws": "^6.2.1",
+    "terser": "^3.17.0"
   },
   "devDependencies": {
     "typescript": "^3.4.5"
