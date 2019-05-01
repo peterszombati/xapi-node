@@ -49,7 +49,7 @@ export class MessageTube extends Queue {
 		if (json.length > 1000) {
 			const reason = "Each command invocation should not contain more than 1kB of data.";
 			if (this.transactions[transactionId] !== undefined) {
-				const json = { code: "NODEJS_0", explain: reason };
+				const json = { code: "XAPINODE_0", explain: reason };
 				this.transactions[transactionId].response = {
 					status: false,
 					received: new Time(),
@@ -80,7 +80,7 @@ export class MessageTube extends Queue {
 		if (addQueu) {
 			const isSuccess = this.addQueu(transactionId);
 			if (!isSuccess) {
-				const json = { code: "NODEJS_2", explain: 'messageQueues exceeded 150 limit' };
+				const json = { code: "XAPINODE_2", explain: 'messageQueues exceeded 150 limit' };
 				this.transactions[transactionId].response = {
 					status: false,
 					received: new Time(),

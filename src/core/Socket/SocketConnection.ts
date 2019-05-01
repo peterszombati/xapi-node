@@ -95,7 +95,7 @@ export class SocketConnection extends MessageTube {
 		for (const transactionId in this.transactions) {
 			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-				this.rejectTransaction({ code: "NODEJS_1", explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
+				this.rejectTransaction({ code: "XAPINODE_1", explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
 			}
 		}
 		if (this.XAPI.tryReconnect) {
@@ -169,7 +169,7 @@ export class SocketConnection extends MessageTube {
 				&& "login" !== command
 				&& "ping" !== command
 				&& "logout" !== command) {
-				this.rejectTransaction({ code: 'NODEJS_BE103', explain: 'User is not logged' }, this.transactions[transactionId], false);
+				this.rejectTransaction({ code: 'XAPINODE_BE103', explain: 'User is not logged' }, this.transactions[transactionId], false);
 			} else {
 				this.sendJSON(command, json, transactionId);
 			}
