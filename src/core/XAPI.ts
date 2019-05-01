@@ -7,6 +7,8 @@ export class XAPI extends Listener {
 
 	public Stream: Stream;
 	public Socket: Socket;
+	private _tryReconnect: boolean = false;
+	public get tryReconnect() { return this._tryReconnect; }
 	private pingTimer: any = null;
 	private _transactionIdIncrement: number = 0;
 
@@ -105,6 +107,7 @@ export class XAPI extends Listener {
 	public connect() {
 		this.Stream.connect();
 		this.Socket.connect();
+		this.tryReconnect = true;
 	}
 
 	public disconnect() {
@@ -119,6 +122,7 @@ export class XAPI extends Listener {
 		}
 		this.Stream.closeConnection();
 		this.account.session = '';
+		this.tryReconnect = false;
 	}
 
 	public onReady(callBack: () => void, key: string = "default") {
