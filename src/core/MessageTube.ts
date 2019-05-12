@@ -32,7 +32,7 @@ export class MessageTube extends Queue {
 		if (transaction.promise.resolve !== null) {
 			const resolve = transaction.promise.resolve;
 			transaction.promise = { resolve: null, reject: null };
-			resolve({returnData, time, transaction});
+			resolve({returnData, time, transaction})
 		}
 	}
 
@@ -41,7 +41,9 @@ export class MessageTube extends Queue {
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;
 			transaction.promise = { resolve: null, reject: null };
-			reject({ reason, transaction });
+			reject({ reason, transaction }).catch(e => {
+				//TODO
+			});
 		}
 	}
 

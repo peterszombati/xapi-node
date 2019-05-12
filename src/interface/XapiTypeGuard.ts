@@ -8,6 +8,9 @@ export interface MessagesQueue {
 	transactionId: string
 }
 
+export interface TransactionResolve<T> { returnData: T, time: Time, transaction: Transaction<null>}
+export interface TransactionReject<T> { reason: { code: string, explain: string }, transaction: Transaction<null>}
+
 export interface Transaction<T> {
 	status: TransactionStatus,
 	command: string
@@ -25,8 +28,8 @@ export interface Transaction<T> {
 		json: any
 	}
 	promise: {
-		resolve: null | ((resolve: { returnData: T, time: Time, transaction: Transaction<null>}) => void),
-		reject: null | ((reject: { reason: { code: string, explain: string }, transaction: Transaction<null>}) => void)
+		resolve: null | ((resolve: TransactionResolve<T>) => void),
+		reject: null | ((reject: TransactionReject<T>) => Promise<TransactionReject<T>>)
 	}
 }
 
