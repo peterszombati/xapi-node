@@ -62,7 +62,7 @@ export class SocketConnection extends MessageTube {
 
 	public connect() {
 
-		this.WebSocket = new WebSocketModule('wss://ws.xapi.pro/' + this.XAPI.getAccountType());
+		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType());
 		this.WebSocket.onOpen(() => {
 			this.handleSocketOpen(new Time());
 		});

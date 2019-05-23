@@ -22,7 +22,7 @@ export class StreamConnection extends MessageTube{
 	}
 
 	public connect() {
-		this.WebSocket = new WebSocketModule("wss://ws.xapi.pro/" + this.XAPI.getAccountType() + "Stream");
+		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType() + "Stream");
 		this.WebSocket.onOpen(() => {
 			this.handleSocketOpen(new Time());
 		});

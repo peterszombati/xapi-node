@@ -57,3 +57,6 @@ export {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD, REQUEST_STATUS_FIELD}
 
 import {Candle} from "./enum/candle";
 export {Candle}
+
+import { XAPILogin } from "./core/XAPI";
+export { XAPILogin };

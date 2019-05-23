@@ -3,6 +3,23 @@ import Socket from "./Socket/Socket";
 import Utils from "../utils/Utils";
 import {Listener} from "../modules/Listener";
 
+export interface XAPILogin {
+	accountId ?: string | null,
+	password ?: string | null,
+	type ?: string | null,
+	appName ?: string,
+	host ?: string
+}
+
+export interface XAPIAccount {
+	accountId ?: string | null,
+	password ?: string | null,
+	type ?: string | null,
+	appName ?: string,
+	host ?: string,
+	session: string
+}
+
 export class XAPI extends Listener {
 
 	public Stream: Stream;
@@ -12,17 +29,18 @@ export class XAPI extends Listener {
 	private pingTimer: any = null;
 	private _transactionIdIncrement: number = 0;
 
-	constructor(
-		accountID: string | null = null,
-		password: string | null = null,
-		type: string | null = null,
-		appName: string = undefined) {
+	constructor({
+		accountId = null,
+		password = null,
+		type = null,
+		appName = undefined,
+		host = 'ws.xapi.pro'}: XAPILogin) {
 		super();
 
 		this.Socket = new Socket(this);
 		this.Stream = new Stream(this);
-		if (accountID != null && password != null && type != null) {
-			this.setAccount(accountID, password, type, appName);
+		if (accountId != null && password != null && type != null) {
+			this.setAccount(accountId, password, type, appName, host);
 		}
 
 		this.addListener("xapiReady", () => {
@@ -59,11 +77,12 @@ export class XAPI extends Listener {
 		return Utils.getUTCTimestamp().toString() + Utils.formatNumber(this._transactionIdIncrement, 4);
 	}
 
-	protected account: any = {
+	protected account: XAPIAccount = {
 		type: "demo",
-		accountID: "",
+		accountId: "",
 		password: "",
 		session: "",
+		host: "",
 		appName: undefined
 	};
 
@@ -72,7 +91,7 @@ export class XAPI extends Listener {
 	}
 
 	public getAccountID(): string {
-		return this.account.accountID;
+		return this.account.accountId;
 	}
 
 	public getPassword(): string {
@@ -87,13 +106,23 @@ export class XAPI extends Listener {
 		return this.account.appName;
 	}
 
-	protected setAccount(accountID: string, password: string, type: string, appName: string = undefined) {
+	public getHostname(): string {
+		return this.account.host;
+	}
+
+	protected setAccount(
+		accountId: string,
+		password: string,
+		type: string,
+		appName: string = undefined,
+		host: string = 'ws.xapi.pro') {
 		this.account = {
 			type:  (type.toLowerCase() === "real") ? "real" : "demo",
-			accountID,
+			accountId,
 			password,
 			session: "",
-			appName
+			appName,
+			host
 		};
 	}
 
