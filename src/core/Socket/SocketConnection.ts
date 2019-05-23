@@ -1,5 +1,5 @@
 
-import {Transaction, TransactionReject, TransactionResolve, TransactionStatus} from "../../interface/XapiTypeGuard";
+import {TransactionResolve, TransactionStatus} from "../../interface/XapiTypeGuard";
 import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";

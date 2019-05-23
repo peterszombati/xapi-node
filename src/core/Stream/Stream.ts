@@ -8,7 +8,7 @@ import {
 	STREAMING_TICK_RECORD,
 	STREAMING_TRADE_RECORD,
 	STREAMING_TRADE_STATUS_RECORD
-} from "../../interface/Definitions";
+} from "../..";
 import {StreamConnection} from "./StreamConnection";
 import {Time} from "../../modules/Time";
 

@@ -39,7 +39,7 @@ import {
 	tradeTransaction,
 	tradeTransactionStatus
 } from '../../interface/Request';
-import {CMD_FIELD, PERIOD_FIELD} from '../../enum/Enum';
+import {CMD_FIELD, PERIOD_FIELD} from '../..';
 import {SocketConnection} from "./SocketConnection";
 import {Time} from "../../modules/Time";
 
