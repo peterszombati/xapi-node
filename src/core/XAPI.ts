@@ -3,6 +3,8 @@ import Socket from "./Socket/Socket";
 import Utils from "../utils/Utils";
 import {Listener} from "../modules/Listener";
 
+export const DefaultHostname = 'ws.xapi.pro';
+
 export interface XAPILogin {
 	accountId ?: string | null,
 	password ?: string | null,
@@ -34,7 +36,7 @@ export class XAPI extends Listener {
 		password = null,
 		type = null,
 		appName = undefined,
-		host = 'ws.xapi.pro'}: XAPILogin) {
+		host = DefaultHostname}: XAPILogin) {
 		super();
 
 		this.Socket = new Socket(this);
@@ -115,7 +117,7 @@ export class XAPI extends Listener {
 		password: string,
 		type: string,
 		appName: string = undefined,
-		host: string = 'ws.xapi.pro') {
+		host: string = DefaultHostname) {
 		this.account = {
 			type:  (type.toLowerCase() === "real") ? "real" : "demo",
 			accountId,
