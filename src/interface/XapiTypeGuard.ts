@@ -29,7 +29,7 @@ export interface Transaction<T> {
 	}
 	promise: {
 		resolve: null | ((resolve: TransactionResolve<T>) => void),
-		reject: null | ((reject: TransactionReject<T>) => Promise<TransactionReject<T>>)
+		reject: null | ((reject: TransactionReject<T>) => void)
 	}
 }
 
