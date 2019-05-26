@@ -41,9 +41,7 @@ export class MessageTube extends Queue {
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;
 			transaction.promise = { resolve: null, reject: null };
-			reject({ reason, transaction }).catch(e => {
-				//TODO
-			});
+			reject({ reason, transaction });
 		}
 	}
 
