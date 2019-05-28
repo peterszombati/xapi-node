@@ -45,3 +45,10 @@ export enum PERIOD_FIELD {
 	PERIOD_W1 = 10080,
 	PERIOD_MN1 = 43200
 }
+
+export enum REQUEST_STATUS  {
+	ERROR = 0,
+	PENDING = 1,
+	ACCEPTED = 3,
+	REJECTED = 4
+}
