@@ -1,4 +1,4 @@
-import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD} from "../enum/Enum";
+import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD} from "..";
 
 export interface CHART_RANGE_INFO_RECORD {
 	end: number,

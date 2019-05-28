@@ -1,4 +1,4 @@
-import { XAPI } from "./core/XAPI";
+import { XAPI, XAPILogin } from "./core/XAPI";
 export default XAPI;
 
 import {
@@ -58,5 +58,4 @@ export {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD, REQUEST_STATUS_FIELD, RE
 import {Candle} from "./enum/candle";
 export {Candle}
 
-import { XAPILogin } from "./core/XAPI";
 export { XAPILogin };
