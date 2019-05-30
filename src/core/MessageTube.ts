@@ -27,12 +27,16 @@ export class MessageTube extends Queue {
 		return true;
 	}
 
-	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any>) {
+	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<null>) {
 		transaction.status = TransactionStatus.successful;
 		if (transaction.promise.resolve !== null) {
 			const resolve = transaction.promise.resolve;
 			transaction.promise = { resolve: null, reject: null };
-			resolve({returnData, time, transaction})
+			if (transaction.isStream) {
+				resolve({transaction});
+			} else {
+				resolve({returnData, time, transaction})
+			}
 		}
 	}
 
@@ -69,6 +73,7 @@ export class MessageTube extends Queue {
 					this.transactions[transactionId].request.sent = new Time();
 					if (this.transactions[transactionId].isStream) {
 						this.transactions[transactionId].status = TransactionStatus.successful;
+						this.resolveTransaction(null, null, this.transactions[transactionId]);
 					} else {
 						this.transactions[transactionId].status = TransactionStatus.sent;
 					}

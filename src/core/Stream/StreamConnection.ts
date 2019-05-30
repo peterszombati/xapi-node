@@ -1,6 +1,11 @@
 import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
-import {TransactionStatus} from "../../interface/XapiTypeGuard";
+import {
+	Transaction,
+	TransactionResolveSocket,
+	TransactionResolveStream,
+	TransactionStatus
+} from "../../interface/XapiTypeGuard";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
 
@@ -69,31 +74,35 @@ export class StreamConnection extends MessageTube{
 		}
 	}
 
-	protected sendCommand(command: string, completion: any = {}): string {
-		const transactionId = this.XAPI.createTransactionId();
-		const json = JSON.stringify({
-			command,
-			"streamSessionId": this.XAPI.getSession(),
-			...completion
+	protected sendCommand(command: string, completion: any = {}):
+		Promise<TransactionResolveStream<null> | { reason: { code: string, explain: string }, transaction: Transaction<null> }> {
+		return new Promise((resolve, reject) => {
+			const transactionId = this.XAPI.createTransactionId();
+			const json = JSON.stringify({
+				command,
+				"streamSessionId": this.XAPI.getSession(),
+				...completion
+			});
+			this.addTransaction({
+				command,
+				isStream: true,
+				request: {json, arguments: completion, sent: null},
+				response: {json: null, received: null, status: null},
+				transactionId,
+				createdAt: new Time(),
+				status: TransactionStatus.waiting,
+				promise: {resolve, reject}
+			}, transactionId);
+
+			if (this.XAPI.getSession().length === 0) {
+				this.rejectTransaction({
+					code: 'NODEJS_BE103',
+					explain: 'User is not logged'
+				}, this.transactions[transactionId], false);
+			} else {
+				this.sendJSON(command, json, transactionId);
+			}
 		});
-		this.addTransaction({
-			command,
-			isStream: true,
-			request: { json, arguments: completion, sent: null},
-			response: { json: null, received: null, status: null },
-			transactionId,
-			createdAt: new Time(),
-			status: TransactionStatus.waiting,
-			promise: { resolve: null, reject: null }
-		}, transactionId);
-
-		if (this.XAPI.getSession().length === 0) {
-			this.rejectTransaction({ code: 'NODEJS_BE103', explain: 'User is not logged' }, this.transactions[transactionId], false);
-		} else {
-			this.sendJSON(command, json, transactionId);
-		}
-
-		return transactionId;
 	}
 
 	public closeConnection() {

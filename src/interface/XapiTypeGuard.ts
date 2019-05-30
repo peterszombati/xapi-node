@@ -8,7 +8,7 @@ export interface MessagesQueue {
 	transactionId: string
 }
 
-export interface TransactionResolve<T> { returnData: T, time: Time, transaction: Transaction<null>}
+export interface TransactionResolve<T> { returnData ?: T, time ?: Time, transaction: Transaction<null> }
 export interface TransactionReject<T> { reason: { code: string, explain: string }, transaction: Transaction<null>}
 
 export interface Transaction<T> {
