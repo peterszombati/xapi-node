@@ -19,7 +19,7 @@ export class MessageTube extends Queue {
 		super();
 	}
 
-	public addTransaction<T>(transaction: Transaction<null,null>, transactionId: string): void {
+	public addTransaction(transaction: Transaction<null,null>, transactionId: string): void {
 		this.transactions[transactionId] = transaction;
 	}
 

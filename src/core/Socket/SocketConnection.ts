@@ -157,7 +157,7 @@ export class SocketConnection extends MessageTube {
 				arguments: (Object.keys(args).length === 0) ? undefined : args,
 				customTag });
 
-			this.addTransaction<T>({
+			this.addTransaction({
 				command,
 				isStream: false,
 				request: { json, arguments: args, sent: null },
