@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@types/node": "^11.13.8",
+    "@types/node": "^11.13.13",
     "ws": "^6.2.1"
   },
   "devDependencies": {
