@@ -35,4 +35,4 @@ function test(jsonPath: string) {
 }
 
 test("sensitive.json");
-test("sensitive2.json");
+test("sensitive-demo.json");
