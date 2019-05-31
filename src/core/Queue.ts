@@ -24,7 +24,7 @@ export class Queue extends Listener {
 
 	protected isRateLimitReached() {
 		return (this.messagesElapsedTime.length > 4) &&
-			(this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs() < 1095);
+			(this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs() < 1150);
 	}
 
 	protected stopQueuKiller() {
