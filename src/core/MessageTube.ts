@@ -1,4 +1,9 @@
-import {Transaction, Transactions, TransactionStatus} from "../interface/XapiTypeGuard";
+import {
+	Transaction,
+	TransactionReject,
+	Transactions,
+	TransactionStatus
+} from "../interface/XapiTypeGuard";
 import {Queue} from "./Queue";
 import {Time} from "../modules/Time";
 import {WebSocketModule} from "../modules/WebSocketModule";
@@ -14,7 +19,7 @@ export class MessageTube extends Queue {
 		super();
 	}
 
-	public addTransaction<T>(transaction: Transaction<T>, transactionId: string): void {
+	public addTransaction<T>(transaction: Transaction<null,null>, transactionId: string): void {
 		this.transactions[transactionId] = transaction;
 	}
 
@@ -27,7 +32,7 @@ export class MessageTube extends Queue {
 		return true;
 	}
 
-	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<null>) {
+	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any,TransactionReject>) {
 		transaction.status = TransactionStatus.successful;
 		if (transaction.promise.resolve !== null) {
 			const resolve = transaction.promise.resolve;
@@ -40,7 +45,7 @@ export class MessageTube extends Queue {
 		}
 	}
 
-	protected rejectTransaction(reason: { code: string, explain: string }, transaction: Transaction<any>, interrupted: boolean = false ) {
+	protected rejectTransaction(reason: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
 		transaction.status = interrupted === false ? TransactionStatus.timeout : TransactionStatus.interrupted;
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;

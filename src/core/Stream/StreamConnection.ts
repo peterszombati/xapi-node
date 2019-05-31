@@ -2,7 +2,6 @@ import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
 import {
 	Transaction,
-	TransactionResolveSocket,
 	TransactionResolveStream,
 	TransactionStatus
 } from "../../interface/XapiTypeGuard";
@@ -75,7 +74,7 @@ export class StreamConnection extends MessageTube{
 	}
 
 	protected sendCommand(command: string, completion: any = {}):
-		Promise<TransactionResolveStream<null> | { reason: { code: string, explain: string }, transaction: Transaction<null> }> {
+		Promise<TransactionResolveStream | { reason: { code: string, explain: string }, transaction: Transaction<null,null> }> {
 		return new Promise((resolve, reject) => {
 			const transactionId = this.XAPI.createTransactionId();
 			const json = JSON.stringify({

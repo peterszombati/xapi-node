@@ -1,4 +1,8 @@
-import {Transaction, TransactionResolve, TransactionStatus} from "../../interface/XapiTypeGuard";
+import {
+	Transaction,
+	TransactionResolveSocket,
+	TransactionStatus
+} from "../../interface/XapiTypeGuard";
 import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
@@ -141,7 +145,7 @@ export class SocketConnection extends MessageTube {
 	}
 
 	protected sendCommand<T>(command: string, args: any = {}, transactionId: string = null):
-		Promise<TransactionResolve<T> | { reason: { code: string, explain: string }, transaction: Transaction<null> }> {
+		Promise<TransactionResolveSocket<T> | { reason: { code: string, explain: string }, transaction: Transaction<null, null> }> {
 		return new Promise((resolve, reject: any) => {
 			if (transactionId === null) {
 				transactionId = this.XAPI.createTransactionId();

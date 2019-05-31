@@ -99,15 +99,15 @@ class Stream extends StreamConnection {
 		},
 	};
 
-	public ping(): string {
+	public ping() {
 		return this.sendCommand("ping");
 	}
 
-	private sendSubscribe(command: string, completion: any = {}): string {
+	private sendSubscribe(command: string, completion: any = {}) {
 		return this.sendCommand(`get${command}`, completion);
 	}
 
-	private sendUnsubscribe(command: string, completion: any = {}): string {
+	private sendUnsubscribe(command: string, completion: any = {}) {
 		return this.sendCommand(`stop${command}`, completion);
 	}
 

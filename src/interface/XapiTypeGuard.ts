@@ -1,17 +1,18 @@
 import {Time} from "../modules/Time";
 
 export interface Transactions {
-	[transactionId: string]: Transaction<any>
+	[transactionId: string]: Transaction<any,any>
 }
 
 export interface MessagesQueue {
 	transactionId: string
 }
 
-export interface TransactionResolve<T> { returnData ?: T, time ?: Time, transaction: Transaction<null> }
-export interface TransactionReject<T> { reason: { code: string, explain: string }, transaction: Transaction<null>}
+export interface TransactionResolveSocket<T> { returnData: T, time: Time, transaction: Transaction<TransactionResolveSocket<T>, null> }
+export interface TransactionResolveStream { transaction: Transaction<null, null> }
+export interface TransactionReject { reason: { code: string, explain: string }, transaction: Transaction<null,null>}
 
-export interface Transaction<T> {
+export interface Transaction<Resolve,Reject> {
 	status: TransactionStatus,
 	command: string
 	createdAt: Time
@@ -28,8 +29,8 @@ export interface Transaction<T> {
 		json: any
 	}
 	promise: {
-		resolve: null | ((resolve: TransactionResolve<T>) => void),
-		reject: null | ((reject: TransactionReject<T>) => void)
+		resolve: null | ((resolve: Resolve) => void),
+		reject: null | ((reject: Reject) => void)
 	}
 }
 
