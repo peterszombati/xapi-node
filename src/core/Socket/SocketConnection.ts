@@ -145,7 +145,7 @@ export class SocketConnection extends MessageTube {
 	}
 
 	protected sendCommand<T>(command: string, args: any = {}, transactionId: string = null):
-		Promise<TransactionResolveSocket<T> | { reason: { code: string, explain: string }, transaction: Transaction<null, null> }> {
+		Promise<TransactionResolveSocket<T>> {
 		return new Promise((resolve, reject: any) => {
 			if (transactionId === null) {
 				transactionId = this.XAPI.createTransactionId();

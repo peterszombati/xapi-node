@@ -74,7 +74,7 @@ export class StreamConnection extends MessageTube{
 	}
 
 	protected sendCommand(command: string, completion: any = {}):
-		Promise<TransactionResolveStream | { reason: { code: string, explain: string }, transaction: Transaction<null,null> }> {
+		Promise<TransactionResolveStream> {
 		return new Promise((resolve, reject) => {
 			const transactionId = this.XAPI.createTransactionId();
 			const json = JSON.stringify({
