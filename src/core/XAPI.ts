@@ -3,7 +3,7 @@ import Socket from "./Socket/Socket";
 import Utils from "../utils/Utils";
 import {Listener} from "../modules/Listener";
 
-export const DefaultHostname = 'ws.xapi.pro';
+export const DefaultHostname = 'ws.xtb.com';
 
 export interface XAPILogin {
 	accountId ?: string | null,
