@@ -107,7 +107,8 @@ export class MessageTube extends Queue {
 	}
 
 	protected callKillQueuTimeout() {
-		const timeoutMs = this.messagesElapsedTime.length > 4 ? Math.max((this.rateLimit() + 5) - this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs(), 0) : 100;
+		const timeoutMs = this.messagesElapsedTime.length <= 4 ? 100
+			: Math.max((this.rateLimit() + 5) - this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs(), 0);
 		this.isKillerCalled = setTimeout(() => {
 			this.isKillerCalled = null;
 			this.tryKillQueu();
