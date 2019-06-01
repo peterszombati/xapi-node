@@ -10,7 +10,8 @@ export interface XAPIConfig {
 	password ?: string | null,
 	type ?: string | null,
 	appName ?: string,
-	host ?: string
+	host ?: string,
+	rateLimit ?: number
 }
 
 export interface XAPIAccount {
@@ -30,15 +31,18 @@ export class XAPI extends Listener {
 	public get tryReconnect() { return this._tryReconnect; }
 	private pingTimer: any = null;
 	private _transactionIdIncrement: number = 0;
+	private _rateLimit: number = 1200;
+	public get rateLimit() { return this._rateLimit; }
 
 	constructor({
 		accountId = null,
 		password = null,
 		type = null,
 		appName = undefined,
-		host = DefaultHostname}: XAPILogin) {
+		host = DefaultHostname,
+		rateLimit = 1200}: XAPIConfig) {
 		super();
-
+		this._rateLimit = rateLimit;
 		this.Socket = new Socket(this);
 		this.Stream = new Stream(this);
 		if (accountId != null && password != null && type != null) {

@@ -6,6 +6,12 @@ export class Queue extends Listener {
 	protected messageQueues: MessagesQueue[] = [];
 	protected messagesElapsedTime: Time[] = [];
 	protected isKillerCalled: any = null;
+	private _rateLimit: number;
+	protected rateLimit() { return this._rateLimit; }
+	constructor(rateLimit: number) {
+		super();
+		this._rateLimit = rateLimit;
+	}
 
 	protected addQueu(transactionId: string): boolean {
 		if (this.messageQueues.length < 150) {
@@ -24,7 +30,7 @@ export class Queue extends Listener {
 
 	protected isRateLimitReached() {
 		return (this.messagesElapsedTime.length > 4) &&
-			(this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs() < 1150);
+			(this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs() < this._rateLimit);
 	}
 
 	protected stopQueuKiller() {

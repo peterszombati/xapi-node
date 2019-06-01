@@ -13,7 +13,7 @@ export class StreamConnection extends MessageTube{
 	public status: boolean = false;
 
 	constructor(XAPI: XAPI) {
-		super();
+		super(XAPI.rateLimit);
 		this.XAPI = XAPI;
 	}
 

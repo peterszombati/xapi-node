@@ -15,7 +15,7 @@ export class SocketConnection extends MessageTube {
 	public status: boolean = false;
 
 	constructor(XAPI: XAPI) {
-		super();
+		super(XAPI.rateLimit);
 		this.XAPI = XAPI;
 	}
 

@@ -15,8 +15,8 @@ export class MessageTube extends Queue {
 	public get lastReceivedMessage() { return this._lastReceivedMessage; }
 	protected WebSocket: WebSocketModule ;
 
-	constructor() {
-		super();
+	constructor(rateLimit: number) {
+		super(rateLimit);
 	}
 
 	public addTransaction(transaction: Transaction<null,null>, transactionId: string): void {
@@ -107,7 +107,7 @@ export class MessageTube extends Queue {
 	}
 
 	protected callKillQueuTimeout() {
-		const timeoutMs = this.messagesElapsedTime.length > 4 ? Math.max(1155 - this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs(), 0) : 100;
+		const timeoutMs = this.messagesElapsedTime.length > 4 ? Math.max((this.rateLimit() + 5) - this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs(), 0) : 100;
 		this.isKillerCalled = setTimeout(() => {
 			this.isKillerCalled = null;
 			this.tryKillQueu();
