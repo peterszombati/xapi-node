@@ -127,7 +127,9 @@ export class MessageTube extends Queue {
 				this.messageQueues.splice(i, 1);
 				i -= 1;
 			} else {
-				this.callKillQueuTimeout();
+				if (this.isKillerCalled === null) {
+					this.callKillQueuTimeout();
+				}
 				break;
 			}
 		}
