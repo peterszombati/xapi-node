@@ -8,7 +8,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import XAPI, {XAPILogin} from "../core/XAPI";
+import XAPI, {XAPIConfig} from "../core/XAPI";
 
 function test(jsonPath: string) {
 	const login = path.join(process.cwd(), 'src', jsonPath);
@@ -17,7 +17,7 @@ function test(jsonPath: string) {
 		process.exit(1);
 	}
 
-	const {accountId, password, type}: XAPILogin = JSON.parse(fs.readFileSync(login).toString().trim());
+	const {accountId, password, type}: XAPIConfig = JSON.parse(fs.readFileSync(login).toString().trim());
 	if (typeof (accountId) !== "string"
 		|| typeof (password) !== "string"
 		|| typeof (type) !== "string") {

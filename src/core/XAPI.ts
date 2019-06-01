@@ -5,7 +5,7 @@ import {Listener} from "../modules/Listener";
 
 export const DefaultHostname = 'ws.xtb.com';
 
-export interface XAPILogin {
+export interface XAPIConfig {
 	accountId ?: string | null,
 	password ?: string | null,
 	type ?: string | null,
