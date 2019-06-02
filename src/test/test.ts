@@ -26,13 +26,19 @@ function test(jsonPath: string) {
 	}
 	const x = new XAPI({accountId, password, type});
 	x.connect();
+
+	x.Stream.listen.getCandles((data, time) => {
+		console.log(data);
+	});
+
 	x.onReady(() => {
-		console.log("Ready: " + accountId);
-		x.Socket.send.getVersion().then(x => {
-			console.log(x.returnData);
-		});
+		console.log("Ready: " + x.getAccountID());
+		x.Stream.subscribe.getCandles("ETHEREUM").then((d) => {
+			console.log(d);
+		}).catch(e => {
+			console.error(e);
+		})
 	});
 }
 
-test("sensitive.json");
 test("sensitive-demo.json");
