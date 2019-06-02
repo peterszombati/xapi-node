@@ -1,7 +1,6 @@
 import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
 import {
-	Transaction,
 	TransactionResolveStream,
 	TransactionStatus
 } from "../../interface/XapiTypeGuard";
