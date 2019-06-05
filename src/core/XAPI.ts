@@ -43,10 +43,10 @@ export class XAPI extends Listener {
 		rateLimit = 1200}: XAPIConfig) {
 		super();
 		this._rateLimit = rateLimit;
-		this.Socket = new Socket(this);
+		this.Socket = new Socket(this, password);
 		this.Stream = new Stream(this);
 		if (accountId != null && password != null && type != null) {
-			this.setAccount(accountId, password, type, appName, host);
+			this.setAccount(accountId, type, appName, host);
 		}
 
 		this.addListener("xapiReady", () => {
@@ -86,7 +86,6 @@ export class XAPI extends Listener {
 	protected account: XAPIAccount = {
 		type: "demo",
 		accountId: "",
-		password: "",
 		session: "",
 		host: "",
 		appName: undefined
@@ -98,10 +97,6 @@ export class XAPI extends Listener {
 
 	public getAccountID(): string {
 		return this.account.accountId;
-	}
-
-	public getPassword(): string {
-		return this.account.password;
 	}
 
 	public getSession(): string {
@@ -118,14 +113,12 @@ export class XAPI extends Listener {
 
 	protected setAccount(
 		accountId: string,
-		password: string,
 		type: string,
 		appName: string = undefined,
 		host: string = DefaultHostname) {
 		this.account = {
 			type:  (type.toLowerCase() === "real") ? "real" : "demo",
 			accountId,
-			password,
 			session: "",
 			appName,
 			host

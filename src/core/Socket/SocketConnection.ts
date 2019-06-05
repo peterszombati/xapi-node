@@ -13,16 +13,18 @@ export class SocketConnection extends MessageTube {
 	protected XAPI: XAPI;
 
 	public status: boolean = false;
+	private _password: string = null;
 
-	constructor(XAPI: XAPI) {
+	constructor(XAPI: XAPI, password: string) {
 		super(XAPI.rateLimit);
+		this._password = password;
 		this.XAPI = XAPI;
 	}
 
 	private login() {
 		return this.sendCommand('login', {
 			'userId': this.XAPI.getAccountID(),
-			'password': this.XAPI.getPassword(),
+			'password': this._password,
 			'appName': this.XAPI.getAppName()
 		});
 	}

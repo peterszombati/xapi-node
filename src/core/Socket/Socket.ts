@@ -47,8 +47,8 @@ interface SocketListen<T> { (data: T, time: Time, transaction: Transaction<null,
 
 class Socket extends SocketConnection {
 
-	constructor(XAPI: XAPI) {
-		super(XAPI);
+	constructor(XAPI: XAPI, password: string) {
+		super(XAPI, password);
 	}
 
 	public listen = {
