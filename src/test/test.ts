@@ -9,7 +9,14 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import XAPI, {XAPIConfig} from "../core/XAPI";
-
+process
+	.on('unhandledRejection', (reason, p) => {
+		console.error(reason, 'Unhandled Rejection at Promise', p);
+	})
+	.on('uncaughtException', err => {
+		console.error(err, 'Uncaught Exception thrown');
+		process.exit(1);
+	});
 function test(jsonPath: string) {
 	const login = path.join(process.cwd(), 'src', jsonPath);
 	if (!fs.existsSync(login)) {
@@ -27,17 +34,15 @@ function test(jsonPath: string) {
 	const x = new XAPI({accountId, password, type});
 	x.connect();
 
-	x.Stream.listen.getCandles((data, time) => {
+	x.Socket.listen.getVersion((data, time) => {
 		console.log(data);
 	});
 
 	x.onReady(() => {
 		console.log("Ready: " + x.getAccountID());
-		x.Stream.subscribe.getCandles("ETHEREUM").then((d) => {
-			console.log(d);
-		}).catch(e => {
-			console.error(e);
-		})
+		for (let i = 0; i < 150; i++) {
+			x.Socket.send.getVersion()
+		}
 	});
 }
 
