@@ -6,9 +6,8 @@
 }
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
 import XAPI, {XAPIConfig} from "../core/XAPI";
+import {getLogin} from "./getLogin";
 process
 	.on('unhandledRejection', (reason, p) => {
 		console.error(reason, 'Unhandled Rejection at Promise', p);
@@ -17,21 +16,15 @@ process
 		console.error(err, 'Uncaught Exception thrown');
 		process.exit(1);
 	});
-function test(jsonPath: string) {
-	const login = path.join(process.cwd(), 'src', jsonPath);
-	if (!fs.existsSync(login)) {
-		console.error(`${login} is not exists.`);
+function messageQueuStressTest(jsonPath: string) {
+	let login = null;
+	try {
+		login = getLogin(jsonPath);
+	} catch (e) {
+		console.error(e);
 		process.exit(1);
 	}
-
-	const {accountId, password, type}: XAPIConfig = JSON.parse(fs.readFileSync(login).toString().trim());
-	if (typeof (accountId) !== "string"
-		|| typeof (password) !== "string"
-		|| typeof (type) !== "string") {
-		console.error("sensitive.json is not valid");
-		process.exit(1);
-	}
-	const x = new XAPI({accountId, password, type});
+	const x = new XAPI(login);
 	x.connect();
 
 	x.Socket.listen.getVersion((data, time) => {
@@ -46,4 +39,4 @@ function test(jsonPath: string) {
 	});
 }
 
-test("sensitive-demo.json");
+messageQueuStressTest("sensitive-demo.json");
