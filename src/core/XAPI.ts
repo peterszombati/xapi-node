@@ -143,18 +143,23 @@ export class XAPI extends Listener {
 	}
 
 	public disconnect() {
-		if (this.Socket.status) {
-			this.Socket.logout().then(() => {
+		return new Promise((resolve, reject) => {
+			this.account.session = '';
+			this._tryReconnect = false;
+			this.Stream.closeConnection();
+			if (this.Socket.status) {
+				this.Socket.logout().then(() => {
+					this.Socket.closeConnection();
+					resolve();
+				}).catch(() => {
+					this.Socket.closeConnection();
+					resolve();
+				});
+			} else {
 				this.Socket.closeConnection();
-			}).catch(() => {
-				this.Socket.closeConnection();
-			});
-		} else {
-			this.Socket.closeConnection();
-		}
-		this.Stream.closeConnection();
-		this.account.session = '';
-		this._tryReconnect = false;
+				resolve();
+			}
+		});
 	}
 
 	public onReady(callBack: () => void, key: string = "default") {
