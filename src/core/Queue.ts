@@ -23,14 +23,14 @@ export class Queue extends Listener {
 
 	protected addElapsedTime(time: Time) {
 		this.messagesElapsedTime.push(time);
-		if (this.messagesElapsedTime.length > 5) {
+		if (this.messagesElapsedTime.length > 4) {
 			this.messagesElapsedTime.shift();
 		}
 	}
 
 	protected isRateLimitReached() {
-		return (this.messagesElapsedTime.length > 4) &&
-			(this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs() < this._rateLimit);
+		return (this.messagesElapsedTime.length > 3) &&
+			(this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs() < this._rateLimit);
 	}
 
 	protected stopQueuKiller() {

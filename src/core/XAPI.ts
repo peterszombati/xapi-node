@@ -31,7 +31,7 @@ export class XAPI extends Listener {
 	public get tryReconnect() { return this._tryReconnect; }
 	private pingTimer: any = null;
 	private _transactionIdIncrement: number = 0;
-	private _rateLimit: number = 1200;
+	private _rateLimit: number = 850;
 	public get rateLimit() { return this._rateLimit; }
 
 	constructor({
@@ -40,7 +40,7 @@ export class XAPI extends Listener {
 		type = null,
 		appName = undefined,
 		host = DefaultHostname,
-		rateLimit = 1200}: XAPIConfig) {
+		rateLimit = 850}: XAPIConfig) {
 		super();
 		this._rateLimit = rateLimit;
 		this.Socket = new Socket(this, password);
