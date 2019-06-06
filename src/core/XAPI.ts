@@ -138,6 +138,10 @@ export class XAPI extends Listener {
 		this._tryReconnect = true;
 	}
 
+	public get isConnectionReady() {
+		return this.Stream.status && this.Socket.status;
+	}
+
 	public disconnect() {
 		if (this.Socket.status) {
 			this.Socket.logout().then(() => {
