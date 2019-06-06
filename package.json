@@ -21,7 +21,10 @@
   },
   "keywords": [
     "xstation5",
-    "trading"
+    "trading",
+    "xtb",
+    "forex",
+    "trading-api"
   ],
   "prepare": "npm run build",
   "author": "Peter Szombati",
