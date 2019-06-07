@@ -45,8 +45,18 @@ export class StreamConnection extends MessageTube{
 		});
 	}
 
+	private setConnection(status: boolean) {
+		if ((this.XAPI.isConnectionReady && status === false)
+			|| (this.XAPI.Socket.status === true && status === true && this.status === false)) {
+			this.status = status;
+			this.XAPI.callListener("xapiConnectionChange", [status]);
+		} else {
+			this.status = status;
+		}
+	}
+
 	private handleSocketOpen(time: Time) {
-		this.status = true;
+		this.setConnection(true);
 		this.resetMessageTube();
 		if (this.XAPI.getSession().length > 0) {
 			this.XAPI.callListener("xapiReady");
@@ -63,7 +73,7 @@ export class StreamConnection extends MessageTube{
 	}
 
 	private handleSocketClose(time: Time) {
-		this.status = false;
+		this.setConnection(false);
 		this.resetMessageTube();
 		if (this.XAPI.tryReconnect) {
 			setTimeout(() => {

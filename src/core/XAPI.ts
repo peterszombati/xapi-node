@@ -169,6 +169,10 @@ export class XAPI extends Listener {
 		this.addListener("xapiReady", callBack, key);
 	}
 
+	public onConnectionChange(callBack: (status: boolean) => void, key: string = undefined) {
+		this.addListener("xapiConnectionChange", callBack, key);
+	}
+
 }
 
 export default XAPI;

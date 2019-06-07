@@ -88,14 +88,24 @@ export class SocketConnection extends MessageTube {
 
 	}
 
+	private setConnection(status: boolean) {
+		if ((this.XAPI.isConnectionReady && status === false)
+		|| (this.XAPI.Stream.status === true && status === true && this.status === false)) {
+			this.status = status;
+			this.XAPI.callListener("xapiConnectionChange", [status]);
+		} else {
+			this.status = status;
+		}
+	}
+
 	private handleSocketOpen(time: Time) {
-		this.status = true;
+		this.setConnection(true);
 		this.resetMessageTube();
 		this.login();
 	}
 
 	private handleSocketClose(time: Time) {
-		this.status = false;
+		this.setConnection(false);
 		this.resetMessageTube();
 		for (const transactionId in this.transactions) {
 			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
