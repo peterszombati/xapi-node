@@ -163,10 +163,10 @@ export class XAPI extends Listener {
 	}
 
 	public onReady(callBack: () => void, key: string = "default") {
-		if (this.getSession().length > 0 && this.Socket.status && this.Stream.status) {
+		if (this.getSession().length > 0 && this.isConnectionReady) {
 			callBack();
 		}
-		this.addListener("xapiReady", callBack, "xapiReady"+key);
+		this.addListener("xapiReady", callBack, key);
 	}
 
 }
