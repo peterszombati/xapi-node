@@ -6,7 +6,7 @@
 }
  */
 
-import XAPI, {XAPIConfig} from "../core/XAPI";
+import XAPI from "../core/XAPI";
 import {getLogin} from "./getLogin";
 process
 	.on('unhandledRejection', (reason, p) => {
@@ -39,4 +39,4 @@ function messageQueuStressTest(jsonPath: string) {
 	});
 }
 
-messageQueuStressTest("sensitive-demo.json");
+messageQueuStressTest("sensitive-demo-xtb-new-branch.json");
