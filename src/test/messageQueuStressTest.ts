@@ -1,4 +1,4 @@
-/* src/sensitive.json
+/* sensitive/sensitive.json
 {
 	"accountId": "",
 	"password": "",
@@ -16,7 +16,7 @@ process
 		console.error(err, 'Uncaught Exception thrown');
 		process.exit(1);
 	});
-function messageQueuStressTest(jsonPath: string) {
+export function messageQueuStressTest(jsonPath: string) {
 	let login = null;
 	try {
 		login = getLogin(jsonPath);
@@ -38,5 +38,3 @@ function messageQueuStressTest(jsonPath: string) {
 		}
 	});
 }
-
-messageQueuStressTest("sensitive-demo-xtb-new-branch.json");
