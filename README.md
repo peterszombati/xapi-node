@@ -21,7 +21,11 @@ npm i xapi-node
 // TypeScript
 import XAPI from "xapi-node";
 
-const x = new XAPI({accountId: "(xStation5) accountID", password: "(xStation5) password", type: "real"});
+const x = new XAPI({
+	accountId: "(xStation5) accountID",
+	password: "(xStation5) password",
+	type: "real" // or demo
+});
 
 x.connect();
 
