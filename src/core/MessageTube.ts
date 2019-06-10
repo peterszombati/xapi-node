@@ -89,8 +89,8 @@ export class MessageTube extends Queue {
 
 		if (addQueu) {
 			const isSuccess = this.addQueu(transactionId);
-			if (!isSuccess) {
-				const json = { code: "XAPINODE_2", explain: 'messageQueues exceeded 150 limit' };
+			if (!isSuccess.status) {
+				const json = { code: "XAPINODE_2", explain: isSuccess.data };
 				this.transactions[transactionId].response = {
 					status: false,
 					received: new Time(),

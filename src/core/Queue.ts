@@ -13,12 +13,12 @@ export class Queue extends Listener {
 		this._rateLimit = rateLimit;
 	}
 
-	protected addQueu(transactionId: string): boolean {
+	protected addQueu(transactionId: string): { status: boolean, data: string | null } {
 		if (this.messageQueues.length < 150) {
 			this.messageQueues.push({ transactionId });
-			return true;
+			return { status: true, data: null};
 		}
-		return false;
+		return { status: false, data: "messageQueues exceeded 150 limit" };
 	}
 
 	protected addElapsedTime(time: Time) {
