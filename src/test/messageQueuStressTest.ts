@@ -7,7 +7,7 @@
  */
 
 import XAPI from "../core/XAPI";
-import {getLogin} from "./getLogin";
+import {parseLogin} from "./parseLogin";
 process
 	.on('unhandledRejection', (reason, p) => {
 		console.error(reason, 'Unhandled Rejection at Promise', p);
@@ -19,7 +19,7 @@ process
 export function messageQueuStressTest(jsonPath: string) {
 	let login = null;
 	try {
-		login = getLogin(jsonPath);
+		login = parseLogin(jsonPath);
 	} catch (e) {
 		console.error(e);
 		process.exit(1);
