@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import {XAPIConfig} from "..";
+import {XAPIConfig} from "../index";
 
 export function parseLogin(loginJsonFile: string): {accountId: string, password: string, type: string} {
 	if (!fs.existsSync(loginJsonFile)) {

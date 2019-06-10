@@ -7,7 +7,7 @@
  */
 
 import XAPI from "../core/XAPI";
-import {parseLogin} from "./parseLogin";
+import {parseLogin} from "../modules/parseLogin";
 process
 	.on('unhandledRejection', (reason, p) => {
 		console.error(reason, 'Unhandled Rejection at Promise', p);
