@@ -148,7 +148,7 @@ export class SocketConnection extends MessageTube {
 		if (message.status) {
 			this.handleData(
 				message.returnData,
-				typeof(message.customTag) !== 'string' ? null : message.customTag,
+				typeof(message.customTag) === 'string' ? message.customTag : null,
 				time);
 		} else if (message.status !== undefined
 			&& message.errorCode !== undefined
@@ -165,11 +165,10 @@ export class SocketConnection extends MessageTube {
 				transactionId = this.XAPI.createTransactionId();
 			}
 
-			const customTag = command + '_' + transactionId;
 			const json = JSON.stringify({
 				command,
 				arguments: (Object.keys(args).length === 0) ? undefined : args,
-				customTag });
+				customTag: command + '_' + transactionId });
 
 			this.addTransaction({
 				command,
