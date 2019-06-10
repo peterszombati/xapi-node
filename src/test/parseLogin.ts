@@ -2,19 +2,25 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {XAPIConfig} from "..";
 
-export function parseLogin(file: string): {accountId: string, password: string, type: string} {
-	const login = path.join(process.cwd(), "sensitive", file);
-	if (!fs.existsSync(login)) {
-		throw `${login} is not exists.`
+export function parseLogin(loginJsonFile: string): {accountId: string, password: string, type: string} {
+	if (!fs.existsSync(loginJsonFile)) {
+		throw `${loginJsonFile} is not exists.`
 	}
-	const {accountId, password, type}: XAPIConfig = JSON.parse(fs.readFileSync(login).toString().trim());
+	let json: any = {};
+	try {
+		json = JSON.parse(fs.readFileSync(loginJsonFile).toString().trim())
+	} catch (e) {
+		throw `${loginJsonFile} is not valid json file`;
+	}
+
+	const {accountId, password, type}: XAPIConfig = json;
 	if (typeof (accountId) !== "string"
 	||	typeof (password) !== "string"
 	||	typeof (type) !== "string") {
-		throw `${login} is not valid`
+		throw `${loginJsonFile} is not valid`
 	}
 	if (["real", "demo"].every(x => x !== type.toLowerCase())) {
-		throw `${login} not contains valid type (it should be 'real' or 'demo')`;
+		throw `${loginJsonFile} not contains valid type (it should be 'real' or 'demo')`;
 	}
 	return { accountId, password, type: type.toLowerCase() };
 }
