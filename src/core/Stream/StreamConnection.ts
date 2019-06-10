@@ -25,6 +25,9 @@ export class StreamConnection extends MessageTube{
 	}
 
 	public connect() {
+		if (this.XAPI.tryReconnect === false) {
+			return;
+		}
 		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType() + "Stream");
 		this.WebSocket.onOpen(() => {
 			this.handleSocketOpen(new Time());
