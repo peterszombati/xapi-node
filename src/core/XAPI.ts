@@ -133,9 +133,9 @@ export class XAPI extends Listener {
 	}
 
 	public connect() {
+		this._tryReconnect = true;
 		this.Stream.connect();
 		this.Socket.connect();
-		this._tryReconnect = true;
 	}
 
 	public get isConnectionReady() {
