@@ -24,9 +24,11 @@ export class Listener {
 	}
 
 	public callListener(listenerId: string, params: any[] = []) {
-		Object.keys(this._listeners[listenerId]).forEach((key: string) => {
-			this._listeners[listenerId][key](...params);
-		});
+		if (this._listeners[listenerId] !== undefined) {
+			Object.keys(this._listeners[listenerId]).forEach((key: string) => {
+				this._listeners[listenerId][key](...params);
+			});
+		}
 	}
 
 }
