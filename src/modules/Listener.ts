@@ -3,6 +3,7 @@ export class Listener {
 	constructor() {}
 
 	private _listeners: any = {};
+
 	public get listeners() {
 		return this._listeners;
 	}
