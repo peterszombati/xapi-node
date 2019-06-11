@@ -128,6 +128,7 @@ export class XAPI extends Listener {
 	public setSession(session: string) {
 		this.account.session = session;
 		if (this.Stream.status === true && session !== null && session.length > 0) {
+			this.Stream.ping();
 			this.callListener("xapiReady");
 		}
 	}

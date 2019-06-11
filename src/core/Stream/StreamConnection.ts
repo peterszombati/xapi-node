@@ -62,6 +62,7 @@ export class StreamConnection extends MessageTube{
 		this.setConnection(true);
 		this.resetMessageTube();
 		if (this.XAPI.getSession().length > 0) {
+			this.XAPI.Stream.ping();
 			this.XAPI.callListener("xapiReady");
 		}
 	}
