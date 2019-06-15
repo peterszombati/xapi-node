@@ -129,7 +129,7 @@ export class SocketConnection extends MessageTube {
 			this.transactions[transactionId].response = {
 				status: false,
 				json: { code, explain },
-				received: new Time()
+				received: time
 			};
 			this.rejectTransaction({ code, explain }, this.transactions[transactionId]);
 		}
