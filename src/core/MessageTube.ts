@@ -87,7 +87,7 @@ export class MessageTube extends Queue {
 		}
 
 		if (addQueu) {
-			const isSuccess = this.addQueu(transaction.transactionId, transaction.urgent);
+			const isSuccess = this.addQueu(transaction);
 			if (!isSuccess.status) {
 				const json = { code: "XAPINODE_2", explain: isSuccess.data };
 				transaction.response = {

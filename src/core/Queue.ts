@@ -13,9 +13,10 @@ export class Queue extends Listener {
 		this._rateLimit = rateLimit;
 	}
 
-	protected addQueu(transactionId: string, urgent: boolean): { status: boolean, data: string | null } {
+	protected addQueu(transaction: Transaction<any,any>): { status: boolean, data: string | null } {
+		const { urgent, transactionId } = transaction;
 		if (this.messageQueues.length < 150) {
-			if (urgent && this.messageQueues.length > 0) {
+			if (transaction.urgent && this.messageQueues.length > 0) {
 				const i = this.messageQueues.findIndex(q => q.urgent === false);
 				if (i === -1) {
 					this.messageQueues.push({transactionId, urgent});
