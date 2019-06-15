@@ -54,17 +54,17 @@ export class MessageTube extends Queue {
 		}
 	}
 
-	protected sendJSON(command: string, json: string, transactionId: string, addQueu: boolean = true): boolean {
+	protected sendJSON(command: string, json: string, transaction: Transaction<any, any>, addQueu: boolean = true): boolean {
 		if (json.length > 1000) {
 			const reason = "Each command invocation should not contain more than 1kB of data.";
-			if (this.transactions[transactionId] !== undefined) {
+			if (transaction !== undefined) {
 				const json = { code: "XAPINODE_0", explain: reason };
-				this.transactions[transactionId].response = {
+				transaction.response = {
 					status: false,
 					received: new Time(),
 					json
 				};
-				this.rejectTransaction(json, this.transactions[transactionId]);
+				this.rejectTransaction(json, transaction);
 			}
 			return false;
 		}
@@ -74,29 +74,27 @@ export class MessageTube extends Queue {
 			const isSuccess = this.sendMessage(json);
 			if (isSuccess) {
 				this.addElapsedTime(time);
-				if (this.transactions[transactionId] !== undefined) {
-					this.transactions[transactionId].request.sent = new Time();
-					if (this.transactions[transactionId].isStream) {
-						this.transactions[transactionId].status = TransactionStatus.successful;
-						this.resolveTransaction(null, null, this.transactions[transactionId]);
+				transaction.request.sent = new Time();
+					if (transaction.isStream) {
+						transaction.status = TransactionStatus.successful;
+						this.resolveTransaction(null, null, transaction);
 					} else {
-						this.transactions[transactionId].status = TransactionStatus.sent;
+						transaction.status = TransactionStatus.sent;
 					}
-				}
 				return true;
 			}
 		}
 
 		if (addQueu) {
-			const isSuccess = this.addQueu(transactionId);
+			const isSuccess = this.addQueu(transaction.transactionId, transaction.urgent);
 			if (!isSuccess.status) {
 				const json = { code: "XAPINODE_2", explain: isSuccess.data };
-				this.transactions[transactionId].response = {
+				transaction.response = {
 					status: false,
 					received: new Time(),
 					json
 				};
-				this.rejectTransaction(json, this.transactions[transactionId]);
+				this.rejectTransaction(json, transaction);
 			}
 		}
 
@@ -122,7 +120,7 @@ export class MessageTube extends Queue {
 		for (let i = 0; i < this.messageQueues.length; i++) {
 			const { transactionId } = this.messageQueues[i];
 			const { request: { json }, command } = this.transactions[transactionId];
-			const isSent = this.sendJSON(command, json, transactionId, false);
+			const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
 			if (isSent) {
 				this.messageQueues.splice(i, 1);
 				i -= 1;

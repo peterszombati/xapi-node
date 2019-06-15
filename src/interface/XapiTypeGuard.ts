@@ -6,6 +6,7 @@ export interface Transactions {
 
 export interface MessagesQueue {
 	transactionId: string
+	urgent: boolean
 }
 
 export interface TransactionResolveSocket<T> { returnData: T, time: Time, transaction: Transaction<TransactionResolveSocket<T>, null> }
@@ -18,6 +19,7 @@ export interface Transaction<Resolve,Reject> {
 	createdAt: Time
 	transactionId: string
 	isStream: boolean
+	urgent: boolean
 	request: {
 		sent: Time,
 		arguments: any

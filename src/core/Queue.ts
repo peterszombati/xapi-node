@@ -1,4 +1,4 @@
-import {MessagesQueue} from "../interface/XapiTypeGuard";
+import {MessagesQueue, Transaction} from "../interface/XapiTypeGuard";
 import {Listener} from "../modules/Listener";
 import {Time} from "../modules/Time";
 
@@ -13,9 +13,18 @@ export class Queue extends Listener {
 		this._rateLimit = rateLimit;
 	}
 
-	protected addQueu(transactionId: string): { status: boolean, data: string | null } {
+	protected addQueu(transactionId: string, urgent: boolean): { status: boolean, data: string | null } {
 		if (this.messageQueues.length < 150) {
-			this.messageQueues.push({ transactionId });
+			if (urgent && this.messageQueues.length > 0) {
+				const i = this.messageQueues.findIndex(q => q.urgent === false);
+				if (i === -1) {
+					this.messageQueues.push({transactionId, urgent});
+				} else {
+					this.messageQueues.splice(i, 0, {transactionId, urgent});
+				}
+			} else {
+				this.messageQueues.push({transactionId, urgent});
+			}
 			return { status: true, data: null};
 		}
 		return { status: false, data: "messageQueues exceeded 150 limit" };

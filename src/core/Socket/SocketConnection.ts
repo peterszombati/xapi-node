@@ -158,7 +158,7 @@ export class SocketConnection extends MessageTube {
 		}
 	}
 
-	protected sendCommand<T>(command: string, args: any = {}, transactionId: string = null):
+	protected sendCommand<T>(command: string, args: any = {}, transactionId: string = null, urgent: boolean = false):
 		Promise<TransactionResolveSocket<T>> {
 		return new Promise((resolve, reject: any) => {
 			if (transactionId === null) {
@@ -178,7 +178,8 @@ export class SocketConnection extends MessageTube {
 				transactionId,
 				createdAt: new Time(),
 				status: TransactionStatus.waiting,
-				promise: { resolve, reject }
+				promise: { resolve, reject },
+				urgent
 			}, transactionId);
 
 			if (this.XAPI.getSession().length === 0
@@ -187,7 +188,7 @@ export class SocketConnection extends MessageTube {
 				&& "logout" !== command) {
 				this.rejectTransaction({ code: 'XAPINODE_BE103', explain: 'User is not logged' }, this.transactions[transactionId], false);
 			} else {
-				this.sendJSON(command, json, transactionId);
+				this.sendJSON(command, json, this.transactions[transactionId]);
 			}
 		});
 	}

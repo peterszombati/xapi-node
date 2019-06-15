@@ -86,7 +86,7 @@ export class StreamConnection extends MessageTube{
 		}
 	}
 
-	protected sendCommand(command: string, completion: any = {}):
+	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
 		Promise<TransactionResolveStream> {
 		return new Promise((resolve, reject) => {
 			const transactionId = this.XAPI.createTransactionId();
@@ -104,6 +104,7 @@ export class StreamConnection extends MessageTube{
 				createdAt: new Time(),
 				status: TransactionStatus.waiting,
 				promise: { resolve, reject },
+				urgent
 			}, transactionId);
 
 			if (this.XAPI.getSession().length === 0) {
@@ -112,7 +113,7 @@ export class StreamConnection extends MessageTube{
 					explain: 'User is not logged'
 				}, this.transactions[transactionId], false);
 			} else {
-				this.sendJSON(command, json, transactionId);
+				this.sendJSON(command, json, this.transactions[transactionId]);
 			}
 		});
 	}
