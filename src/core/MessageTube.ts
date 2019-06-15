@@ -19,8 +19,9 @@ export class MessageTube extends Queue {
 		super(rateLimit);
 	}
 
-	public addTransaction(transaction: Transaction<null,null>, transactionId: string): void {
+	public addTransaction(transaction: Transaction<null,null>, transactionId: string): Transaction<null, null> {
 		this.transactions[transactionId] = transaction;
+		return transaction;
 	}
 
 	private sendMessage(json: string): boolean {
