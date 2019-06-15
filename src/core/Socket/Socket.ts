@@ -190,7 +190,7 @@ class Socket extends SocketConnection {
 			});
 		},
 		getServerTime: () => {
-			return this.sendCommand<getServerTimeResponse>('getServerTime');
+			return this.sendCommand<getServerTimeResponse>('getServerTime', {}, null, true);
 		},
 		getStepRules: () => {
 			return this.sendCommand<STEP_RULE_RECORD[]>('getStepRules');
