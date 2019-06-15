@@ -95,7 +95,7 @@ export class StreamConnection extends MessageTube{
 				"streamSessionId": this.XAPI.getSession(),
 				...completion
 			});
-			this.addTransaction({
+			const transaction = this.addTransaction({
 				command,
 				isStream: true,
 				request: {json, arguments: completion, sent: null},
@@ -111,9 +111,9 @@ export class StreamConnection extends MessageTube{
 				this.rejectTransaction({
 					code: 'NODEJS_BE103',
 					explain: 'User is not logged'
-				}, this.transactions[transactionId], false);
+				}, transaction, false);
 			} else {
-				this.sendJSON(command, json, this.transactions[transactionId]);
+				this.sendJSON(command, json, transaction);
 			}
 		});
 	}

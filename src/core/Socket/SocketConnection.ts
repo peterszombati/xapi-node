@@ -172,7 +172,7 @@ export class SocketConnection extends MessageTube {
 				arguments: (Object.keys(args).length === 0) ? undefined : args,
 				customTag: command + '_' + transactionId });
 
-			this.addTransaction({
+			const transaction = this.addTransaction({
 				command,
 				isStream: false,
 				request: { json, arguments: args, sent: null },
@@ -188,9 +188,9 @@ export class SocketConnection extends MessageTube {
 				&& "login" !== command
 				&& "ping" !== command
 				&& "logout" !== command) {
-				this.rejectTransaction({ code: 'XAPINODE_BE103', explain: 'User is not logged' }, this.transactions[transactionId], false);
+				this.rejectTransaction({ code: 'XAPINODE_BE103', explain: 'User is not logged' }, transaction, false);
 			} else {
-				this.sendJSON(command, json, this.transactions[transactionId]);
+				this.sendJSON(command, json, transaction);
 			}
 		});
 	}
