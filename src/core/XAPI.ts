@@ -2,6 +2,9 @@ import Stream from "./Stream/Stream";
 import Socket from "./Socket/Socket";
 import Utils from "../utils/Utils";
 import {Listener} from "../modules/Listener";
+import Logger4, {EmptyLogger} from "logger4";
+import {Logger4Interface} from "logger4";
+import Logger from "../utils/Logger";
 
 export const DefaultHostname = 'ws.xtb.com';
 
@@ -11,7 +14,8 @@ export interface XAPIConfig {
 	type ?: string | null,
 	appName ?: string,
 	host ?: string,
-	rateLimit ?: number
+	rateLimit ?: number,
+	logger ?: Logger4Interface
 }
 
 export interface XAPIAccount {
@@ -40,8 +44,10 @@ export class XAPI extends Listener {
 		type = null,
 		appName = undefined,
 		host = DefaultHostname,
-		rateLimit = 850}: XAPIConfig) {
+		rateLimit = 850,
+		logger = new EmptyLogger()}: XAPIConfig) {
 		super();
+		Logger.setLogger(logger);
 		this._rateLimit = rateLimit;
 		this.Socket = new Socket(this, password);
 		this.Stream = new Stream(this);
