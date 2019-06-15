@@ -1,7 +1,14 @@
 import * as fs from 'fs';
 import {XAPIConfig} from "..";
 
-export function parseLogin(loginJsonFile: string): { accountId: string, password: string, type: string } {
+export function parseLogin(loginJsonFile: string): {
+	accountId: string,
+	password: string,
+	type: string,
+	rateLimit: undefined | number,
+	host: undefined | string,
+	appName: undefined | string
+} {
 	if (!fs.existsSync(loginJsonFile)) {
 		throw `${loginJsonFile} is not exists.`
 	}
@@ -28,5 +35,5 @@ export function parseLogin(loginJsonFile: string): { accountId: string, password
 	if (["real", "demo"].every(x => x !== type.toLowerCase())) {
 		throw `${loginJsonFile} not contains valid type (it should be 'real' or 'demo')`;
 	}
-	return { accountId, password, type: type.toLowerCase() };
+	return { accountId, password, type: type.toLowerCase(), rateLimit, host, appName };
 }
