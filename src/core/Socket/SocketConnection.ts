@@ -103,7 +103,9 @@ export class SocketConnection extends MessageTube {
 	private handleSocketOpen(time: Time) {
 		this.setConnection(true);
 		this.resetMessageTube();
-		this.login();
+		this.login().then(() => {
+			this.XAPI.Socket.ping();
+		});
 	}
 
 	private handleSocketClose(time: Time) {
