@@ -254,7 +254,7 @@ class Socket extends SocketConnection {
 					type,
 					volume: parseFloat(volume.toFixed(2))
 				}
-			}, transactionId);
+			}, transactionId, true);
 		},
 		tradeTransactionStatus: (order: number) => {
 			return this.sendCommand<tradeTransactionStatusResponse>('tradeTransactionStatus', {
@@ -264,11 +264,11 @@ class Socket extends SocketConnection {
 	};
 
 	public ping() {
-		return this.sendCommand<null>('ping');
+		return this.sendCommand<null>('ping', {}, null, true );
 	}
 
 	public logout() {
-		return this.sendCommand<null>('logout');
+		return this.sendCommand<null>('logout', {}, null, true);
 	}
 
 }

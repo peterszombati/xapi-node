@@ -26,7 +26,7 @@ export class SocketConnection extends MessageTube {
 			'userId': this.XAPI.getAccountID(),
 			'password': this._password,
 			'appName': this.XAPI.getAppName()
-		});
+		}, null, true);
 	}
 
 	private getInfo(customTag: string): { transactionId: string, command: string } {
