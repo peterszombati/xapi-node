@@ -2,9 +2,8 @@ import Stream from "./Stream/Stream";
 import Socket from "./Socket/Socket";
 import Utils from "../utils/Utils";
 import {Listener} from "../modules/Listener";
-import Logger4, {EmptyLogger} from "logger4";
-import {Logger4Interface} from "logger4";
 import Logger from "../utils/Logger";
+import {Logger4Interface, EmptyLogger} from "logger4";
 
 export const DefaultHostname = 'ws.xtb.com';
 
