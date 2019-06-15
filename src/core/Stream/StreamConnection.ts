@@ -103,7 +103,7 @@ export class StreamConnection extends MessageTube{
 				transactionId,
 				createdAt: new Time(),
 				status: TransactionStatus.waiting,
-				promise: {resolve, reject}
+				promise: { resolve, reject },
 			}, transactionId);
 
 			if (this.XAPI.getSession().length === 0) {

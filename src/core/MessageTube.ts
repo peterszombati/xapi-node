@@ -13,7 +13,7 @@ export class MessageTube extends Queue {
 	public transactions: Transactions = {};
 	private _lastReceivedMessage: Time = new Time(false);
 	public get lastReceivedMessage() { return this._lastReceivedMessage; }
-	protected WebSocket: WebSocketModule ;
+	protected WebSocket: WebSocketModule;
 
 	constructor(rateLimit: number) {
 		super(rateLimit);
