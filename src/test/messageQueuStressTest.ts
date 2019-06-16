@@ -8,6 +8,9 @@
 
 import XAPI from "../core/XAPI";
 import {parseLogin} from "..";
+import Logger4 from "logger4";
+import * as path from 'path';
+
 process
 	.on('unhandledRejection', (reason, p) => {
 		console.error(reason, 'Unhandled Rejection at Promise', p);
@@ -24,12 +27,8 @@ export function messageQueuStressTest(jsonPath: string) {
 		console.error(e);
 		process.exit(1);
 	}
-	const x = new XAPI(login);
+	const x = new XAPI({...login, logger: new Logger4(path.join(process.cwd(), "logs", "xapi"))});
 	x.connect();
-
-	x.Socket.listen.getVersion((data, time) => {
-		console.log(data);
-	});
 
 	x.onReady(() => {
 		console.log("Ready: " + x.getAccountID());
