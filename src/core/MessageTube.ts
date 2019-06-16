@@ -55,7 +55,10 @@ export class MessageTube extends Queue {
 
 	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
 		transaction.status = interrupted === false ? TransactionStatus.timeout : TransactionStatus.interrupted;
-		Logger.log.error((transaction.isStream ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): " + transaction.command + ", " + JSON.stringify(transaction.request.arguments) + "\nReason:\n" + JSON.stringify({code, explain}));
+		Logger.log.error((transaction.isStream ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
+			+ transaction.command + ", "
+			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
+			+ "\nReason:\n" + JSON.stringify({code, explain}));
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;
 			transaction.promise = { resolve: null, reject: null };
