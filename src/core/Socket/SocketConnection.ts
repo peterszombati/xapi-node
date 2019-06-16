@@ -8,6 +8,7 @@ import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
 import Logger from "../../utils/Logger";
+import {errorCode} from "../../enum/errorCode";
 
 export class SocketConnection extends MessageTube {
 
@@ -109,7 +110,7 @@ export class SocketConnection extends MessageTube {
 		for (const transactionId in this.transactions) {
 			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-				this.rejectTransaction({ code: "XAPINODE_1", explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
+				this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
 			}
 		}
 		if (this.XAPI.tryReconnect) {
@@ -182,14 +183,14 @@ export class SocketConnection extends MessageTube {
 
 			if (this.status === false) {
 				this.rejectTransaction({
-					code: "XAPINODE_1",
+					code: errorCode.XAPINODE_1,
 					explain: "Socket closed"
 				}, this.transactions[transactionId], false);
 			} else if (this.XAPI.getSession().length === 0
 				&& "login" !== command
 				&& "ping" !== command
 				&& "logout" !== command) {
-				this.rejectTransaction({ code: 'XAPINODE_BE103', explain: 'User is not logged' }, transaction, false);
+				this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction, false);
 			} else {
 				this.sendJSON(command, json, transaction);
 			}

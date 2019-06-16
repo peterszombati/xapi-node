@@ -8,6 +8,7 @@ import {Queue} from "./Queue";
 import {Time} from "../modules/Time";
 import {WebSocketModule} from "../modules/WebSocketModule";
 import Logger from "../utils/Logger";
+import {errorCode} from "../enum/errorCode";
 
 export class MessageTube extends Queue {
 
@@ -70,7 +71,7 @@ export class MessageTube extends Queue {
 		if (json.length > 1000) {
 			const reason = "Each command invocation should not contain more than 1kB of data.";
 			if (transaction !== undefined) {
-				const json = { code: "XAPINODE_0", explain: reason };
+				const json = { code: errorCode.XAPINODE_0, explain: reason };
 				transaction.response = {
 					status: false,
 					received: new Time(),
@@ -100,7 +101,7 @@ export class MessageTube extends Queue {
 		if (addQueu) {
 			const isSuccess = this.addQueu(transaction);
 			if (!isSuccess.status) {
-				const json = { code: "XAPINODE_2", explain: isSuccess.data };
+				const json = { code: errorCode.XAPINODE_2, explain: isSuccess.data };
 				transaction.response = {
 					status: false,
 					received: new Time(),

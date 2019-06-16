@@ -7,6 +7,7 @@ import {
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
 import Logger from "../../utils/Logger";
+import {errorCode} from "../../enum/errorCode";
 
 export class StreamConnection extends MessageTube{
 	private XAPI: XAPI;
@@ -113,12 +114,12 @@ export class StreamConnection extends MessageTube{
 
 			if (this.status === false) {
 				this.rejectTransaction({
-					code: "XAPINODE_1",
+					code: errorCode.XAPINODE_1,
 					explain: "Stream closed"
 				}, this.transactions[transactionId], false);
 			} else if (this.XAPI.getSession().length === 0) {
 				this.rejectTransaction({
-					code: 'NODEJS_BE103',
+					code: errorCode.XAPINODE_BE103,
 					explain: 'User is not logged'
 				}, transaction, false);
 			} else {
