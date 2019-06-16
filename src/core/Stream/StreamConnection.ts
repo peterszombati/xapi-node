@@ -111,7 +111,12 @@ export class StreamConnection extends MessageTube{
 				urgent
 			}, transactionId);
 
-			if (this.XAPI.getSession().length === 0) {
+			if (this.status === false) {
+				this.rejectTransaction({
+					code: "XAPINODE_1",
+					explain: "Stream closed"
+				}, this.transactions[transactionId], false);
+			} else if (this.XAPI.getSession().length === 0) {
 				this.rejectTransaction({
 					code: 'NODEJS_BE103',
 					explain: 'User is not logged'

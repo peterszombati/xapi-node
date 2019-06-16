@@ -180,7 +180,12 @@ export class SocketConnection extends MessageTube {
 				urgent
 			}, transactionId);
 
-			if (this.XAPI.getSession().length === 0
+			if (this.status === false) {
+				this.rejectTransaction({
+					code: "XAPINODE_1",
+					explain: "Socket closed"
+				}, this.transactions[transactionId], false);
+			} else if (this.XAPI.getSession().length === 0
 				&& "login" !== command
 				&& "ping" !== command
 				&& "logout" !== command) {
