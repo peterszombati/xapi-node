@@ -54,6 +54,10 @@ export class XAPI extends Listener {
 			this.setAccount(accountId, type, appName, host);
 		}
 
+		this.Socket.listen.login((data, time, transaction) => {
+			this.setSession(data.streamSessionId);
+		});
+
 		this.addListener("xapiReady", () => {
 			if (this.pingTimer != null) {
 				clearInterval(this.pingTimer);

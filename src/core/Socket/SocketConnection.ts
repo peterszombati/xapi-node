@@ -14,20 +14,10 @@ export class SocketConnection extends MessageTube {
 	protected XAPI: XAPI;
 
 	public status: boolean = false;
-	private _password: string = null;
 
-	constructor(XAPI: XAPI, password: string) {
+	constructor(XAPI: XAPI) {
 		super(XAPI.rateLimit);
-		this._password = password;
 		this.XAPI = XAPI;
-	}
-
-	private login() {
-		return this.sendCommand('login', {
-			'userId': this.XAPI.getAccountID(),
-			'password': this._password,
-			'appName': this.XAPI.getAppName()
-		}, null, true);
 	}
 
 	private getInfo(customTag: string): { transactionId: string, command: string } {
@@ -107,7 +97,7 @@ export class SocketConnection extends MessageTube {
 	private handleSocketOpen(time: Time) {
 		this.setConnection(true);
 		this.resetMessageTube();
-		this.login().then(() => {
+		this.XAPI.Socket.login().then(() => {
 			this.XAPI.Socket.ping();
 		});
 	}
@@ -150,14 +140,12 @@ export class SocketConnection extends MessageTube {
 
 	private handleSocketMessage(message: any, time: Time) {
 		this.lastReceivedMessage.reset();
-		if (message.streamSessionId !== undefined) {
-			this.XAPI.setSession(message.streamSessionId);
-			return;
-		}
 		if (message.status) {
 			this.handleData(
-				message.returnData,
-				typeof(message.customTag) === 'string' ? message.customTag : null,
+				(message.streamSessionId === undefined) ?
+						{streamSessionId: message.streamSessionId} : message.returnData,
+				typeof(message.customTag) === 'string' ?
+						message.customTag : null,
 				time);
 		} else if (message.status !== undefined
 			&& message.errorCode !== undefined

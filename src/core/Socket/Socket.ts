@@ -47,8 +47,10 @@ interface SocketListen<T> { (data: T, time: Time, transaction: Transaction<null,
 
 class Socket extends SocketConnection {
 
+	private _password: string = null;
 	constructor(XAPI: XAPI, password: string) {
-		super(XAPI, password);
+		super(XAPI);
+		this._password = password;
 	}
 
 	public listen = {
@@ -120,6 +122,9 @@ class Socket extends SocketConnection {
 		},
 		ping: (callBack: SocketListen<any>, key: string = undefined) => {
 			this.addListener('ping', callBack, key);
+		},
+		login: (callBack: SocketListen<{streamSessionId: string}>, key: string = undefined) => {
+			this.addListener('login', callBack, key);
 		}
 	};
 
@@ -269,6 +274,14 @@ class Socket extends SocketConnection {
 
 	public logout() {
 		return this.sendCommand<null>('logout', {}, null, true);
+	}
+
+	public login() {
+		return this.sendCommand('login', {
+			'userId': this.XAPI.getAccountID(),
+			'password': this._password,
+			'appName': this.XAPI.getAppName()
+		}, null, true);
 	}
 
 }
