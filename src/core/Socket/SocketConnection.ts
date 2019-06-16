@@ -98,6 +98,7 @@ export class SocketConnection extends MessageTube {
 		this.setConnection(true);
 		this.resetMessageTube();
 		this.XAPI.Socket.login().then(() => {
+			Logger.log.hidden("Login is successful (userId = " + this.XAPI.getAccountID() + ", " + this.XAPI.getAccountType() + ")", "INFO");
 			this.XAPI.Socket.ping();
 		});
 	}
