@@ -44,7 +44,10 @@ export class MessageTube extends Queue {
 				resolve({transaction});
 			} else {
 				const elapsedMs = transaction.response.received.getDifference(transaction.request.sent);
-				Logger.log.info("Socket (" + transaction.transactionId + "): " + transaction.command + ", " + JSON.stringify(transaction.request.arguments) + ", ("+elapsedMs+"ms)");
+				Logger.log.info("Socket (" + transaction.transactionId + "): "
+					+ transaction.command + ", "
+					+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
+					+ ", ("+elapsedMs+"ms)");
 				resolve({returnData, time, transaction})
 			}
 		}

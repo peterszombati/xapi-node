@@ -142,7 +142,7 @@ export class SocketConnection extends MessageTube {
 		this.lastReceivedMessage.reset();
 		if (message.status) {
 			this.handleData(
-				(message.streamSessionId === undefined) ?
+				(message.streamSessionId !== undefined) ?
 						{streamSessionId: message.streamSessionId} : message.returnData,
 				typeof(message.customTag) === 'string' ?
 						message.customTag : null,
