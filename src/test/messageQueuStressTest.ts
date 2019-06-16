@@ -27,11 +27,11 @@ export function messageQueuStressTest(jsonPath: string) {
 		console.error(e);
 		process.exit(1);
 	}
-	const x = new XAPI({...login, logger: new Logger4(path.join(process.cwd(), "logs", "xapi"))});
+	const logger = new Logger4(path.join(process.cwd(), "logs", "xapi"));
+	const x = new XAPI({...login, logger });
 	x.connect();
 
 	x.onReady(() => {
-		console.log("Ready: " + x.getAccountID());
 		for (let i = 0; i < 150; i++) {
 			x.Socket.send.getVersion()
 		}
