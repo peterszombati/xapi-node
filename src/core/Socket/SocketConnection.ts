@@ -98,9 +98,21 @@ export class SocketConnection extends MessageTube {
 	private handleSocketOpen(time: Time) {
 		this.setConnection(true);
 		this.resetMessageTube();
+		this.tryLogin(2);
+	}
+
+	private tryLogin(retries: number = 2) {
 		this.XAPI.Socket.login().then(() => {
-			Logger.log.hidden("Login is successful (userId = " + this.XAPI.getAccountID() + ", " + this.XAPI.getAccountType() + ")", "INFO");
+			Logger.log.hidden("Login is successful (userId = " + this.XAPI.getAccountID() + ", accountType = " + this.XAPI.getAccountType() + ")", "INFO");
 			this.XAPI.Socket.ping();
+		}).catch(e => {
+			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.getAccountID() + ", accountType = " + this.XAPI.getAccountType() + ")\nReason:\n" + JSON.stringify(e), "ERROR");
+			if (retries > 0 && e.code !== errorCode.XAPINODE_1) {
+				setTimeout(() => {
+					Logger.log.hidden("Try to login (retries = " + retries + ")", "INFO");
+					this.tryLogin(retries - 1);
+				}, 500);
+			}
 		});
 	}
 
