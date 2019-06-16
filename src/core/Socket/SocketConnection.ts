@@ -107,7 +107,7 @@ export class SocketConnection extends MessageTube {
 			this.XAPI.Socket.ping();
 		}).catch(e => {
 			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.getAccountID() + ", accountType = " + this.XAPI.getAccountType() + ")\nReason:\n" + JSON.stringify(e), "ERROR");
-			if (retries > 0 && e.code !== errorCode.XAPINODE_1) {
+			if (retries > 0 && e.code !== errorCode.XAPINODE_1 && e.code !== errorCode.BE005) {
 				setTimeout(() => {
 					Logger.log.hidden("Try to login (retries = " + retries + ")", "INFO");
 					this.tryLogin(retries - 1);
