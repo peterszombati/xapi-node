@@ -28,7 +28,7 @@ export class Queue extends Listener {
 			}
 			return { status: true, data: null};
 		}
-		return { status: false, data: "messageQueues exceeded 150 limit" };
+		return { status: false, data: "messageQueues exceeded 150 size limit" };
 	}
 
 	protected addElapsedTime(time: Time) {
