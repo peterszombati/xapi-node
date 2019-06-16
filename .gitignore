@@ -6,3 +6,4 @@ sensitive*.json
 sensitive.json
 /sensitive
 /src/test/tests.ts
+/logs
