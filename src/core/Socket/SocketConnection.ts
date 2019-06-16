@@ -76,7 +76,9 @@ export class SocketConnection extends MessageTube {
 		this.WebSocket.onMessage((message: any) => {
 			try {
 				this.handleSocketMessage(JSON.parse(message.toString().trim()), new Time());
-			} catch (e) {}
+			} catch (e) {
+				Logger.log.hidden(JSON.stringify(e, null, "t"), "ERROR");
+			}
 		});
 
 		this.WebSocket.onError((e: any) => {
