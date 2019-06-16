@@ -6,6 +6,7 @@ import {
 } from "../../interface/XapiTypeGuard";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
+import Logger from "../../utils/Logger";
 
 export class StreamConnection extends MessageTube{
 	private XAPI: XAPI;
@@ -26,14 +27,17 @@ export class StreamConnection extends MessageTube{
 
 	public connect() {
 		if (this.XAPI.tryReconnect === false) {
+			Logger.log.warn("Stream connect is called when tryReconnect is false");
 			return;
 		}
 		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType() + "Stream");
 		this.WebSocket.onOpen(() => {
+			Logger.log.info("Stream open");
 			this.handleSocketOpen(new Time());
 		});
 
 		this.WebSocket.onClose(() => {
+			Logger.log.info("Stream closed");
 			this.handleSocketClose(new Time());
 		});
 

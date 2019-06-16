@@ -7,6 +7,7 @@ import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
+import Logger from "../../utils/Logger";
 
 export class SocketConnection extends MessageTube {
 
@@ -67,14 +68,17 @@ export class SocketConnection extends MessageTube {
 
 	public connect() {
 		if (this.XAPI.tryReconnect === false) {
+			Logger.log.warn("Socket connect is called when tryReconnect is false");
 			return;
 		}
 		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType());
 		this.WebSocket.onOpen(() => {
+			Logger.log.info("Socket open");
 			this.handleSocketOpen(new Time());
 		});
 
 		this.WebSocket.onClose(() => {
+			Logger.log.info("Socket closed");
 			this.handleSocketClose(new Time());
 		});
 
@@ -134,6 +138,9 @@ export class SocketConnection extends MessageTube {
 				received: time
 			};
 			this.rejectTransaction({ code, explain }, this.transactions[transactionId]);
+		} else {
+			Logger.log.error("Socket error message:\n"
+				+ JSON.stringify({ code, explain, customTag }, null, "\t"));
 		}
 	}
 
