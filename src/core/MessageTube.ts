@@ -40,14 +40,14 @@ export class MessageTube extends Queue {
 			const resolve = transaction.promise.resolve;
 			transaction.promise = { resolve: null, reject: null };
 			if (transaction.isStream) {
-				Logger.log.info(" Stream (" + transaction.transactionId + "): " + transaction.command + ", " + JSON.stringify(transaction.request.arguments));
+				Logger.log.hidden(" Stream (" + transaction.transactionId + "): " + transaction.command + ", " + JSON.stringify(transaction.request.arguments), "INFO");
 				resolve({transaction});
 			} else {
 				const elapsedMs = transaction.response.received.getDifference(transaction.request.sent);
-				Logger.log.info("Socket (" + transaction.transactionId + "): "
+				Logger.log.hidden("Socket (" + transaction.transactionId + "): "
 					+ transaction.command + ", "
 					+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
-					+ ", ("+elapsedMs+"ms)");
+					+ ", ("+elapsedMs+"ms)", "INFO");
 				resolve({returnData, time, transaction})
 			}
 		}
@@ -55,10 +55,10 @@ export class MessageTube extends Queue {
 
 	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
 		transaction.status = interrupted === false ? TransactionStatus.timeout : TransactionStatus.interrupted;
-		Logger.log.error((transaction.isStream ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
+		Logger.log.hidden((transaction.isStream ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
 			+ transaction.command + ", "
 			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
-			+ "\nReason:\n" + JSON.stringify({code, explain}));
+			+ "\nReason:\n" + JSON.stringify({code, explain}), "ERROR");
 		if (transaction.promise.reject !== null) {
 			const reject = transaction.promise.reject;
 			transaction.promise = { resolve: null, reject: null };

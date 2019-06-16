@@ -58,17 +58,17 @@ export class SocketConnection extends MessageTube {
 
 	public connect() {
 		if (this.XAPI.tryReconnect === false) {
-			Logger.log.warn("Socket connect is called when tryReconnect is false");
+			Logger.log.hidden("Socket connect is called when tryReconnect is false", "WARN");
 			return;
 		}
 		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType());
 		this.WebSocket.onOpen(() => {
-			Logger.log.info("Socket open");
+			Logger.log.hidden("Socket open", "INFO");
 			this.handleSocketOpen(new Time());
 		});
 
 		this.WebSocket.onClose(() => {
-			Logger.log.info("Socket closed");
+			Logger.log.hidden("Socket closed", "INFO");
 			this.handleSocketClose(new Time());
 		});
 
@@ -129,8 +129,8 @@ export class SocketConnection extends MessageTube {
 			};
 			this.rejectTransaction({ code, explain }, this.transactions[transactionId]);
 		} else {
-			Logger.log.error("Socket error message:\n"
-				+ JSON.stringify({ code, explain, customTag }, null, "\t"));
+			Logger.log.hidden("Socket error message:\n"
+				+ JSON.stringify({ code, explain, customTag }, null, "\t"), "ERROR");
 		}
 	}
 

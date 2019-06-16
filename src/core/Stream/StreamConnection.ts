@@ -27,17 +27,17 @@ export class StreamConnection extends MessageTube{
 
 	public connect() {
 		if (this.XAPI.tryReconnect === false) {
-			Logger.log.warn("Stream connect is called when tryReconnect is false");
+			Logger.log.hidden("Stream connect is called when tryReconnect is false", "WARN");
 			return;
 		}
 		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType() + "Stream");
 		this.WebSocket.onOpen(() => {
-			Logger.log.info("Stream open");
+			Logger.log.hidden("Stream open", "INFO");
 			this.handleSocketOpen(new Time());
 		});
 
 		this.WebSocket.onClose(() => {
-			Logger.log.info("Stream closed");
+			Logger.log.hidden("Stream closed", "INFO");
 			this.handleSocketClose(new Time());
 		});
 
