@@ -10,7 +10,7 @@ This module is usable on Front-end too.
 
 ## Getting started
 
-### 1. Install 
+### 1. Install via [npm](https://www.npmjs.com/package/xapi-node)
 
 ```
 npm i xapi-node
