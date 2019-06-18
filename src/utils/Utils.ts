@@ -1,7 +1,39 @@
+import {Transaction} from "../interface/XapiTypeGuard";
+import {getProfitCalculation} from "../interface/Request";
+
 class Utils {
 
 	static Date(UTCtimestamp: number): Date {
 		return new Date(UTCtimestamp);
+	}
+
+	static transactionToJSONString(transaction: Transaction<any, any>): string {
+		const response = JSON.stringify(transaction.response.json);
+		try {
+			return JSON.stringify({
+				status: transaction.status,
+				command: transaction.command,
+				createdAt: transaction.createdAt === null ? null : transaction.createdAt.getUTC().getTime(),
+				transactionId: transaction.transactionId,
+				isStream: transaction.isStream,
+				urgent: transaction.urgent,
+				request: {
+					sent: transaction.request.sent === null ? null : transaction.request.sent.getUTC().getTime(),
+					arguments: transaction.command === 'login' ? {} : transaction.request.arguments,
+					json: transaction.command === 'login' ? '"json contains secret information"' : transaction.request.json
+				},
+				response: {
+					status: transaction.response.status,
+					received: transaction.response.received === null ? null : transaction.response.received.getUTC().getTime(),
+					json: response === null ? null : (
+						(response.length > 1000) ? '"Too long response #xapi-node' : response
+					)
+				}
+			}, null, "\t");
+		} catch (e) {
+			console.log(response);
+			process.exit(2);
+		}
 	}
 
 	static getUTCTimestamp(year: number = null, month: number = null, date: number = null, hour: number = null, minute: number = null, seconds: number = null): number {

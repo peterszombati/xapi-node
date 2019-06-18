@@ -9,6 +9,7 @@ import {Time} from "../modules/Time";
 import {WebSocketModule} from "../modules/WebSocketModule";
 import Logger from "../utils/Logger";
 import {errorCode} from "../enum/errorCode";
+import Utils from "../utils/Utils";
 
 export class MessageTube extends Queue {
 
@@ -24,6 +25,21 @@ export class MessageTube extends Queue {
 	public addTransaction(transaction: Transaction<null,null>, transactionId: string): Transaction<null, null> {
 		this.transactions[transactionId] = transaction;
 		return transaction;
+	}
+
+	public removeOldTransactions(): number {
+		let deleted = 0;
+		Object.values(this.transactions).forEach(transaction => {
+			if (transaction.createdAt.elapsedMs() > 60000) {
+				if (transaction.promise.reject !== null) {
+					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
+				}
+				Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "_Transactions");
+				delete this.transactions[transaction.transactionId];
+				deleted += 1;
+			}
+		});
+		return deleted;
 	}
 
 	private sendMessage(json: string): boolean {
