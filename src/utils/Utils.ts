@@ -1,5 +1,6 @@
 import {Transaction} from "../interface/XapiTypeGuard";
 import {getProfitCalculation} from "../interface/Request";
+import Logger from "./Logger";
 
 class Utils {
 
@@ -31,8 +32,8 @@ class Utils {
 				}
 			}, null, "\t");
 		} catch (e) {
-			console.log(response);
-			process.exit(2);
+			Logger.log.error(e);
+			return "{}";
 		}
 	}
 
