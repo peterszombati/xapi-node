@@ -35,8 +35,7 @@ x.Socket.listen.getTradesHistory((history, time, transaction) => {
 });
 
 x.onReady(() => {
-	x.Socket.send.getTickPrices(["EURUSD"]).then((resolve) => {
-		const { returnData, time, transaction } = resolve;
+	x.Socket.send.getTickPrices(["EURUSD"]).then(({ returnData, time, transaction }) => {
 		console.log(returnData.quotations[0]);
 	});
 
