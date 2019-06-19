@@ -25,7 +25,7 @@ class Utils {
 				response: {
 					status: transaction.response.status,
 					received: transaction.response.received === null ? null : transaction.response.received.getUTC().getTime(),
-					json: response === null ? null : (
+					json: response === null || typeof(response) === 'undefined' ? null : (
 						(response.length > 1000) ? '"Too long response #xapi-node"' : response
 					)
 				}
