@@ -34,7 +34,7 @@ export class MessageTube extends Queue {
 				if (transaction.promise.reject !== null) {
 					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
 				}
-				Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "_Transactions");
+				Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
 				delete this.transactions[transaction.transactionId];
 				deleted += 1;
 			}

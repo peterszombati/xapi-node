@@ -27,7 +27,7 @@ export function messageQueuStressTest(jsonPath: string) {
 		console.error(e);
 		process.exit(1);
 	}
-	const logger = new Logger4(path.join(process.cwd(), "logs", "xapi"));
+	const logger = new Logger4({ path: path.join(process.cwd(), "logs", "xapi"), removeOverDirectorySize: null });
 	const x = new XAPI({...login, logger });
 	x.connect();
 

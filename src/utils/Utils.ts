@@ -1,5 +1,4 @@
 import {Transaction} from "../interface/XapiTypeGuard";
-import {getProfitCalculation} from "../interface/Request";
 import Logger from "./Logger";
 
 class Utils {
@@ -27,12 +26,12 @@ class Utils {
 					status: transaction.response.status,
 					received: transaction.response.received === null ? null : transaction.response.received.getUTC().getTime(),
 					json: response === null ? null : (
-						(response.length > 1000) ? '"Too long response #xapi-node' : response
+						(response.length > 1000) ? '"Too long response #xapi-node"' : response
 					)
 				}
 			}, null, "\t");
 		} catch (e) {
-			Logger.log.error(e);
+			Logger.log.error(JSON.stringify(e));
 			return "{}";
 		}
 	}
