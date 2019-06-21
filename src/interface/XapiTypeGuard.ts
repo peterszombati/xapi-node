@@ -26,7 +26,7 @@ export interface Transaction<Resolve,Reject> {
 		json: string
 	},
 	response: {
-		status: boolean
+		status: boolean | null
 		received: Time | null
 		json: any
 	}

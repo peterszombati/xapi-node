@@ -19,28 +19,28 @@ class Stream extends StreamConnection {
 	}
 
 	public listen = {
-		getBalance: (callBack: (data: STREAMING_BALANCE_RECORD, time: Time) => void, key: string = undefined) => {
+		getBalance: (callBack: (data: STREAMING_BALANCE_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("balance", callBack, key);
 		},
-		getCandles: (callBack: (data: STREAMING_CANDLE_RECORD, time: Time) => void, key: string = undefined) => {
+		getCandles: (callBack: (data: STREAMING_CANDLE_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("candle", callBack, key);
 		},
-		getKeepAlive: (callBack: (data: STREAMING_KEEP_ALIVE_RECORD, time: Time) => void, key: string = undefined) => {
+		getKeepAlive: (callBack: (data: STREAMING_KEEP_ALIVE_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("keepAlive", callBack, key);
 		},
-		getNews: (callBack: (data: STREAMING_NEWS_RECORD, time: Time) => void, key: string = undefined) => {
+		getNews: (callBack: (data: STREAMING_NEWS_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("news", callBack, key);
 		},
-		getProfits: (callBack: (data: STREAMING_PROFIT_RECORD, time: Time) => void, key: string = undefined) => {
+		getProfits: (callBack: (data: STREAMING_PROFIT_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("profit", callBack, key);
 		},
-		getTickPrices: (callBack: (data: STREAMING_TICK_RECORD, time: Time) => void, key: string = undefined) => {
+		getTickPrices: (callBack: (data: STREAMING_TICK_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("tickPrices", callBack, key);
 		},
-		getTrades: (callBack: (data: STREAMING_TRADE_RECORD, time: Time) => void, key: string = undefined) => {
+		getTrades: (callBack: (data: STREAMING_TRADE_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("trade", callBack, key);
 		},
-		getTradeStatus: (callBack: (data: STREAMING_TRADE_STATUS_RECORD, time: Time) => void, key: string = undefined) => {
+		getTradeStatus: (callBack: (data: STREAMING_TRADE_STATUS_RECORD, time: Time) => void, key: string | null = null) => {
 			this.addListener("tradeStatus", callBack, key);
 		},
 	};

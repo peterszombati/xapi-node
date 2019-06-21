@@ -174,7 +174,7 @@ export class SocketConnection extends MessageTube {
 		}
 	}
 
-	protected sendCommand<T>(command: string, args: any = {}, transactionId: string = null, urgent: boolean = false):
+	protected sendCommand<T>(command: string, args: any = {}, transactionId: string | null = null, urgent: boolean = false):
 		Promise<TransactionResolveSocket<T>> {
 		return new Promise((resolve, reject: any) => {
 			if (transactionId === null) {

@@ -1,14 +1,7 @@
 import * as fs from 'fs';
 import {XAPIConfig} from "..";
 
-export function parseLogin(loginJsonFile: string): {
-	accountId: string,
-	password: string,
-	type: string,
-	rateLimit: undefined | number,
-	host: undefined | string,
-	appName: undefined | string
-} {
+export function parseLogin(loginJsonFile: string): XAPIConfig {
 	if (!fs.existsSync(loginJsonFile)) {
 		throw `${loginJsonFile} is not exists.`
 	}

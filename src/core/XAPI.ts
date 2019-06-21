@@ -8,21 +8,20 @@ import {Logger4Interface, EmptyLogger} from "logger4";
 export const DefaultHostname = 'ws.xtb.com';
 
 export interface XAPIConfig {
-	accountId ?: string | null,
-	password ?: string | null,
-	type ?: string | null,
+	accountId: string,
+	password: string,
+	type: string,
 	appName ?: string,
-	host ?: string,
-	rateLimit ?: number,
+	host ?: string | undefined,
+	rateLimit ?: number | undefined,
 	logger ?: Logger4Interface
 }
 
 export interface XAPIAccount {
-	accountId ?: string | null,
-	password ?: string | null,
-	type ?: string | null,
-	appName ?: string,
-	host ?: string,
+	accountId: string,
+	type: string,
+	appName ?: string | undefined,
+	host: string,
 	session: string
 }
 
@@ -38,9 +37,9 @@ export class XAPI extends Listener {
 	public get rateLimit() { return this._rateLimit; }
 
 	constructor({
-		accountId = null,
-		password = null,
-		type = null,
+		accountId,
+		password,
+		type,
 		appName = undefined,
 		host = DefaultHostname,
 		rateLimit = 850,
@@ -107,7 +106,7 @@ export class XAPI extends Listener {
 		appName: undefined
 	};
 
-	public getAccountType(): string {
+	public getAccountType(): string | null {
 		return this.account.type;
 	}
 
@@ -119,7 +118,7 @@ export class XAPI extends Listener {
 		return this.account.session;
 	}
 
-	public getAppName(): string {
+	public getAppName(): string | undefined {
 		return this.account.appName;
 	}
 
@@ -130,7 +129,7 @@ export class XAPI extends Listener {
 	protected setAccount(
 		accountId: string,
 		type: string,
-		appName: string = undefined,
+		appName: string | undefined = undefined,
 		host: string = DefaultHostname) {
 		this.account = {
 			type: (type.toLowerCase() === "real") ? "real" : "demo",
@@ -186,7 +185,7 @@ export class XAPI extends Listener {
 		this.addListener("xapiReady", callBack, key);
 	}
 
-	public onConnectionChange(callBack: (status: boolean) => void, key: string = undefined) {
+	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
 		this.addListener("xapiConnectionChange", callBack, key);
 	}
 

@@ -6,7 +6,7 @@
 }
  */
 
-import XAPI from "../core/XAPI";
+import XAPI, {XAPIConfig} from "../core/XAPI";
 import {parseLogin} from "..";
 import Logger4 from "logger4";
 import * as path from 'path';
@@ -20,20 +20,21 @@ process
 		process.exit(1);
 	});
 export function messageQueuStressTest(jsonPath: string) {
-	let login = null;
+	let login: XAPIConfig;
 	try {
 		login = parseLogin(jsonPath);
+		const logger = new Logger4({ path: path.join(process.cwd(), "logs", "xapi"), removeOverDirectorySize: null });
+		const x = new XAPI({...login, logger});
+		x.connect();
+
+		x.onReady(() => {
+			for (let i = 0; i < 150; i++) {
+				x.Socket.send.getVersion()
+			}
+		});
 	} catch (e) {
 		console.error(e);
 		process.exit(1);
 	}
-	const logger = new Logger4({ path: path.join(process.cwd(), "logs", "xapi"), removeOverDirectorySize: null });
-	const x = new XAPI({...login, logger });
-	x.connect();
 
-	x.onReady(() => {
-		for (let i = 0; i < 150; i++) {
-			x.Socket.send.getVersion()
-		}
-	});
 }
