@@ -133,7 +133,7 @@ export class XAPI extends Listener {
 		appName: string = undefined,
 		host: string = DefaultHostname) {
 		this.account = {
-			type:  (type.toLowerCase() === "real") ? "real" : "demo",
+			type: (type.toLowerCase() === "real") ? "real" : "demo",
 			accountId,
 			session: "",
 			appName,
