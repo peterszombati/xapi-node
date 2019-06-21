@@ -27,14 +27,13 @@ export class MessageTube extends Queue {
 		return transaction;
 	}
 
-	public removeOldTransactions(): number {
+	public rejectAndRemoveOldTransactions(): number {
 		let deleted = 0;
 		Object.values(this.transactions).forEach(transaction => {
 			if (transaction.createdAt.elapsedMs() > 60000) {
 				if (transaction.promise.reject !== null) {
 					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
 				}
-				Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
 				delete this.transactions[transaction.transactionId];
 				deleted += 1;
 			}
@@ -67,6 +66,9 @@ export class MessageTube extends Queue {
 					+ ", ("+elapsedMs+"ms)", "INFO");
 				resolve({returnData, time, transaction})
 			}
+			Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
+		} else {
+			Logger.log.hidden("Transaction archived (promise resolve is null):\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
 		}
 	}
 
@@ -81,6 +83,7 @@ export class MessageTube extends Queue {
 			transaction.promise = { resolve: null, reject: null };
 			reject({ reason: {code, explain}, transaction });
 		}
+		Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
 	}
 
 	protected sendJSON(command: string, json: string, transaction: Transaction<any, any>, addQueu: boolean = true): boolean {
