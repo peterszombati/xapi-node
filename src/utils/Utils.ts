@@ -10,33 +10,42 @@ class Utils {
 	static transactionToJSONString(transaction: Transaction<any, any>): string {
 		const response = JSON.stringify(transaction.response.json);
 		try {
+			const createdAtUTC = transaction.createdAt.getUTC();
+			const sentUTC = transaction.request.sent == null ? null : transaction.request.sent.getUTC();
+			const receivedUTC = transaction.response.received == null ? null : transaction.response.received.getUTC();
 			return JSON.stringify({
 				status: transaction.status,
 				command: transaction.command,
-				createdAt: transaction.createdAt === null ? null : transaction.createdAt.getUTC().getTime(),
+				createdAt: transaction.createdAt === null || createdAtUTC === null ? null : createdAtUTC.getTime(),
 				transactionId: transaction.transactionId,
 				isStream: transaction.isStream,
 				urgent: transaction.urgent,
 				request: {
-					sent: transaction.request.sent === null ? null : transaction.request.sent.getUTC().getTime(),
+					sent: transaction.request.sent === null || sentUTC == null ? null : sentUTC.getTime(),
 					arguments: transaction.command === 'login' ? {} : transaction.request.arguments,
 					json: transaction.command === 'login' ? '"json contains secret information"' : transaction.request.json
 				},
 				response: {
 					status: transaction.response.status,
-					received: transaction.response.received === null ? null : transaction.response.received.getUTC().getTime(),
+					received: transaction.response.received === null || receivedUTC == null ? null : receivedUTC.getTime(),
 					json: response === null || typeof(response) === 'undefined' ? null : (
 						(response.length > 1000) ? '"Too long response #xapi-node"' : response
 					)
 				}
 			}, null, "\t");
 		} catch (e) {
-			Logger.log.error(JSON.stringify(e));
 			return "{}";
 		}
 	}
 
-	static getUTCTimestamp(year: number = null, month: number = null, date: number = null, hour: number = null, minute: number = null, seconds: number = null): number {
+	static getUTCTimestamp(
+		year: number | null = null,
+		month: number | null = null,
+		date: number | null = null,
+		hour: number | null = null,
+		minute: number | null = null,
+		seconds: number | null = null
+	): number {
 
 		if (year == null) {
 			return new Date().getTime();

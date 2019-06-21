@@ -8,8 +8,8 @@ function calculateElapsedTime(time: [number, number]): number {
 }
 
 export class Time {
-	private unit: [number, number] = null;
-	private UTCTimestamp: number = null;
+	private unit: [number, number] | null = null;
+	private UTCTimestamp: number | null = null;
 
 	constructor(setDefaultValue: boolean = true) {
 		if (setDefaultValue) {
@@ -48,7 +48,7 @@ export class Time {
 		this.unit = null;
 	}
 
-	public getUTC(): Date {
-		return new Date(this.UTCTimestamp);
+	public getUTC(): Date | null {
+		return this.UTCTimestamp === null ? null : new Date(this.UTCTimestamp);
 	}
 }

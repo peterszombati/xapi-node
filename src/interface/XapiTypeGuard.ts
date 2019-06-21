@@ -21,13 +21,13 @@ export interface Transaction<Resolve,Reject> {
 	isStream: boolean
 	urgent: boolean
 	request: {
-		sent: Time,
+		sent: Time | null
 		arguments: any
 		json: string
 	},
 	response: {
 		status: boolean
-		received: Time
+		received: Time | null
 		json: any
 	}
 	promise: {

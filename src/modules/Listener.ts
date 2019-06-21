@@ -8,14 +8,14 @@ export class Listener {
 		return this._listeners;
 	}
 
-	public addListener(listenerId: string, callBack: any, key: string = undefined) {
+	public addListener(listenerId: string, callBack: any, key: string | null = null) {
 		if (typeof(callBack) !== "function") {
 			return;
 		}
 		if (this._listeners[listenerId] === undefined) {
 			this._listeners[listenerId] = {};
 		}
-		if (key === undefined) {
+		if (key === null) {
 			key = "g" + Object.keys(this._listeners[listenerId]).length;
 			this._listeners[listenerId][key] = callBack;
 		} else {
