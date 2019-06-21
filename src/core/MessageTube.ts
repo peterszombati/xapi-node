@@ -30,8 +30,9 @@ export class MessageTube extends Queue {
 	public rejectAndRemoveOldTransactions(): number {
 		let deleted = 0;
 		Object.values(this.transactions).forEach(transaction => {
-			if (transaction.createdAt.elapsedMs() > 60000) {
-				if (transaction.promise.reject !== null) {
+			const elapsedMs = transaction.createdAt.elapsedMs();
+			if (elapsedMs != null && elapsedMs > 60000) {
+				if (transaction.transactionPromise.tReject !== null) {
 					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
 				}
 				delete this.transactions[transaction.transactionId];
@@ -52,14 +53,14 @@ export class MessageTube extends Queue {
 
 	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any,TransactionReject>) {
 		transaction.status = TransactionStatus.successful;
-		if (transaction.promise.resolve !== null) {
-			const resolve = transaction.promise.resolve;
-			transaction.promise = { resolve: null, reject: null };
+		if (transaction.transactionPromise.tResolve !== null) {
+			const resolve = transaction.transactionPromise.tResolve;
+			transaction.transactionPromise = { tResolve: null, tReject: null };
 			if (transaction.isStream) {
 				Logger.log.hidden(" Stream (" + transaction.transactionId + "): " + transaction.command + ", " + JSON.stringify(transaction.request.arguments), "INFO");
 				resolve({transaction});
 			} else {
-				const elapsedMs = transaction.response.received.getDifference(transaction.request.sent);
+				const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent);
 				Logger.log.hidden("Socket (" + transaction.transactionId + "): "
 					+ transaction.command + ", "
 					+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
@@ -78,9 +79,9 @@ export class MessageTube extends Queue {
 			+ transaction.command + ", "
 			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
 			+ "\nReason:\n" + JSON.stringify({code, explain}, null, "\t"), "ERROR");
-		if (transaction.promise.reject !== null) {
-			const reject = transaction.promise.reject;
-			transaction.promise = { resolve: null, reject: null };
+		if (transaction.transactionPromise.tReject !== null) {
+			const reject = transaction.transactionPromise.tReject;
+			transaction.transactionPromise = { tResolve: null, tReject: null };
 			reject({ reason: {code, explain}, transaction });
 		}
 		Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
@@ -109,7 +110,7 @@ export class MessageTube extends Queue {
 				transaction.request.sent = new Time();
 					if (transaction.isStream) {
 						transaction.status = TransactionStatus.successful;
-						this.resolveTransaction(null, null, transaction);
+						this.resolveTransaction(null, new Time(), transaction);
 					} else {
 						transaction.status = TransactionStatus.sent;
 					}
@@ -120,7 +121,7 @@ export class MessageTube extends Queue {
 		if (addQueu) {
 			const isSuccess = this.addQueu(transaction);
 			if (!isSuccess.status) {
-				const json = { code: errorCode.XAPINODE_2, explain: isSuccess.data };
+				const json: { code: errorCode, explain: string } = { code: errorCode.XAPINODE_2, explain: "" + isSuccess.data };
 				transaction.response = {
 					status: false,
 					received: new Time(),
@@ -137,8 +138,17 @@ export class MessageTube extends Queue {
 	}
 
 	protected callKillQueuTimeout() {
-		const timeoutMs = this.messagesElapsedTime.length <= 4 ? 100
-			: Math.max((this.rateLimit() + 5) - this.messagesElapsedTime[this.messagesElapsedTime.length - 5].elapsedMs(), 0);
+
+		const getTimeoutMs = () => {
+			if (this.messagesElapsedTime.length <= 3) {
+				return 100;
+			}
+			const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
+			return this.rateLimit() + 20 + (elapsedMs == null ? 0 : elapsedMs);
+		};
+
+		const timeoutMs = getTimeoutMs();
+
 		this.isKillerCalled = setTimeout(() => {
 			this.isKillerCalled = null;
 			this.tryKillQueu();

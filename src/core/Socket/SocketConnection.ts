@@ -21,7 +21,7 @@ export class SocketConnection extends MessageTube {
 		this.XAPI = XAPI;
 	}
 
-	private getInfo(customTag: string): { transactionId: string, command: string } {
+	private getInfo(customTag: string): { transactionId: string | null, command: string | null } {
 		const customTagData = customTag.split('_');
 		if (customTagData.length < 2) {
 			return { transactionId: null, command: null };
@@ -38,7 +38,7 @@ export class SocketConnection extends MessageTube {
 	private handleData(returnData: any, customTag: string, time: Time) {
 		const { transactionId, command } = this.getInfo(customTag);
 
-		if (transactionId !== null) {
+		if (transactionId !== null && command !== null) {
 			this.transactions[transactionId].response = {
 				status: true,
 				received: time,
@@ -176,7 +176,7 @@ export class SocketConnection extends MessageTube {
 
 	protected sendCommand<T>(command: string, args: any = {}, transactionId: string | null = null, urgent: boolean = false):
 		Promise<TransactionResolveSocket<T>> {
-		return new Promise((resolve, reject: any) => {
+		return new Promise((tResolve: any, tReject: any) => {
 			if (transactionId === null) {
 				transactionId = this.XAPI.createTransactionId();
 			}
@@ -194,7 +194,7 @@ export class SocketConnection extends MessageTube {
 				transactionId,
 				createdAt: new Time(),
 				status: TransactionStatus.waiting,
-				promise: { resolve, reject },
+				transactionPromise: { tResolve, tReject },
 				urgent
 			}, transactionId);
 

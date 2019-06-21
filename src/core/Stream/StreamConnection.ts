@@ -95,7 +95,7 @@ export class StreamConnection extends MessageTube{
 
 	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
 		Promise<TransactionResolveStream> {
-		return new Promise((resolve, reject) => {
+		return new Promise((tResolve: any, tReject: any) => {
 			const transactionId = this.XAPI.createTransactionId();
 			const json = JSON.stringify({
 				command,
@@ -110,7 +110,7 @@ export class StreamConnection extends MessageTube{
 				transactionId,
 				createdAt: new Time(),
 				status: TransactionStatus.waiting,
-				promise: { resolve, reject },
+				transactionPromise: { tResolve, tReject },
 				urgent
 			}, transactionId);
 

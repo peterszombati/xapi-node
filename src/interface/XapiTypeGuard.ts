@@ -30,9 +30,9 @@ export interface Transaction<Resolve,Reject> {
 		received: Time | null
 		json: any
 	}
-	promise: {
-		resolve: null | ((resolve: Resolve) => void),
-		reject: null | ((reject: Reject) => void)
+	transactionPromise: {
+		tResolve: null | ((resolve: Resolve | null) => void),
+		tReject: null | ((reject: Reject | null) => void)
 	}
 }
 
