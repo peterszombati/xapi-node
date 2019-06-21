@@ -39,8 +39,11 @@ export class Queue extends Listener {
 	}
 
 	protected isRateLimitReached() {
-		return (this.messagesElapsedTime.length > 3) &&
-			(this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs() < this._rateLimit);
+		if (this.messagesElapsedTime.length < 4) {
+			return false;
+		}
+		const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
+		return elapsedMs !== null && elapsedMs < this._rateLimit;
 	}
 
 	protected stopQueuKiller() {
