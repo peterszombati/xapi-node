@@ -27,14 +27,24 @@ export class MessageTube extends Queue {
 		return transaction;
 	}
 
-	public rejectAndRemoveOldTransactions(): number {
-		let deleted = 0;
+	public rejectOldTransactions(): void {
 		Object.values(this.transactions).forEach(transaction => {
 			const elapsedMs = transaction.createdAt.elapsedMs();
 			if (elapsedMs != null && elapsedMs > 60000) {
 				if (transaction.transactionPromise.tReject !== null) {
 					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
 				}
+			}
+		});
+	}
+
+	public removeOldTransactions(): number {
+		let deleted = 0;
+		Object.values(this.transactions)
+			.filter(t => t.transactionPromise.tReject === null && t.transactionPromise.tResolve === null)
+			.forEach(transaction => {
+			const elapsedMs = transaction.createdAt.elapsedMs();
+			if (elapsedMs != null && elapsedMs > 86400000) {
 				delete this.transactions[transaction.transactionId];
 				deleted += 1;
 			}

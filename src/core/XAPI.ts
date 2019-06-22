@@ -80,11 +80,13 @@ export class XAPI extends Listener {
 					}
 				}, 2000);
 
-				if (Object.keys(this.Socket.transactions).length > 0) {
-					this.Socket.rejectAndRemoveOldTransactions();
+				this.Socket.rejectOldTransactions();
+				this.Stream.rejectOldTransactions();
+				if (Object.keys(this.Socket.transactions).length > 20000) {
+					this.Socket.removeOldTransactions();
 				}
-				if (Object.keys(this.Stream.transactions).length > 0) {
-					this.Stream.rejectAndRemoveOldTransactions();
+				if (Object.keys(this.Stream.transactions).length > 20000) {
+					this.Stream.removeOldTransactions();
 				}
 			}, 19000);
 		}, "constructor");
