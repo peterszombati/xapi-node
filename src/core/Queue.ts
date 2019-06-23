@@ -27,7 +27,7 @@ export class Queue extends Listener {
 			} else {
 				this.messageQueues.push({transactionId, urgent});
 			}
-			Logger.log.hidden(transaction.isStream ? " Stream" : "Socket" +  " (" + transaction.transactionId + "): added to queue", "INFO");
+			Logger.log.hidden((transaction.isStream ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue", "INFO");
 			return { status: true, data: null};
 		}
 		return { status: false, data: "messageQueues exceeded 150 size limit" };
