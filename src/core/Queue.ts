@@ -1,6 +1,7 @@
 import {MessagesQueue, Transaction} from "../interface/XapiTypeGuard";
 import {Listener} from "../modules/Listener";
 import {Time} from "../modules/Time";
+import Logger from "../utils/Logger";
 
 export class Queue extends Listener {
 	protected messageQueues: MessagesQueue[] = [];
@@ -26,6 +27,7 @@ export class Queue extends Listener {
 			} else {
 				this.messageQueues.push({transactionId, urgent});
 			}
+			Logger.log.hidden(transaction.isStream ? " Stream" : "Socket" +  " (" + transaction.transactionId + "): added to queue", "INFO");
 			return { status: true, data: null};
 		}
 		return { status: false, data: "messageQueues exceeded 150 size limit" };
