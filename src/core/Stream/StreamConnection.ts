@@ -118,7 +118,7 @@ export class StreamConnection extends MessageTube{
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
 					explain: "Stream closed"
-				}, this.transactions[transactionId], false);
+				}, transaction, false);
 			} else if (this.XAPI.getSession().length === 0) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_BE103,
