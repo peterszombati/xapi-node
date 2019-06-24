@@ -113,18 +113,20 @@ export class MessageTube extends Queue {
 		}
 
 		if (!this.isRateLimitReached()) {
-			const time: Time = new Time();
-			const isSuccess = this.sendMessage(json);
-			if (isSuccess) {
-				this.addElapsedTime(time);
-				transaction.request.sent = new Time();
+			if (this.messageQueues.length === 0 || addQueu === false) {
+				const time: Time = new Time();
+				const isSuccess = this.sendMessage(json);
+				if (isSuccess) {
+					this.addElapsedTime(time);
+					transaction.request.sent = new Time();
 					if (transaction.isStream) {
 						transaction.status = TransactionStatus.successful;
 						this.resolveTransaction(null, new Time(), transaction);
 					} else {
 						transaction.status = TransactionStatus.sent;
 					}
-				return true;
+					return true;
+				}
 			}
 		}
 
@@ -166,9 +168,6 @@ export class MessageTube extends Queue {
 	}
 
 	protected tryKillQueu() {
-		if (this.isKillerCalled != null) {
-			return;
-		}
 		for (let i = 0; i < this.messageQueues.length; i++) {
 			const { transactionId } = this.messageQueues[i];
 			const { request: { json }, command } = this.transactions[transactionId];
