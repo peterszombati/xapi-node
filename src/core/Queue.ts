@@ -4,7 +4,10 @@ import {Time} from "../modules/Time";
 import Logger from "../utils/Logger";
 
 export class Queue extends Listener {
-	protected messageQueues: MessagesQueue[] = [];
+	protected messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = { urgent: [], normal: [] };
+	protected get queueSize() {
+		return this.messageQueues.urgent.length + this.messageQueues.normal.length;
+	}
 	protected messagesElapsedTime: Time[] = [];
 	protected isKillerCalled: any = null;
 	private _rateLimit: number;
@@ -16,16 +19,11 @@ export class Queue extends Listener {
 
 	protected addQueu(transaction: Transaction<any,any>): { status: boolean, data: string | null } {
 		const { urgent, transactionId } = transaction;
-		if (this.messageQueues.length < 150) {
-			if (transaction.urgent && this.messageQueues.length > 0) {
-				const i = this.messageQueues.findIndex(q => q.urgent === false);
-				if (i === -1) {
-					this.messageQueues.push({transactionId, urgent});
-				} else {
-					this.messageQueues.splice(i, 0, {transactionId, urgent});
-				}
+		if (this.messageQueues.urgent.length + this.messageQueues.normal.length < 150) {
+			if (transaction.urgent) {
+				this.messageQueues.urgent.push({transactionId, urgent});
 			} else {
-				this.messageQueues.push({transactionId, urgent});
+				this.messageQueues.normal.push({transactionId, urgent});
 			}
 			Logger.log.hidden((transaction.isStream ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue", "INFO");
 			return { status: true, data: null};
@@ -55,7 +53,7 @@ export class Queue extends Listener {
 	}
 
 	protected resetMessageTube() {
-		this.messageQueues = [];
+		this.messageQueues = { urgent: [], normal: [] };
 		this.messagesElapsedTime = [];
 		this.stopQueuKiller();
 	}

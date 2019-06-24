@@ -1,4 +1,5 @@
 import {
+	MessagesQueue,
 	Transaction,
 	TransactionReject,
 	Transactions,
@@ -113,7 +114,7 @@ export class MessageTube extends Queue {
 		}
 
 		if (!this.isRateLimitReached()) {
-			if (this.messageQueues.length === 0 || addQueu === false) {
+			if (this.queueSize === 0 || addQueu === false) {
 				const time: Time = new Time();
 				const isSuccess = this.sendMessage(json);
 				if (isSuccess) {
@@ -143,7 +144,7 @@ export class MessageTube extends Queue {
 			}
 		}
 
-		if (this.messageQueues.length > 0 && this.isKillerCalled === null) {
+		if ((this.messageQueues.urgent.length > 0 || this.messageQueues.normal.length > 0) && this.isKillerCalled === null) {
 			this.callKillQueuTimeout();
 		}
 		return false;
@@ -163,23 +164,32 @@ export class MessageTube extends Queue {
 
 		this.isKillerCalled = setTimeout(() => {
 			this.isKillerCalled = null;
-			this.tryKillQueu();
+			this.tryKillQueu(this.messageQueues.urgent);
+			this.tryKillQueu(this.messageQueues.normal);
 		}, timeoutMs);
 	}
 
-	protected tryKillQueu() {
-		for (let i = 0; i < this.messageQueues.length; i++) {
-			const { transactionId } = this.messageQueues[i];
-			const { request: { json }, command } = this.transactions[transactionId];
-			const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
-			if (isSent) {
-				this.messageQueues.splice(i, 1);
-				i -= 1;
-			} else {
-				this.callKillQueuTimeout();
-				break;
+	protected tryKillQueu(queue: MessagesQueue[]) {
+		for (let i = 0; i < queue.length; i++) {
+			const { transactionId } = queue[i];
+			const { request: { json }, command, status } = this.transactions[transactionId];
+			if (status === TransactionStatus.waiting) {
+				const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
+				if (isSent === false) {
+					this.callKillQueuTimeout();
+					return;
+				} else {
+					this.cleanQueue();
+				}
 			}
 		}
+	}
+
+	protected cleanQueue() {
+		this.messageQueues = {
+			urgent: this.messageQueues.urgent.filter(q => this.transactions[q.transactionId].status === TransactionStatus.waiting),
+			normal: this.messageQueues.normal.filter(q => this.transactions[q.transactionId].status === TransactionStatus.waiting),
+		};
 	}
 
 }
