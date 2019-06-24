@@ -20,10 +20,10 @@ export class Queue extends Listener {
 	protected addQueu(transaction: Transaction<any,any>): { status: boolean, data: string | null } {
 		const { urgent, transactionId } = transaction;
 		if (this.messageQueues.urgent.length + this.messageQueues.normal.length < 150) {
-			if (transaction.urgent) {
-				this.messageQueues.urgent.push({transactionId, urgent});
+			if (urgent) {
+				this.messageQueues.urgent.push({transactionId});
 			} else {
-				this.messageQueues.normal.push({transactionId, urgent});
+				this.messageQueues.normal.push({transactionId});
 			}
 			Logger.log.hidden((transaction.isStream ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue", "INFO");
 			return { status: true, data: null};

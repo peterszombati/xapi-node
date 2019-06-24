@@ -144,7 +144,7 @@ export class MessageTube extends Queue {
 			}
 		}
 
-		if ((this.messageQueues.urgent.length > 0 || this.messageQueues.normal.length > 0) && this.isKillerCalled === null) {
+		if (this.queueSize > 0 && this.isKillerCalled === null) {
 			this.callKillQueuTimeout();
 		}
 		return false;

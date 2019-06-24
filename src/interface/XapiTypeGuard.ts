@@ -6,7 +6,6 @@ export interface Transactions {
 
 export interface MessagesQueue {
 	transactionId: string
-	urgent: boolean
 }
 
 export interface TransactionResolveSocket<T> { returnData: T, time: Time, transaction: Transaction<TransactionResolveSocket<T>, null> }
