@@ -69,7 +69,9 @@ export class SocketConnection extends MessageTube {
 		});
 
 		this.WebSocket.onClose(() => {
-			Logger.log.hidden("Socket closed", "INFO");
+			if (this.status === true) {
+				Logger.log.hidden("Socket closed", "INFO");
+			}
 			this.handleSocketClose(new Time());
 		});
 

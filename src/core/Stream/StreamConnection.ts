@@ -38,7 +38,9 @@ export class StreamConnection extends MessageTube{
 		});
 
 		this.WebSocket.onClose(() => {
-			Logger.log.hidden("Stream closed", "INFO");
+			if (this.status === true) {
+				Logger.log.hidden("Stream closed", "INFO");
+			}
 			this.handleSocketClose(new Time());
 		});
 
