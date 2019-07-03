@@ -101,7 +101,7 @@ export class SocketConnection extends MessageTube {
 
 	private handleSocketOpen(time: Time) {
 		this.setConnection(true);
-		this.resetMessageTube();
+		this.resetMessageTube("Socket");
 		this.tryLogin(2);
 	}
 
@@ -125,7 +125,7 @@ export class SocketConnection extends MessageTube {
 
 	private handleSocketClose(time: Time) {
 		this.setConnection(false);
-		this.resetMessageTube();
+		this.resetMessageTube("Socket");
 		for (const transactionId in this.transactions) {
 			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {

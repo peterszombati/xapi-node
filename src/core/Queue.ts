@@ -25,7 +25,7 @@ export class Queue extends Listener {
 			} else {
 				this.messageQueues.normal.push({transactionId});
 			}
-			Logger.log.hidden((transaction.isStream ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue", "INFO");
+			Logger.log.hidden((transaction.isStream ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
 			return { status: true, data: null};
 		}
 		return { status: false, data: "messageQueues exceeded 150 size limit" };
@@ -52,7 +52,10 @@ export class Queue extends Listener {
 		}
 	}
 
-	protected resetMessageTube() {
+	protected resetMessageTube(source: string) {
+		if (this.queueSize > 0) {
+			Logger.log.info((source === "Stream" ? " Stream" : "Socket") + " Message queue reseted, deleted = " + this.queueSize);
+		}
 		this.messageQueues = { urgent: [], normal: [] };
 		this.messagesElapsedTime = [];
 		this.stopQueuKiller();
