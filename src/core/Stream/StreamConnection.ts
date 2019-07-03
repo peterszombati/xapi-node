@@ -69,11 +69,11 @@ export class StreamConnection extends MessageTube{
 
 	private handleSocketOpen(time: Time) {
 		this.setConnection(true);
+		this.resetMessageTube("Stream");
 		if (this.XAPI.getSession().length > 0) {
 			this.XAPI.Stream.ping();
 			this.XAPI.callListener("xapiReady");
 		}
-		this.resetMessageTube("Stream");
 	}
 
 	private handleSocketMessage(message: any, time: Time) {
