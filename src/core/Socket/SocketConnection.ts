@@ -103,9 +103,12 @@ export class SocketConnection extends MessageTube {
 			clearTimeout(this.openTimeout);
 		}
 		if (status) {
+			this.XAPI.Socket.ping();
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
-				this.tryLogin(2);
+				if (this.status) {
+					this.tryLogin(2);
+				}
 			}, 1000);
 		}
 	}

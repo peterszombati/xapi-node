@@ -71,10 +71,12 @@ export class StreamConnection extends MessageTube{
 			clearTimeout(this.openTimeout);
 		}
 		if (status) {
+			if (this.XAPI.getSession().length > 0) {
+				this.XAPI.Stream.ping();
+			}
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
-				if (this.XAPI.getSession().length > 0) {
-					this.XAPI.Stream.ping();
+				if (this.XAPI.getSession().length > 0 && this.status) {
 					this.XAPI.callListener("xapiReady");
 				}
 			}, 1000);
