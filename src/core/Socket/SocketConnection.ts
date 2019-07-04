@@ -51,7 +51,7 @@ export class SocketConnection extends MessageTube {
 			if (this.listeners[command] !== undefined) {
 				this.callListener(command, [returnData, time, this.transactions[transactionId]]);
 			} else {
-				Logger.log.error('Unhandled message (customTag = ' + customTag + ')');
+				Logger.log.warn('Unhandled message (customTag = ' + customTag + ')');
 			}
 		} else {
 			Logger.log.error('Received a message without vaild customTag (customTag = ' + customTag + ')');
