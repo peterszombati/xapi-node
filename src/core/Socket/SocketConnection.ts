@@ -15,6 +15,7 @@ export class SocketConnection extends MessageTube {
 	protected XAPI: XAPI;
 
 	public status: boolean = false;
+	private openTimeout: NodeJS.Timeout | null = null;
 
 	constructor(XAPI: XAPI) {
 		super(XAPI.rateLimit);
@@ -97,12 +98,21 @@ export class SocketConnection extends MessageTube {
 		} else {
 			this.status = status;
 		}
+
+		if (this.openTimeout !== null) {
+			clearTimeout(this.openTimeout);
+		}
+		if (status) {
+			this.openTimeout = setTimeout(() => {
+				this.openTimeout = null;
+				this.tryLogin(2);
+			}, 1000);
+		}
 	}
 
 	private handleSocketOpen(time: Time) {
-		this.setConnection(true);
 		this.resetMessageTube("Socket");
-		this.tryLogin(2);
+		this.setConnection(true);
 	}
 
 	private tryLogin(retries: number = 2) {

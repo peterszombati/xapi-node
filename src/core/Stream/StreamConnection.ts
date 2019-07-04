@@ -12,6 +12,7 @@ import {errorCode} from "../../enum/errorCode";
 export class StreamConnection extends MessageTube{
 	private XAPI: XAPI;
 	public status: boolean = false;
+	private openTimeout: NodeJS.Timeout | null = null;
 
 	constructor(XAPI: XAPI) {
 		super(XAPI.rateLimit);
@@ -65,15 +66,24 @@ export class StreamConnection extends MessageTube{
 		} else {
 			this.status = status;
 		}
+
+		if (this.openTimeout !== null) {
+			clearTimeout(this.openTimeout);
+		}
+		if (status) {
+			this.openTimeout = setTimeout(() => {
+				this.openTimeout = null;
+				if (this.XAPI.getSession().length > 0) {
+					this.XAPI.Stream.ping();
+					this.XAPI.callListener("xapiReady");
+				}
+			}, 1000);
+		}
 	}
 
 	private handleSocketOpen(time: Time) {
-		this.setConnection(true);
 		this.resetMessageTube("Stream");
-		if (this.XAPI.getSession().length > 0) {
-			this.XAPI.Stream.ping();
-			this.XAPI.callListener("xapiReady");
-		}
+		this.setConnection(true);
 	}
 
 	private handleSocketMessage(message: any, time: Time) {
