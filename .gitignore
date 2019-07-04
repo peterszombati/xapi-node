@@ -1,5 +1,4 @@
 /.idea
-/build
 /node_modules
 /package-lock.json
 sensitive*.json
@@ -7,3 +6,5 @@ sensitive.json
 /sensitive
 /src/test/tests.ts
 /logs
+
+/build
