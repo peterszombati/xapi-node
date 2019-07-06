@@ -241,6 +241,8 @@ class Socket extends SocketConnection {
 			const transactionId = this.XAPI.createTransactionId();
 			if (customComment == null) {
 				customComment = 'x' + transactionId;
+			} else {
+				customComment = 'x' + transactionId + '_' + customComment;
 			}
 			if (expiration instanceof Date) {
 				expiration = expiration.getTime();
