@@ -116,10 +116,13 @@ export class SocketConnection extends MessageTube {
 
 	private tryLogin(retries: number = 2) {
 		this.XAPI.Socket.login().then(() => {
-			Logger.log.hidden("Login is successful (userId = " + this.XAPI.getAccountID() + ", accountType = " + this.XAPI.getAccountType() + ")", "INFO");
+			Logger.log.hidden("Login is successful (userId = " + this.XAPI.getAccountID()
+				+ ", accountType = " + this.XAPI.getAccountType() + ")", "INFO");
 			this.XAPI.Socket.ping();
 		}).catch(e => {
-			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.getAccountID() + ", accountType = " + this.XAPI.getAccountType() + ")\nReason:\n" + JSON.stringify(e, null, "\t"), "ERROR");
+			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.getAccountID()
+				+ ", accountType = " + this.XAPI.getAccountType()
+				+ ")\nReason:\n" + JSON.stringify(e, null, "\t"), "ERROR");
 			if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
 				setTimeout(() => {
 					Logger.log.hidden("Try to login (retries = " + retries + ")", "INFO");
