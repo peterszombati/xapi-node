@@ -51,6 +51,16 @@ export class XAPI extends Listener {
 		if (accountId != null && password != null && type != null) {
 			this.setAccount(accountId, type, appName, host);
 		}
+		this.Stream.onConnectionChange(status => {
+			if (this.Socket.status) {
+				this.callListener("xapiConnectionChange", [status]);
+			}
+		});
+		this.Socket.onConnectionChange(status => {
+			if (this.Stream.status) {
+				this.callListener("xapiConnectionChange", [status]);
+			}
+		});
 
 		this.Socket.listen.login((data, time, transaction) => {
 			this.setSession(data.streamSessionId);

@@ -56,11 +56,14 @@ export class StreamConnection extends MessageTube {
 		});
 	}
 
+	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
+		this.addListener("connectionChange", callBack, key);
+	}
+
 	private setConnection(status: boolean) {
-		if ((this.XAPI.isConnectionReady && status === false)
-			|| (this.XAPI.Socket.status === true && status === true && this.status === false)) {
+		if (this.status !== status) {
 			this.status = status;
-			this.XAPI.callListener("xapiConnectionChange", [status]);
+			this.callListener("connectionChange", [status]);
 		} else {
 			this.status = status;
 		}
