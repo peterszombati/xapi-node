@@ -99,7 +99,7 @@ export class SocketConnection extends MessageTube {
 			clearTimeout(this.openTimeout);
 		}
 		if (status) {
-			this.XAPI.Socket.ping();
+			this.ping();
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
 				if (this.status) {
@@ -118,7 +118,7 @@ export class SocketConnection extends MessageTube {
 		this.XAPI.Socket.login().then(() => {
 			Logger.log.hidden("Login is successful (userId = " + this.XAPI.getAccountID()
 				+ ", accountType = " + this.XAPI.getAccountType() + ")", "INFO");
-			this.XAPI.Socket.ping();
+			this.ping();
 		}).catch(e => {
 			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.getAccountID()
 				+ ", accountType = " + this.XAPI.getAccountType()
@@ -236,4 +236,7 @@ export class SocketConnection extends MessageTube {
 		}
 	}
 
+	public ping() {
+		return this.sendCommand<null>('ping', {}, null, true );
+	}
 }

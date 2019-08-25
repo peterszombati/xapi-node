@@ -159,13 +159,12 @@ export class XAPI extends Listener {
 			this._tryReconnect = false;
 			this.Stream.closeConnection();
 			if (this.Socket.status) {
-				this.Socket.logout().then(() => {
-					this.Socket.closeConnection();
-					resolve();
-				}).catch(() => {
-					this.Socket.closeConnection();
-					resolve();
-				});
+				this.Socket.logout()
+					.catch(() => {})
+					.then(() => {
+						this.Socket.closeConnection();
+						resolve();
+					});
 			} else {
 				this.Socket.closeConnection();
 				resolve();

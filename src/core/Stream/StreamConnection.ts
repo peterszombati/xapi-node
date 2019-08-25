@@ -70,7 +70,7 @@ export class StreamConnection extends MessageTube {
 		}
 		if (status) {
 			if (this.session.length > 0) {
-				this.sendCommand("ping", {}, true);
+				this.ping();
 			}
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
@@ -146,6 +146,10 @@ export class StreamConnection extends MessageTube {
 		if (this.WebSocket !== null) {
 			this.WebSocket.close();
 		}
+	}
+
+	public ping() {
+		return this.sendCommand("ping", {}, true);
 	}
 
 }
