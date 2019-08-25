@@ -129,7 +129,7 @@ export class SocketConnection extends MessageTube {
 					this.tryLogin(retries - 1);
 				}, 500);
 			} else if (e.reason.code === errorCode.BE005) {
-				Logger.log.hidden("Disconnect from stream and socket (reason = 'login error code is " + e.reason.code + "')", "INFO");
+				Logger.log.error("Disconnect from stream and socket (reason = 'login error code is " + e.reason.code + "')");
 				this.XAPI.disconnect();
 			}
 		});
