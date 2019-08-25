@@ -14,7 +14,7 @@ export class SocketConnection extends MessageTube {
 	private openTimeout: NodeJS.Timeout | null = null;
 
 	constructor(XAPI: XAPI) {
-		super(XAPI.rateLimit);
+		super(XAPI.rateLimit, TransactionType.SOCKET);
 		this.XAPI = XAPI;
 	}
 
@@ -110,7 +110,7 @@ export class SocketConnection extends MessageTube {
 	}
 
 	private handleSocketOpen(time: Time) {
-		this.resetMessageTube("Socket");
+		this.resetMessageTube();
 		this.setConnection(true);
 	}
 
@@ -137,7 +137,7 @@ export class SocketConnection extends MessageTube {
 
 	private handleSocketClose(time: Time) {
 		this.setConnection(false);
-		this.resetMessageTube("Socket");
+		this.resetMessageTube();
 		for (const transactionId in this.transactions) {
 			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {

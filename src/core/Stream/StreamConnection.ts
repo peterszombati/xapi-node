@@ -6,13 +6,13 @@ import {WebSocketModule} from "../../modules/WebSocketModule";
 import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
 
-export class StreamConnection extends MessageTube{
+export class StreamConnection extends MessageTube {
 	private XAPI: XAPI;
 	public status: boolean = false;
 	private openTimeout: NodeJS.Timeout | null = null;
 
 	constructor(XAPI: XAPI) {
-		super(XAPI.rateLimit);
+		super(XAPI.rateLimit, TransactionType.STREAM);
 		this.XAPI = XAPI;
 	}
 
@@ -81,7 +81,7 @@ export class StreamConnection extends MessageTube{
 	}
 
 	private handleSocketOpen(time: Time) {
-		this.resetMessageTube("Stream");
+		this.resetMessageTube();
 		this.setConnection(true);
 	}
 
@@ -96,7 +96,7 @@ export class StreamConnection extends MessageTube{
 
 	private handleSocketClose(time: Time) {
 		this.setConnection(false);
-		this.resetMessageTube("Stream");
+		this.resetMessageTube();
 		if (this.XAPI.tryReconnect) {
 			setTimeout(() => {
 				this.connect();

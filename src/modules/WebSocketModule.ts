@@ -60,6 +60,7 @@ export class WebSocketModule extends Listener {
 	onOpen(callback: () => void) {
 		this.addListener("open", callback);
 	}
+
 	onMessage(callback: (message: any) => void) {
 		this.addListener("message", callback);
 	}

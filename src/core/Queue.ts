@@ -4,6 +4,7 @@ import {Time} from "../modules/Time";
 import Logger from "../utils/Logger";
 
 export class Queue extends Listener {
+	private type: TransactionType;
 	protected messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = { urgent: [], normal: [] };
 	protected get queueSize() {
 		return this.messageQueues.urgent.length + this.messageQueues.normal.length;
@@ -12,9 +13,10 @@ export class Queue extends Listener {
 	protected messageSender: any = null;
 	private _rateLimit: number;
 	protected rateLimit() { return this._rateLimit; }
-	constructor(rateLimit: number) {
+	constructor(rateLimit: number, type: TransactionType) {
 		super();
 		this._rateLimit = rateLimit;
+		this.type = type;
 	}
 
 	protected addQueu(transaction: Transaction<any,any>): void {
@@ -28,7 +30,7 @@ export class Queue extends Listener {
 		} else {
 			this.messageQueues.normal.push({transactionId});
 		}
-		Logger.log.hidden((transaction.type === TransactionType.STREAM ? " Stream" : "Socket")
+		Logger.log.hidden((this.type === TransactionType.STREAM ? " Stream" : "Socket")
 			+ " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
 	}
 
@@ -47,9 +49,9 @@ export class Queue extends Listener {
 		return elapsedMs !== null && elapsedMs < this._rateLimit;
 	}
 
-	protected resetMessageTube(source: string) {
+	protected resetMessageTube() {
 		if (this.queueSize > 0) {
-			Logger.log.info((source === "Stream" ? " Stream" : "Socket")
+			Logger.log.info((this.type === TransactionType.STREAM ? " Stream" : "Socket")
 				+ " Message queue reseted, deleted = " + this.queueSize);
 		}
 		this.messageQueues = { urgent: [], normal: [] };

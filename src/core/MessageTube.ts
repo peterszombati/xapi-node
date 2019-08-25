@@ -20,8 +20,8 @@ export class MessageTube extends Queue {
 	public get lastReceivedMessage() { return this._lastReceivedMessage; }
 	protected WebSocket: WebSocketModule;
 
-	constructor(rateLimit: number) {
-		super(rateLimit);
+	constructor(rateLimit: number, type: TransactionType) {
+		super(rateLimit, type);
 	}
 
 	public addTransaction(transaction: Transaction<null,null>, transactionId: string): Transaction<null, null> {
