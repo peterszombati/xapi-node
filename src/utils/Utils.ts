@@ -1,5 +1,4 @@
 import {Transaction} from "../interface/XapiTypeGuard";
-import Logger from "./Logger";
 
 class Utils {
 
@@ -27,7 +26,8 @@ class Utils {
 					json: response === null || typeof(response) === 'undefined' ? null : (
 						(response.length > 1000) ? '"Too long response #xapi-node"' : response
 					)
-				}
+				},
+				transactionPromise: undefined
 			}, null, "\t");
 		} catch (e) {
 			return "{}";
