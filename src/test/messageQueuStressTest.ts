@@ -10,6 +10,7 @@ import XAPI, {XAPIConfig} from "../core/XAPI";
 import {parseLogin} from "..";
 import Logger4 from "logger4";
 import * as path from 'path';
+import {Time} from "../modules/Time";
 
 process
 	.on('unhandledRejection', (reason, p) => {
@@ -27,10 +28,27 @@ export function messageQueuStressTest(jsonPath: string) {
 		const x = new XAPI({...login, logger});
 		x.connect();
 
+		let start: Time = new Time(false);
+		let received: number = 0;
 		x.onReady(() => {
+			start.reset();
+			console.log("Test started.");
 			for (let i = 0; i < 150; i++) {
-				x.Socket.send.getVersion()
+				x.Socket.send.getVersion();
 			}
+			setTimeout(() => {
+				if (received !== 150) {
+					console.error("Test: failed");
+					process.exit(1);
+				} else {
+					console.log("Test: successful");
+					process.exit(0);
+				}
+			}, 40000);
+		});
+
+		x.Socket.listen.getVersion((returnData) => {
+			received += 1;
 		});
 	} catch (e) {
 		console.error(e);
