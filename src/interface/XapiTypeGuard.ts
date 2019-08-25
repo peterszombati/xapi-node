@@ -12,8 +12,8 @@ export interface TransactionResolveSocket<T> { returnData: T, time: Time, transa
 export interface TransactionResolveStream { transaction: Transaction<null, null> }
 export interface TransactionReject { reason: { code: string, explain: string }, transaction: Transaction<null,null>}
 export enum TransactionType {
-	SOCKET = 'socket',
-	STREAM = 'stream'
+	SOCKET = 'Socket',
+	STREAM = 'Stream'
 }
 
 export interface Transaction<Resolve,Reject> {

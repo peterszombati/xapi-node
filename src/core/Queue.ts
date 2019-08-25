@@ -19,7 +19,7 @@ export class Queue extends Listener {
 
 	protected addQueu(transaction: Transaction<any,any>): void {
 		const { urgent, transactionId } = transaction;
-		if (this.messageQueues.urgent.length + this.messageQueues.normal.length >= 150) {
+		if (this.queueSize >= 150) {
 			throw "messageQueues exceeded 150 size limit";
 		}
 
