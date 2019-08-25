@@ -219,7 +219,7 @@ export class SocketConnection extends MessageTube {
 					code: errorCode.XAPINODE_1,
 					explain: "Socket closed"
 				}, this.transactions[transactionId], false);
-			} else if (this.XAPI.getSession().length === 0
+			} else if (this.XAPI.Stream.session.length === 0
 				&& "login" !== command
 				&& "ping" !== command
 				&& "logout" !== command) {

@@ -9,6 +9,7 @@ import {errorCode} from "../../enum/errorCode";
 export class StreamConnection extends MessageTube {
 	private XAPI: XAPI;
 	public status: boolean = false;
+	public session: string = '';
 	private openTimeout: NodeJS.Timeout | null = null;
 
 	constructor(XAPI: XAPI) {
@@ -68,12 +69,12 @@ export class StreamConnection extends MessageTube {
 			clearTimeout(this.openTimeout);
 		}
 		if (status) {
-			if (this.XAPI.getSession().length > 0) {
-				this.XAPI.Stream.ping();
+			if (this.session.length > 0) {
+				this.sendCommand("ping", {}, true);
 			}
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
-				if (this.XAPI.getSession().length > 0 && this.status) {
+				if (this.session.length > 0 && this.status) {
 					this.XAPI.callListener("xapiReady");
 				}
 			}, 1000);
@@ -111,7 +112,7 @@ export class StreamConnection extends MessageTube {
 			const json = JSON.stringify({
 				...completion,
 				command,
-				"streamSessionId": this.XAPI.getSession(),
+				"streamSessionId": this.session,
 			});
 			const transaction = this.addTransaction({
 				command,
@@ -130,7 +131,7 @@ export class StreamConnection extends MessageTube {
 					code: errorCode.XAPINODE_1,
 					explain: "Stream closed"
 				}, transaction, false);
-			} else if (this.XAPI.getSession().length === 0) {
+			} else if (this.session.length === 0) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_BE103,
 					explain: 'User is not logged'

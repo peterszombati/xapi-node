@@ -21,8 +21,7 @@ export interface XAPIAccount {
 	accountId: string,
 	type: string,
 	appName ?: string | undefined,
-	host: string,
-	session: string
+	host: string
 }
 
 export class XAPI extends Listener {
@@ -103,7 +102,6 @@ export class XAPI extends Listener {
 	protected account: XAPIAccount = {
 		type: "demo",
 		accountId: "",
-		session: "",
 		host: "",
 		appName: undefined
 	};
@@ -114,10 +112,6 @@ export class XAPI extends Listener {
 
 	public getAccountID(): string {
 		return this.account.accountId;
-	}
-
-	public getSession(): string {
-		return this.account.session;
 	}
 
 	public getAppName(): string | undefined {
@@ -136,14 +130,13 @@ export class XAPI extends Listener {
 		this.account = {
 			type: (type.toLowerCase() === "real") ? "real" : "demo",
 			accountId,
-			session: "",
 			appName,
 			host
 		};
 	}
 
 	public setSession(session: string) {
-		this.account.session = session;
+		this.Stream.session = session;
 		if (this.Stream.status && session !== null && session.length > 0) {
 			this.Stream.ping();
 			this.callListener("xapiReady");
@@ -162,7 +155,7 @@ export class XAPI extends Listener {
 
 	public disconnect() {
 		return new Promise((resolve, reject) => {
-			this.account.session = '';
+			this.Stream.session = '';
 			this._tryReconnect = false;
 			this.Stream.closeConnection();
 			if (this.Socket.status) {
@@ -181,7 +174,7 @@ export class XAPI extends Listener {
 	}
 
 	public onReady(callBack: () => void, key: string = "default") {
-		if (this.getSession().length > 0 && this.isConnectionReady) {
+		if (this.Stream.session.length > 0 && this.isConnectionReady) {
 			callBack();
 		}
 		this.addListener("xapiReady", callBack, key);
