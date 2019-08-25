@@ -28,7 +28,8 @@ export class Queue extends Listener {
 		} else {
 			this.messageQueues.normal.push({transactionId});
 		}
-		Logger.log.hidden((transaction.type === TransactionType.STREAM ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
+		Logger.log.hidden((transaction.type === TransactionType.STREAM ? " Stream" : "Socket")
+			+ " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
 	}
 
 	protected addElapsedTime(time: Time) {
@@ -48,7 +49,8 @@ export class Queue extends Listener {
 
 	protected resetMessageTube(source: string) {
 		if (this.queueSize > 0) {
-			Logger.log.info((source === "Stream" ? " Stream" : "Socket") + " Message queue reseted, deleted = " + this.queueSize);
+			Logger.log.info((source === "Stream" ? " Stream" : "Socket")
+				+ " Message queue reseted, deleted = " + this.queueSize);
 		}
 		this.messageQueues = { urgent: [], normal: [] };
 		this.messagesElapsedTime = [];
