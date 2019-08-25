@@ -95,7 +95,7 @@ export class StreamConnection extends MessageTube {
 	}
 
 	private handleSocketError(error: any, time: Time) {
-		//console.error(error);
+		//TODO
 	}
 
 	private handleSocketClose(time: Time) {

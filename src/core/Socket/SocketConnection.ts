@@ -173,7 +173,7 @@ export class SocketConnection extends MessageTube {
 	}
 
 	private handleSocketError(error: any, time: Time) {
-		//TODO: console.error(error);
+		//TODO
 	}
 
 	private handleSocketMessage(message: any, time: Time) {
