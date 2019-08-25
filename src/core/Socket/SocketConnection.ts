@@ -143,7 +143,9 @@ export class SocketConnection extends MessageTube {
 		}
 		if (this.XAPI.tryReconnect) {
 			setTimeout(() => {
-				this.connect();
+				if (this.XAPI.tryReconnect) {
+					this.connect();
+				}
 			}, 2000);
 		}
 	}
