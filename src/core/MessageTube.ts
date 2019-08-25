@@ -3,7 +3,8 @@ import {
 	Transaction,
 	TransactionReject,
 	Transactions,
-	TransactionStatus
+	TransactionStatus,
+	TransactionType
 } from "../interface/XapiTypeGuard";
 import {Queue} from "./Queue";
 import {Time} from "../modules/Time";
@@ -67,7 +68,7 @@ export class MessageTube extends Queue {
 		if (transaction.transactionPromise.tResolve !== null) {
 			const resolve = transaction.transactionPromise.tResolve;
 			transaction.transactionPromise = { tResolve: null, tReject: null };
-			if (transaction.isStream) {
+			if (transaction.type === TransactionType.STREAM) {
 				Logger.log.hidden(" Stream (" + transaction.transactionId + "): " + transaction.command + ", " + JSON.stringify(transaction.request.arguments), "INFO");
 				resolve({transaction});
 			} else {
@@ -86,7 +87,7 @@ export class MessageTube extends Queue {
 
 	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
 		transaction.status = interrupted === false ? TransactionStatus.timeout : TransactionStatus.interrupted;
-		Logger.log.hidden((transaction.isStream ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
+		Logger.log.hidden((transaction.type ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
 			+ transaction.command + ", "
 			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
 			+ "\nReason:\n" + JSON.stringify({code, explain}, null, "\t"), "ERROR");
@@ -100,9 +101,8 @@ export class MessageTube extends Queue {
 
 	protected sendJSON(command: string, json: string, transaction: Transaction<any, any>, addQueu: boolean = true): boolean {
 		if (json.length > 1000) {
-			const reason = "Each command invocation should not contain more than 1kB of data.";
 			if (transaction !== undefined) {
-				const json = { code: errorCode.XAPINODE_0, explain: reason };
+				const json = { code: errorCode.XAPINODE_0, explain: "Each command invocation should not contain more than 1kB of data." };
 				transaction.response = {
 					status: false,
 					received: new Time(),
@@ -120,7 +120,7 @@ export class MessageTube extends Queue {
 				if (isSuccess) {
 					this.addElapsedTime(time);
 					transaction.request.sent = new Time();
-					if (transaction.isStream) {
+					if (transaction.type === TransactionType.STREAM) {
 						transaction.status = TransactionStatus.successful;
 						this.resolveTransaction(null, new Time(), transaction);
 					} else {
@@ -132,15 +132,15 @@ export class MessageTube extends Queue {
 		}
 
 		if (addQueu) {
-			const isSuccess = this.addQueu(transaction);
-			if (!isSuccess.status) {
-				const json: { code: errorCode, explain: string } = { code: errorCode.XAPINODE_2, explain: "" + isSuccess.data };
+			try {
+				this.addQueu(transaction);
+			} catch (e) {
 				transaction.response = {
 					status: false,
 					received: new Time(),
-					json
+					json: e
 				};
-				this.rejectTransaction(json, transaction);
+				this.rejectTransaction(e, transaction);
 			}
 		}
 

@@ -1,9 +1,6 @@
 import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
-import {
-	TransactionResolveStream,
-	TransactionStatus
-} from "../../interface/XapiTypeGuard";
+import {TransactionResolveStream, TransactionStatus, TransactionType} from "../../interface/XapiTypeGuard";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
 import Logger from "../../utils/Logger";
@@ -118,7 +115,7 @@ export class StreamConnection extends MessageTube{
 			});
 			const transaction = this.addTransaction({
 				command,
-				isStream: true,
+				type: TransactionType.STREAM,
 				request: {json, arguments: completion, sent: null},
 				response: {json: null, received: null, status: null},
 				transactionId,

@@ -14,12 +14,8 @@ class Utils {
 			const sentUTC = transaction.request.sent == null ? null : transaction.request.sent.getUTC();
 			const receivedUTC = transaction.response.received == null ? null : transaction.response.received.getUTC();
 			return JSON.stringify({
-				status: transaction.status,
-				command: transaction.command,
+				...transaction,
 				createdAt: transaction.createdAt === null || createdAtUTC === null ? null : createdAtUTC.getTime(),
-				transactionId: transaction.transactionId,
-				isStream: transaction.isStream,
-				urgent: transaction.urgent,
 				request: {
 					sent: transaction.request.sent === null || sentUTC == null ? null : sentUTC.getTime(),
 					arguments: transaction.command === 'login' ? {} : transaction.request.arguments,

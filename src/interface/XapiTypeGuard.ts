@@ -11,13 +11,17 @@ export interface MessagesQueue {
 export interface TransactionResolveSocket<T> { returnData: T, time: Time, transaction: Transaction<TransactionResolveSocket<T>, null> }
 export interface TransactionResolveStream { transaction: Transaction<null, null> }
 export interface TransactionReject { reason: { code: string, explain: string }, transaction: Transaction<null,null>}
+export enum TransactionType {
+	SOCKET = 'socket',
+	STREAM = 'stream'
+}
 
 export interface Transaction<Resolve,Reject> {
 	status: TransactionStatus,
 	command: string
 	createdAt: Time
 	transactionId: string
-	isStream: boolean
+	type: TransactionType
 	urgent: boolean
 	request: {
 		sent: Time | null

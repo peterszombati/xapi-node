@@ -1,4 +1,4 @@
-import {MessagesQueue, Transaction} from "../interface/XapiTypeGuard";
+import {MessagesQueue, Transaction, TransactionType} from "../interface/XapiTypeGuard";
 import {Listener} from "../modules/Listener";
 import {Time} from "../modules/Time";
 import Logger from "../utils/Logger";
@@ -17,18 +17,18 @@ export class Queue extends Listener {
 		this._rateLimit = rateLimit;
 	}
 
-	protected addQueu(transaction: Transaction<any,any>): { status: boolean, data: string | null } {
+	protected addQueu(transaction: Transaction<any,any>): void {
 		const { urgent, transactionId } = transaction;
-		if (this.messageQueues.urgent.length + this.messageQueues.normal.length < 150) {
+		if (this.messageQueues.urgent.length + this.messageQueues.normal.length >= 150) {
+			throw "messageQueues exceeded 150 size limit";
+		} else {
 			if (urgent) {
 				this.messageQueues.urgent.push({transactionId});
 			} else {
 				this.messageQueues.normal.push({transactionId});
 			}
-			Logger.log.hidden((transaction.isStream ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
-			return { status: true, data: null};
+			Logger.log.hidden((transaction.type === TransactionType.STREAM ? " Stream" : "Socket") +  " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
 		}
-		return { status: false, data: "messageQueues exceeded 150 size limit" };
 	}
 
 	protected addElapsedTime(time: Time) {

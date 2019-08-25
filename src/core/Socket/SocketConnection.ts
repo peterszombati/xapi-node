@@ -1,8 +1,4 @@
-import {
-	Transaction,
-	TransactionResolveSocket,
-	TransactionStatus
-} from "../../interface/XapiTypeGuard";
+import {TransactionResolveSocket, TransactionStatus, TransactionType} from "../../interface/XapiTypeGuard";
 import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
@@ -203,7 +199,7 @@ export class SocketConnection extends MessageTube {
 
 			const transaction = this.addTransaction({
 				command,
-				isStream: false,
+				type: TransactionType.SOCKET,
 				request: { json, arguments: args, sent: null },
 				response: { json: null, received: null, status: null },
 				transactionId,
