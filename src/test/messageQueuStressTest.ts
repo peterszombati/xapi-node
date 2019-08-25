@@ -21,9 +21,8 @@ process
 		process.exit(1);
 	});
 export function messageQueuStressTest(jsonPath: string) {
-	let login: XAPIConfig;
 	try {
-		login = parseLogin(jsonPath);
+		const login = parseLogin(jsonPath);
 		const logger = new Logger4({ path: path.join(process.cwd(), "logs", "xapi"), removeOverDirectorySize: null });
 		const x = new XAPI({...login, logger});
 		x.connect();
