@@ -6,7 +6,7 @@ export class WebSocketModule extends Listener {
 	constructor(url: string) {
 		super();
 		if (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports) {
-			// backend module
+			// NodeJS module
 			const WebSocketClient = require("ws");
 			this.ws = new WebSocketClient(url);
 			this.ws.on('open', () => {
@@ -24,7 +24,7 @@ export class WebSocketModule extends Listener {
 				this.callListener("error", [error]);
 			});
 		} else {
-			// frontend module
+			// JavaScript browser module
 			this.ws = new WebSocket(url);
 			this.ws.onopen = () => {
 				if (this._status === false) {
