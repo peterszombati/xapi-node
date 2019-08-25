@@ -179,7 +179,6 @@ export class MessageTube extends Queue {
 				if (isSent) {
 					this.cleanQueue();
 				} else {
-					this.callKillQueuTimeout();
 					return;
 				}
 			}
