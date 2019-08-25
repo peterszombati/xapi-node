@@ -54,13 +54,15 @@ export class MessageTube extends Queue {
 		return deleted;
 	}
 
-	private sendMessage(json: string): boolean {
+	private sendMessage(json: string): Time | null {
 		try {
+			const time: Time = new Time();
 			this.WebSocket.send(json);
+			return time;
 		} catch (e) {
-			return false;
+			Logger.log.error(e.toString());
+			return null;
 		}
-		return true;
 	}
 
 	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any,TransactionReject>) {
@@ -114,17 +116,16 @@ export class MessageTube extends Queue {
 		}
 
 		if (!this.isRateLimitReached()) {
-			if (this.queueSize === 0 || addQueu === false) {
-				const time: Time = new Time();
-				const isSuccess = this.sendMessage(json);
-				if (isSuccess) {
-					this.addElapsedTime(time);
+			if (this.queueSize === 0 || !addQueu) {
+				const sentTime = this.sendMessage(json);
+				if (sentTime !== null) {
+					this.addElapsedTime(sentTime);
 					transaction.request.sent = new Time();
+					transaction.status = (transaction.type === TransactionType.STREAM)
+						? TransactionStatus.successful
+						: TransactionStatus.sent;
 					if (transaction.type === TransactionType.STREAM) {
-						transaction.status = TransactionStatus.successful;
 						this.resolveTransaction(null, new Time(), transaction);
-					} else {
-						transaction.status = TransactionStatus.sent;
 					}
 					return true;
 				}
@@ -144,7 +145,7 @@ export class MessageTube extends Queue {
 			}
 		}
 
-		if (this.queueSize > 0 && this.isKillerCalled === null) {
+		if (this.queueSize > 0 && this.messageSender === null) {
 			this.callKillQueuTimeout();
 		}
 		return false;
@@ -162,8 +163,8 @@ export class MessageTube extends Queue {
 
 		const timeoutMs = getTimeoutMs();
 
-		this.isKillerCalled = setTimeout(() => {
-			this.isKillerCalled = null;
+		this.messageSender = setTimeout(() => {
+			this.messageSender = null;
 			this.tryKillQueu(this.messageQueues.urgent);
 			this.tryKillQueu(this.messageQueues.normal);
 		}, timeoutMs);
@@ -175,11 +176,11 @@ export class MessageTube extends Queue {
 			const { request: { json }, command, status } = this.transactions[transactionId];
 			if (status === TransactionStatus.waiting) {
 				const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
-				if (isSent === false) {
+				if (isSent) {
+					this.cleanQueue();
+				} else {
 					this.callKillQueuTimeout();
 					return;
-				} else {
-					this.cleanQueue();
 				}
 			}
 		}

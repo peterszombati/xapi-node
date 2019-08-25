@@ -9,7 +9,7 @@ export class Queue extends Listener {
 		return this.messageQueues.urgent.length + this.messageQueues.normal.length;
 	}
 	protected messagesElapsedTime: Time[] = [];
-	protected isKillerCalled: any = null;
+	protected messageSender: any = null;
 	private _rateLimit: number;
 	protected rateLimit() { return this._rateLimit; }
 	constructor(rateLimit: number) {
@@ -52,8 +52,8 @@ export class Queue extends Listener {
 		}
 		this.messageQueues = { urgent: [], normal: [] };
 		this.messagesElapsedTime = [];
-		if (this.isKillerCalled != null) {
-			clearTimeout(this.isKillerCalled);
+		if (this.messageSender != null) {
+			clearTimeout(this.messageSender);
 		}
 	}
 }
