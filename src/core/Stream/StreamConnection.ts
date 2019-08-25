@@ -103,7 +103,9 @@ export class StreamConnection extends MessageTube {
 		this.resetMessageTube();
 		if (this.XAPI.tryReconnect) {
 			setTimeout(() => {
-				this.connect();
+				if (this.XAPI.tryReconnect) {
+					this.connect();
+				}
 			}, 2000);
 		}
 	}
