@@ -109,9 +109,9 @@ export class StreamConnection extends MessageTube{
 		return new Promise((tResolve: any, tReject: any) => {
 			const transactionId = this.XAPI.createTransactionId();
 			const json = JSON.stringify({
+				...completion,
 				command,
 				"streamSessionId": this.XAPI.getSession(),
-				...completion
 			});
 			const transaction = this.addTransaction({
 				command,
