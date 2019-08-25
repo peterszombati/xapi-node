@@ -112,7 +112,7 @@ export class MessageTube extends Queue {
 				};
 				this.rejectTransaction(json, transaction);
 			}
-			return false;
+			return true;
 		}
 
 		if (!this.isRateLimitReached()) {
