@@ -30,7 +30,10 @@ export class XAPI extends Listener {
 	public Socket: Socket;
 	private _tryReconnect: boolean = false;
 	public get tryReconnect() { return this._tryReconnect; }
-	private pingTimer: any = null;
+	private timer: { interval: any[], timeout: any[]} = {
+		interval: [],
+		timeout: []
+	};
 	private _transactionIdIncrement: number = 0;
 	private _rateLimit: number = 850;
 	public get rateLimit() { return this._rateLimit; }
@@ -67,35 +70,31 @@ export class XAPI extends Listener {
 		});
 
 		this.Socket.onConnectionChange(status => {
-			if (!status && this.pingTimer !== null) {
-				clearInterval(this.pingTimer);
-				this.pingTimer = null;
+			if (!status) {
+				this.stopTimer();
 			}
 		});
 
 		this.addListener("xapiReady", () => {
-			if (this.pingTimer != null) {
-				clearInterval(this.pingTimer);
-				this.pingTimer = null;
-			}
+			this.stopTimer();
 
-			this.pingTimer = setInterval(() => {
+			this.timer.interval.push(setInterval(() => {
 				if (this.Socket.status) {
 					this.Socket.ping();
 				}
 				if (this.Stream.status) {
 					this.Stream.ping();
 				}
-				setTimeout(() => {
+				this.timer.timeout.push(setTimeout(() => {
 					if (this.Socket.status) {
 						this.Socket.send.getServerTime();
 					}
-				}, 1000);
-				setTimeout(() => {
+				}, 1000));
+				this.timer.timeout.push(setTimeout(() => {
 					if (this.Socket.status) {
 						this.Socket.send.getTrades();
 					}
-				}, 2000);
+				}, 2000));
 
 				this.Socket.rejectOldTransactions();
 				this.Stream.rejectOldTransactions();
@@ -105,8 +104,14 @@ export class XAPI extends Listener {
 				if (Object.keys(this.Stream.transactions).length > 20000) {
 					this.Stream.removeOldTransactions();
 				}
-			}, 19000);
+			}, 19000));
 		}, "constructor");
+	}
+
+	private stopTimer() {
+		this.timer.interval.forEach(i => clearInterval(i));
+		this.timer.timeout.forEach(i => clearTimeout(i));
+		this.timer = { interval: [], timeout: [] };
 	}
 
 	public createTransactionId(): string {
