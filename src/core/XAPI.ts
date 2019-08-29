@@ -66,7 +66,7 @@ export class XAPI extends Listener {
 			this.setSession(data.streamSessionId);
 		});
 
-		this.onConnectionChange(status => {
+		this.Socket.onConnectionChange(status => {
 			if (!status && this.pingTimer !== null) {
 				clearInterval(this.pingTimer);
 				this.pingTimer = null;
