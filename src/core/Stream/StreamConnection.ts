@@ -47,7 +47,7 @@ export class StreamConnection extends MessageTube {
 			try {
 				this.handleSocketMessage(JSON.parse(message.toString().trim()), new Time());
 			} catch (e) {
-				Logger.log.hidden("Stream websocket error\n" + JSON.stringify(e, null, "t"), "ERROR");
+				Logger.log.hidden("Stream websocket error\n" + JSON.stringify(e, null, "\t"), "ERROR");
 			}
 		});
 

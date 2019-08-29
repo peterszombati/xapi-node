@@ -50,7 +50,7 @@ export class SocketConnection extends MessageTube {
 				//Logger.log.warn('Unhandled message (customTag = ' + customTag + ')');
 			}
 		} else {
-			Logger.log.error('Received a message without vaild customTag (customTag = ' + customTag + ')');
+			Logger.log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, "\t"));
 		}
 	}
 
