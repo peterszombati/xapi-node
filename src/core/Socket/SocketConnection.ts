@@ -186,9 +186,10 @@ export class SocketConnection extends MessageTube {
 						message.customTag : null,
 				time);
 		} else if (message.status !== undefined
-			&& message.errorCode !== undefined
-			&& message.errorDescr !== undefined) {
-			const { errorCode, errorDescr, customTag } = message;
+			&& message.errorCode !== undefined) {
+			const { errorCode } = message;
+			const customTag = message.customTag !== undefined ? message.customTag : null;
+			const errorDescr = message.errorDescr !== undefined ? message.errorDescr : null;
 			this.handleError(errorCode, errorDescr, customTag, time);
 		}
 	}
