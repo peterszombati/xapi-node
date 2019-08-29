@@ -142,6 +142,7 @@ export class MessageTube extends Queue {
 					json: e
 				};
 				this.rejectTransaction(e, transaction);
+				return true;
 			}
 		}
 

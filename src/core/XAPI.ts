@@ -66,9 +66,17 @@ export class XAPI extends Listener {
 			this.setSession(data.streamSessionId);
 		});
 
+		this.onConnectionChange(status => {
+			if (!status && this.pingTimer !== null) {
+				clearInterval(this.pingTimer);
+				this.pingTimer = null;
+			}
+		});
+
 		this.addListener("xapiReady", () => {
 			if (this.pingTimer != null) {
 				clearInterval(this.pingTimer);
+				this.pingTimer = null;
 			}
 
 			this.pingTimer = setInterval(() => {
