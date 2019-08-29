@@ -165,31 +165,31 @@ export class MessageTube extends Queue {
 
 		this.messageSender = setTimeout(() => {
 			this.messageSender = null;
-			this.tryKillQueu(this.messageQueues.urgent);
-			this.tryKillQueu(this.messageQueues.normal);
+			this.tryCleanQueue();
 		}, timeoutMs);
 	}
 
-	protected tryKillQueu(queue: MessagesQueue[]) {
-		for (let i = 0; i < queue.length; i++) {
-			const { transactionId } = queue[i];
+	protected tryCleanQueue() {
+		while(this.messageQueues.urgent.length > 0) {
+			const { transactionId } = this.messageQueues.urgent[0];
 			const { request: { json }, command, status } = this.transactions[transactionId];
-			if (status === TransactionStatus.waiting) {
-				const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
-				if (isSent) {
-					this.cleanQueue();
-				} else {
-					return;
-				}
+			const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
+			if (isSent) {
+				this.messageQueues.urgent.shift();
+			} else {
+				return;
 			}
 		}
-	}
-
-	protected cleanQueue() {
-		this.messageQueues = {
-			urgent: this.messageQueues.urgent.filter(q => this.transactions[q.transactionId].status === TransactionStatus.waiting),
-			normal: this.messageQueues.normal.filter(q => this.transactions[q.transactionId].status === TransactionStatus.waiting),
-		};
+		while(this.messageQueues.normal.length > 0) {
+			const { transactionId } = this.messageQueues.normal[0];
+			const { request: { json }, command, status } = this.transactions[transactionId];
+			const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
+			if (isSent) {
+				this.messageQueues.normal.shift();
+			} else {
+				return;
+			}
+		}
 	}
 
 }
