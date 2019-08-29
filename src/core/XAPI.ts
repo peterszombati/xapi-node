@@ -30,7 +30,7 @@ export class XAPI extends Listener {
 	public Socket: Socket;
 	private _tryReconnect: boolean = false;
 	public get tryReconnect() { return this._tryReconnect; }
-	private timer: { interval: any[], timeout: any[]} = {
+	private timer: { interval: any[], timeout: any[] } = {
 		interval: [],
 		timeout: []
 	};
@@ -71,6 +71,7 @@ export class XAPI extends Listener {
 
 		this.Socket.onConnectionChange(status => {
 			if (!status) {
+				this.Stream.session = '';
 				this.stopTimer();
 			}
 		});
