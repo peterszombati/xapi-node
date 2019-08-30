@@ -18,7 +18,10 @@ export class SocketConnection extends MessageTube {
 		this.XAPI = XAPI;
 	}
 
-	private getInfo(customTag: string): { transactionId: string | null, command: string | null } {
+	private getInfo(customTag: string | null): { transactionId: string | null, command: string | null } {
+		if (customTag == null) {
+			return { transactionId: null, command: null };
+		}
 		const customTagData = customTag.split('_');
 		if (customTagData.length < 2) {
 			return { transactionId: null, command: null };
@@ -149,7 +152,7 @@ export class SocketConnection extends MessageTube {
 		}
 	}
 
-	private handleError(code: any, explain: any, customTag: string, time: Time) {
+	private handleError(code: any, explain: any, customTag: string | null, time: Time) {
 		const { transactionId } = this.getInfo(customTag);
 
 		if (transactionId !== null) {
@@ -181,8 +184,8 @@ export class SocketConnection extends MessageTube {
 		} else if (message.status !== undefined
 			&& message.errorCode !== undefined) {
 			const { errorCode } = message;
-			const customTag = message.customTag !== undefined ? message.customTag : null;
-			const errorDescr = message.errorDescr !== undefined ? message.errorDescr : null;
+			const customTag: string | null = message.customTag !== undefined ? message.customTag : null;
+			const errorDescr: string | null  = message.errorDescr !== undefined ? message.errorDescr : null;
 			this.handleError(errorCode, errorDescr, customTag, time);
 		}
 	}
