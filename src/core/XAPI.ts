@@ -73,6 +73,25 @@ export class XAPI extends Listener {
 			if (!status) {
 				this.Stream.session = '';
 				this.stopTimer();
+				if (this.tryReconnect) {
+					setTimeout(() => {
+						if (this.tryReconnect) {
+							this.Socket.connect();
+						}
+					}, 2000);
+				}
+			}
+		});
+
+		this.Stream.onConnectionChange(status => {
+			if (!status) {
+				if (this.tryReconnect) {
+					setTimeout(() => {
+						if (this.tryReconnect) {
+							this.Stream.connect();
+						}
+					}, 2000);
+				}
 			}
 		});
 

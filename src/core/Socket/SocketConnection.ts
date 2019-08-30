@@ -147,13 +147,6 @@ export class SocketConnection extends MessageTube {
 				this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
 			}
 		}
-		if (this.XAPI.tryReconnect) {
-			setTimeout(() => {
-				if (this.XAPI.tryReconnect) {
-					this.connect();
-				}
-			}, 2000);
-		}
 	}
 
 	private handleError(code: any, explain: any, customTag: string, time: Time) {

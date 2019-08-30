@@ -101,13 +101,6 @@ export class StreamConnection extends MessageTube {
 	private handleSocketClose(time: Time) {
 		this.setConnection(false);
 		this.resetMessageTube();
-		if (this.XAPI.tryReconnect) {
-			setTimeout(() => {
-				if (this.XAPI.tryReconnect) {
-					this.connect();
-				}
-			}, 2000);
-		}
 	}
 
 	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
