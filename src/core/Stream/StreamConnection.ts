@@ -41,6 +41,13 @@ export class StreamConnection extends MessageTube {
 				Logger.log.hidden("Stream closed", "INFO");
 			}
 			this.handleSocketClose(new Time());
+			if (this.XAPI.tryReconnect) {
+				setTimeout(() => {
+					if (this.XAPI.tryReconnect) {
+						this.connect();
+					}
+				}, 2000);
+			}
 		});
 
 		this.WebSocket.onMessage((message: any) => {
