@@ -86,7 +86,13 @@ export class SocketConnection extends MessageTube {
 			try {
 				this.handleSocketMessage(JSON.parse(message.toString().trim()), new Time());
 			} catch (e) {
-				Logger.log.hidden("Socket websocket error\n" + JSON.stringify(e, null, "t"), "ERROR");
+				const { name, message, stack } = new Error(e);
+				Logger.log.error("Socket websocket error");
+				Logger.log.hidden(name + "\n" + message, "ERROR");
+				if (stack) {
+					Logger.log.hidden(stack, "ERROR");
+				}
+				Logger.log.hidden("Message: " + message.toString(), "ERROR");
 			}
 		});
 
