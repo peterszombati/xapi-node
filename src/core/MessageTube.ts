@@ -12,6 +12,7 @@ import {WebSocketModule} from "../modules/WebSocketModule";
 import Logger from "../utils/Logger";
 import {errorCode} from "../enum/errorCode";
 import Utils from "../utils/Utils";
+import {tradeTransaction} from "../interface/Request";
 
 export class MessageTube extends Queue {
 
@@ -87,6 +88,17 @@ export class MessageTube extends Queue {
 		}
 	}
 
+	private hideSecretInfo(transaction: Transaction<any, any>): Transaction<any, any> {
+		return {
+			...transaction,
+			request: {
+				...transaction.request,
+				json: "json contains secret information",
+				arguments: {},
+			}
+		}
+	}
+
 	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
 		transaction.status = interrupted === false ? TransactionStatus.timeout : TransactionStatus.interrupted;
 		Logger.log.hidden((transaction.type ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
@@ -96,7 +108,10 @@ export class MessageTube extends Queue {
 		if (transaction.transactionPromise.tReject !== null) {
 			const reject = transaction.transactionPromise.tReject;
 			transaction.transactionPromise = { tResolve: null, tReject: null };
-			reject({ reason: {code, explain}, transaction });
+			reject({
+				reason: {code, explain},
+				transaction: transaction.command === "login" ? this.hideSecretInfo(transaction) : transaction
+			});
 		}
 		Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
 	}
