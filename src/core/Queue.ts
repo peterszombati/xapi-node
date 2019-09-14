@@ -1,7 +1,8 @@
-import {MessagesQueue, Transaction, TransactionType} from "../interface/XapiTypeGuard";
+import {MessagesQueue, Transaction} from "../interface/XapiTypeGuard";
 import {Listener} from "../modules/Listener";
 import {Time} from "../modules/Time";
 import Logger from "../utils/Logger";
+import {TransactionType} from "../enum/Enum";
 
 export class Queue extends Listener {
 	private type: TransactionType;

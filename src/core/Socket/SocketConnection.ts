@@ -1,11 +1,11 @@
-import {TransactionResolveSocket, TransactionType} from "../../interface/XapiTypeGuard";
+import {TransactionResolveSocket} from "../../interface/XapiTypeGuard";
 import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
 import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
-import {TransactionStatus} from "../../enum/Enum";
+import {TransactionStatus, TransactionType} from "../../enum/Enum";
 
 export class SocketConnection extends MessageTube {
 

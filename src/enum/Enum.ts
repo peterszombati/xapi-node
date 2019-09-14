@@ -62,3 +62,8 @@ export enum TransactionStatus {
 	timeout = 3,
 	interrupted = 4
 }
+
+export enum TransactionType {
+	SOCKET = 'Socket',
+	STREAM = 'Stream'
+}

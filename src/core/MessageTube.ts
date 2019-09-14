@@ -2,7 +2,6 @@ import {
 	Transaction,
 	TransactionReject,
 	Transactions,
-	TransactionType
 } from "../interface/XapiTypeGuard";
 import {Queue} from "./Queue";
 import {Time} from "../modules/Time";
@@ -10,7 +9,7 @@ import {WebSocketModule} from "../modules/WebSocketModule";
 import Logger from "../utils/Logger";
 import {errorCode} from "../enum/errorCode";
 import Utils from "../utils/Utils";
-import {TransactionStatus} from "../enum/Enum";
+import {TransactionStatus, TransactionType} from "../enum/Enum";
 
 export class MessageTube extends Queue {
 
