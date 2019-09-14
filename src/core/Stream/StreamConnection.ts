@@ -1,10 +1,11 @@
 import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
-import {TransactionResolveStream, TransactionStatus, TransactionType} from "../../interface/XapiTypeGuard";
+import {TransactionResolveStream, TransactionType} from "../../interface/XapiTypeGuard";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
 import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
+import {TransactionStatus} from "../../enum/Enum";
 
 export class StreamConnection extends MessageTube {
 	private XAPI: XAPI;

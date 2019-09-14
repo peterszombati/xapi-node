@@ -1,4 +1,5 @@
 import {Time} from "../modules/Time";
+import {TransactionStatus} from "../enum/Enum";
 
 export interface Transactions {
 	[transactionId: string]: Transaction<any,any>
@@ -39,10 +40,4 @@ export interface Transaction<Resolve,Reject> {
 	}
 }
 
-export enum TransactionStatus {
-	waiting = 0,
-	sent = 1,
-	successful = 2,
-	timeout = 3,
-	interrupted = 4
-}
+

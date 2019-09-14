@@ -1,3 +1,4 @@
+// xapi
 export enum REQUEST_STATUS_FIELD {
 	ERROR = 0,
 	PENDING = 1,
@@ -51,4 +52,13 @@ export enum REQUEST_STATUS  {
 	PENDING = 1,
 	ACCEPTED = 3,
 	REJECTED = 4
+}
+
+// xapi-node
+export enum TransactionStatus {
+	waiting = 0,
+	sent = 1,
+	successful = 2,
+	timeout = 3,
+	interrupted = 4
 }
