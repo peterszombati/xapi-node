@@ -1,6 +1,6 @@
 import {Listener} from "./Listener";
 
-export class WebSocketModule extends Listener {
+export class WebSocketWrapper extends Listener {
 	private ws: any = null;
 	private _status = false;
 	constructor(url: string) {

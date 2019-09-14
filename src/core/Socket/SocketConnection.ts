@@ -2,7 +2,7 @@ import {TransactionResolveSocket} from "../../interface/Interface";
 import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
-import {WebSocketModule} from "../../modules/WebSocketModule";
+import {WebSocketWrapper} from "../../modules/WebSocketWrapper";
 import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
 import {TransactionStatus, TransactionType} from "../../enum/Enum";
@@ -63,7 +63,7 @@ export class SocketConnection extends MessageTube {
 			Logger.log.hidden("Socket connect is called when tryReconnect is false", "WARN");
 			return;
 		}
-		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType());
+		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType());
 		this.WebSocket.onOpen(() => {
 			Logger.log.hidden("Socket open", "INFO");
 			this.handleSocketOpen(new Time());

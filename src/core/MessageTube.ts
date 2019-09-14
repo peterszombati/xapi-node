@@ -5,7 +5,7 @@ import {
 } from "../interface/Interface";
 import {Queue} from "./Queue";
 import {Time} from "../modules/Time";
-import {WebSocketModule} from "../modules/WebSocketModule";
+import {WebSocketWrapper} from "../modules/WebSocketWrapper";
 import Logger from "../utils/Logger";
 import {errorCode} from "../enum/errorCode";
 import Utils from "../utils/Utils";
@@ -16,7 +16,7 @@ export class MessageTube extends Queue {
 	public transactions: Transactions = {};
 	private _lastReceivedMessage: Time = new Time(false);
 	public get lastReceivedMessage() { return this._lastReceivedMessage; }
-	protected WebSocket: WebSocketModule;
+	protected WebSocket: WebSocketWrapper;
 
 	constructor(rateLimit: number, type: TransactionType) {
 		super(rateLimit, type);

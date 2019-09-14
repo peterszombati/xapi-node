@@ -2,7 +2,7 @@ import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
 import {TransactionResolveStream} from "../../interface/Interface";
 import {Time} from "../../modules/Time";
-import {WebSocketModule} from "../../modules/WebSocketModule";
+import {WebSocketWrapper} from "../../modules/WebSocketWrapper";
 import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
 import {TransactionStatus, TransactionType} from "../../enum/Enum";
@@ -31,7 +31,7 @@ export class StreamConnection extends MessageTube {
 			Logger.log.hidden("Stream connect is called when tryReconnect is false", "WARN");
 			return;
 		}
-		this.WebSocket = new WebSocketModule('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType() + "Stream");
+		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType() + "Stream");
 		this.WebSocket.onOpen(() => {
 			Logger.log.hidden("Stream open", "INFO");
 			this.handleSocketOpen(new Time());
