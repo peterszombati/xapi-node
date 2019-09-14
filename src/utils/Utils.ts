@@ -1,4 +1,4 @@
-import {Transaction} from "../interface/XapiTypeGuard";
+import {Transaction} from "../interface/Interface";
 
 class Utils {
 

@@ -9,7 +9,7 @@ import {
 	TRADE_TRANS_INFO,
 	TRADING_HOURS_RECORD
 } from '../..';
-import { Transaction } from '../../interface/XapiTypeGuard';
+import { Transaction } from '../../interface/Interface';
 import {
 	getChartLastRequestResponse,
 	getChartRangeRequestResponse,

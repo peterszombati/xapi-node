@@ -1,4 +1,4 @@
-import {MessagesQueue, Transaction} from "../interface/XapiTypeGuard";
+import {MessagesQueue, Transaction} from "../interface/Interface";
 import {Listener} from "../modules/Listener";
 import {Time} from "../modules/Time";
 import Logger from "../utils/Logger";

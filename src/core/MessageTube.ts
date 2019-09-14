@@ -2,7 +2,7 @@ import {
 	Transaction,
 	TransactionReject,
 	Transactions,
-} from "../interface/XapiTypeGuard";
+} from "../interface/Interface";
 import {Queue} from "./Queue";
 import {Time} from "../modules/Time";
 import {WebSocketModule} from "../modules/WebSocketModule";

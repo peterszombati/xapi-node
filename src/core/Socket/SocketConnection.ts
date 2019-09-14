@@ -1,4 +1,4 @@
-import {TransactionResolveSocket} from "../../interface/XapiTypeGuard";
+import {TransactionResolveSocket} from "../../interface/Interface";
 import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";

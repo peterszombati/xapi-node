@@ -1,6 +1,6 @@
 import XAPI from "../XAPI";
 import {MessageTube} from "../MessageTube";
-import {TransactionResolveStream} from "../../interface/XapiTypeGuard";
+import {TransactionResolveStream} from "../../interface/Interface";
 import {Time} from "../../modules/Time";
 import {WebSocketModule} from "../../modules/WebSocketModule";
 import Logger from "../../utils/Logger";
