@@ -1,5 +1,4 @@
 import {
-	MessagesQueue,
 	Transaction,
 	TransactionReject,
 	Transactions,
@@ -12,7 +11,6 @@ import {WebSocketModule} from "../modules/WebSocketModule";
 import Logger from "../utils/Logger";
 import {errorCode} from "../enum/errorCode";
 import Utils from "../utils/Utils";
-import {tradeTransaction} from "../interface/Request";
 
 export class MessageTube extends Queue {
 
@@ -101,7 +99,7 @@ export class MessageTube extends Queue {
 
 	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
 		transaction.status = interrupted ? TransactionStatus.interrupted : TransactionStatus.timeout;
-		Logger.log.hidden((transaction.type ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
+		Logger.log.hidden((transaction.type === TransactionType.STREAM ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
 			+ transaction.command + ", "
 			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
 			+ "\nReason:\n" + JSON.stringify({code, explain}, null, "\t"), "ERROR");
