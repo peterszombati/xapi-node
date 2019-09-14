@@ -100,7 +100,7 @@ export class MessageTube extends Queue {
 	}
 
 	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
-		transaction.status = interrupted === false ? TransactionStatus.timeout : TransactionStatus.interrupted;
+		transaction.status = interrupted ? TransactionStatus.interrupted : TransactionStatus.timeout;
 		Logger.log.hidden((transaction.type ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
 			+ transaction.command + ", "
 			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
