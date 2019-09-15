@@ -120,7 +120,7 @@ export class StreamConnection extends MessageTube {
 	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
 		Promise<TransactionResolveStream> {
 		return new Promise((tResolve: any, tReject: any) => {
-			const transactionId = this.XAPI.createTransactionId();
+			const transactionId = this.createTransactionId();
 			const json = JSON.stringify({
 				...completion,
 				command,

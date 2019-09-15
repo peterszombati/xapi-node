@@ -3,10 +3,12 @@ import {Listener} from "../modules/Listener";
 import {Time} from "../modules/Time";
 import Logger from "../utils/Logger";
 import {TransactionType} from "../enum/Enum";
+import Utils from "../utils/Utils";
 
 export class Queue extends Listener {
 	private type: TransactionType;
 	protected messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = { urgent: [], normal: [] };
+	private _transactionIdIncrement: number = 0;
 	protected get queueSize() {
 		return this.messageQueues.urgent.length + this.messageQueues.normal.length;
 	}
@@ -60,5 +62,13 @@ export class Queue extends Listener {
 		if (this.messageSender != null) {
 			clearTimeout(this.messageSender);
 		}
+	}
+
+	public createTransactionId(): string {
+		this._transactionIdIncrement += 1;
+		if (this._transactionIdIncrement > 9999) {
+			this._transactionIdIncrement = 0;
+		}
+		return Utils.getUTCTimestamp().toString() + Utils.formatNumber(this._transactionIdIncrement, 4) + (this.type === TransactionType.SOCKET ? '0' : '1');
 	}
 }

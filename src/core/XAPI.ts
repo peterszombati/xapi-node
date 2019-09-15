@@ -34,7 +34,6 @@ export class XAPI extends Listener {
 		interval: [],
 		timeout: []
 	};
-	private _transactionIdIncrement: number = 0;
 	private _rateLimit: number = 850;
 	public get rateLimit() { return this._rateLimit; }
 
@@ -113,14 +112,6 @@ export class XAPI extends Listener {
 		this.timer.interval.forEach(i => clearInterval(i));
 		this.timer.timeout.forEach(i => clearTimeout(i));
 		this.timer = { interval: [], timeout: [] };
-	}
-
-	public createTransactionId(): string {
-		this._transactionIdIncrement += 1;
-		if (this._transactionIdIncrement > 9999) {
-			this._transactionIdIncrement = 0;
-		}
-		return Utils.getUTCTimestamp().toString() + Utils.formatNumber(this._transactionIdIncrement, 4);
 	}
 
 	protected account: XAPIAccount = {

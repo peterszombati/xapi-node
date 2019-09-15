@@ -208,7 +208,7 @@ export class SocketConnection extends MessageTube {
 		Promise<TransactionResolveSocket<T>> {
 		return new Promise((tResolve: any, tReject: any) => {
 			if (transactionId === null) {
-				transactionId = this.XAPI.createTransactionId();
+				transactionId = this.createTransactionId();
 			}
 
 			const json = JSON.stringify({
