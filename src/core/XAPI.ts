@@ -70,7 +70,7 @@ export class XAPI extends Listener {
 		});
 
 		this.Socket.listen.login((data, time, transaction) => {
-			this.setSession(data.streamSessionId);
+			this.session = data.streamSessionId;
 		});
 
 		this.Socket.onConnectionChange(status => {
@@ -142,7 +142,7 @@ export class XAPI extends Listener {
 		return this.account.host;
 	}
 
-	public setSession(session: string) {
+	public set session(session: string) {
 		this.Stream.session = session;
 		if (this.Stream.status && session !== null && session.length > 0) {
 			this.Stream.ping();
