@@ -120,7 +120,6 @@ export class StreamConnection extends MessageTube {
 	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
 		Promise<TransactionResolveStream> {
 		return new Promise((tResolve: any, tReject: any) => {
-			const transactionId = this.createTransactionId();
 			const json = JSON.stringify({
 				...completion,
 				command,
@@ -131,12 +130,12 @@ export class StreamConnection extends MessageTube {
 				type: TransactionType.STREAM,
 				request: {json, arguments: completion, sent: null},
 				response: {json: null, received: null, status: null},
-				transactionId,
+				transactionId: this.createTransactionId(),
 				createdAt: new Time(),
 				status: TransactionStatus.waiting,
 				transactionPromise: { tResolve, tReject },
 				urgent
-			}, transactionId);
+			});
 
 			if (this.status === false) {
 				this.rejectTransaction({

@@ -226,7 +226,7 @@ export class SocketConnection extends MessageTube {
 				status: TransactionStatus.waiting,
 				transactionPromise: { tResolve, tReject },
 				urgent
-			}, transactionId);
+			});
 
 			if (this.status === false) {
 				this.rejectTransaction({

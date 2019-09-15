@@ -22,8 +22,8 @@ export class MessageTube extends Queue {
 		super(rateLimit, type);
 	}
 
-	public addTransaction(transaction: Transaction<null,null>, transactionId: string): Transaction<null, null> {
-		this.transactions[transactionId] = transaction;
+	public addTransaction(transaction: Transaction<null,null>): Transaction<null, null> {
+		this.transactions[transaction.transactionId] = transaction;
 		return transaction;
 	}
 
