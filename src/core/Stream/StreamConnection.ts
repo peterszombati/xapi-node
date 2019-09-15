@@ -66,7 +66,7 @@ export class StreamConnection extends MessageTube {
 		});
 
 		this.WebSocket.onError((error: any) => {
-			Logger.log.error("WebSocket ERROR");
+			Logger.log.error("Stream: WebSocket ERROR");
 			Logger.log.error(error);
 		});
 	}

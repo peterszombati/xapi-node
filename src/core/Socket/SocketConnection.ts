@@ -100,7 +100,7 @@ export class SocketConnection extends MessageTube {
 		});
 
 		this.WebSocket.onError((error: any) => {
-			Logger.log.error("WebSocket ERROR");
+			Logger.log.error("Socket: WebSocket ERROR");
 			Logger.log.error(error);
 		});
 
