@@ -238,7 +238,7 @@ class Socket extends SocketConnection {
 		},
 		tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO) => {
 			let {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
-			const transactionId = this.XAPI.createTransactionId();
+			const transactionId = this.createTransactionId();
 			if (customComment == null) {
 				customComment = 'x' + transactionId;
 			} else {
