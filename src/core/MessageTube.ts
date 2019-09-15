@@ -183,22 +183,17 @@ export class MessageTube extends Queue {
 	}
 
 	protected tryCleanQueue() {
-		while(this.messageQueues.urgent.length > 0) {
-			const { transactionId } = this.messageQueues.urgent[0];
+		while(this.queueSize > 0) {
+			const urgent = this.messageQueues.urgent.length > 0;
+			const { transactionId } = urgent ? this.messageQueues.urgent[0] : this.messageQueues.normal[0];
 			const { request: { json }, command, status } = this.transactions[transactionId];
 			const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
 			if (isSent) {
-				this.messageQueues.urgent.shift();
-			} else {
-				return;
-			}
-		}
-		while(this.messageQueues.normal.length > 0) {
-			const { transactionId } = this.messageQueues.normal[0];
-			const { request: { json }, command, status } = this.transactions[transactionId];
-			const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
-			if (isSent) {
-				this.messageQueues.normal.shift();
+				if (urgent) {
+					this.messageQueues.urgent.shift();
+				} else {
+					this.messageQueues.normal.shift();
+				}
 			} else {
 				return;
 			}
