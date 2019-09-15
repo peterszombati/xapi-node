@@ -163,4 +163,12 @@ export class StreamConnection extends MessageTube {
 		return this.sendCommand("ping", {}, true);
 	}
 
+	protected sendSubscribe(command: string, completion: any = {}) {
+		return this.sendCommand(`get${command}`, completion);
+	}
+
+	protected sendUnsubscribe(command: string, completion: any = {}) {
+		return this.sendCommand(`stop${command}`, completion);
+	}
+
 }

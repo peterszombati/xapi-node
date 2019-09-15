@@ -99,15 +99,6 @@ class Stream extends StreamConnection {
 		},
 	};
 
-	private sendSubscribe(command: string, completion: any = {}) {
-		return this.sendCommand(`get${command}`, completion);
-	}
-
-	private sendUnsubscribe(command: string, completion: any = {}) {
-		return this.sendCommand(`stop${command}`, completion);
-	}
-
-
 }
 
 export default Stream;
