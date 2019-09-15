@@ -276,9 +276,9 @@ class Socket extends SocketConnection {
 
 	public login() {
 		return this.sendCommand('login', {
-			'userId': this.XAPI.getAccountID(),
+			'userId': this.XAPI.accountId,
 			'password': this._password,
-			'appName': this.XAPI.getAppName()
+			'appName': this.XAPI.appName
 		}, null, true);
 	}
 

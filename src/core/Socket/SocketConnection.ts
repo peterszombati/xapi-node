@@ -63,7 +63,7 @@ export class SocketConnection extends MessageTube {
 			Logger.log.hidden("Socket connect is called when tryReconnect is false", "WARN");
 			return;
 		}
-		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.getHostname() +'/' + this.XAPI.getAccountType());
+		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType);
 		this.WebSocket.onOpen(() => {
 			Logger.log.hidden("Socket open", "INFO");
 			this.handleSocketOpen(new Time());
@@ -136,12 +136,12 @@ export class SocketConnection extends MessageTube {
 
 	private tryLogin(retries: number = 2) {
 		this.XAPI.Socket.login().then(() => {
-			Logger.log.hidden("Login is successful (userId = " + this.XAPI.getAccountID()
-				+ ", accountType = " + this.XAPI.getAccountType() + ")", "INFO");
+			Logger.log.hidden("Login is successful (userId = " + this.XAPI.accountId
+				+ ", accountType = " + this.XAPI.accountType + ")", "INFO");
 			this.ping();
 		}).catch(e => {
-			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.getAccountID()
-				+ ", accountType = " + this.XAPI.getAccountType()
+			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.accountId
+				+ ", accountType = " + this.XAPI.accountType
 				+ ")\nReason:\n" + JSON.stringify(e, null, "\t"), "ERROR");
 			if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
 				setTimeout(() => {

@@ -121,19 +121,19 @@ export class XAPI extends Listener {
 		appName: undefined
 	};
 
-	public getAccountType(): string | null {
+	public get accountType(): string | null {
 		return this.account.type;
 	}
 
-	public getAccountID(): string {
+	public get accountId(): string {
 		return this.account.accountId;
 	}
 
-	public getAppName(): string | undefined {
+	public get appName(): string | undefined {
 		return this.account.appName;
 	}
 
-	public getHostname(): string {
+	public get hostName(): string {
 		return this.account.host;
 	}
 
