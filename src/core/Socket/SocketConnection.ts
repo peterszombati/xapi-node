@@ -99,8 +99,9 @@ export class SocketConnection extends MessageTube {
 			}
 		});
 
-		this.WebSocket.onError((e: any) => {
-			this.handleSocketError(e, new Time());
+		this.WebSocket.onError((error: any) => {
+			Logger.log.error("WebSocket ERROR");
+			Logger.log.error(error);
 		});
 
 	}
@@ -182,10 +183,6 @@ export class SocketConnection extends MessageTube {
 			Logger.log.hidden("Socket error message:\n"
 				+ JSON.stringify({ code, explain, customTag }, null, "\t"), "ERROR");
 		}
-	}
-
-	private handleSocketError(error: any, time: Time) {
-		//TODO
 	}
 
 	private handleSocketMessage(message: any, time: Time) {

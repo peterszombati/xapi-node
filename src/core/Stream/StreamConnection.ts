@@ -65,8 +65,9 @@ export class StreamConnection extends MessageTube {
 			}
 		});
 
-		this.WebSocket.onError((e: any) => {
-			this.handleSocketError(e, new Time());
+		this.WebSocket.onError((error: any) => {
+			Logger.log.error("WebSocket ERROR");
+			Logger.log.error(error);
 		});
 	}
 
@@ -106,10 +107,6 @@ export class StreamConnection extends MessageTube {
 	private handleSocketMessage(message: any, time: Time) {
 		this.lastReceivedMessage.reset();
 		this.handleData(message.command, message.data, time);
-	}
-
-	private handleSocketError(error: any, time: Time) {
-		//TODO
 	}
 
 	private handleSocketClose(time: Time) {
