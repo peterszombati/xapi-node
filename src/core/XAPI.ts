@@ -30,12 +30,12 @@ export class XAPI extends Listener {
 	public Socket: Socket;
 	private _tryReconnect: boolean = false;
 	public get tryReconnect() { return this._tryReconnect; }
+	private _rateLimit: number = 850;
+	public get rateLimit() { return this._rateLimit; }
 	private timer: { interval: any[], timeout: any[] } = {
 		interval: [],
 		timeout: []
 	};
-	private _rateLimit: number = 850;
-	public get rateLimit() { return this._rateLimit; }
 
 	constructor({
 		accountId,
@@ -51,7 +51,12 @@ export class XAPI extends Listener {
 		this.Socket = new Socket(this, password);
 		this.Stream = new Stream(this);
 		if (accountId != null && password != null && type != null) {
-			this.setAccount(accountId, type, appName, host);
+			this.account = {
+				type: (type.toLowerCase() === "real") ? "real" : "demo",
+				accountId,
+				appName,
+				host
+			};
 		}
 		this.Stream.onConnectionChange(status => {
 			if (this.Socket.status) {
@@ -135,19 +140,6 @@ export class XAPI extends Listener {
 
 	public get hostName(): string {
 		return this.account.host;
-	}
-
-	protected setAccount(
-		accountId: string,
-		type: string,
-		appName: string | undefined = undefined,
-		host: string = DefaultHostname) {
-		this.account = {
-			type: (type.toLowerCase() === "real") ? "real" : "demo",
-			accountId,
-			appName,
-			host
-		};
 	}
 
 	public setSession(session: string) {
