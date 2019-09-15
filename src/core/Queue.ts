@@ -15,7 +15,7 @@ export class Queue extends Listener {
 	protected messagesElapsedTime: Time[] = [];
 	protected messageSender: any = null;
 	private _rateLimit: number;
-	protected rateLimit() { return this._rateLimit; }
+	protected get rateLimit() { return this._rateLimit; }
 	constructor(rateLimit: number, type: TransactionType) {
 		super();
 		this._rateLimit = rateLimit;

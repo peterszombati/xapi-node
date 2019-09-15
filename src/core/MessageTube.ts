@@ -171,7 +171,7 @@ export class MessageTube extends Queue {
 				return 100;
 			}
 			const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
-			return this.rateLimit() + 20 + (elapsedMs == null ? 0 : elapsedMs);
+			return this.rateLimit + 20 + (elapsedMs == null ? 0 : elapsedMs);
 		};
 
 		const timeoutMs = getTimeoutMs();
