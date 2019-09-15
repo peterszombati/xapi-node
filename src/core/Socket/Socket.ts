@@ -237,21 +237,15 @@ class Socket extends SocketConnection {
 			return this.sendCommand<getVersionResponse>('getVersion');
 		},
 		tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO) => {
-			let {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
+			const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
 			const transactionId = this.createTransactionId();
-			if (customComment == null) {
-				customComment = 'x' + transactionId;
-			} else {
-				customComment = 'x' + transactionId + '_' + customComment;
-			}
-			if (expiration instanceof Date) {
-				expiration = expiration.getTime();
-			}
 			return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
 				'tradeTransInfo': {
 					cmd,
-					customComment,
-					expiration,
+					customComment: (customComment == null)
+						? 'x' + transactionId
+						: 'x' + transactionId + '_' + customComment,
+					expiration: (expiration instanceof Date) ? expiration.getTime() : expiration,
 					offset,
 					order,
 					price,
