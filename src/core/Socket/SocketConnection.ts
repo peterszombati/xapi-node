@@ -250,9 +250,8 @@ export class SocketConnection extends MessageTube {
 	}
 
 	public ping() {
-		return this.sendCommand<null>('ping', {}, null, true );
+		return this.sendCommand<null>('ping', {}, null, true);
 	}
-
 
 	public logout() {
 		return this.sendCommand<null>('logout', {}, null, true);
