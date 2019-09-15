@@ -13,9 +13,11 @@ export class SocketConnection extends MessageTube {
 
 	public status: boolean = false;
 	private openTimeout: NodeJS.Timeout | null = null;
+	private _password: string;
 
-	constructor(XAPI: XAPI) {
+	constructor(XAPI: XAPI, password: string) {
 		super(XAPI.rateLimit, TransactionType.SOCKET);
+		this._password = password;
 		this.XAPI = XAPI;
 	}
 
@@ -252,5 +254,18 @@ export class SocketConnection extends MessageTube {
 
 	public ping() {
 		return this.sendCommand<null>('ping', {}, null, true );
+	}
+
+
+	public logout() {
+		return this.sendCommand<null>('logout', {}, null, true);
+	}
+
+	public login() {
+		return this.sendCommand('login', {
+			'userId': this.XAPI.accountId,
+			'password': this._password,
+			'appName': this.XAPI.appName
+		}, null, true);
 	}
 }

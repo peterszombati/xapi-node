@@ -47,10 +47,8 @@ interface SocketListen<T> { (data: T, time: Time, transaction: Transaction<null,
 
 class Socket extends SocketConnection {
 
-	private _password: string;
 	constructor(XAPI: XAPI, password: string) {
-		super(XAPI);
-		this._password = password;
+		super(XAPI, password);
 	}
 
 	public listen = {
@@ -263,18 +261,6 @@ class Socket extends SocketConnection {
 			});
 		}
 	};
-
-	public logout() {
-		return this.sendCommand<null>('logout', {}, null, true);
-	}
-
-	public login() {
-		return this.sendCommand('login', {
-			'userId': this.XAPI.accountId,
-			'password': this._password,
-			'appName': this.XAPI.appName
-		}, null, true);
-	}
 
 }
 
