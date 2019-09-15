@@ -113,23 +113,26 @@ export class MessageTube extends Queue {
 		Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
 	}
 
-	protected sendJSON(command: string, json: string, transaction: Transaction<any, any>, addQueu: boolean = true): boolean {
-		if (json.length > 1000) {
-			if (transaction !== undefined) {
-				const json = { code: errorCode.XAPINODE_0, explain: "Each command invocation should not contain more than 1kB of data." };
-				transaction.response = {
-					status: false,
-					received: new Time(),
-					json
-				};
-				this.rejectTransaction(json, transaction);
-			}
+	protected sendJSON(transaction: Transaction<any, any>, addQueu: boolean): boolean {
+		if (transaction.request.json.length > 1000) {
+			transaction.response = {
+				status: false,
+				received: new Time(),
+				json: {
+					code: errorCode.XAPINODE_0,
+					explain: "Each command invocation should not contain more than 1kB of data."
+				}
+			};
+			this.rejectTransaction({
+				code: errorCode.XAPINODE_0,
+				explain: "Each command invocation should not contain more than 1kB of data."
+			}, transaction);
 			return true;
 		}
 
 		if (!this.isRateLimitReached()) {
 			if (this.queueSize === 0 || !addQueu) {
-				const sentTime = this.sendMessage(json);
+				const sentTime = this.sendMessage(transaction.request.json);
 				if (sentTime !== null) {
 					this.addElapsedTime(sentTime);
 					transaction.request.sent = new Time();
@@ -186,8 +189,7 @@ export class MessageTube extends Queue {
 		while(this.queueSize > 0) {
 			const urgent = this.messageQueues.urgent.length > 0;
 			const { transactionId } = urgent ? this.messageQueues.urgent[0] : this.messageQueues.normal[0];
-			const { request: { json }, command, status } = this.transactions[transactionId];
-			const isSent = this.sendJSON(command, json, this.transactions[transactionId], false);
+			const isSent = this.sendJSON(this.transactions[transactionId], false);
 			if (isSent) {
 				if (urgent) {
 					this.messageQueues.urgent.shift();

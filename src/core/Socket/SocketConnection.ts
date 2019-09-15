@@ -239,7 +239,7 @@ export class SocketConnection extends MessageTube {
 				&& "logout" !== command) {
 				this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction, false);
 			} else {
-				this.sendJSON(command, json, transaction);
+				this.sendJSON(transaction, true);
 			}
 		});
 	}

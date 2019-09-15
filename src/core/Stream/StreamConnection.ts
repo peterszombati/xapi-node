@@ -149,7 +149,7 @@ export class StreamConnection extends MessageTube {
 					explain: 'User is not logged'
 				}, transaction, false);
 			} else {
-				this.sendJSON(command, json, transaction);
+				this.sendJSON(transaction, true);
 			}
 		});
 	}
