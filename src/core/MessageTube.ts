@@ -159,12 +159,12 @@ export class MessageTube extends Queue {
 		}
 
 		if (this.queueSize > 0 && this.messageSender === null) {
-			this.callKillQueuTimeout();
+			this.callCleanQueuTimeout();
 		}
 		return false;
 	}
 
-	protected callKillQueuTimeout() {
+	protected callCleanQueuTimeout() {
 
 		const getTimeoutMs = () => {
 			if (this.messagesElapsedTime.length <= 3) {
