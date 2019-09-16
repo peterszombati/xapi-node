@@ -76,18 +76,18 @@ export class SocketConnection extends MessageTube {
 			}
 			this.setConnection(false);
 			this.resetMessageTube();
-			for (const transactionId in this.transactions) {
-				const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
-				if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
-				}
-			}
 			if (this.XAPI.tryReconnect) {
 				setTimeout(() => {
 					if (this.XAPI.tryReconnect) {
 						this.connect();
 					}
 				}, 2000);
+			}
+			for (const transactionId in this.transactions) {
+				const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
+				if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
+					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
+				}
 			}
 		});
 
