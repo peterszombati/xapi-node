@@ -158,7 +158,7 @@ export class MessageTube extends Queue {
 			try {
 				this.addQueu(transaction);
 			} catch (e) {
-				this.rejectTransaction(e, transaction);
+				this.rejectTransaction({ code: errorCode.XAPINODE_2, explain: e }, transaction);
 				return true;
 			}
 		}
