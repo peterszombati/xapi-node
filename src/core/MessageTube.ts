@@ -126,7 +126,7 @@ export class MessageTube extends Queue {
 				const sentTime = this.sendMessage(transaction.request.json);
 				if (sentTime !== null) {
 					this.addElapsedTime(sentTime);
-					transaction.request.sent = new Time();
+					transaction.request.sent = sentTime;
 					transaction.status = (transaction.type === TransactionType.STREAM)
 						? TransactionStatus.successful
 						: TransactionStatus.sent;
