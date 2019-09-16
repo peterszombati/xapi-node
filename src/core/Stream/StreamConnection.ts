@@ -43,6 +43,11 @@ export class StreamConnection extends MessageTube {
 					}
 				}, 2000);
 			}
+			for (const transactionId in this.transactions) {
+				if (this.transactions[transactionId].status === TransactionStatus.waiting) {
+					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Stream closed"}, this.transactions[transactionId], false);
+				}
+			}
 		});
 
 		this.WebSocket.onMessage((message: any) => {
