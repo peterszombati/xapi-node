@@ -38,13 +38,9 @@ export class XAPI extends Listener {
 	};
 
 	constructor({
-		accountId,
-		password,
-		type,
-		appName = undefined,
-		host = DefaultHostname,
-		rateLimit = 850,
-		logger = new EmptyLogger()}: XAPIConfig) {
+		accountId, password, type, appName = undefined,
+		host = DefaultHostname, rateLimit = 850, logger = new EmptyLogger()
+	}: XAPIConfig) {
 		super();
 		Logger.setLogger(logger);
 		this._rateLimit = rateLimit;
