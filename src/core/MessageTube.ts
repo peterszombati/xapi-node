@@ -85,20 +85,9 @@ export class MessageTube extends Queue {
 		}
 	}
 
-	private hideSecretInfo(transaction: Transaction<any, any>): Transaction<any, any> {
-		return {
-			...transaction,
-			request: {
-				...transaction.request,
-				json: "json contains secret information",
-				arguments: {},
-			}
-		}
-	}
-
 	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
 		transaction.status = interrupted ? TransactionStatus.interrupted : TransactionStatus.timeout;
-		Logger.log.hidden((transaction.type === TransactionType.STREAM ? "Stream" : "Socket") + " message rejected (" + transaction.transactionId + "): "
+		Logger.log.hidden(transaction.type + " message rejected (" + transaction.transactionId + "): "
 			+ transaction.command + ", "
 			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
 			+ "\nReason:\n" + JSON.stringify({code, explain}, null, "\t"), "ERROR");
@@ -107,7 +96,7 @@ export class MessageTube extends Queue {
 			transaction.transactionPromise = { tResolve: null, tReject: null };
 			reject({
 				reason: {code, explain},
-				transaction: transaction.command === "login" ? this.hideSecretInfo(transaction) : transaction
+				transaction: transaction.command === "login" ? Utils.hideSecretInfo(transaction) : transaction
 			});
 		}
 		Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");

@@ -6,6 +6,17 @@ class Utils {
 		return new Date(UTCtimestamp);
 	}
 
+	static hideSecretInfo(transaction: Transaction<any, any>): Transaction<any, any> {
+		return {
+			...transaction,
+			request: {
+				...transaction.request,
+				json: "json contains secret information",
+				arguments: {},
+			}
+		}
+	}
+
 	static transactionToJSONString(transaction: Transaction<any, any>): string {
 		const response = JSON.stringify(transaction.response.json);
 		try {
