@@ -1,13 +1,13 @@
 import {TransactionResolveSocket} from "../../interface/Interface";
-import {MessageTube} from "../MessageTube";
 import XAPI from "../XAPI";
 import {Time} from "../../modules/Time";
 import {WebSocketWrapper} from "../../modules/WebSocketWrapper";
 import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
 import {TransactionStatus, TransactionType} from "../../enum/Enum";
+import {Queue} from "../Queue";
 
-export class SocketConnection extends MessageTube {
+export class SocketConnection extends Queue {
 
 	protected XAPI: XAPI;
 

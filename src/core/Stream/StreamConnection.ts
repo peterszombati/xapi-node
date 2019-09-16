@@ -1,13 +1,13 @@
 import XAPI from "../XAPI";
-import {MessageTube} from "../MessageTube";
 import {TransactionResolveStream} from "../../interface/Interface";
 import {Time} from "../../modules/Time";
 import {WebSocketWrapper} from "../../modules/WebSocketWrapper";
 import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
 import {TransactionStatus, TransactionType} from "../../enum/Enum";
+import {Queue} from "../Queue";
 
-export class StreamConnection extends MessageTube {
+export class StreamConnection extends Queue {
 	private XAPI: XAPI;
 	public status: boolean = false;
 	public session: string = '';

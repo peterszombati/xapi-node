@@ -32,5 +32,12 @@ export interface Transaction<Resolve,Reject> {
 		tReject: null | ((reject: Reject | null) => void)
 	}
 }
-
-
+export interface AddTransaction {
+	command: string,
+	json: any,
+	args: any,
+	transactionId: string,
+	resolve: any,
+	reject: any,
+	urgent: boolean
+}
