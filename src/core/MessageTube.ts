@@ -1,8 +1,4 @@
-import {
-	Transaction,
-	TransactionReject,
-	Transactions,
-} from "../interface/Interface";
+import {Transaction, TransactionReject, Transactions,} from "../interface/Interface";
 import {Queue} from "./Queue";
 import {Time} from "../modules/Time";
 import {WebSocketWrapper} from "../modules/WebSocketWrapper";
@@ -10,6 +6,16 @@ import Logger from "../utils/Logger";
 import {errorCode} from "../enum/errorCode";
 import Utils from "../utils/Utils";
 import {TransactionStatus, TransactionType} from "../enum/Enum";
+
+export interface AddTransaction {
+	command: string,
+	json: any,
+	args: any,
+	transactionId: string,
+	resolve: any,
+	reject: any,
+	urgent: boolean
+}
 
 export class MessageTube extends Queue {
 
@@ -22,9 +28,19 @@ export class MessageTube extends Queue {
 		super(rateLimit, type);
 	}
 
-	public addTransaction(transaction: Transaction<null,null>): Transaction<null, null> {
-		this.transactions[transaction.transactionId] = transaction;
-		return transaction;
+	public addTransaction(newTransaction: AddTransaction): Transaction<null, null> {
+		this.transactions[newTransaction.transactionId] = {
+			command: newTransaction.command,
+			type: this.type,
+			request: { json: newTransaction.json, arguments: newTransaction.args, sent: null },
+			response: { json: null, received: null, status: null },
+			transactionId: newTransaction.transactionId,
+			createdAt: new Time(),
+			status: TransactionStatus.waiting,
+			transactionPromise: { tResolve: newTransaction.resolve, tReject: newTransaction.reject },
+			urgent: newTransaction.urgent
+		};
+		return this.transactions[newTransaction.transactionId];
 	}
 
 	public rejectOldTransactions(): void {

@@ -99,24 +99,15 @@ export class StreamConnection extends MessageTube {
 
 	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
 		Promise<TransactionResolveStream> {
-		return new Promise((tResolve: any, tReject: any) => {
+		return new Promise((resolve: any, reject: any) => {
 			const json = JSON.stringify({
 				...completion,
 				command,
 				"streamSessionId": this.session,
 			});
 			const transaction = this.addTransaction({
-				command,
-				type: TransactionType.STREAM,
-				request: {json, arguments: completion, sent: null},
-				response: {json: null, received: null, status: null},
-				transactionId: this.createTransactionId(),
-				createdAt: new Time(),
-				status: TransactionStatus.waiting,
-				transactionPromise: { tResolve, tReject },
-				urgent
+				command, json, args: completion, transactionId: this.createTransactionId(), resolve, reject, urgent
 			});
-
 			if (this.status === false) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,

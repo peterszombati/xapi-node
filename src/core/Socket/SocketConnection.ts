@@ -190,28 +190,17 @@ export class SocketConnection extends MessageTube {
 
 	protected sendCommand<T>(command: string, args: any = {}, transactionId: string | null = null, urgent: boolean = false):
 		Promise<TransactionResolveSocket<T>> {
-		return new Promise((tResolve: any, tReject: any) => {
+		return new Promise((resolve: any, reject: any) => {
 			if (transactionId === null) {
 				transactionId = this.createTransactionId();
 			}
-
 			const json = JSON.stringify({
 				command,
 				arguments: (Object.keys(args).length === 0) ? undefined : args,
 				customTag: command + '_' + transactionId });
-
 			const transaction = this.addTransaction({
-				command,
-				type: TransactionType.SOCKET,
-				request: { json, arguments: args, sent: null },
-				response: { json: null, received: null, status: null },
-				transactionId,
-				createdAt: new Time(),
-				status: TransactionStatus.waiting,
-				transactionPromise: { tResolve, tReject },
-				urgent
+				command, json, args, transactionId, urgent, resolve, reject
 			});
-
 			if (this.status === false) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,

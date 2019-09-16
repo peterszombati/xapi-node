@@ -6,7 +6,7 @@ import {TransactionType} from "../enum/Enum";
 import Utils from "../utils/Utils";
 
 export class Queue extends Listener {
-	private type: TransactionType;
+	protected type: TransactionType;
 	protected messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = { urgent: [], normal: [] };
 	private _transactionIdIncrement: number = 0;
 	protected get queueSize() {
