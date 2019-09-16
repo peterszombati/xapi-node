@@ -52,8 +52,6 @@ export class SocketConnection extends MessageTube {
 
 			if (this.listeners[command] !== undefined) {
 				this.callListener(command, [returnData, time, this.transactions[transactionId]]);
-			} else {
-				//Logger.log.warn('Unhandled message (customTag = ' + customTag + ')');
 			}
 		} else {
 			Logger.log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, "\t"));
@@ -68,14 +66,22 @@ export class SocketConnection extends MessageTube {
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType);
 		this.WebSocket.onOpen(() => {
 			Logger.log.hidden("Socket open", "INFO");
-			this.handleSocketOpen(new Time());
+			this.resetMessageTube();
+			this.setConnection(true);
 		});
 
 		this.WebSocket.onClose(() => {
 			if (this.status === true) {
 				Logger.log.hidden("Socket closed", "INFO");
 			}
-			this.handleSocketClose(new Time());
+			this.setConnection(false);
+			this.resetMessageTube();
+			for (const transactionId in this.transactions) {
+				const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
+				if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
+					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
+				}
+			}
 			if (this.XAPI.tryReconnect) {
 				setTimeout(() => {
 					if (this.XAPI.tryReconnect) {
@@ -132,11 +138,6 @@ export class SocketConnection extends MessageTube {
 		}
 	}
 
-	private handleSocketOpen(time: Time) {
-		this.resetMessageTube();
-		this.setConnection(true);
-	}
-
 	private tryLogin(retries: number = 2) {
 		this.XAPI.Socket.login().then(() => {
 			Logger.log.hidden("Login is successful (userId = " + this.XAPI.accountId
@@ -156,17 +157,6 @@ export class SocketConnection extends MessageTube {
 				this.XAPI.disconnect();
 			}
 		});
-	}
-
-	private handleSocketClose(time: Time) {
-		this.setConnection(false);
-		this.resetMessageTube();
-		for (const transactionId in this.transactions) {
-			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
-			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-				this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
-			}
-		}
 	}
 
 	private handleError(code: any, explain: any, customTag: string | null, received: Time) {

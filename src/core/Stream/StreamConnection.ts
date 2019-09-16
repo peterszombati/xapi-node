@@ -18,14 +18,6 @@ export class StreamConnection extends MessageTube {
 		this.XAPI = XAPI;
 	}
 
-	private handleData(command: string, data: any, time: Time) {
-		if (this.listeners[command] === undefined) {
-			return;
-		}
-
-		this.callListener(command, [data, time]);
-	}
-
 	public connect() {
 		if (this.XAPI.tryReconnect === false) {
 			Logger.log.hidden("Stream connect is called when tryReconnect is false", "WARN");
@@ -34,14 +26,16 @@ export class StreamConnection extends MessageTube {
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType + "Stream");
 		this.WebSocket.onOpen(() => {
 			Logger.log.hidden("Stream open", "INFO");
-			this.handleSocketOpen(new Time());
+			this.resetMessageTube();
+			this.setConnection(true);
 		});
 
 		this.WebSocket.onClose(() => {
 			if (this.status === true) {
 				Logger.log.hidden("Stream closed", "INFO");
 			}
-			this.handleSocketClose(new Time());
+			this.setConnection(false);
+			this.resetMessageTube();
 			if (this.XAPI.tryReconnect) {
 				setTimeout(() => {
 					if (this.XAPI.tryReconnect) {
@@ -53,7 +47,11 @@ export class StreamConnection extends MessageTube {
 
 		this.WebSocket.onMessage((message: any) => {
 			try {
-				this.handleSocketMessage(JSON.parse(message.toString().trim()), new Time());
+				const json = JSON.parse(message.toString().trim());
+				this.lastReceivedMessage.reset();
+				if (this.listeners[json.command] !== undefined) {
+					this.callListener(json.command, [json.data, new Time()]);
+				}
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
 				Logger.log.error("Stream websocket error");
@@ -97,21 +95,6 @@ export class StreamConnection extends MessageTube {
 				}
 			}, 1000);
 		}
-	}
-
-	private handleSocketOpen(time: Time) {
-		this.resetMessageTube();
-		this.setConnection(true);
-	}
-
-	private handleSocketMessage(message: any, time: Time) {
-		this.lastReceivedMessage.reset();
-		this.handleData(message.command, message.data, time);
-	}
-
-	private handleSocketClose(time: Time) {
-		this.setConnection(false);
-		this.resetMessageTube();
 	}
 
 	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
