@@ -78,7 +78,7 @@ export class Queue extends Listener {
 		return Utils.getUTCTimestamp().toString() + Utils.formatNumber(this._transactionIdIncrement, 4) + (this.type === TransactionType.SOCKET ? '0' : '1');
 	}
 
-	public addTransaction(newTransaction: AddTransaction): Transaction<null, null> {
+	protected addTransaction(newTransaction: AddTransaction): Transaction<null, null> {
 		this.transactions[newTransaction.transactionId] = {
 			command: newTransaction.command,
 			type: this.type,
