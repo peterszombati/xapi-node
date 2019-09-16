@@ -138,12 +138,12 @@ export class StreamConnection extends MessageTube {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
 					explain: "Stream closed"
-				}, transaction, false);
+				}, transaction, false, new Time());
 			} else if (this.session.length === 0) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_BE103,
 					explain: 'User is not logged'
-				}, transaction, false);
+				}, transaction, false, new Time());
 			} else {
 				this.sendJSON(transaction, true);
 			}

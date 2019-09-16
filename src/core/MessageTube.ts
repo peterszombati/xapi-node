@@ -32,7 +32,7 @@ export class MessageTube extends Queue {
 			const elapsedMs = transaction.createdAt.elapsedMs();
 			if (elapsedMs != null && elapsedMs > 60000) {
 				if (transaction.transactionPromise.tReject !== null) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
+					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction, false, new Time());
 				}
 			}
 		});
@@ -85,17 +85,27 @@ export class MessageTube extends Queue {
 		}
 	}
 
-	protected rejectTransaction({code, explain}: { code: string, explain: string }, transaction: Transaction<null,TransactionReject>, interrupted: boolean = false ) {
+	protected rejectTransaction(
+		json: { code: string, explain: string },
+		transaction: Transaction<null,TransactionReject>,
+		interrupted: boolean = false,
+		received: Time = new Time()
+	) {
 		transaction.status = interrupted ? TransactionStatus.interrupted : TransactionStatus.timeout;
+		transaction.response = {
+			status: false,
+			received,
+			json
+		};
 		Logger.log.hidden(transaction.type + " message rejected (" + transaction.transactionId + "): "
 			+ transaction.command + ", "
 			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
-			+ "\nReason:\n" + JSON.stringify({code, explain}, null, "\t"), "ERROR");
+			+ "\nReason:\n" + JSON.stringify(json, null, "\t"), "ERROR");
 		if (transaction.transactionPromise.tReject !== null) {
 			const reject = transaction.transactionPromise.tReject;
 			transaction.transactionPromise = { tResolve: null, tReject: null };
 			reject({
-				reason: {code, explain},
+				reason: json,
 				transaction: transaction.command === "login" ? Utils.hideSecretInfo(transaction) : transaction
 			});
 		}
@@ -104,18 +114,10 @@ export class MessageTube extends Queue {
 
 	protected sendJSON(transaction: Transaction<any, any>, addQueu: boolean): boolean {
 		if (transaction.request.json.length > 1000) {
-			transaction.response = {
-				status: false,
-				received: new Time(),
-				json: {
-					code: errorCode.XAPINODE_0,
-					explain: "Each command invocation should not contain more than 1kB of data."
-				}
-			};
 			this.rejectTransaction({
 				code: errorCode.XAPINODE_0,
 				explain: "Each command invocation should not contain more than 1kB of data."
-			}, transaction);
+			}, transaction, false, new Time());
 			return true;
 		}
 
@@ -140,12 +142,7 @@ export class MessageTube extends Queue {
 			try {
 				this.addQueu(transaction);
 			} catch (e) {
-				transaction.response = {
-					status: false,
-					received: new Time(),
-					json: e
-				};
-				this.rejectTransaction(e, transaction);
+				this.rejectTransaction(e, transaction, false, new Time());
 				return true;
 			}
 		}

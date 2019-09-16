@@ -164,21 +164,16 @@ export class SocketConnection extends MessageTube {
 		for (const transactionId in this.transactions) {
 			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-				this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
+				this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted, new Time());
 			}
 		}
 	}
 
-	private handleError(code: any, explain: any, customTag: string | null, time: Time) {
+	private handleError(code: any, explain: any, customTag: string | null, received: Time) {
 		const { transactionId } = this.getInfo(customTag);
 
 		if (transactionId !== null) {
-			this.transactions[transactionId].response = {
-				status: false,
-				json: { code, explain },
-				received: time
-			};
-			this.rejectTransaction({ code, explain }, this.transactions[transactionId]);
+			this.rejectTransaction({ code, explain }, this.transactions[transactionId], false, received);
 		} else {
 			Logger.log.hidden("Socket error message:\n"
 				+ JSON.stringify({ code, explain, customTag }, null, "\t"), "ERROR");
@@ -231,12 +226,12 @@ export class SocketConnection extends MessageTube {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
 					explain: "Socket closed"
-				}, this.transactions[transactionId], false);
+				}, this.transactions[transactionId], false, new Time());
 			} else if (this.XAPI.Stream.session.length === 0
 				&& "login" !== command
 				&& "ping" !== command
 				&& "logout" !== command) {
-				this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction, false);
+				this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction, false, new Time());
 			} else {
 				this.sendJSON(transaction, true);
 			}
