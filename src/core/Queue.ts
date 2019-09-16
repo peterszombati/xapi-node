@@ -27,7 +27,7 @@ export class Queue extends Listener {
 		this.type = type;
 	}
 
-	protected addQueu(transaction: Transaction<any,any>): void {
+	private addQueu(transaction: Transaction<any,any>): void {
 		const { urgent, transactionId } = transaction;
 		if (this.queueSize >= 150) {
 			this.rejectTransaction({ code: errorCode.XAPINODE_2, explain: "messageQueues exceeded 150 size limit" }, transaction);
@@ -43,14 +43,14 @@ export class Queue extends Listener {
 			+ " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
 	}
 
-	protected addElapsedTime(time: Time) {
+	private addElapsedTime(time: Time) {
 		this.messagesElapsedTime.push(time);
 		if (this.messagesElapsedTime.length > 4) {
 			this.messagesElapsedTime.shift();
 		}
 	}
 
-	protected isRateLimitReached() {
+	private isRateLimitReached() {
 		if (this.messagesElapsedTime.length < 4) {
 			return false;
 		}
