@@ -164,7 +164,7 @@ export class SocketConnection extends MessageTube {
 		for (const transactionId in this.transactions) {
 			const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 			if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-				this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted, new Time());
+				this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
 			}
 		}
 	}
@@ -226,12 +226,12 @@ export class SocketConnection extends MessageTube {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
 					explain: "Socket closed"
-				}, this.transactions[transactionId], false, new Time());
+				}, this.transactions[transactionId]);
 			} else if (this.XAPI.Stream.session.length === 0
 				&& "login" !== command
 				&& "ping" !== command
 				&& "logout" !== command) {
-				this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction, false, new Time());
+				this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction);
 			} else {
 				this.sendJSON(transaction, true);
 			}

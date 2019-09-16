@@ -32,7 +32,7 @@ export class MessageTube extends Queue {
 			const elapsedMs = transaction.createdAt.elapsedMs();
 			if (elapsedMs != null && elapsedMs > 60000) {
 				if (transaction.transactionPromise.tReject !== null) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction, false, new Time());
+					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
 				}
 			}
 		});
@@ -117,7 +117,7 @@ export class MessageTube extends Queue {
 			this.rejectTransaction({
 				code: errorCode.XAPINODE_0,
 				explain: "Each command invocation should not contain more than 1kB of data."
-			}, transaction, false, new Time());
+			}, transaction);
 			return true;
 		}
 
@@ -142,7 +142,7 @@ export class MessageTube extends Queue {
 			try {
 				this.addQueu(transaction);
 			} catch (e) {
-				this.rejectTransaction(e, transaction, false, new Time());
+				this.rejectTransaction(e, transaction);
 				return true;
 			}
 		}
