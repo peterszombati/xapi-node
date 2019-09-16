@@ -30,7 +30,8 @@ export class Queue extends Listener {
 	protected addQueu(transaction: Transaction<any,any>): void {
 		const { urgent, transactionId } = transaction;
 		if (this.queueSize >= 150) {
-			throw "messageQueues exceeded 150 size limit";
+			this.rejectTransaction({ code: errorCode.XAPINODE_2, explain: "messageQueues exceeded 150 size limit" }, transaction);
+			return;
 		}
 
 		if (urgent) {
@@ -204,12 +205,7 @@ export class Queue extends Listener {
 		}
 
 		if (addQueu) {
-			try {
-				this.addQueu(transaction);
-			} catch (e) {
-				this.rejectTransaction({ code: errorCode.XAPINODE_2, explain: e }, transaction);
-				return true;
-			}
+			this.addQueu(transaction);
 		}
 
 		if (this.queueSize > 0 && this.messageSender === null) {
