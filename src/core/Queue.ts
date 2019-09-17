@@ -31,16 +31,15 @@ export class Queue extends Listener {
 		const { urgent, transactionId } = transaction;
 		if (this.queueSize >= 150) {
 			this.rejectTransaction({ code: errorCode.XAPINODE_2, explain: "messageQueues exceeded 150 size limit" }, transaction);
-			return;
-		}
-
-		if (urgent) {
-			this.messageQueues.urgent.push({transactionId});
 		} else {
-			this.messageQueues.normal.push({transactionId});
+			if (urgent) {
+				this.messageQueues.urgent.push({transactionId});
+			} else {
+				this.messageQueues.normal.push({transactionId});
+			}
+			Logger.log.hidden((this.type === TransactionType.STREAM ? " Stream" : "Socket")
+				+ " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
 		}
-		Logger.log.hidden((this.type === TransactionType.STREAM ? " Stream" : "Socket")
-			+ " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
 	}
 
 	private addElapsedTime(time: Time) {
