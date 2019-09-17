@@ -41,44 +41,8 @@ class Utils {
 		}
 	}
 
-	static getUTCTimestamp(
-		year: number | null = null,
-		month: number | null = null,
-		date: number | null = null,
-		hour: number | null = null,
-		minute: number | null = null,
-		seconds: number | null = null
-	): number {
-
-		if (year == null) {
-			return new Date().getTime();
-		}
-
-		let returnDate = new Date();
-
-		if (month != null) {
-			returnDate.setMonth(month - 1);
-		}
-
-		if (date != null) {
-			returnDate.setDate(date);
-		}
-
-		if (hour != null) {
-			returnDate.setHours(hour);
-		}
-
-		if (minute != null) {
-			returnDate.setMinutes(minute);
-		}
-
-		if (seconds != null) {
-			returnDate.setSeconds(seconds);
-		}
-
-		returnDate.setFullYear(year);
-
-		return returnDate.getTime();
+	static getUTCTimestampString(): string {
+		return new Date().getTime().toString();
 	}
 
 	static formatNumber(number: number, length: number): string {

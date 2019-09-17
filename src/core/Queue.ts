@@ -74,7 +74,7 @@ export class Queue extends Listener {
 		if (this._transactionIdIncrement > 9999) {
 			this._transactionIdIncrement = 0;
 		}
-		return Utils.getUTCTimestamp().toString() + Utils.formatNumber(this._transactionIdIncrement, 4) + (this.type === TransactionType.SOCKET ? '0' : '1');
+		return Utils.getUTCTimestampString() + Utils.formatNumber(this._transactionIdIncrement, 4) + (this.type === TransactionType.SOCKET ? '0' : '1');
 	}
 
 	protected addTransaction(newTransaction: AddTransaction): Transaction<null, null> {
