@@ -2,10 +2,6 @@ import {Transaction} from "../interface/Interface";
 
 class Utils {
 
-	static Date(UTCtimestamp: number): Date {
-		return new Date(UTCtimestamp);
-	}
-
 	static hideSecretInfo(transaction: Transaction<any, any>): Transaction<any, any> {
 		return {
 			...transaction,
@@ -95,30 +91,6 @@ class Utils {
 		return result;
 	}
 
-	static getTimeString(date: Date): string {
-		let Y = date.getFullYear().toString();
-		let M = (date.getMonth() + 1).toString();
-		let D = date.getDate().toString();
-		let h = date.getHours().toString();
-		let m = date.getMinutes().toString();
-		let s = date.getSeconds().toString();
-		M = M.length < 2 ? "0" + M : M;
-		D = D.length < 2 ? "0" + D : D;
-		h = h.length < 2 ? "0" + h : h;
-		m = m.length < 2 ? "0" + m : m;
-		s = s.length < 2 ? "0" + s : s;
-		return Y + "-" + M + "-" + D + " " + h + ":" + m + ":" + s;
-	}
-
-	static getDifferenceTimeString(msUnit: number): string {
-		let seconds = (msUnit - msUnit % 1000) / 1000;
-		let ms = msUnit % 1000;
-		let minutes = (seconds - seconds % 60) / 60;
-		seconds = seconds % 60;
-		let hours = (minutes - minutes % 60) / 60;
-		minutes = minutes % 60;
-		return hours + ":" + minutes + ":" + seconds + "." + ms;
-	}
 }
 
 export default Utils;
