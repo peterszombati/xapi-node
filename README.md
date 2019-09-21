@@ -2,9 +2,9 @@
 
 This project is make possible to get data from market, execute order or limit orders with NodeJS through WebSocket connection
 
-It can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
+This module can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
-WebSocket communication documentation: http://developers.xstore.pro/documentation/
+WebSocket docs: http://developers.xstore.pro/documentation/
 
 This module is usable on Front-end too.
 
