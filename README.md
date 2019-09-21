@@ -4,7 +4,7 @@ This project is make possible to get data from market, execute order or limit or
 
 This module can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
-WebSocket docs: http://developers.xstore.pro/documentation/
+WebSocket protocol description: http://developers.xstore.pro/documentation/
 
 This module is usable on Front-end too.
 
