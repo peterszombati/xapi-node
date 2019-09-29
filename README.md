@@ -43,5 +43,5 @@ x.onReady(() => {
 });
 ```
 
-### You can donate if you want
+### Now you can support these projects
 BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F [www.blockchain.com](https://www.blockchain.com/btc/address/3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F)
