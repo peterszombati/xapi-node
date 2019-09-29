@@ -42,3 +42,6 @@ x.onReady(() => {
 	x.Socket.send.getTradesHistory(1,0);
 });
 ```
+
+### You can donate if you want
+BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F
