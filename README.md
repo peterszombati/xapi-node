@@ -43,5 +43,5 @@ x.onReady(() => {
 });
 ```
 
-### Now you can support these projects
+### Now you can support these projects with bitcoin
 BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F [www.blockchain.com](https://www.blockchain.com/btc/address/3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F)
