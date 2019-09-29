@@ -1,8 +1,8 @@
 # xapi-node
 
-This project is make possible to get data from market, execute order or limit orders with NodeJS through WebSocket connection
+This project is made possible to get data from market, execute order or limit orders with NodeJS through WebSocket connection
 
-This module can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
+This module may can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
 WebSocket protocol description: http://developers.xstore.pro/documentation/
 
