@@ -82,8 +82,6 @@ export class StreamConnection extends Queue {
 		if (this.status !== status) {
 			this.status = status;
 			this.callListener("connectionChange", [status]);
-		} else {
-			this.status = status;
 		}
 
 		if (this.openTimeout !== null) {
