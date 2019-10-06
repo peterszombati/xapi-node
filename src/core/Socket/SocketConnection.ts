@@ -8,11 +8,7 @@ import {TransactionStatus, TransactionType} from "../../enum/Enum";
 import {Queue} from "../Queue";
 
 export class SocketConnection extends Queue {
-
-	protected XAPI: XAPI;
-
-	public status: boolean = false;
-	private openTimeout: NodeJS.Timeout | null = null;
+	private XAPI: XAPI;
 	private _password: string;
 
 	constructor(XAPI: XAPI, password: string) {

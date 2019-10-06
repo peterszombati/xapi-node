@@ -8,6 +8,8 @@ import {WebSocketWrapper} from "../modules/WebSocketWrapper";
 import {errorCode} from "../enum/errorCode";
 
 export class Queue extends Listener {
+	public status: boolean = false;
+	protected openTimeout: NodeJS.Timeout | null = null;
 	public transactions: Transactions = {};
 	private _lastReceivedMessage: Time = new Time(false);
 	public get lastReceivedMessage() { return this._lastReceivedMessage; }

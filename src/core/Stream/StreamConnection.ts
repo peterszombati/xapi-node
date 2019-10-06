@@ -9,9 +9,7 @@ import {Queue} from "../Queue";
 
 export class StreamConnection extends Queue {
 	private XAPI: XAPI;
-	public status: boolean = false;
 	public session: string = '';
-	private openTimeout: NodeJS.Timeout | null = null;
 
 	constructor(XAPI: XAPI) {
 		super(XAPI.rateLimit, TransactionType.STREAM);
