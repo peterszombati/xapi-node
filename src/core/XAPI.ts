@@ -63,17 +63,15 @@ export class XAPI extends Listener {
 			if (this.Stream.status) {
 				this.callListener("xapiConnectionChange", [status]);
 			}
-		});
 
-		this.Socket.listen.login((data, time, transaction) => {
-			this.session = data.streamSessionId;
-		});
-
-		this.Socket.onConnectionChange(status => {
 			if (!status) {
 				this.Stream.session = '';
 				this.stopTimer();
 			}
+		});
+
+		this.Socket.listen.login((data, time, transaction) => {
+			this.session = data.streamSessionId;
 		});
 
 		this.addListener("xapiReady", () => {
