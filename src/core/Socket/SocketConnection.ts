@@ -109,7 +109,6 @@ export class SocketConnection extends Queue {
 			Logger.log.error("Socket: WebSocket ERROR");
 			Logger.log.error(error);
 		});
-
 	}
 
 	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
@@ -125,6 +124,7 @@ export class SocketConnection extends Queue {
 		if (this.openTimeout !== null) {
 			clearTimeout(this.openTimeout);
 		}
+
 		if (status) {
 			this.ping();
 			this.openTimeout = setTimeout(() => {
@@ -192,12 +192,17 @@ export class SocketConnection extends Queue {
 			if (transactionId === null) {
 				transactionId = this.createTransactionId();
 			}
-			const json = JSON.stringify({
-				command,
-				arguments: (Object.keys(args).length === 0) ? undefined : args,
-				customTag: command + '_' + transactionId });
 			const transaction = this.addTransaction({
-				command, json, args, transactionId, urgent, resolve, reject
+				command,
+				json: JSON.stringify({
+					command,
+					arguments: (Object.keys(args).length === 0) ? undefined : args,
+					customTag: command + '_' + transactionId }),
+				args,
+				transactionId,
+				urgent,
+				resolve,
+				reject
 			});
 			if (this.status === false) {
 				this.rejectTransaction({

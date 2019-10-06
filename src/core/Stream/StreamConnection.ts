@@ -103,13 +103,18 @@ export class StreamConnection extends Queue {
 	protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
 		Promise<TransactionResolveStream> {
 		return new Promise((resolve: any, reject: any) => {
-			const json = JSON.stringify({
-				...completion,
-				command,
-				"streamSessionId": this.session,
-			});
 			const transaction = this.addTransaction({
-				command, json, args: completion, transactionId: this.createTransactionId(), resolve, reject, urgent
+				command,
+				json: JSON.stringify({
+					...completion,
+					command,
+					"streamSessionId": this.session,
+				}),
+				args: completion,
+				transactionId: this.createTransactionId(),
+				resolve,
+				reject,
+				urgent
 			});
 			if (this.status === false) {
 				this.rejectTransaction({
