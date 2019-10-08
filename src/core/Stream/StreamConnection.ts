@@ -52,9 +52,7 @@ export class StreamConnection extends Queue {
 			try {
 				const json = JSON.parse(message.toString().trim());
 				this.lastReceivedMessage.reset();
-				if (this.listeners[json.command] !== undefined) {
-					this.callListener(json.command, [json.data, new Time()]);
-				}
+				this.callListener(json.command, [json.data, new Time()]);
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
 				Logger.log.error("Stream websocket error");
