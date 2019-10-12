@@ -55,23 +55,14 @@ export class StreamConnection extends Queue {
 				this.callListener(json.command, [json.data, new Time()]);
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
-				Logger.log.error("Stream websocket error");
-				Logger.log.hidden(name + "\n" + message, "ERROR");
-				if (stack) {
-					Logger.log.hidden(stack, "ERROR");
-				}
-				Logger.log.hidden("Message: " + message.toString(), "ERROR");
+				Logger.log.error("Stream WebSocket Error");
+				Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
 			}
 		});
 
 		this.WebSocket.onError((error: any) => {
-			Logger.log.error("Stream: WebSocket ERROR");
 			const { name, message, stack } = new Error(error);
-			Logger.log.error(name);
-			Logger.log.error(message);
-			if (stack) {
-				Logger.log.error(stack);
-			}
+			Logger.log.error("Stream WebSocket Error\n" + name + "\n" + message + (stack ? "\n" + stack : ""));
 		});
 	}
 

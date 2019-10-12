@@ -89,26 +89,18 @@ export class SocketConnection extends Queue {
 
 		this.WebSocket.onMessage((message: any) => {
 			try {
-				this.handleSocketMessage(JSON.parse(message.toString().trim()), new Time());
+				const json = JSON.parse(message.toString().trim());
+				this.handleSocketMessage(json, new Time());
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
-				Logger.log.error("Socket websocket error");
-				Logger.log.hidden(name + "\n" + message, "ERROR");
-				if (stack) {
-					Logger.log.hidden(stack, "ERROR");
-				}
-				Logger.log.hidden("Message: " + message.toString(), "ERROR");
+				Logger.log.error("Socket WebSocket Error");
+				Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
 			}
 		});
 
 		this.WebSocket.onError((error: any) => {
-			Logger.log.error("Socket: WebSocket ERROR");
 			const { name, message, stack } = new Error(error);
-			Logger.log.error(name);
-			Logger.log.error(message);
-			if (stack) {
-				Logger.log.error(stack);
-			}
+			Logger.log.error("Socket WebSocket Error\n" + name + "\n" + message + (stack ? "\n" + stack : ""));
 		});
 	}
 
