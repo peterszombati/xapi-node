@@ -6,6 +6,7 @@ import Logger from "../../utils/Logger";
 import {errorCode} from "../../enum/errorCode";
 import {TransactionStatus, TransactionType} from "../../enum/Enum";
 import {Queue} from "../Queue";
+import Utils from "../../utils/Utils";
 
 export class SocketConnection extends Queue {
 	private XAPI: XAPI;
@@ -17,27 +18,10 @@ export class SocketConnection extends Queue {
 		this.XAPI = XAPI;
 	}
 
-	private getInfo(customTag: string | null): { transactionId: string | null, command: string | null } {
-		if (customTag == null) {
-			return { transactionId: null, command: null };
-		}
-		const customTagData = customTag.split('_');
-		if (customTagData.length < 2) {
-			return { transactionId: null, command: null };
-		}
-		const command = customTagData[0];
-		const transactionId = customTagData[1];
-
-		if (this.transactions[transactionId] === undefined) {
-			return { transactionId: null, command };
-		}
-		return { transactionId, command };
-	}
-
 	private handleData(returnData: any, customTag: string, time: Time) {
-		const { transactionId, command } = this.getInfo(customTag);
+		const { transactionId, command } = Utils.parseCustomTag(customTag);
 
-		if (transactionId !== null && command !== null) {
+		if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
 			this.transactions[transactionId].response = {
 				status: true,
 				received: time,
@@ -151,9 +135,9 @@ export class SocketConnection extends Queue {
 	}
 
 	private handleError(code: any, explain: any, customTag: string | null, received: Time) {
-		const { transactionId } = this.getInfo(customTag);
+		const { transactionId } = Utils.parseCustomTag(customTag);
 
-		if (transactionId !== null) {
+		if (transactionId !== null && this.transactions[transactionId] !== undefined) {
 			this.rejectTransaction({ code, explain }, this.transactions[transactionId], false, received);
 		} else {
 			Logger.log.hidden("Socket error message:\n"
