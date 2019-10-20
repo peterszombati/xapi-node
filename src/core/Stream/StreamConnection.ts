@@ -17,10 +17,6 @@ export class StreamConnection extends Queue {
 	}
 
 	public connect() {
-		if (this.XAPI.tryReconnect === false) {
-			Logger.log.hidden("Stream connect is called when tryReconnect is false", "WARN");
-			return;
-		}
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType + "Stream");
 		this.WebSocket.onOpen(() => {
 			Logger.log.hidden("Stream open", "INFO");

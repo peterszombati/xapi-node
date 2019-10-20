@@ -1,6 +1,5 @@
 import Stream from "./Stream/Stream";
 import Socket from "./Socket/Socket";
-import Utils from "../utils/Utils";
 import {Listener} from "../modules/Listener";
 import Logger from "../utils/Logger";
 import {Logger4Interface, EmptyLogger} from "logger4";
@@ -25,14 +24,13 @@ export interface XAPIAccount {
 }
 
 export class XAPI extends Listener {
-
 	public Stream: Stream;
 	public Socket: Socket;
 	private _tryReconnect: boolean = false;
 	public get tryReconnect() { return this._tryReconnect; }
 	private _rateLimit: number = 850;
 	public get rateLimit() { return this._rateLimit; }
-	private timer: { interval: any[], timeout: any[] } = {
+	private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
 		interval: [],
 		timeout: []
 	};

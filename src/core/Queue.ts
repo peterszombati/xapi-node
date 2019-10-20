@@ -21,7 +21,7 @@ export class Queue extends Listener {
 		return this.messageQueues.urgent.length + this.messageQueues.normal.length;
 	}
 	private messagesElapsedTime: Time[] = [];
-	private messageSender: any = null;
+	private messageSender: NodeJS.Timeout | null = null;
 	private rateLimit: number;
 	constructor(rateLimit: number, type: TransactionType) {
 		super();

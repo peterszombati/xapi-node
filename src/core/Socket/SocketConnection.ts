@@ -39,10 +39,6 @@ export class SocketConnection extends Queue {
 	}
 
 	public connect() {
-		if (this.XAPI.tryReconnect === false) {
-			Logger.log.hidden("Socket connect is called when tryReconnect is false", "WARN");
-			return;
-		}
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType);
 		this.WebSocket.onOpen(() => {
 			Logger.log.hidden("Socket open", "INFO");
