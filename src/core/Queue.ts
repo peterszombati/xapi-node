@@ -223,12 +223,12 @@ export class Queue extends Listener {
 		}
 
 		const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
-		const timeoutMs = this.rateLimit + 20 - (elapsedMs == null ? 0 : elapsedMs);
+		const timeoutMs = Math.abs(this.rateLimit + 20 - (elapsedMs == null ? 0 : elapsedMs));
 
 		this.messageSender = setTimeout(() => {
 			this.messageSender = null;
 			this.tryCleanQueue();
-		}, timeoutMs < 0 ? 0 : timeoutMs);
+		},  timeoutMs);
 	}
 
 	private tryCleanQueue() {
