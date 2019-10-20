@@ -223,7 +223,7 @@ export class Queue extends Listener {
 				return 100;
 			}
 			const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
-			return this.rateLimit + 20 + (elapsedMs == null ? 0 : elapsedMs);
+			return this.rateLimit + 20 - (elapsedMs == null ? 0 : elapsedMs);
 		};
 
 		const timeoutMs = getTimeoutMs();
@@ -231,7 +231,7 @@ export class Queue extends Listener {
 		this.messageSender = setTimeout(() => {
 			this.messageSender = null;
 			this.tryCleanQueue();
-		}, timeoutMs);
+		}, timeoutMs < 0 ? 0 : timeoutMs);
 	}
 
 	private tryCleanQueue() {
