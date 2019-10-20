@@ -148,17 +148,17 @@ export class SocketConnection extends Queue {
 	private handleSocketMessage(message: any, time: Time) {
 		this.lastReceivedMessage.reset();
 		if (message.status) {
-			this.handleData(
-				(message.streamSessionId !== undefined) ?
-						{streamSessionId: message.streamSessionId} : message.returnData,
-				typeof(message.customTag) === 'string' ?
-						message.customTag : null,
+			this.handleData(message.streamSessionId === undefined
+				? message.returnData
+				: { streamSessionId: message.streamSessionId },
+				typeof(message.customTag) === 'string'
+					? message.customTag
+					: null,
 				time);
-		} else if (message.status !== undefined
-			&& message.errorCode !== undefined) {
+		} else if (message.status !== undefined && message.errorCode !== undefined) {
 			const { errorCode } = message;
-			const customTag: string | null = message.customTag !== undefined ? message.customTag : null;
-			const errorDescr: string | null  = message.errorDescr !== undefined ? message.errorDescr : null;
+			const customTag: string | null = message.customTag === undefined ? null : message.customTag;
+			const errorDescr: string | null  = message.errorDescr === undefined ? null : message.errorDescr;
 			this.handleError(errorCode, errorDescr, customTag, time);
 		}
 	}
