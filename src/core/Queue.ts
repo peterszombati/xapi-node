@@ -132,6 +132,13 @@ export class Queue extends Listener {
 	}
 
 	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any,TransactionReject>) {
+	    if (this.type === TransactionType.SOCKET) {
+            transaction.response = {
+                status: true,
+                received: time,
+                json: returnData
+            };
+        }
 		transaction.status = TransactionStatus.successful;
 		if (transaction.transactionPromise.tResolve !== null) {
 			const resolve = transaction.transactionPromise.tResolve;

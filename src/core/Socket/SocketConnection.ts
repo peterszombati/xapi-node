@@ -22,12 +22,6 @@ export class SocketConnection extends Queue {
 		const { transactionId, command } = Utils.parseCustomTag(customTag);
 
 		if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
-			this.transactions[transactionId].response = {
-				status: true,
-				received: time,
-				json: returnData
-			};
-
 			this.resolveTransaction(returnData, time, this.transactions[transactionId]);
 
 			if (this.listeners[command] !== undefined) {
