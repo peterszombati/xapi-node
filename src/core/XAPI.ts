@@ -44,7 +44,7 @@ export class XAPI extends Listener {
 		this._rateLimit = rateLimit;
 		this.Socket = new Socket(this, password);
 		this.Stream = new Stream(this);
-		if (accountId != null && password != null && type != null) {
+		if (accountId != null && type != null) {
 			this.account = {
 				type: (type.toLowerCase() === "real") ? "real" : "demo",
 				accountId,

@@ -54,7 +54,8 @@ export class StreamConnection extends Queue {
 
 		this.WebSocket.onError((error: any) => {
 			const { name, message, stack } = new Error(error);
-			Logger.log.error("Stream WebSocket Error\n" + name + "\n" + message + (stack ? "\n" + stack : ""));
+			Logger.log.error("Stream WebSocket Error");
+			Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
 		});
 	}
 
@@ -72,6 +73,7 @@ export class StreamConnection extends Queue {
 		if (this.openTimeout !== null) {
 			clearTimeout(this.openTimeout);
 		}
+
 		if (status) {
 			if (this.session.length > 0) {
 				this.ping();

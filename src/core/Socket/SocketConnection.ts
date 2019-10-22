@@ -76,7 +76,8 @@ export class SocketConnection extends Queue {
 
 		this.WebSocket.onError((error: any) => {
 			const { name, message, stack } = new Error(error);
-			Logger.log.error("Socket WebSocket Error\n" + name + "\n" + message + (stack ? "\n" + stack : ""));
+			Logger.log.error("Socket WebSocket Error");
+			Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
 		});
 	}
 
