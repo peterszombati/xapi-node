@@ -5,6 +5,7 @@ import Logger from "../utils/Logger";
 import {Logger4Interface, EmptyLogger} from "logger4";
 
 export const DefaultHostname = 'ws.xtb.com';
+export const DefaultRateLimit = 1000;
 
 export interface XAPIConfig {
 	accountId: string,
@@ -28,7 +29,7 @@ export class XAPI extends Listener {
 	public Socket: Socket;
 	private _tryReconnect: boolean = false;
 	public get tryReconnect() { return this._tryReconnect; }
-	private _rateLimit: number = 850;
+	private _rateLimit: number = DefaultRateLimit;
 	public get rateLimit() { return this._rateLimit; }
 	private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
 		interval: [],
@@ -37,7 +38,7 @@ export class XAPI extends Listener {
 
 	constructor({
 		accountId, password, type, appName = undefined,
-		host = DefaultHostname, rateLimit = 850, logger = new EmptyLogger()
+		host = DefaultHostname, rateLimit = DefaultRateLimit, logger = new EmptyLogger()
 	}: XAPIConfig) {
 		super();
 		Logger.setLogger(logger);
