@@ -19,17 +19,13 @@ export class StreamConnection extends Queue {
 	public connect() {
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType + "Stream");
 		this.WebSocket.onOpen(() => {
-			Logger.log.hidden("Stream open", "INFO");
 			this.resetMessageTube();
 			this.setConnection(true);
 		});
 
 		this.WebSocket.onClose(() => {
-			if (this.status === true) {
-				Logger.log.hidden("Stream closed", "INFO");
-			}
-			this.setConnection(false);
 			this.resetMessageTube();
+			this.setConnection(false);
 			if (this.XAPI.tryReconnect) {
 				setTimeout(() => {
 					if (this.XAPI.tryReconnect) {
@@ -68,6 +64,7 @@ export class StreamConnection extends Queue {
 
 	private setConnection(status: boolean) {
 		if (this.status !== status) {
+			Logger.log.hidden("Stream " + (status ? "open" : "closed"), "INFO");
 			this.status = status;
 			this.callListener("connectionChange", [status]);
 		}
