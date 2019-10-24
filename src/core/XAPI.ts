@@ -38,11 +38,11 @@ export class XAPI extends Listener {
 
 	constructor({
 		accountId, password, type, appName = undefined,
-		host = DefaultHostname, rateLimit = DefaultRateLimit, logger = new EmptyLogger()
+		host, rateLimit, logger = new EmptyLogger()
 	}: XAPIConfig) {
 		super();
 		Logger.setLogger(logger);
-		this._rateLimit = rateLimit;
+		this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
 		this.Socket = new Socket(this, password);
 		this.Stream = new Stream(this);
 		if (accountId != null && type != null) {
@@ -50,7 +50,7 @@ export class XAPI extends Listener {
 				type: (type.toLowerCase() === "real") ? "real" : "demo",
 				accountId,
 				appName,
-				host
+				host: host === undefined ? DefaultHostname : host
 			};
 		}
 		this.Stream.onConnectionChange(status => {
