@@ -230,8 +230,11 @@ export class Queue extends Listener {
 		}
 
 		const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
-		const timeoutMs = Math.abs(this.rateLimit - (elapsedMs == null ? 0 : elapsedMs));
+		const timeoutMs = Math.max(this.rateLimit - (elapsedMs == null ? 0 : elapsedMs), 0);
 
+		if (this.messageSender !== null) {
+			clearTimeout(this.messageSender);
+		}
 		this.messageSender = setTimeout(() => {
 			this.messageSender = null;
 			this.tryCleanQueue();
