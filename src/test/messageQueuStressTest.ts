@@ -31,7 +31,7 @@ export function messageQueuStressTest(jsonPath: string) {
 		let received: number = 0;
 		x.onReady(() => {
 			start.reset();
-			console.log("Test started.");
+			console.log("Test: started.");
 			for (let i = 0; i < 150; i++) {
 				x.Socket.send.getVersion();
 			}
@@ -48,6 +48,9 @@ export function messageQueuStressTest(jsonPath: string) {
 
 		x.Socket.listen.getVersion((returnData) => {
 			received += 1;
+			if (received === 150) {
+				console.log("Test: 150. message arrived in " + start.elapsedMs() + "ms");
+			}
 		});
 	} catch (e) {
 		console.error(e);
