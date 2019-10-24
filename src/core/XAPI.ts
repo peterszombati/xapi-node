@@ -5,7 +5,7 @@ import Logger from "../utils/Logger";
 import {Logger4Interface, EmptyLogger} from "logger4";
 
 export const DefaultHostname = 'ws.xtb.com';
-export const DefaultRateLimit = 1000;
+export const DefaultRateLimit = 850;
 
 export interface XAPIConfig {
 	accountId: string,
