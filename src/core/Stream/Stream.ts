@@ -1,4 +1,4 @@
-import XAPI from "../XAPI";
+import XAPI from '../XAPI';
 import {
 	STREAMING_BALANCE_RECORD,
 	STREAMING_CANDLE_RECORD,
@@ -8,9 +8,9 @@ import {
 	STREAMING_TICK_RECORD,
 	STREAMING_TRADE_RECORD,
 	STREAMING_TRADE_STATUS_RECORD
-} from "../..";
-import {StreamConnection} from "./StreamConnection";
-import {Time} from "../../modules/Time";
+} from '../..';
+import {StreamConnection} from './StreamConnection';
+import {Time} from '../../modules/Time';
 
 class Stream extends StreamConnection {
 
@@ -20,82 +20,82 @@ class Stream extends StreamConnection {
 
 	public listen = {
 		getBalance: (callBack: (data: STREAMING_BALANCE_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("balance", callBack, key);
+			this.addListener('balance', callBack, key);
 		},
 		getCandles: (callBack: (data: STREAMING_CANDLE_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("candle", callBack, key);
+			this.addListener('candle', callBack, key);
 		},
 		getKeepAlive: (callBack: (data: STREAMING_KEEP_ALIVE_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("keepAlive", callBack, key);
+			this.addListener('keepAlive', callBack, key);
 		},
 		getNews: (callBack: (data: STREAMING_NEWS_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("news", callBack, key);
+			this.addListener('news', callBack, key);
 		},
 		getProfits: (callBack: (data: STREAMING_PROFIT_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("profit", callBack, key);
+			this.addListener('profit', callBack, key);
 		},
 		getTickPrices: (callBack: (data: STREAMING_TICK_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("tickPrices", callBack, key);
+			this.addListener('tickPrices', callBack, key);
 		},
 		getTrades: (callBack: (data: STREAMING_TRADE_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("trade", callBack, key);
+			this.addListener('trade', callBack, key);
 		},
 		getTradeStatus: (callBack: (data: STREAMING_TRADE_STATUS_RECORD, time: Time) => void, key: string | null = null) => {
-			this.addListener("tradeStatus", callBack, key);
+			this.addListener('tradeStatus', callBack, key);
 		},
 	};
 
 	public subscribe = {
 		getBalance: () => {
-			return this.sendSubscribe("Balance");
+			return this.sendSubscribe('Balance');
 		},
 		getCandles: (symbol: string) => {
-			return this.sendSubscribe("Candles", {symbol});
+			return this.sendSubscribe('Candles', {symbol});
 		},
 		getKeepAlive: () => {
-			return this.sendSubscribe("KeepAlive");
+			return this.sendSubscribe('KeepAlive');
 		},
 		getNews: () => {
-			return this.sendSubscribe("News");
+			return this.sendSubscribe('News');
 		},
 		getProfits: () => {
-			return this.sendSubscribe("Profits");
+			return this.sendSubscribe('Profits');
 		},
 		getTickPrices: (symbol: string, minArrivalTime: number = 0, maxLevel: number = 6) => {
-			return this.sendSubscribe("TickPrices", {symbol, minArrivalTime, maxLevel});
+			return this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel});
 		},
 		getTrades: () => {
-			return this.sendSubscribe("Trades");
+			return this.sendSubscribe('Trades');
 		},
 		getTradeStatus: () => {
-			return this.sendSubscribe("TradeStatus");
+			return this.sendSubscribe('TradeStatus');
 		},
 	};
 
 	public unSubscribe = {
 		getBalance: () => {
-			return this.sendUnsubscribe("Balance");
+			return this.sendUnsubscribe('Balance');
 		},
 		getCandles: (symbol: string) => {
-			return this.sendUnsubscribe("Candles", {symbol});
+			return this.sendUnsubscribe('Candles', {symbol});
 		},
 		getKeepAlive: () => {
-			return this.sendUnsubscribe("KeepAlive");
+			return this.sendUnsubscribe('KeepAlive');
 		},
 		getNews: () => {
-			return this.sendUnsubscribe("News");
+			return this.sendUnsubscribe('News');
 		},
 		getProfits: () => {
-			return this.sendUnsubscribe("Profits");
+			return this.sendUnsubscribe('Profits');
 		},
 		getTickPrices: (symbol: string) => {
-			return this.sendUnsubscribe("TickPrices", {symbol});
+			return this.sendUnsubscribe('TickPrices', {symbol});
 		},
 		getTrades: () => {
-			return this.sendUnsubscribe("Trades");
+			return this.sendUnsubscribe('Trades');
 		},
 		getTradeStatus: () => {
-			return this.sendUnsubscribe("TradeStatus");
+			return this.sendUnsubscribe('TradeStatus');
 		},
 	};
 

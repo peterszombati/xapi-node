@@ -1,4 +1,4 @@
-import { XAPI, XAPIConfig } from "./core/XAPI";
+import { XAPI, XAPIConfig } from './core/XAPI';
 export default XAPI;
 export { XAPIConfig };
 
@@ -53,11 +53,11 @@ export {
 	CHART_RANGE_INFO_RECORD
 }
 
-import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD, REQUEST_STATUS_FIELD, REQUEST_STATUS} from "./enum/Enum";
+import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD, REQUEST_STATUS_FIELD, REQUEST_STATUS} from './enum/Enum';
 export {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD, REQUEST_STATUS_FIELD, REQUEST_STATUS}
 
-import {Candle} from "./enum/candle";
+import {Candle} from './enum/candle';
 export {Candle}
 
-import {parseLogin} from "./modules/parseLogin";
+import {parseLogin} from './modules/parseLogin';
 export {parseLogin};

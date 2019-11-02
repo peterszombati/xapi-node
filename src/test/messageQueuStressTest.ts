@@ -23,7 +23,7 @@ process
 export function messageQueuStressTest(jsonPath: string) {
 	try {
 		const login = parseLogin(jsonPath);
-		const logger = new Logger4({ path: path.join(process.cwd(), "logs", "xapi"), removeOverDirectorySize: null });
+		const logger = new Logger4({ path: path.join(process.cwd(), 'logs', 'xapi'), removeOverDirectorySize: null });
 		const x = new XAPI({...login, logger});
 		x.connect();
 
@@ -31,16 +31,16 @@ export function messageQueuStressTest(jsonPath: string) {
 		let received: number = 0;
 		x.onReady(() => {
 			start.reset();
-			console.log("Test: started.");
+			console.log('Test: started.');
 			for (let i = 0; i < 150; i++) {
 				x.Socket.send.getVersion();
 			}
 			setTimeout(() => {
 				if (received !== 150) {
-					console.error("Test: failed");
+					console.error('Test: failed');
 					process.exit(1);
 				} else {
-					console.log("Test: successful");
+					console.log('Test: successful');
 					process.exit(0);
 				}
 			}, 40000);
@@ -49,7 +49,7 @@ export function messageQueuStressTest(jsonPath: string) {
 		x.Socket.listen.getVersion((returnData) => {
 			received += 1;
 			if (received === 150) {
-				console.log("Test: 150. message arrived in " + start.elapsedMs() + "ms");
+				console.log('Test: 150. message arrived in ' + start.elapsedMs() + 'ms');
 			}
 		});
 	} catch (e) {

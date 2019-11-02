@@ -1,4 +1,4 @@
-import {Transaction} from "../interface/Interface";
+import {Transaction} from '../interface/Interface';
 
 class Utils {
 
@@ -7,7 +7,7 @@ class Utils {
 			...transaction,
 			request: {
 				...transaction.request,
-				json: "json contains secret information",
+				json: 'json contains secret information',
 				arguments: {},
 			}
 		}
@@ -15,15 +15,15 @@ class Utils {
 
 	static parseCustomTag(customTag: string | null): { transactionId: string | null, command: string | null } {
 		if (customTag == null) {
-			return {transactionId: null, command: null};
+			return { transactionId: null, command: null };
 		}
 		const customTagData = customTag.split('_');
 		if (customTagData.length < 2) {
-			return {transactionId: null, command: null};
+			return { transactionId: null, command: null };
 		}
 		const command = customTagData[0];
 		const transactionId = customTagData[1];
-		return {transactionId, command};
+		return { transactionId, command };
 	}
 
 	static transactionToJSONString(transaction: Transaction<any, any>): string {
@@ -48,9 +48,9 @@ class Utils {
 					)
 				},
 				transactionPromise: undefined
-			}, null, "\t");
+			}, null, '\t');
 		} catch (e) {
-			return "{}";
+			return '{}';
 		}
 	}
 
@@ -62,7 +62,7 @@ class Utils {
 		let result = number.toString();
 
 		if (length - result.length > 0) {
-			return "0".repeat(length - result.length) + result;
+			return '0'.repeat(length - result.length) + result;
 		}
 
 		return result;

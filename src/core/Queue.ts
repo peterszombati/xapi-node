@@ -1,11 +1,11 @@
-import {AddTransaction, MessagesQueue, Transaction, TransactionReject, Transactions} from "../interface/Interface";
-import {Listener} from "../modules/Listener";
-import {Time} from "../modules/Time";
-import Logger from "../utils/Logger";
-import {TransactionStatus, TransactionType} from "../enum/Enum";
-import Utils from "../utils/Utils";
-import {WebSocketWrapper} from "../modules/WebSocketWrapper";
-import {errorCode} from "../enum/errorCode";
+import {AddTransaction, MessagesQueue, Transaction, TransactionReject, Transactions} from '../interface/Interface';
+import {Listener} from '../modules/Listener';
+import {Time} from '../modules/Time';
+import Logger from '../utils/Logger';
+import {TransactionStatus, TransactionType} from '../enum/Enum';
+import Utils from '../utils/Utils';
+import {WebSocketWrapper} from '../modules/WebSocketWrapper';
+import {errorCode} from '../enum/errorCode';
 
 export class Queue extends Listener {
 	public status: boolean = false;
@@ -32,15 +32,15 @@ export class Queue extends Listener {
 	private addQueu(transaction: Transaction<any,any>): void {
 		const { urgent, transactionId } = transaction;
 		if (this.queueSize >= 150) {
-			this.rejectTransaction({ code: errorCode.XAPINODE_2, explain: "messageQueues exceeded 150 size limit" }, transaction);
+			this.rejectTransaction({ code: errorCode.XAPINODE_2, explain: 'messageQueues exceeded 150 size limit' }, transaction);
 		} else {
 			if (urgent) {
 				this.messageQueues.urgent.push({transactionId});
 			} else {
 				this.messageQueues.normal.push({transactionId});
 			}
-			Logger.log.hidden((this.type === TransactionType.STREAM ? " Stream" : "Socket")
-				+ " (" + transaction.transactionId + "): added to queue (messages in queue = " + this.queueSize + ")", "INFO");
+			Logger.log.hidden((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
+				+ ' (' + transaction.transactionId + '): added to queue (messages in queue = ' + this.queueSize + ')', 'INFO');
 		}
 	}
 
@@ -61,8 +61,8 @@ export class Queue extends Listener {
 
 	protected resetMessageTube() {
 		if (this.queueSize > 0) {
-			Logger.log.info((this.type === TransactionType.STREAM ? " Stream" : "Socket")
-				+ " Message queue reseted, deleted = " + this.queueSize);
+			Logger.log.info((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
+				+ ' Message queue reseted, deleted = ' + this.queueSize);
 		}
 		this.messageQueues = { urgent: [], normal: [] };
 		this.messagesElapsedTime = [];
@@ -88,7 +88,7 @@ export class Queue extends Listener {
 			transactionId: newTransaction.transactionId,
 			createdAt: new Time(),
 			status: TransactionStatus.waiting,
-			transactionPromise: { tResolve: newTransaction.resolve, tReject: newTransaction.reject },
+			transactionPromise: { resolve: newTransaction.resolve, reject: newTransaction.reject },
 			urgent: newTransaction.urgent
 		};
 		return this.transactions[newTransaction.transactionId];
@@ -96,12 +96,12 @@ export class Queue extends Listener {
 
 	public rejectOldTransactions(): void {
 		Object.values(this.transactions)
-			.filter(t => t.transactionPromise.tReject !== null)
+			.filter(t => t.transactionPromise.reject !== null)
 			.forEach(transaction => {
 				const elapsedMs = transaction.createdAt.elapsedMs();
 				if (elapsedMs != null
 					&& elapsedMs > 60000) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: "Timeout"}, transaction);
+					this.rejectTransaction({ code: errorCode.XAPINODE_3, explain: 'Timeout' }, transaction);
 				}
 			});
 	}
@@ -109,7 +109,7 @@ export class Queue extends Listener {
 	public removeOldTransactions(): number {
 		let deleted = 0;
 		Object.values(this.transactions)
-			.filter(t => t.transactionPromise.tReject === null && t.transactionPromise.tResolve === null)
+			.filter(t => t.transactionPromise.reject === null && t.transactionPromise.resolve === null)
 			.forEach(transaction => {
 				const elapsedMs = transaction.createdAt.elapsedMs();
 				if (elapsedMs != null && elapsedMs > 86400000) {
@@ -140,23 +140,23 @@ export class Queue extends Listener {
             };
         }
 		transaction.status = TransactionStatus.successful;
-		if (transaction.transactionPromise.tResolve !== null) {
-			const resolve = transaction.transactionPromise.tResolve;
-			transaction.transactionPromise = { tResolve: null, tReject: null };
+		if (transaction.transactionPromise.resolve !== null) {
+			const { resolve } = transaction.transactionPromise;
+			transaction.transactionPromise = { resolve: null, reject: null };
 			if (transaction.type === TransactionType.STREAM) {
-				Logger.log.hidden(" Stream (" + transaction.transactionId + "): " + transaction.command + ", " + JSON.stringify(transaction.request.arguments), "INFO");
+				Logger.log.hidden(' Stream (' + transaction.transactionId + '): ' + transaction.command + ', ' + JSON.stringify(transaction.request.arguments), 'INFO');
 				resolve({transaction});
 			} else {
 				const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent);
-				Logger.log.hidden("Socket (" + transaction.transactionId + "): "
-					+ transaction.command + ", "
-					+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
-					+ ", ("+elapsedMs+"ms)", "INFO");
+				Logger.log.hidden('Socket (' + transaction.transactionId + '): '
+					+ transaction.command + ', '
+					+ (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
+					+ ', ('+elapsedMs+'ms)', 'INFO');
 				resolve({returnData, time, transaction})
 			}
-			Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
+			Logger.log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
 		} else {
-			Logger.log.hidden("Transaction archived (promise resolve is null):\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
+			Logger.log.hidden('Transaction archived (promise resolve is null):\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
 		}
 	}
 
@@ -172,26 +172,26 @@ export class Queue extends Listener {
 			received,
 			json
 		};
-		Logger.log.hidden(transaction.type + " message rejected (" + transaction.transactionId + "): "
-			+ transaction.command + ", "
-			+ (transaction.command === "login" ? "(arguments contains secret information)" : JSON.stringify(transaction.request.arguments))
-			+ "\nReason:\n" + JSON.stringify(json, null, "\t"), "ERROR");
-		if (transaction.transactionPromise.tReject !== null) {
-			const reject = transaction.transactionPromise.tReject;
-			transaction.transactionPromise = { tResolve: null, tReject: null };
+		Logger.log.hidden(transaction.type + ' message rejected (' + transaction.transactionId + '): '
+			+ transaction.command + ', '
+			+ (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
+			+ '\nReason:\n' + JSON.stringify(json, null, '\t'), 'ERROR');
+		if (transaction.transactionPromise.reject !== null) {
+			const { reject } = transaction.transactionPromise;
+			transaction.transactionPromise = { resolve: null, reject: null };
 			reject({
 				reason: json,
-				transaction: transaction.command === "login" ? Utils.hideSecretInfo(transaction) : transaction
+				transaction: transaction.command === 'login' ? Utils.hideSecretInfo(transaction) : transaction
 			});
 		}
-		Logger.log.hidden("Transaction archived:\n" + Utils.transactionToJSONString(transaction), "INFO", "Transactions");
+		Logger.log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
 	}
 
 	protected sendJSON(transaction: Transaction<any, any>, addQueu: boolean): boolean {
 		if (transaction.request.json.length > 1000) {
 			this.rejectTransaction({
 				code: errorCode.XAPINODE_0,
-				explain: "Each command invocation should not contain more than 1kB of data."
+				explain: 'Each command invocation should not contain more than 1kB of data.'
 			}, transaction);
 			return true;
 		}

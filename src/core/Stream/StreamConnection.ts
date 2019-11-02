@@ -1,11 +1,11 @@
-import XAPI from "../XAPI";
-import {TransactionResolveStream} from "../../interface/Interface";
-import {Time} from "../../modules/Time";
-import {WebSocketWrapper} from "../../modules/WebSocketWrapper";
-import Logger from "../../utils/Logger";
-import {errorCode} from "../../enum/errorCode";
-import {TransactionStatus, TransactionType} from "../../enum/Enum";
-import {Queue} from "../Queue";
+import XAPI from '../XAPI';
+import {TransactionResolveStream} from '../../interface/Interface';
+import {Time} from '../../modules/Time';
+import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
+import Logger from '../../utils/Logger';
+import {errorCode} from '../../enum/errorCode';
+import {TransactionStatus, TransactionType} from '../../enum/Enum';
+import {Queue} from '../Queue';
 
 export class StreamConnection extends Queue {
 	private XAPI: XAPI;
@@ -17,7 +17,7 @@ export class StreamConnection extends Queue {
 	}
 
 	public connect() {
-		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType + "Stream");
+		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType + 'Stream');
 		this.WebSocket.onOpen(() => {
 			this.resetMessageTube();
 			this.setConnection(true);
@@ -35,7 +35,7 @@ export class StreamConnection extends Queue {
 			}
 			for (const transactionId in this.transactions) {
 				if (this.transactions[transactionId].status === TransactionStatus.waiting) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Stream closed"}, this.transactions[transactionId], false);
+					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: 'Stream closed'}, this.transactions[transactionId], false);
 				}
 			}
 		});
@@ -47,27 +47,27 @@ export class StreamConnection extends Queue {
 				this.callListener(json.command, [json.data, new Time()]);
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
-				Logger.log.error("Stream WebSocket Error");
-				Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
+				Logger.log.error('Stream WebSocket Error');
+				Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 			}
 		});
 
 		this.WebSocket.onError((error: any) => {
 			const { name, message, stack } = new Error(error);
-			Logger.log.error("Stream WebSocket Error");
-			Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
+			Logger.log.error('Stream WebSocket Error');
+			Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 		});
 	}
 
 	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
-		this.addListener("connectionChange", callBack, key);
+		this.addListener('connectionChange', callBack, key);
 	}
 
 	private setConnection(status: boolean) {
 		if (this.status !== status) {
-			Logger.log.hidden("Stream " + (status ? "open" : "closed"), "INFO");
+			Logger.log.hidden('Stream ' + (status ? 'open' : 'closed'), 'INFO');
 			this.status = status;
-			this.callListener("connectionChange", [status]);
+			this.callListener('connectionChange', [status]);
 		}
 
 		if (this.openTimeout !== null) {
@@ -81,7 +81,7 @@ export class StreamConnection extends Queue {
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
 				if (this.session.length > 0 && this.status) {
-					this.XAPI.callListener("xapiReady");
+					this.XAPI.callListener('xapiReady');
 				}
 			}, 1000);
 		}
@@ -95,7 +95,7 @@ export class StreamConnection extends Queue {
 				json: JSON.stringify({
 					...completion,
 					command,
-					"streamSessionId": this.session,
+					'streamSessionId': this.session,
 				}),
 				args: completion,
 				transactionId: this.createTransactionId(),
@@ -106,7 +106,7 @@ export class StreamConnection extends Queue {
 			if (this.status === false) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
-					explain: "Stream closed"
+					explain: 'Stream closed'
 				}, transaction);
 			} else if (this.session.length === 0) {
 				this.rejectTransaction({
@@ -126,7 +126,7 @@ export class StreamConnection extends Queue {
 	}
 
 	public ping() {
-		return this.sendCommand("ping", {}, true);
+		return this.sendCommand('ping', {}, true);
 	}
 
 	protected sendSubscribe(command: string, completion: any = {}) {

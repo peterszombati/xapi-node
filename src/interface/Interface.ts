@@ -28,8 +28,8 @@ export interface Transaction<Resolve,Reject> {
 		json: any
 	}
 	transactionPromise: {
-		tResolve: null | ((resolve: Resolve | null) => void),
-		tReject: null | ((reject: Reject | null) => void)
+		resolve: null | ((resolve: Resolve | null) => void),
+		reject: null | ((reject: Reject | null) => void)
 	}
 }
 export interface AddTransaction {

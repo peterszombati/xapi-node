@@ -1,12 +1,12 @@
-import {TransactionResolveSocket} from "../../interface/Interface";
-import XAPI from "../XAPI";
-import {Time} from "../../modules/Time";
-import {WebSocketWrapper} from "../../modules/WebSocketWrapper";
-import Logger from "../../utils/Logger";
-import {errorCode} from "../../enum/errorCode";
-import {TransactionStatus, TransactionType} from "../../enum/Enum";
-import {Queue} from "../Queue";
-import Utils from "../../utils/Utils";
+import {TransactionResolveSocket} from '../../interface/Interface';
+import XAPI from '../XAPI';
+import {Time} from '../../modules/Time';
+import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
+import Logger from '../../utils/Logger';
+import {errorCode} from '../../enum/errorCode';
+import {TransactionStatus, TransactionType} from '../../enum/Enum';
+import {Queue} from '../Queue';
+import Utils from '../../utils/Utils';
 
 export class SocketConnection extends Queue {
 	private XAPI: XAPI;
@@ -28,7 +28,7 @@ export class SocketConnection extends Queue {
 				this.callListener(command, [returnData, time, this.transactions[transactionId]]);
 			}
 		} else {
-			Logger.log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, "\t"));
+			Logger.log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, '\t'));
 		}
 	}
 
@@ -52,7 +52,7 @@ export class SocketConnection extends Queue {
 			for (const transactionId in this.transactions) {
 				const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 				if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: "Socket closed"}, this.transactions[transactionId], isInterrupted);
+					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: 'Socket closed'}, this.transactions[transactionId], isInterrupted);
 				}
 			}
 		});
@@ -63,27 +63,27 @@ export class SocketConnection extends Queue {
 				this.handleSocketMessage(json, new Time());
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
-				Logger.log.error("Socket WebSocket Error");
-				Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
+				Logger.log.error('Socket WebSocket Error');
+				Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 			}
 		});
 
 		this.WebSocket.onError((error: any) => {
 			const { name, message, stack } = new Error(error);
-			Logger.log.error("Socket WebSocket Error");
-			Logger.log.hidden(name + "\n" + message + (stack ? "\n" + stack : ""), "ERROR");
+			Logger.log.error('Socket WebSocket Error');
+			Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 		});
 	}
 
 	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
-		this.addListener("connectionChange", callBack, key);
+		this.addListener('connectionChange', callBack, key);
 	}
 
 	private setConnection(status: boolean) {
 		if (this.status !== status) {
-			Logger.log.hidden("Socket " + (status ? "open" : "closed"), "INFO");
+			Logger.log.hidden('Socket ' + (status ? 'open' : 'closed'), 'INFO');
 			this.status = status;
-			this.callListener("connectionChange", [status]);
+			this.callListener('connectionChange', [status]);
 		}
 
 		if (this.openTimeout !== null) {
@@ -103,20 +103,20 @@ export class SocketConnection extends Queue {
 
 	private tryLogin(retries: number = 2) {
 		this.XAPI.Socket.login().then(() => {
-			Logger.log.hidden("Login is successful (userId = " + this.XAPI.accountId
-				+ ", accountType = " + this.XAPI.accountType + ")", "INFO");
+			Logger.log.hidden('Login is successful (userId = ' + this.XAPI.accountId
+				+ ', accountType = ' + this.XAPI.accountType + ')', 'INFO');
 			this.ping();
 		}).catch(e => {
-			Logger.log.hidden("Login is rejected (userId = " + this.XAPI.accountId
-				+ ", accountType = " + this.XAPI.accountType
-				+ ")\nReason:\n" + JSON.stringify(e, null, "\t"), "ERROR");
+			Logger.log.hidden('Login is rejected (userId = ' + this.XAPI.accountId
+				+ ', accountType = ' + this.XAPI.accountType
+				+ ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');
 			if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
 				setTimeout(() => {
-					Logger.log.hidden("Try to login (retries = " + retries + ")", "INFO");
+					Logger.log.hidden('Try to login (retries = ' + retries + ')', 'INFO');
 					this.tryLogin(retries - 1);
 				}, 500);
 			} else if (e.reason.code === errorCode.BE005) {
-				Logger.log.error("Disconnect from stream and socket (reason = 'login error code is " + e.reason.code + "')");
+				Logger.log.error('Disconnect from stream and socket (reason = \'login error code is ' + e.reason.code + '\')');
 				this.XAPI.disconnect();
 			}
 		});
@@ -128,8 +128,8 @@ export class SocketConnection extends Queue {
 		if (transactionId !== null && this.transactions[transactionId] !== undefined) {
 			this.rejectTransaction({ code, explain }, this.transactions[transactionId], false, received);
 		} else {
-			Logger.log.hidden("Socket error message:\n"
-				+ JSON.stringify({ code, explain, customTag }, null, "\t"), "ERROR");
+			Logger.log.hidden('Socket error message:\n'
+				+ JSON.stringify({ code, explain, customTag }, null, '\t'), 'ERROR');
 		}
 	}
 
@@ -172,12 +172,12 @@ export class SocketConnection extends Queue {
 			if (this.status === false) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
-					explain: "Socket closed"
+					explain: 'Socket closed'
 				}, this.transactions[transactionId]);
 			} else if (this.XAPI.Stream.session.length === 0
-				&& "login" !== command
-				&& "ping" !== command
-				&& "logout" !== command) {
+				&& 'login' !== command
+				&& 'ping' !== command
+				&& 'logout' !== command) {
 				this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction);
 			} else if (this.XAPI.isTradingDisabled && command === 'tradeTransaction') {
 				this.rejectTransaction({

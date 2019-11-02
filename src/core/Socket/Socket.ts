@@ -40,8 +40,8 @@ import {
 	tradeTransactionStatus
 } from '../../interface/Request';
 import {CMD_FIELD, PERIOD_FIELD} from '../..';
-import {SocketConnection} from "./SocketConnection";
-import {Time} from "../../modules/Time";
+import {SocketConnection} from './SocketConnection';
+import {Time} from '../../modules/Time';
 
 interface SocketListen<T> { (data: T, time: Time, transaction: Transaction<null, null>): void }
 
