@@ -26,18 +26,6 @@ export class StreamConnection extends Queue {
 		this.WebSocket.onClose(() => {
 			this.resetMessageTube();
 			this.setConnection(false);
-			if (this.XAPI.tryReconnect) {
-				setTimeout(() => {
-					if (this.XAPI.tryReconnect) {
-						this.connect();
-					}
-				}, 2000);
-			}
-			for (const transactionId in this.transactions) {
-				if (this.transactions[transactionId].status === TransactionStatus.waiting) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: 'Stream closed'}, this.transactions[transactionId], false);
-				}
-			}
 		});
 
 		this.WebSocket.onMessage((message: any) => {
@@ -84,6 +72,19 @@ export class StreamConnection extends Queue {
 					this.XAPI.callListener('xapiReady');
 				}
 			}, 1000);
+		} else {
+			if (this.XAPI.tryReconnect) {
+				setTimeout(() => {
+					if (this.XAPI.tryReconnect) {
+						this.connect();
+					}
+				}, 2000);
+			}
+			for (const transactionId in this.transactions) {
+				if (this.transactions[transactionId].status === TransactionStatus.waiting) {
+					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: 'Stream closed'}, this.transactions[transactionId], false);
+				}
+			}
 		}
 	}
 

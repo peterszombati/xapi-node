@@ -42,19 +42,6 @@ export class SocketConnection extends Queue {
 		this.WebSocket.onClose(() => {
 			this.resetMessageTube();
 			this.setConnection(false);
-			if (this.XAPI.tryReconnect) {
-				setTimeout(() => {
-					if (this.XAPI.tryReconnect) {
-						this.connect();
-					}
-				}, 2000);
-			}
-			for (const transactionId in this.transactions) {
-				const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
-				if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: 'Socket closed'}, this.transactions[transactionId], isInterrupted);
-				}
-			}
 		});
 
 		this.WebSocket.onMessage((message: any) => {
@@ -98,6 +85,20 @@ export class SocketConnection extends Queue {
 					this.tryLogin(2);
 				}
 			}, 1000);
+		} else {
+			if (this.XAPI.tryReconnect) {
+				setTimeout(() => {
+					if (this.XAPI.tryReconnect) {
+						this.connect();
+					}
+				}, 2000);
+			}
+			for (const transactionId in this.transactions) {
+				const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
+				if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
+					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: 'Socket closed'}, this.transactions[transactionId], isInterrupted);
+				}
+			}
 		}
 	}
 
