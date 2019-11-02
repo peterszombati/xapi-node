@@ -15,13 +15,15 @@ export interface XAPIConfig {
 	host ?: string | undefined,
 	rateLimit ?: number | undefined,
 	logger ?: Logger4Interface
+	safe ?: boolean
 }
 
 export interface XAPIAccount {
 	accountId: string,
 	type: string,
 	appName ?: string | undefined,
-	host: string
+	host: string,
+	safe: boolean
 }
 
 export class XAPI extends Listener {
@@ -35,23 +37,32 @@ export class XAPI extends Listener {
 		interval: [],
 		timeout: []
 	};
+	protected account: XAPIAccount = {
+		type: 'demo',
+		accountId: '',
+		host: '',
+		appName: undefined,
+		safe: false
+	};
 
 	constructor({
 		accountId, password, type, appName = undefined,
-		host, rateLimit, logger = new EmptyLogger()
+		host, rateLimit, logger = new EmptyLogger(), safe
 	}: XAPIConfig) {
 		super();
 		Logger.setLogger(logger);
 		this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
 		this.Socket = new Socket(this, password);
 		this.Stream = new Stream(this);
-		if (accountId != null && type != null) {
-			this.account = {
-				type: (type.toLowerCase() === "real") ? "real" : "demo",
-				accountId,
-				appName,
-				host: host === undefined ? DefaultHostname : host
-			};
+		this.account = {
+			type: (type.toLowerCase() === 'real') ? 'real' : 'demo',
+			accountId,
+			appName,
+			host: host === undefined ? DefaultHostname : host,
+			safe: safe === undefined ? false : safe
+		};
+		if (this.account.safe) {
+			Logger.log.warn('[TRADING DISABLED] tradeTransaction command is disabled, this mean you can\'t open, modify or close positions.');
 		}
 		this.Stream.onConnectionChange(status => {
 			if (this.Socket.status) {
@@ -112,15 +123,12 @@ export class XAPI extends Listener {
 		this.timer = { interval: [], timeout: [] };
 	}
 
-	protected account: XAPIAccount = {
-		type: "demo",
-		accountId: "",
-		host: "",
-		appName: undefined
-	};
-
 	public get accountType(): string | null {
 		return this.account.type;
+	}
+
+	public get isTradingDisabled(): boolean {
+		return this.account.safe;
 	}
 
 	public get accountId(): string {
