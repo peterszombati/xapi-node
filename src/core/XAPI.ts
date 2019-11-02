@@ -62,7 +62,7 @@ export class XAPI extends Listener {
 			safe: safe === undefined ? false : safe
 		};
 		if (this.account.safe) {
-			Logger.log.warn('[TRADING DISABLED] tradeTransaction command is disabled, this mean you can\'t open, modify or close positions.');
+			Logger.log.warn('[TRADING DISABLED] tradeTransaction command is disabled in cofing (safe = true), it mean you can\'t open, modify or close positions.');
 		}
 		this.Stream.onConnectionChange(status => {
 			if (this.Socket.status) {
