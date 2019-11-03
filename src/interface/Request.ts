@@ -1,5 +1,5 @@
-import {CMD_FIELD} from "..";
-import {TRADE_TRANS_INFO} from "./Definitions";
+import {CMD_FIELD} from '..';
+import {TRADE_TRANS_INFO} from './Definitions';
 
 export interface getCommissionDef {
 	symbol: string

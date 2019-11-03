@@ -1,5 +1,5 @@
-import {Time} from "../modules/Time";
-import {TransactionStatus, TransactionType} from "../enum/Enum";
+import {Time} from '../modules/Time';
+import {TransactionStatus, TransactionType} from '../enum/Enum';
 
 export interface Transactions {
 	[transactionId: string]: Transaction<any,any>
