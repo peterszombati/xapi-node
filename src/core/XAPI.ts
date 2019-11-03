@@ -1,8 +1,8 @@
 import Stream from './Stream/Stream';
 import Socket from './Socket/Socket';
 import {Listener} from '../modules/Listener';
-import Logger from '../utils/Logger';
 import {Logger4Interface, EmptyLogger} from 'logger4';
+import Log, {changeLogger} from "../utils/Log";
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
@@ -46,7 +46,7 @@ export class XAPI extends Listener {
 	};
 
 	public getLogger(): Logger4Interface {
-		return Logger.log;
+		return Log;
 	}
 
 	constructor({
@@ -54,7 +54,7 @@ export class XAPI extends Listener {
 		host, rateLimit, logger = new EmptyLogger(), safe
 	}: XAPIConfig) {
 		super();
-		Logger.setLogger(logger);
+		changeLogger(logger);
 		this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
 		this.Socket = new Socket(this, password);
 		this.Stream = new Stream(this);
@@ -66,7 +66,7 @@ export class XAPI extends Listener {
 			safe: safe === undefined ? false : safe
 		};
 		if (this.account.safe) {
-			Logger.log.warn('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true), it mean you can\'t open, modify or close positions.');
+			Log.warn('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true), it mean you can\'t open, modify or close positions.');
 		}
 		this.Stream.onConnectionChange(status => {
 			if (this.Socket.status) {

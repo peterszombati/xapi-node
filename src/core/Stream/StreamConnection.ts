@@ -2,7 +2,7 @@ import XAPI from '../XAPI';
 import {TransactionResolveStream} from '../../interface/Interface';
 import {Time} from '../../modules/Time';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import Logger from '../../utils/Logger';
+import Log from '../../utils/Log';
 import {errorCode} from '../../enum/errorCode';
 import {TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
@@ -35,15 +35,15 @@ export class StreamConnection extends Queue {
 				this.callListener(json.command, [json.data, new Time()]);
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
-				Logger.log.error('Stream WebSocket Error');
-				Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+				Log.error('Stream WebSocket Error');
+				Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 			}
 		});
 
 		this.WebSocket.onError((error: any) => {
 			const { name, message, stack } = new Error(error);
-			Logger.log.error('Stream WebSocket Error');
-			Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+			Log.error('Stream WebSocket Error');
+			Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 		});
 	}
 
@@ -53,7 +53,7 @@ export class StreamConnection extends Queue {
 
 	private setConnection(status: boolean) {
 		if (this.status !== status) {
-			Logger.log.hidden('Stream ' + (status ? 'open' : 'closed'), 'INFO');
+			Log.hidden('Stream ' + (status ? 'open' : 'closed'), 'INFO');
 			this.status = status;
 			this.callListener('connectionChange', [status]);
 		}

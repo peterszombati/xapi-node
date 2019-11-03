@@ -1,7 +1,7 @@
 import {AddTransaction, MessagesQueue, Transaction, TransactionReject, Transactions} from '../interface/Interface';
 import {Listener} from '../modules/Listener';
 import {Time} from '../modules/Time';
-import Logger from '../utils/Logger';
+import Log from '../utils/Log';
 import {TransactionStatus, TransactionType} from '../enum/Enum';
 import Utils from '../utils/Utils';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
@@ -39,7 +39,7 @@ export class Queue extends Listener {
 			} else {
 				this.messageQueues.normal.push({transactionId});
 			}
-			Logger.log.hidden((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
+			Log.hidden((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
 				+ ' (' + transaction.transactionId + '): added to queue (messages in queue = ' + this.queueSize + ')', 'INFO');
 		}
 	}
@@ -61,7 +61,7 @@ export class Queue extends Listener {
 
 	protected resetMessageTube() {
 		if (this.queueSize > 0) {
-			Logger.log.info((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
+			Log.info((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
 				+ ' Message queue reseted, deleted = ' + this.queueSize);
 		}
 		this.messageQueues = { urgent: [], normal: [] };
@@ -126,7 +126,7 @@ export class Queue extends Listener {
 			this.WebSocket.send(json);
 			return time;
 		} catch (e) {
-			Logger.log.error(e.toString());
+			Log.error(e.toString());
 			return null;
 		}
 	}
@@ -144,19 +144,19 @@ export class Queue extends Listener {
 			const { resolve } = transaction.transactionPromise;
 			transaction.transactionPromise = { resolve: null, reject: null };
 			if (transaction.type === TransactionType.STREAM) {
-				Logger.log.hidden(' Stream (' + transaction.transactionId + '): ' + transaction.command + ', ' + JSON.stringify(transaction.request.arguments), 'INFO');
+				Log.hidden(' Stream (' + transaction.transactionId + '): ' + transaction.command + ', ' + JSON.stringify(transaction.request.arguments), 'INFO');
 				resolve({transaction});
 			} else {
 				const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent);
-				Logger.log.hidden('Socket (' + transaction.transactionId + '): '
+				Log.hidden('Socket (' + transaction.transactionId + '): '
 					+ transaction.command + ', '
 					+ (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
 					+ ', ('+elapsedMs+'ms)', 'INFO');
 				resolve({returnData, time, transaction})
 			}
-			Logger.log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+			Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
 		} else {
-			Logger.log.hidden('Transaction archived (promise resolve is null):\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+			Log.hidden('Transaction archived (promise resolve is null):\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
 		}
 	}
 
@@ -172,7 +172,7 @@ export class Queue extends Listener {
 			received,
 			json
 		};
-		Logger.log.hidden(transaction.type + ' message rejected (' + transaction.transactionId + '): '
+		Log.hidden(transaction.type + ' message rejected (' + transaction.transactionId + '): '
 			+ transaction.command + ', '
 			+ (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
 			+ '\nReason:\n' + JSON.stringify(json, null, '\t'), 'ERROR');
@@ -184,7 +184,7 @@ export class Queue extends Listener {
 				transaction: transaction.command === 'login' ? Utils.hideSecretInfo(transaction) : transaction
 			});
 		}
-		Logger.log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+		Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
 	}
 
 	protected sendJSON(transaction: Transaction<any, any>, addQueu: boolean): boolean {

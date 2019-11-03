@@ -2,7 +2,7 @@ import {TransactionResolveSocket} from '../../interface/Interface';
 import XAPI from '../XAPI';
 import {Time} from '../../modules/Time';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import Logger from '../../utils/Logger';
+import Log from '../../utils/Log';
 import {errorCode} from '../../enum/errorCode';
 import {TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
@@ -28,7 +28,7 @@ export class SocketConnection extends Queue {
 				this.callListener(command, [returnData, time, this.transactions[transactionId]]);
 			}
 		} else {
-			Logger.log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, '\t'));
+			Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, '\t'));
 		}
 	}
 
@@ -51,15 +51,15 @@ export class SocketConnection extends Queue {
 				this.handleSocketMessage(json, new Time());
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
-				Logger.log.error('Socket WebSocket Error');
-				Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+				Log.error('Socket WebSocket Error');
+				Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 			}
 		});
 
 		this.WebSocket.onError((error: any) => {
 			const { name, message, stack } = new Error(error);
-			Logger.log.error('Socket WebSocket Error');
-			Logger.log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+			Log.error('Socket WebSocket Error');
+			Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
 		});
 	}
 
@@ -69,7 +69,7 @@ export class SocketConnection extends Queue {
 
 	private setConnection(status: boolean) {
 		if (this.status !== status) {
-			Logger.log.hidden('Socket ' + (status ? 'open' : 'closed'), 'INFO');
+			Log.hidden('Socket ' + (status ? 'open' : 'closed'), 'INFO');
 			this.status = status;
 			this.callListener('connectionChange', [status]);
 		}
@@ -105,20 +105,20 @@ export class SocketConnection extends Queue {
 
 	private tryLogin(retries: number = 2) {
 		this.XAPI.Socket.login().then(() => {
-			Logger.log.hidden('Login is successful (userId = ' + this.XAPI.accountId
+			Log.hidden('Login is successful (userId = ' + this.XAPI.accountId
 				+ ', accountType = ' + this.XAPI.accountType + ')', 'INFO');
 			this.ping();
 		}).catch(e => {
-			Logger.log.hidden('Login is rejected (userId = ' + this.XAPI.accountId
+			Log.hidden('Login is rejected (userId = ' + this.XAPI.accountId
 				+ ', accountType = ' + this.XAPI.accountType
 				+ ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');
 			if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
 				setTimeout(() => {
-					Logger.log.hidden('Try to login (retries = ' + retries + ')', 'INFO');
+					Log.hidden('Try to login (retries = ' + retries + ')', 'INFO');
 					this.tryLogin(retries - 1);
 				}, 500);
 			} else if (e.reason.code === errorCode.BE005) {
-				Logger.log.error('Disconnect from stream and socket (reason = \'login error code is ' + e.reason.code + '\')');
+				Log.error('Disconnect from stream and socket (reason = \'login error code is ' + e.reason.code + '\')');
 				this.XAPI.disconnect();
 			}
 		});
@@ -130,7 +130,7 @@ export class SocketConnection extends Queue {
 		if (transactionId !== null && this.transactions[transactionId] !== undefined) {
 			this.rejectTransaction({ code, explain }, this.transactions[transactionId], false, received);
 		} else {
-			Logger.log.hidden('Socket error message:\n'
+			Log.hidden('Socket error message:\n'
 				+ JSON.stringify({ code, explain, customTag }, null, '\t'), 'ERROR');
 		}
 	}
