@@ -45,6 +45,10 @@ export class XAPI extends Listener {
 		safe: false
 	};
 
+	public getLogger(): Logger4Interface {
+		return Logger.log;
+	}
+
 	constructor({
 		accountId, password, type, appName = undefined,
 		host, rateLimit, logger = new EmptyLogger(), safe
