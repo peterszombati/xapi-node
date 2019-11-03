@@ -47,6 +47,7 @@ export class SocketConnection extends Queue {
 		this.WebSocket.onMessage((message: any) => {
 			try {
 				const json = JSON.parse(message.toString().trim());
+				this.lastReceivedMessage.reset();
 				this.handleSocketMessage(json, new Time());
 			} catch (e) {
 				const { name, message, stack } = new Error(e);
@@ -135,7 +136,6 @@ export class SocketConnection extends Queue {
 	}
 
 	private handleSocketMessage(message: any, time: Time) {
-		this.lastReceivedMessage.reset();
 		if (message.status) {
 			this.handleData(message.streamSessionId === undefined
 				? message.returnData
