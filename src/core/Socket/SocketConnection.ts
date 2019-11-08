@@ -35,12 +35,10 @@ export class SocketConnection extends Queue {
 	public connect() {
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType);
 		this.WebSocket.onOpen(() => {
-			this.resetMessageTube();
 			this.setConnection(true);
 		});
 
 		this.WebSocket.onClose(() => {
-			this.resetMessageTube();
 			this.setConnection(false);
 		});
 
@@ -68,6 +66,7 @@ export class SocketConnection extends Queue {
 	}
 
 	private setConnection(status: boolean) {
+		this.resetMessageTube();
 		if (this.status !== status) {
 			Log.hidden('Socket ' + (status ? 'open' : 'closed'), 'INFO');
 			this.status = status;
