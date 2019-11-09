@@ -75,6 +75,11 @@ export class SocketConnection extends Queue {
 
 		if (this.openTimeout !== null) {
 			clearTimeout(this.openTimeout);
+			this.openTimeout = null;
+		}
+		if (this.reconnectTimeout !== null) {
+			clearTimeout(this.reconnectTimeout);
+			this.reconnectTimeout = null;
 		}
 
 		if (status) {
@@ -87,7 +92,8 @@ export class SocketConnection extends Queue {
 			}, 1000);
 		} else {
 			if (this.XAPI.tryReconnect) {
-				setTimeout(() => {
+				this.reconnectTimeout = setTimeout(() => {
+					this.reconnectTimeout = null;
 					if (this.XAPI.tryReconnect) {
 						this.connect();
 					}

@@ -10,6 +10,7 @@ import {errorCode} from '../enum/errorCode';
 export class Queue extends Listener {
 	public status: boolean = false;
 	protected openTimeout: NodeJS.Timeout | null = null;
+	protected reconnectTimeout: NodeJS.Timeout | null = null;
 	public transactions: Transactions = {};
 	private _lastReceivedMessage: Time = new Time(false);
 	public get lastReceivedMessage() { return this._lastReceivedMessage; }
@@ -68,6 +69,7 @@ export class Queue extends Listener {
 		this.messagesElapsedTime = [];
 		if (this.messageSender != null) {
 			clearTimeout(this.messageSender);
+			this.messageSender = null;
 		}
 	}
 
