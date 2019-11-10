@@ -181,7 +181,7 @@ export interface TRADING_RECORD {
 
 export interface TRADE_TRANS_INFO {
 	cmd: CMD_FIELD
-	customComment: string
+	customComment: string | null
 	expiration: number | Date
 	offset: number
 	order: number
