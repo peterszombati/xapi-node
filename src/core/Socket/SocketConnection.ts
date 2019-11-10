@@ -11,6 +11,7 @@ import Utils from '../../utils/Utils';
 export class SocketConnection extends Queue {
 	private XAPI: XAPI;
 	private _password: string;
+	private loginTimeout: NodeJS.Timeout | null = null;
 
 	constructor(XAPI: XAPI, password: string) {
 		super(XAPI.rateLimit, TransactionType.SOCKET);
@@ -73,6 +74,10 @@ export class SocketConnection extends Queue {
 			this.callListener('connectionChange', [status]);
 		}
 
+		if (this.loginTimeout !== null) {
+			clearTimeout(this.loginTimeout);
+			this.loginTimeout = null;
+		}
 		if (this.openTimeout !== null) {
 			clearTimeout(this.openTimeout);
 			this.openTimeout = null;
@@ -118,7 +123,11 @@ export class SocketConnection extends Queue {
 				+ ', accountType = ' + this.XAPI.accountType
 				+ ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');
 			if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
-				setTimeout(() => {
+				if (this.loginTimeout !== null) {
+					clearTimeout(this.loginTimeout);
+				}
+				this.loginTimeout = setTimeout(() => {
+					this.loginTimeout = null;
 					Log.hidden('Try to login (retries = ' + retries + ')', 'INFO');
 					this.tryLogin(retries - 1);
 				}, 500);
