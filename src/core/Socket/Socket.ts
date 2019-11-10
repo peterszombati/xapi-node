@@ -240,7 +240,7 @@ class Socket extends SocketConnection {
 			return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
 				'tradeTransInfo': {
 					cmd,
-					customComment: (customComment == null)
+					customComment: (customComment == null || customComment.length === 0)
 						? 'x' + transactionId
 						: 'x' + transactionId + '_' + customComment,
 					expiration: (expiration instanceof Date) ? expiration.getTime() : expiration,
