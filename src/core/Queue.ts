@@ -1,7 +1,7 @@
 import {AddTransaction, MessagesQueue, Transaction, TransactionReject, Transactions} from '../interface/Interface';
 import {Listener} from '../modules/Listener';
 import {Time} from '../modules/Time';
-import Log from '../utils/Log';
+import {Log} from '../utils/Log';
 import {ConnectionStatus, TransactionStatus, TransactionType} from '../enum/Enum';
 import Utils from '../utils/Utils';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
