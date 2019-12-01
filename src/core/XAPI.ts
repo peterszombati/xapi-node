@@ -29,10 +29,10 @@ export interface XAPIAccount {
 export class XAPI extends Listener {
 	public Stream: Stream;
 	public Socket: Socket;
-	private _tryReconnect: boolean = false;
-	public get tryReconnect() { return this._tryReconnect; }
-	private _rateLimit: number = DefaultRateLimit;
+    private _rateLimit: number = DefaultRateLimit;
+    private _tryReconnect: boolean = false;
 	public get rateLimit() { return this._rateLimit; }
+	public get tryReconnect() { return this._tryReconnect; }
 	private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
 		interval: [],
 		timeout: []
@@ -69,18 +69,29 @@ export class XAPI extends Listener {
 			Log.warn('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
 		}
 		this.Stream.onConnectionChange(status => {
-			if (this.Socket.status) {
-				this.callListener('xapiConnectionChange', [status]);
-			}
+			if (status !== ConnectionStatus.CONNECTING) {
+				Log.hidden('Stream ' + (status === ConnectionStatus.CONNECTED ? 'open' : 'closed'), 'INFO');
+
+                if (this.Socket.status === ConnectionStatus.CONNECTED) {
+                    if (status === ConnectionStatus.CONNECTED && this.Stream.session.length > 0) {
+                        this.callListener('xapiReady');
+                    }
+
+                    this.callListener('xapiConnectionChange', [status]);
+                }
+            }
 		});
 		this.Socket.onConnectionChange(status => {
-			if (this.Stream.status) {
-				this.callListener('xapiConnectionChange', [status]);
-			}
+			if (status !== ConnectionStatus.CONNECTING) {
+				Log.hidden('Socket ' + (status === ConnectionStatus.CONNECTED ? 'open' : 'closed'), 'INFO');
 
-			if (!status) {
-				this.Stream.session = '';
-				this.stopTimer();
+                if (status === ConnectionStatus.DISCONNECTED) {
+                    this.Stream.session = '';
+                    this.stopTimer();
+                }
+                if (this.Stream.status === ConnectionStatus.CONNECTED) {
+                    this.callListener('xapiConnectionChange', [status]);
+                }
 			}
 		});
 
@@ -92,19 +103,19 @@ export class XAPI extends Listener {
 			this.stopTimer();
 
 			this.timer.interval.push(setInterval(() => {
-				if (this.Socket.status) {
+				if (this.Socket.status === ConnectionStatus.CONNECTED) {
 					this.Socket.ping();
 				}
-				if (this.Stream.status) {
+				if (this.Stream.status === ConnectionStatus.CONNECTED) {
 					this.Stream.ping();
 				}
 				this.timer.timeout.push(setTimeout(() => {
-					if (this.Socket.status) {
+					if (this.Socket.status === ConnectionStatus.CONNECTED) {
 						this.Socket.send.getServerTime();
 					}
 				}, 1000));
 				this.timer.timeout.push(setTimeout(() => {
-					if (this.Socket.status) {
+					if (this.Socket.status === ConnectionStatus.CONNECTED) {
 						this.Socket.send.getTrades();
 					}
 				}, 2000));
@@ -148,10 +159,10 @@ export class XAPI extends Listener {
 	}
 
 	public set session(session: string) {
-		this.Stream.session = session;
-		if (this.Stream.status && session !== null && session.length > 0) {
-			this.Stream.ping();
-			this.callListener('xapiReady');
+        this.Stream.session = session;
+        if (this.Stream.status === ConnectionStatus.CONNECTED && session !== null && session.length > 0) {
+            this.Stream.ping();
+            this.callListener('xapiReady');
 		}
 	}
 
@@ -191,7 +202,7 @@ export class XAPI extends Listener {
 		this.addListener('xapiReady', callBack, key);
 	}
 
-	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
+	public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
 		this.addListener('xapiConnectionChange', callBack, key);
 	}
 

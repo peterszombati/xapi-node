@@ -4,7 +4,7 @@ import {Time} from '../../modules/Time';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import Log from '../../utils/Log';
 import {errorCode} from '../../enum/errorCode';
-import {TransactionStatus, TransactionType} from '../../enum/Enum';
+import {ConnectionStatus, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 
 export class StreamConnection extends Queue {
@@ -19,11 +19,11 @@ export class StreamConnection extends Queue {
 	public connect() {
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType + 'Stream');
 		this.WebSocket.onOpen(() => {
-			this.changeConnection(true);
+			this.setConnectionStatus(ConnectionStatus.CONNECTING);
 		});
 
 		this.WebSocket.onClose(() => {
-			this.changeConnection(false);
+			this.setConnectionStatus(ConnectionStatus.DISCONNECTED);
 		});
 
 		this.WebSocket.onMessage((message: any) => {
@@ -45,14 +45,14 @@ export class StreamConnection extends Queue {
 		});
 	}
 
-	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
+	public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
 		this.addListener('connectionChange', callBack, key);
 	}
 
-	private changeConnection(status: boolean) {
+	private setConnectionStatus(status: ConnectionStatus) {
 		this.resetMessageTube();
+
 		if (this.status !== status) {
-			Log.hidden('Stream ' + (status ? 'open' : 'closed'), 'INFO');
 			this.status = status;
 			this.callListener('connectionChange', [status]);
 		}
@@ -61,30 +61,34 @@ export class StreamConnection extends Queue {
 			clearTimeout(this.openTimeout);
 			this.openTimeout = null;
 		}
+
 		if (this.reconnectTimeout !== null) {
 			clearTimeout(this.reconnectTimeout);
 			this.reconnectTimeout = null;
 		}
 
-		if (status) {
+		if (status === ConnectionStatus.CONNECTING) {
 			if (this.session.length > 0) {
 				this.ping();
 			}
+
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
-				if (this.session.length > 0 && this.status) {
-					this.XAPI.callListener('xapiReady');
+				if (this.status === ConnectionStatus.CONNECTING) {
+					this.status = ConnectionStatus.CONNECTED;
+					this.callListener('connectionChange', [ConnectionStatus.CONNECTED]);
 				}
 			}, 1000);
 		} else {
 			if (this.XAPI.tryReconnect) {
 				this.reconnectTimeout = setTimeout(() => {
 					this.reconnectTimeout = null;
-					if (this.XAPI.tryReconnect) {
+					if (this.XAPI.tryReconnect && this.status === ConnectionStatus.DISCONNECTED) {
 						this.connect();
 					}
 				}, 2000);
 			}
+
 			for (const transactionId in this.transactions) {
 				if (this.transactions[transactionId].status === TransactionStatus.waiting) {
 					this.rejectTransaction({ code: errorCode.XAPINODE_1, explain: 'Stream closed'}, this.transactions[transactionId], false);
@@ -109,7 +113,7 @@ export class StreamConnection extends Queue {
 				reject,
 				urgent
 			});
-			if (this.status === false) {
+			if (this.status === ConnectionStatus.DISCONNECTED) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
 					explain: 'Stream closed'

@@ -2,13 +2,13 @@ import {AddTransaction, MessagesQueue, Transaction, TransactionReject, Transacti
 import {Listener} from '../modules/Listener';
 import {Time} from '../modules/Time';
 import Log from '../utils/Log';
-import {TransactionStatus, TransactionType} from '../enum/Enum';
+import {ConnectionStatus, TransactionStatus, TransactionType} from '../enum/Enum';
 import Utils from '../utils/Utils';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
 import {errorCode} from '../enum/errorCode';
 
 export class Queue extends Listener {
-	public status: boolean = false;
+	public status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
 	protected openTimeout: NodeJS.Timeout | null = null;
 	protected reconnectTimeout: NodeJS.Timeout | null = null;
 	public transactions: Transactions = {};

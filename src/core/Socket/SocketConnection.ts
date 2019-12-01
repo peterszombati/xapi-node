@@ -4,7 +4,7 @@ import {Time} from '../../modules/Time';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import Log from '../../utils/Log';
 import {errorCode} from '../../enum/errorCode';
-import {TransactionStatus, TransactionType} from '../../enum/Enum';
+import {ConnectionStatus, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import Utils from '../../utils/Utils';
 
@@ -33,11 +33,11 @@ export class SocketConnection extends Queue {
 	public connect() {
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType);
 		this.WebSocket.onOpen(() => {
-			this.changeConnection(true);
+			this.setConnectionStatus(ConnectionStatus.CONNECTING);
 		});
 
 		this.WebSocket.onClose(() => {
-			this.changeConnection(false);
+			this.setConnectionStatus(ConnectionStatus.DISCONNECTED);
 		});
 
 		this.WebSocket.onMessage((message: any) => {
@@ -59,14 +59,14 @@ export class SocketConnection extends Queue {
 		});
 	}
 
-	public onConnectionChange(callBack: (status: boolean) => void, key: string | null = null) {
+	public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
 		this.addListener('connectionChange', callBack, key);
 	}
 
-	private changeConnection(status: boolean) {
+	private setConnectionStatus(status: ConnectionStatus) {
 		this.resetMessageTube();
+
 		if (this.status !== status) {
-			Log.hidden('Socket ' + (status ? 'open' : 'closed'), 'INFO');
 			this.status = status;
 			this.callListener('connectionChange', [status]);
 		}
@@ -75,20 +75,24 @@ export class SocketConnection extends Queue {
 			clearTimeout(this.loginTimeout);
 			this.loginTimeout = null;
 		}
+
 		if (this.openTimeout !== null) {
 			clearTimeout(this.openTimeout);
 			this.openTimeout = null;
 		}
+
 		if (this.reconnectTimeout !== null) {
 			clearTimeout(this.reconnectTimeout);
 			this.reconnectTimeout = null;
 		}
 
-		if (status) {
+		if (status === ConnectionStatus.CONNECTING) {
 			this.ping();
 			this.openTimeout = setTimeout(() => {
 				this.openTimeout = null;
-				if (this.status) {
+				if (this.status === ConnectionStatus.CONNECTING) {
+					this.status = ConnectionStatus.CONNECTED;
+					this.callListener('connectionChange', [ConnectionStatus.CONNECTED]);
 					this.tryLogin(2);
 				}
 			}, 1000);
@@ -96,11 +100,12 @@ export class SocketConnection extends Queue {
 			if (this.XAPI.tryReconnect) {
 				this.reconnectTimeout = setTimeout(() => {
 					this.reconnectTimeout = null;
-					if (this.XAPI.tryReconnect) {
+					if (this.XAPI.tryReconnect && this.status === ConnectionStatus.DISCONNECTED) {
 						this.connect();
 					}
 				}, 2000);
 			}
+
 			for (const transactionId in this.transactions) {
 				const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
 				if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
@@ -181,7 +186,7 @@ export class SocketConnection extends Queue {
 				resolve,
 				reject
 			});
-			if (this.status === false) {
+			if (this.status === ConnectionStatus.DISCONNECTED) {
 				this.rejectTransaction({
 					code: errorCode.XAPINODE_1,
 					explain: 'Socket closed'
