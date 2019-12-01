@@ -66,7 +66,7 @@ export class XAPI extends Listener {
 			safe: safe === undefined ? false : safe
 		};
 		if (this.account.safe) {
-			Log.warn('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true), it mean you can\'t open, modify or close positions.');
+			Log.warn('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
 		}
 		this.Stream.onConnectionChange(status => {
 			if (this.Socket.status) {
