@@ -53,76 +53,76 @@ class Socket extends SocketConnection {
 
 	public listen = {
 		getAllSymbols: (callBack: SocketListen<SYMBOL_RECORD[]>, key: string | null = null) => {
-			this.addListener('getAllSymbols', callBack, key);
+			this.addListener('command_' + 'getAllSymbols', callBack, key);
 		},
 		getCalendar: (callBack: SocketListen<CALENDAR_RECORD[]>, key: string | null = null) => {
-			this.addListener('getCalendar', callBack, key);
+			this.addListener('command_' + 'getCalendar', callBack, key);
 		},
 		getChartLastRequest: (callBack: SocketListen<getChartLastRequestResponse>, key: string | null = null) => {
-			this.addListener('getChartLastRequest', callBack, key);
+			this.addListener('command_' + 'getChartLastRequest', callBack, key);
 		},
 		getChartRangeRequest: (callBack: SocketListen<getChartRangeRequestResponse>, key: string | null = null) => {
-			this.addListener('getChartRangeRequest', callBack, key);
+			this.addListener('command_' + 'getChartRangeRequest', callBack, key);
 		},
 		getCommissionDef: (callBack: SocketListen<getCommissionDefResponse>, key: string | null = null) => {
-			this.addListener('getCommissionDef', callBack, key);
+			this.addListener('command_' + 'getCommissionDef', callBack, key);
 		},
 		getCurrentUserData: (callBack: SocketListen<getCurrentUserDataResponse>, key: string | null = null) => {
-			this.addListener('getCurrentUserData', callBack, key);
+			this.addListener('command_' + 'getCurrentUserData', callBack, key);
 		},
 		getIbsHistory: (callBack: SocketListen<IB_RECORD[]>, key: string | null = null) => {
-			this.addListener('getIbsHistory', callBack, key);
+			this.addListener('command_' + 'getIbsHistory', callBack, key);
 		},
 		getMarginLevel: (callBack: SocketListen<getMarginLevelResponse>, key: string | null = null) => {
-			this.addListener('getMarginLevel', callBack, key);
+			this.addListener('command_' + 'getMarginLevel', callBack, key);
 		},
 		getMarginTrade: (callBack: SocketListen<getMarginTradeResponse>, key: string | null = null) => {
-			this.addListener('getMarginTrade', callBack, key);
+			this.addListener('command_' + 'getMarginTrade', callBack, key);
 		},
 		getNews: (callBack: SocketListen<NEWS_TOPIC_RECORD[]>, key: string | null = null) => {
-			this.addListener('getNews', callBack, key);
+			this.addListener('command_' + 'getNews', callBack, key);
 		},
 		getProfitCalculation: (callBack: SocketListen<getProfitCalculationResponse>, key: string | null = null) => {
-			this.addListener('getProfitCalculation', callBack, key);
+			this.addListener('command_' + 'getProfitCalculation', callBack, key);
 		},
 		getServerTime: (callBack: SocketListen<getServerTimeResponse>, key: string | null = null) => {
-			this.addListener('getServerTime', callBack, key);
+			this.addListener('command_' + 'getServerTime', callBack, key);
 		},
 		getStepRules: (callBack: SocketListen<STEP_RULE_RECORD[]>, key: string | null = null) => {
-			this.addListener('getStepRules', callBack, key);
+			this.addListener('command_' + 'getStepRules', callBack, key);
 		},
 		getSymbol: (callBack: SocketListen<SYMBOL_RECORD>, key: string | null = null) => {
-			this.addListener('getSymbol', callBack, key);
+			this.addListener('command_' + 'getSymbol', callBack, key);
 		},
 		getTickPrices: (callBack: SocketListen<getTickPricesResponse>, key: string | null = null) => {
-			this.addListener('getTickPrices', callBack, key);
+			this.addListener('command_' + 'getTickPrices', callBack, key);
 		},
 		getTradeRecords: (callBack: SocketListen<TRADE_RECORD[]>, key: string | null = null) => {
-			this.addListener('getTradeRecords', callBack, key);
+			this.addListener('command_' + 'getTradeRecords', callBack, key);
 		},
 		getTrades: (callBack: SocketListen<TRADE_RECORD[]>, key: string | null = null) => {
-			this.addListener('getTrades', callBack, key);
+			this.addListener('command_' + 'getTrades', callBack, key);
 		},
 		getTradesHistory: (callBack: SocketListen<TRADE_RECORD[]>, key: string | null = null) => {
-			this.addListener('getTradesHistory', callBack, key);
+			this.addListener('command_' + 'getTradesHistory', callBack, key);
 		},
 		getTradingHours: (callBack: SocketListen<TRADING_HOURS_RECORD[]>, key: string | null = null) => {
-			this.addListener('getTradingHours', callBack, key);
+			this.addListener('command_' + 'getTradingHours', callBack, key);
 		},
 		getVersion: (callBack: SocketListen<getVersionResponse>, key: string | null = null) => {
-			this.addListener('getVersion', callBack, key);
+			this.addListener('command_' + 'getVersion', callBack, key);
 		},
 		tradeTransaction: (callBack: SocketListen<tradeTransactionResponse>, key: string | null = null) => {
-			this.addListener('tradeTransaction', callBack, key);
+			this.addListener('command_' + 'tradeTransaction', callBack, key);
 		},
 		tradeTransactionStatus: (callBack: SocketListen<tradeTransactionStatusResponse>, key: string | null = null) => {
-			this.addListener('tradeTransactionStatus', callBack, key);
+			this.addListener('command_' + 'tradeTransactionStatus', callBack, key);
 		},
 		ping: (callBack: SocketListen<any>, key: string | null = null) => {
-			this.addListener('ping', callBack, key);
+			this.addListener('command_' + 'ping', callBack, key);
 		},
 		login: (callBack: SocketListen<{streamSessionId: string}>, key: string | null = null) => {
-			this.addListener('login', callBack, key);
+			this.addListener('command_' + 'login', callBack, key);
 		}
 	};
 

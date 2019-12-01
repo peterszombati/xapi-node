@@ -24,10 +24,7 @@ export class SocketConnection extends Queue {
 
 		if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
 			this.resolveTransaction(returnData, time, this.transactions[transactionId]);
-
-			if (this.listeners[command] !== undefined) {
-				this.callListener(command, [returnData, time, this.transactions[transactionId]]);
-			}
+			this.callListener('command_' + command, [returnData, time, this.transactions[transactionId]]);
 		} else {
 			Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, '\t'));
 		}
