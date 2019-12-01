@@ -3,6 +3,7 @@ import Socket from './Socket/Socket';
 import {Listener} from '../modules/Listener';
 import {Logger4Interface, EmptyLogger} from 'logger4';
 import Log, {changeLogger} from '../utils/Log';
+import {ConnectionStatus} from '../enum/Enum';
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
