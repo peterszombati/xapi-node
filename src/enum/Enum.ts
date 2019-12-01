@@ -67,3 +67,9 @@ export enum TransactionType {
 	SOCKET = 'Socket',
 	STREAM = 'Stream'
 }
+
+export enum ConnectionStatus {
+	DISCONNECTED,
+	CONNECTING,
+	CONNECTED
+}
