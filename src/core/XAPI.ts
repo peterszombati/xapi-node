@@ -173,8 +173,8 @@ export class XAPI extends Listener {
 		this.Socket.connect();
 	}
 
-	public get isConnectionReady() {
-		return this.Stream.status && this.Socket.status;
+	public get isConnectionReady(): boolean {
+		return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED;
 	}
 
 	public disconnect() {
