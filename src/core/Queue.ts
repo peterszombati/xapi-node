@@ -259,4 +259,12 @@ export class Queue extends Listener {
 			}
 		}
 	}
+
+	public isQueueContains(command: string) {
+		return this.messageQueues.urgent.some(id => {
+			return this.transactions[id.transactionId].command === command
+		}) || this.messageQueues.normal.some(id => {
+			return this.transactions[id.transactionId].command === command
+		})
+	}
 }

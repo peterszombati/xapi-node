@@ -104,19 +104,23 @@ export class XAPI extends Listener {
 			this.stopTimer();
 
 			this.timer.interval.push(setInterval(() => {
-				if (this.Socket.status === ConnectionStatus.CONNECTED) {
+				if (this.Socket.status === ConnectionStatus.CONNECTED
+					&& !this.Socket.isQueueContains('ping')) {
 					this.Socket.ping();
 				}
-				if (this.Stream.status === ConnectionStatus.CONNECTED) {
+				if (this.Stream.status === ConnectionStatus.CONNECTED
+					&& !this.Stream.isQueueContains('ping')) {
 					this.Stream.ping();
 				}
 				this.timer.timeout.push(setTimeout(() => {
-					if (this.Socket.status === ConnectionStatus.CONNECTED) {
+					if (this.Socket.status === ConnectionStatus.CONNECTED
+						&& !this.Socket.isQueueContains('getServerTime')) {
 						this.Socket.send.getServerTime();
 					}
 				}, 1000));
 				this.timer.timeout.push(setTimeout(() => {
-					if (this.Socket.status === ConnectionStatus.CONNECTED) {
+					if (this.Socket.status === ConnectionStatus.CONNECTED
+						&& !this.Socket.isQueueContains('getTrades')) {
 						this.Socket.send.getTrades();
 					}
 				}, 2000));
