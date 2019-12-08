@@ -60,7 +60,7 @@ export class SocketConnection extends Queue {
 	}
 
 	public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-		this.addListener('connectionChange', callBack, key);
+		this.addListener('xapi_onConnectionChange', callBack, key);
 	}
 
 	private setConnectionStatus(status: ConnectionStatus) {
@@ -68,7 +68,7 @@ export class SocketConnection extends Queue {
 
 		if (this.status !== status) {
 			this.status = status;
-			this.callListener('connectionChange', [status]);
+			this.callListener('xapi_onConnectionChange', [status]);
 		}
 
 		if (this.loginTimeout !== null) {
@@ -92,7 +92,7 @@ export class SocketConnection extends Queue {
 				this.openTimeout = null;
 				if (this.status === ConnectionStatus.CONNECTING) {
 					this.status = ConnectionStatus.CONNECTED;
-					this.callListener('connectionChange', [ConnectionStatus.CONNECTED]);
+					this.callListener('xapi_onConnectionChange', [ConnectionStatus.CONNECTED]);
 					this.tryLogin(2);
 				}
 			}, 1000);

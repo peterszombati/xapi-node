@@ -46,7 +46,7 @@ export class StreamConnection extends Queue {
 	}
 
 	public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-		this.addListener('connectionChange', callBack, key);
+		this.addListener('xapi_onConnectionChange', callBack, key);
 	}
 
 	private setConnectionStatus(status: ConnectionStatus) {
@@ -54,7 +54,7 @@ export class StreamConnection extends Queue {
 
 		if (this.status !== status) {
 			this.status = status;
-			this.callListener('connectionChange', [status]);
+			this.callListener('xapi_onConnectionChange', [status]);
 		}
 
 		if (this.openTimeout !== null) {
@@ -76,7 +76,7 @@ export class StreamConnection extends Queue {
 				this.openTimeout = null;
 				if (this.status === ConnectionStatus.CONNECTING) {
 					this.status = ConnectionStatus.CONNECTED;
-					this.callListener('connectionChange', [ConnectionStatus.CONNECTED]);
+					this.callListener('xapi_onConnectionChange', [ConnectionStatus.CONNECTED]);
 				}
 			}, 1000);
 		} else {

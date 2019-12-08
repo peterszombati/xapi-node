@@ -3,7 +3,7 @@ import Socket from './Socket/Socket';
 import {Listener} from '../modules/Listener';
 import {Logger4Interface, EmptyLogger} from 'logger4';
 import {Log, changeLogger} from '../utils/Log';
-import {ConnectionStatus} from '../enum/Enum';
+import {ConnectionStatus} from '..';
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
@@ -75,10 +75,10 @@ export class XAPI extends Listener {
 
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     if (status === ConnectionStatus.CONNECTED && this.Stream.session.length > 0) {
-                        this.callListener('xapiReady');
+                        this.callListener('xapi_onReady');
                     }
 
-                    this.callListener('xapiConnectionChange', [status]);
+                    this.callListener('xapi_onConnectionChange', [status]);
                 }
             }
 		});
@@ -91,7 +91,7 @@ export class XAPI extends Listener {
                     this.stopTimer();
                 }
                 if (this.Stream.status === ConnectionStatus.CONNECTED) {
-                    this.callListener('xapiConnectionChange', [status]);
+                    this.callListener('xapi_onConnectionChange', [status]);
                 }
 			}
 		});
@@ -100,7 +100,7 @@ export class XAPI extends Listener {
 			this.session = data.streamSessionId;
 		});
 
-		this.addListener('xapiReady', () => {
+		this.addListener('xapi_onReady', () => {
 			this.stopTimer();
 
 			this.timer.interval.push(setInterval(() => {
@@ -167,7 +167,7 @@ export class XAPI extends Listener {
         this.Stream.session = session;
         if (this.Stream.status === ConnectionStatus.CONNECTED && session !== null && session.length > 0) {
             this.Stream.ping();
-            this.callListener('xapiReady');
+            this.callListener('xapi_onReady');
 		}
 	}
 
@@ -204,11 +204,11 @@ export class XAPI extends Listener {
 		if (this.Stream.session.length > 0 && this.isConnectionReady) {
 			callBack();
 		}
-		this.addListener('xapiReady', callBack, key);
+		this.addListener('xapi_onReady', callBack, key);
 	}
 
 	public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-		this.addListener('xapiConnectionChange', callBack, key);
+		this.addListener('xapi_onConnectionChange', callBack, key);
 	}
 
 }
