@@ -200,7 +200,7 @@ export class XAPI extends Listener {
 		});
 	}
 
-	public onReady(callBack: () => void, key: string = 'default') {
+	public onReady(callBack: () => void, key: string | null = null) {
 		if (this.Stream.session.length > 0 && this.isConnectionReady) {
 			callBack();
 		}
