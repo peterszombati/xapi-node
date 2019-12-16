@@ -126,6 +126,7 @@ export class SocketConnection extends Queue {
 				Log.error('Disconnect from stream and socket (reason = \'login error code is ' + e.reason.code + '\')');
 				this.XAPI.disconnect();
 			}
+			this.XAPI.callListener('xapi_onReject', [e])
 		});
 	}
 
