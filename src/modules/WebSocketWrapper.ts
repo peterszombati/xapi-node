@@ -34,7 +34,7 @@ export class WebSocketWrapper extends Listener {
 				this.callListener('open');
 			};
 			this.ws.onclose = () => {
-				if (this._status === true) {
+				if (this._status) {
 					this._status = false;
 					this.callListener('statusChange', [false]);
 				}

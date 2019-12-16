@@ -19,17 +19,6 @@ export class SocketConnection extends Queue {
 		this.XAPI = XAPI;
 	}
 
-	private handleData(returnData: any, customTag: string, time: Time) {
-		const { transactionId, command } = Utils.parseCustomTag(customTag);
-
-		if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
-			this.resolveTransaction(returnData, time, this.transactions[transactionId]);
-			this.callListener('command_' + command, [returnData, time, this.transactions[transactionId]]);
-		} else {
-			Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n' + JSON.stringify(returnData, null, '\t'));
-		}
-	}
-
 	public connect() {
 		this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName +'/' + this.XAPI.accountType);
 		this.WebSocket.onOpen(() => {
@@ -154,13 +143,20 @@ export class SocketConnection extends Queue {
 
 	private handleSocketMessage(message: any, time: Time) {
 		if (message.status) {
-			this.handleData(message.streamSessionId === undefined
 				? message.returnData
-				: { streamSessionId: message.streamSessionId },
-				typeof(message.customTag) === 'string'
-					? message.customTag
-					: null,
-				time);
+				: { streamSessionId: message.streamSessionId };
+			const customTag = typeof(message.customTag) === 'string'
+				? message.customTag
+				: null;
+			const { transactionId, command } = Utils.parseCustomTag(customTag);
+
+			if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
+				this.resolveTransaction(returnData, time, this.transactions[transactionId]);
+				this.callListener('command_' + command, [returnData, time, this.transactions[transactionId]]);
+			} else {
+				Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n'
+					+ JSON.stringify(returnData, null, '\t'));
+			}
 		} else if (message.status !== undefined && message.errorCode !== undefined) {
 			const { errorCode } = message;
 			const customTag: string | null = message.customTag === undefined ? null : message.customTag;
