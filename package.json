@@ -5,11 +5,11 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
-    "@types/node": "^11.13.13",
     "logger4": "^1.5.0",
     "ws": "^7.2.0"
   },
   "devDependencies": {
+    "@types/node": "^11.13.13",
     "typescript": "^3.4.5"
   },
   "scripts": {

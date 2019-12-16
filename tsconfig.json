@@ -16,6 +16,7 @@
 	"exclude": [
 		".idea",
 		"node_modules",
-		"**/*.spec.ts"
+		"**/*.spec.ts",
+		"**/*.d.ts"
 	]
 }

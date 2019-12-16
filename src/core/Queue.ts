@@ -133,7 +133,7 @@ export class Queue extends Listener {
 		}
 	}
 
-	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any,TransactionReject>) {
+	protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any,any>) {
 	    if (this.type === TransactionType.SOCKET) {
             transaction.response = {
                 status: true,
@@ -164,7 +164,7 @@ export class Queue extends Listener {
 
 	protected rejectTransaction(
 		json: { code: string, explain: string },
-		transaction: Transaction<null,TransactionReject>,
+		transaction: Transaction<any,any>,
 		interrupted: boolean = false,
 		received: Time = new Time()
 	) {
