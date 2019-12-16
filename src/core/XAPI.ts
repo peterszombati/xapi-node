@@ -207,6 +207,10 @@ export class XAPI extends Listener {
 		this.addListener('xapi_onReady', callBack, key);
 	}
 
+	public onReject(callBack: (err: any) => void, key: string | null = null) {
+		this.addListener('xapi_onReject', callBack, key);
+	}
+
 	public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
 		this.addListener('xapi_onConnectionChange', callBack, key);
 	}
