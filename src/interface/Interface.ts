@@ -1,5 +1,5 @@
 import {Time} from '../modules/Time';
-import {TransactionStatus, TransactionType} from '../enum/Enum';
+import {CMD_FIELD, TransactionStatus, TransactionType} from '../enum/Enum';
 
 export interface Transactions {
 	[transactionId: string]: Transaction<any,any>
@@ -40,4 +40,28 @@ export interface AddTransaction {
 	resolve: any,
 	reject: any,
 	urgent: boolean
+}
+
+export interface Position {
+	close_price: number
+	close_time: number
+	closed: boolean
+	cmd: CMD_FIELD
+	comment: string
+	commission: number
+	customComment: string
+	digits: number
+	expiration: number
+	margin_rate: number
+	offset: number
+	open_price: number
+	open_time: number
+	order: number
+	order2: number
+	position: number
+	sl: number
+	storage: number
+	symbol: string
+	tp: number
+	volume: number
 }
