@@ -75,7 +75,11 @@ export class XAPI extends Listener {
 
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     if (status === ConnectionStatus.CONNECTED && this.Stream.session.length > 0) {
-                        this.callListener('xapi_onReady');
+						this.Socket.send.getTrades(true).then(() => {
+							this.callListener('xapi_onReady');
+						}).catch(e => {
+							this.callListener('xapi_onReady');
+						});
                     }
 
                     this.callListener('xapi_onConnectionChange', [status]);
@@ -102,7 +106,7 @@ export class XAPI extends Listener {
 
 		this.addListener('xapi_onReady', () => {
 			this.stopTimer();
-
+			this.Stream.subscribe.getTrades();
 			this.timer.interval.push(setInterval(() => {
 				if (this.Socket.status === ConnectionStatus.CONNECTED
 					&& !this.Socket.isQueueContains('ping')) {
@@ -121,7 +125,7 @@ export class XAPI extends Listener {
 				this.timer.timeout.push(setTimeout(() => {
 					if (this.Socket.status === ConnectionStatus.CONNECTED
 						&& !this.Socket.isQueueContains('getTrades')) {
-						this.Socket.send.getTrades();
+						this.Socket.send.getTrades(true);
 					}
 				}, 2000));
 
@@ -134,7 +138,10 @@ export class XAPI extends Listener {
 					this.Stream.removeOldTransactions();
 				}
 			}, 19000));
-		}, 'constructor');
+			this.timer.interval.push(setInterval(() => {
+				this.Stream.subscribe.getTrades();
+			}, 60000));
+			}, 'constructor');
 	}
 
 	private stopTimer() {
@@ -167,7 +174,11 @@ export class XAPI extends Listener {
         this.Stream.session = session;
         if (this.Stream.status === ConnectionStatus.CONNECTED && session !== null && session.length > 0) {
             this.Stream.ping();
-            this.callListener('xapi_onReady');
+			this.Socket.send.getTrades(true).then(() => {
+				this.callListener('xapi_onReady');
+			}).catch(e => {
+				this.callListener('xapi_onReady');
+			});
 		}
 	}
 
