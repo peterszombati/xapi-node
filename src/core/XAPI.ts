@@ -50,8 +50,12 @@ export class XAPI extends Listener {
         timeout: []
     };
     private _positions: {
-        value: TradePositions | null, lastUpdated: Time
-    } = {value: null, lastUpdated: new Time(false)};
+        value: TradePositions | null,
+        lastUpdated: Time
+    } = {
+        value: null,
+        lastUpdated: new Time(false)
+    };
 
     public get openPositions(): TradePosition[] | null {
         return this._positions.value === null
