@@ -42,7 +42,7 @@ export interface AddTransaction {
 	urgent: boolean
 }
 
-export interface Position {
+export interface TradePosition {
 	close_price: number
 	close_time: number
 	closed: boolean
@@ -64,4 +64,8 @@ export interface Position {
 	symbol: string
 	tp: number
 	volume: number
+}
+
+export interface TradePositions {
+	[position: number]: TradePosition
 }

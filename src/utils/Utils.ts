@@ -1,4 +1,5 @@
-import {Transaction} from '../interface/Interface';
+import {TradePosition, Transaction} from '../interface/Interface';
+import {STREAMING_TRADE_RECORD, TRADE_RECORD} from "..";
 
 class Utils {
 
@@ -25,6 +26,32 @@ class Utils {
 		const transactionId = customTagData[1];
 		return { transactionId, command };
 	}
+
+	static formatPosition(t: STREAMING_TRADE_RECORD | TRADE_RECORD): TradePosition {
+		return {
+			close_price: t.close_price,
+			close_time: t.close_time,
+			closed: t.closed,
+			cmd: t.cmd,
+			comment: t.comment,
+			commission: t.commission,
+			customComment: t.customComment,
+			digits: t.digits,
+			expiration: t.expiration,
+			margin_rate: t.margin_rate,
+			offset: t.offset,
+			open_price: t.open_price,
+			open_time: t.open_time,
+			order: t.order,
+			order2: t.order2,
+			position: t.position,
+			sl: t.sl,
+			storage: t.storage,
+			symbol: t.symbol,
+			tp: t.tp,
+			volume: t.volume
+		};
+	};
 
 	static transactionToJSONString(transaction: Transaction<any, any>): string {
 		const response = JSON.stringify(transaction.response.json);
