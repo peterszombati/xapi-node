@@ -165,7 +165,9 @@ export class Queue extends Listener {
                     + ', (' + elapsedMs + 'ms)', 'INFO');
                 resolve({returnData, time, transaction})
             }
-            Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+            if (transaction.command !== 'ping') {
+                Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+            }
         } else {
             Log.hidden('Transaction archived (promise resolve is null):\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
         }
