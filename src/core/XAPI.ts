@@ -95,7 +95,7 @@ export class XAPI extends Listener {
             accountId,
             appName,
             host: host === undefined ? DefaultHostname : host,
-            safe: safe === undefined ? false : safe
+            safe: safe === true
         };
         if (this.account.safe) {
             Log.warn('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
