@@ -73,3 +73,10 @@ export enum ConnectionStatus {
 	CONNECTING,
 	CONNECTED
 }
+
+export enum PositionType {
+	open = 0,
+	closed = 1,
+	limit = 2,
+	source = 3
+}

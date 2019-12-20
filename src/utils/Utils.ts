@@ -1,5 +1,6 @@
 import {TradePosition, Transaction} from '../interface/Interface';
-import {STREAMING_TRADE_RECORD, TRADE_RECORD} from "..";
+import {CMD_FIELD, STREAMING_TRADE_RECORD, TRADE_RECORD} from "..";
+import {PositionType} from "../enum/Enum";
 
 class Utils {
 
@@ -95,6 +96,17 @@ class Utils {
 		return result;
 	}
 
+	static getPositionType(position: TradePosition): PositionType {
+		if (position.cmd === CMD_FIELD.BALANCE || position.cmd === CMD_FIELD.CREDIT) {
+			return PositionType.source;
+		} else if (position.cmd === CMD_FIELD.SELL || position.cmd === CMD_FIELD.BUY) {
+			return position.close_time === null && !position.closed
+				? PositionType.open
+				: PositionType.closed;
+		} else {
+			return PositionType.limit;
+		}
+	}
 }
 
 export default Utils;

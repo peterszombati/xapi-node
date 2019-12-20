@@ -1,12 +1,13 @@
 import Stream from './Stream/Stream';
 import Socket from './Socket/Socket';
 import {Listener} from '../modules/Listener';
-import {Logger4Interface, EmptyLogger} from 'logger4';
-import {Log, changeLogger} from '../utils/Log';
+import {EmptyLogger, Logger4Interface} from 'logger4';
+import {changeLogger, Log} from '../utils/Log';
 import {ConnectionStatus} from '..';
-import {TradePositions} from "../interface/Interface";
+import {TradePosition, TradePositions} from "../interface/Interface";
 import Utils from "../utils/Utils";
 import {Time} from "../modules/Time";
+import {PositionType} from "../enum/Enum";
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
@@ -44,8 +45,15 @@ export class XAPI extends Listener {
 	private _positions: {
 		value: TradePositions | null, lastUpdated: Time
 	} = { value: null, lastUpdated: new Time(false)};
-	public get positions() {
-		return this._positions;
+	public get openPositions(): TradePosition[] | null {
+		return this._positions.value === null
+			? null
+			: Object.values(this._positions.value).filter(t => Utils.getPositionType(t) === PositionType.open);
+	}
+	public get limitPositions(): TradePosition[] | null {
+		return this._positions.value === null
+			? null
+			: Object.values(this._positions.value).filter(t => Utils.getPositionType(t) === PositionType.limit);
 	}
 	protected account: XAPIAccount = {
 		type: 'demo',
@@ -133,26 +141,36 @@ export class XAPI extends Listener {
 
 		this.addListener('xapi_onReady', () => {
 			this.stopTimer();
-			this.Stream.subscribe.getTrades();
+			this.Stream.subscribe.getTrades().catch(e => {
+				Log.error("Stream: getTrades request failed");
+			});
 			this.timer.interval.push(setInterval(() => {
 				if (this.Socket.status === ConnectionStatus.CONNECTED
 					&& !this.Socket.isQueueContains('ping')) {
-					this.Socket.ping();
+					this.Socket.ping().catch(e => {
+						Log.error("Socket: ping request failed");
+					});
 				}
 				if (this.Stream.status === ConnectionStatus.CONNECTED
 					&& !this.Stream.isQueueContains('ping')) {
-					this.Stream.ping();
+					this.Stream.ping().catch(e => {
+						Log.error("Stream: ping request failed");
+					});
 				}
 				this.timer.timeout.push(setTimeout(() => {
 					if (this.Socket.status === ConnectionStatus.CONNECTED
 						&& !this.Socket.isQueueContains('getServerTime')) {
-						this.Socket.send.getServerTime();
+						this.Socket.send.getServerTime().catch(e => {
+							Log.error("Socket: getServerTime request failed");
+						});
 					}
 				}, 1000));
 				this.timer.timeout.push(setTimeout(() => {
 					if (this.Socket.status === ConnectionStatus.CONNECTED
 						&& !this.Socket.isQueueContains('getTrades')) {
-						this.Socket.send.getTrades(true);
+						this.Socket.send.getTrades(true).catch(e => {
+							Log.error("Socket: getTrades request failed");
+						});
 					}
 				}, 2000));
 
@@ -166,7 +184,9 @@ export class XAPI extends Listener {
 				}
 			}, 19000));
 			this.timer.interval.push(setInterval(() => {
-				this.Stream.subscribe.getTrades();
+				this.Stream.subscribe.getTrades().catch(e => {
+					Log.error("Stream: getTrades request failed");
+				});
 			}, 60000));
 			}, 'constructor');
 	}
