@@ -4,6 +4,9 @@ import {Listener} from '../modules/Listener';
 import {Logger4Interface, EmptyLogger} from 'logger4';
 import {Log, changeLogger} from '../utils/Log';
 import {ConnectionStatus} from '..';
+import {TradePositions} from "../interface/Interface";
+import Utils from "../utils/Utils";
+import {Time} from "../modules/Time";
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
@@ -38,6 +41,12 @@ export class XAPI extends Listener {
 		interval: [],
 		timeout: []
 	};
+	private _positions: {
+		value: TradePositions | null, lastUpdated: Time
+	} = { value: null, lastUpdated: new Time(false)};
+	public get positions() {
+		return this._positions;
+	}
 	protected account: XAPIAccount = {
 		type: 'demo',
 		accountId: '',
@@ -102,6 +111,24 @@ export class XAPI extends Listener {
 
 		this.Socket.listen.login((data, time, transaction) => {
 			this.session = data.streamSessionId;
+		});
+
+		this.Socket.listen.getTrades((data, time) => {
+			const obj: TradePositions = {};
+			data.forEach(t => {
+				obj[t.order] = Utils.formatPosition(t);
+			});
+			this._positions = { value: obj, lastUpdated: time};
+		});
+
+		this.Stream.listen.getTrades((t, time) => {
+			if (this._positions.value === null) {
+				this._positions.value = {
+					[t.order]: Utils.formatPosition(t)
+				};
+			} else {
+				this._positions.value[t.order] = Utils.formatPosition(t);
+			}
 		});
 
 		this.addListener('xapi_onReady', () => {
