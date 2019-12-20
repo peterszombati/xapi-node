@@ -239,19 +239,18 @@ export class Queue extends Listener {
     private callCleanQueuTimeout() {
         if (this.messagesElapsedTime.length <= 3) {
             this.tryCleanQueue();
-            return;
-        }
+        } else {
+            const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
+            const timeoutMs = Math.max(this.rateLimit - (elapsedMs == null ? 0 : elapsedMs), 0);
 
-        const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
-        const timeoutMs = Math.max(this.rateLimit - (elapsedMs == null ? 0 : elapsedMs), 0);
-
-        if (this.messageSender !== null) {
-            clearTimeout(this.messageSender);
+            if (this.messageSender !== null) {
+                clearTimeout(this.messageSender);
+            }
+            this.messageSender = setTimeout(() => {
+                this.messageSender = null;
+                this.tryCleanQueue();
+            }, timeoutMs);
         }
-        this.messageSender = setTimeout(() => {
-            this.messageSender = null;
-            this.tryCleanQueue();
-        }, timeoutMs);
     }
 
     private tryCleanQueue() {
