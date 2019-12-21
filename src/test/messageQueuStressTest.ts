@@ -28,10 +28,10 @@ export function messageQueuStressTest(jsonPath: string) {
         const x = new XAPI({...login, logger});
         x.connect();
 
-        let start: Time = new Time(false);
+        let start: Time | null = null;
         let received: number = 0;
         x.onReady(() => {
-            start.reset();
+            start = new Time();
             console.log('Test: started.');
             for (let i = 0; i < 150; i++) {
                 x.Socket.send.getVersion();
@@ -50,7 +50,7 @@ export function messageQueuStressTest(jsonPath: string) {
         x.Socket.listen.getVersion((returnData) => {
             received += 1;
             if (received === 150) {
-                console.log('Test: 150. message arrived in ' + start.elapsedMs() + 'ms');
+                console.log('Test: 150. message arrived in ' + start?.elapsedMs() + 'ms');
             }
         });
     } catch (e) {

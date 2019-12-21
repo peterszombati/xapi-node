@@ -12,9 +12,12 @@ export class Queue extends Listener {
     protected openTimeout: NodeJS.Timeout | null = null;
     protected reconnectTimeout: NodeJS.Timeout | null = null;
     public transactions: Transactions = {};
-    private _lastReceivedMessage: Time = new Time(false);
+    private _lastReceivedMessage: Time | null = null;
     public get lastReceivedMessage() {
         return this._lastReceivedMessage;
+    }
+    public set lastReceivedMessage(time: Time | null) {
+        this._lastReceivedMessage = time;
     }
 
     protected WebSocket: WebSocketWrapper;
@@ -65,8 +68,7 @@ export class Queue extends Listener {
         if (this.messagesElapsedTime.length < 4) {
             return false;
         }
-        const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
-        return elapsedMs !== null && elapsedMs < this.rateLimit;
+        return this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs() < this.rateLimit;
     }
 
     protected resetMessageTube() {
@@ -109,9 +111,7 @@ export class Queue extends Listener {
         Object.values(this.transactions)
             .filter(t => t.transactionPromise.reject !== null)
             .forEach(transaction => {
-                const elapsedMs = transaction.createdAt.elapsedMs();
-                if (elapsedMs != null
-                    && elapsedMs > 60000) {
+                if (transaction.createdAt.elapsedMs() > 60000) {
                     this.rejectTransaction({code: errorCode.XAPINODE_3, explain: 'Timeout'}, transaction);
                 }
             });
@@ -122,8 +122,7 @@ export class Queue extends Listener {
         Object.values(this.transactions)
             .filter(t => t.transactionPromise.reject === null && t.transactionPromise.resolve === null)
             .forEach(transaction => {
-                const elapsedMs = transaction.createdAt.elapsedMs();
-                if (elapsedMs != null && elapsedMs > 86400000) {
+                if (transaction.createdAt.elapsedMs() > 86400000) {
                     delete this.transactions[transaction.transactionId];
                     deleted += 1;
                 }
@@ -241,7 +240,7 @@ export class Queue extends Listener {
             this.tryCleanQueue();
         } else {
             const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
-            const timeoutMs = Math.max(this.rateLimit - (elapsedMs == null ? 0 : elapsedMs), 0);
+            const timeoutMs = Math.max(this.rateLimit - elapsedMs, 0);
 
             if (this.messageSender !== null) {
                 clearTimeout(this.messageSender);

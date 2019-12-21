@@ -32,7 +32,7 @@ export class SocketConnection extends Queue {
         this.WebSocket.onMessage((message: any) => {
             try {
                 const json = JSON.parse(message.toString().trim());
-                this.lastReceivedMessage.reset();
+                this.lastReceivedMessage = new Time();
                 this.handleSocketMessage(json, new Time());
             } catch (e) {
                 const {name, message, stack} = new Error(e);
