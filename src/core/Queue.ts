@@ -1,4 +1,4 @@
-import {AddTransaction, MessagesQueue, Transaction, TransactionReject, Transactions} from '../interface/Interface';
+import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface';
 import {Listener} from '../modules/Listener';
 import {Time} from '../modules/Time';
 import {Log} from '../utils/Log';

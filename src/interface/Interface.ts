@@ -19,11 +19,6 @@ export interface TransactionResolveStream {
     transaction: Transaction<null, null>
 }
 
-export interface TransactionReject {
-    reason: { code: string, explain: string },
-    transaction: Transaction<null, null>
-}
-
 export interface Transaction<Resolve, Reject> {
     status: TransactionStatus,
     command: string

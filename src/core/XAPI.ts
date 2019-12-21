@@ -135,21 +135,35 @@ export class XAPI extends Listener {
             this.session = data.streamSessionId;
         });
 
-        this.Socket.listen.getTrades((data, time) => {
-            const obj: TradePositions = {};
-            data.forEach(t => {
-                obj[t.order] = Utils.formatPosition(t);
-            });
-            this._positions = {value: obj, lastUpdated: time};
+        this.Socket.listen.getTrades((data, time, transaction) => {
+            if (transaction.request.sent !== null) {
+                const elapsedMs = transaction.request.sent.elapsedMs();
+                if (elapsedMs !== null && elapsedMs < 1000) {
+                    const obj: TradePositions = {};
+                    data.forEach(t => {
+                        obj[t.order] = Utils.formatPosition(t);
+                    });
+                    this._positions = { value: obj, lastUpdated: time };
+                } else {
+                    Log.info("getTrades transaction (" + transaction.transactionId + ") is ignored")
+                }
+            }
         });
 
         this.Stream.listen.getTrades((t, time) => {
-            if (this._positions.value === null) {
-                this._positions.value = {
-                    [t.order]: Utils.formatPosition(t)
-                };
+            if (t.state === 'Deleted') {
+                if (this._positions.value !== null
+                &&  this._positions.value[t.order] !== undefined) {
+                    delete this._positions.value[t.order];
+                }
             } else {
-                this._positions.value[t.order] = Utils.formatPosition(t);
+                if (this._positions.value === null) {
+                    this._positions.value = {
+                        [t.order]: Utils.formatPosition(t)
+                    };
+                } else {
+                    this._positions.value[t.order] = Utils.formatPosition(t);
+                }
             }
         });
 
