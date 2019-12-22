@@ -170,7 +170,7 @@ export class XAPI extends Listener {
                     if (this._positions[t.position] !== undefined) {
                         const { value } = this._positions[t.position];
                         if (value) {
-                            Log.info("Position changed [" + t.position + "]:\n"
+                            Log.info("Position changed [" + t.position + ", " + t.symbol + "]:\n"
                                 + JSON.stringify(Utils.getObjectChanges(value, Utils.formatPosition(t)), null, '\t'));
                         }
                     }
