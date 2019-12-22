@@ -73,8 +73,14 @@ export class XAPI extends Listener {
     }
 
     constructor({
-                    accountId, password, type, appName = undefined,
-                    host, rateLimit, logger = new EmptyLogger(), safe
+                    accountId,
+                    password,
+                    type,
+                    appName = undefined,
+                    host = undefined,
+                    rateLimit = undefined,
+                    logger = new EmptyLogger(),
+                    safe = undefined
                 }: XAPIConfig) {
         super();
         changeLogger(logger);
