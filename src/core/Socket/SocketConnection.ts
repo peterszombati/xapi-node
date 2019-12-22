@@ -35,8 +35,8 @@ export class SocketConnection extends Queue {
                 this.lastReceivedMessage = new Time();
                 this.handleSocketMessage(json, new Time());
             } catch (e) {
-                Log.error('Socket WebSocket Error');
                 const { name, message, stack } = new Error(e);
+                Log.error('Socket Handle WebSocket Message Error');
                 Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
             }
         });
