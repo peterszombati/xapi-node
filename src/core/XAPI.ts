@@ -160,6 +160,9 @@ export class XAPI extends Listener {
         });
 
         this.Stream.listen.getTrades((t, time) => {
+            if (t.cmd === CMD_FIELD.BALANCE || t.cmd === CMD_FIELD.CREDIT) {
+                return;
+            }
             if (t.type === TYPE_FIELD.PENDING
                 && t.cmd !== CMD_FIELD.BUY_LIMIT
                 && t.cmd !== CMD_FIELD.SELL_LIMIT
