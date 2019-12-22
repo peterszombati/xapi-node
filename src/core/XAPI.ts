@@ -162,7 +162,8 @@ export class XAPI extends Listener {
 
         this.Stream.listen.getTrades((t, time) => {
             if (t.state === 'Deleted') {
-                if (this._positions[t.position] !== undefined) {
+                if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
+                    Log.info("Position deleted [" + t.position + ", " + t.symbol + "]");
                     this._positions[t.position] = { value: null, lastUpdated: time };
                 }
             } else {
@@ -173,6 +174,8 @@ export class XAPI extends Listener {
                             Log.info("Position changed [" + t.position + ", " + t.symbol + "]:\n"
                                 + JSON.stringify(Utils.getObjectChanges(value, Utils.formatPosition(t)), null, '\t'));
                         }
+                    } else {
+                        Log.info("Position created [" + t.position + ", " + t.symbol + "]");
                     }
                     this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
                 }
