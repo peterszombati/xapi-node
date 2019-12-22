@@ -30,7 +30,6 @@ class Utils {
 
     static formatPosition(t: STREAMING_TRADE_RECORD | TRADE_RECORD): TradePosition {
         return {
-            close_price: t.close_price,
             close_time: t.close_time,
             closed: t.closed,
             cmd: t.cmd,

@@ -53,7 +53,8 @@ export interface AddTransaction {
 }
 
 export interface TradePosition {
-    close_price: number
+//  TODO:close_price: number
+//  TODO:profit: number
     close_time: number
     closed: boolean
     cmd: CMD_FIELD

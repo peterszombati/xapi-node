@@ -52,12 +52,14 @@ export class XAPI extends Listener {
 
     public get openPositions(): TradePosition[] | null {
         return Object.values(this._positions)
-            .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.open);
+            .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.open)
+            .map(t => t.value);
     }
 
     public get limitPositions(): TradePosition[] | null {
         return Object.values(this._positions)
-            .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.limit);
+            .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.limit)
+            .map(t => t.value);
     }
 
     protected account: XAPIAccount = {
