@@ -3,8 +3,7 @@ import XAPI from '../XAPI';
 import {Time} from '../../modules/Time';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import {Log} from '../../utils/Log';
-import {errorCode} from '../../enum/errorCode';
-import {ConnectionStatus, TransactionStatus, TransactionType} from '../../enum/Enum';
+import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import Utils from '../../utils/Utils';
 

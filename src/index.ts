@@ -82,5 +82,6 @@ export {
 }
 
 import {parseLogin} from './modules/parseLogin';
+import Utils from "./utils/Utils";
 
-export {parseLogin};
+export {parseLogin, Utils};

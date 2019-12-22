@@ -2,10 +2,9 @@ import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../inter
 import {Listener} from '../modules/Listener';
 import {Time} from '../modules/Time';
 import {Log} from '../utils/Log';
-import {ConnectionStatus, TransactionStatus, TransactionType} from '../enum/Enum';
+import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../enum/Enum';
 import Utils from '../utils/Utils';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
-import {errorCode} from '../enum/errorCode';
 
 export class Queue extends Listener {
     public status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
