@@ -137,8 +137,7 @@ export class XAPI extends Listener {
             if (sent !== null && sent.elapsedMs() < 1000) {
                 const obj: TradePositions = {};
                 data.forEach(t => {
-                    if (this._positions[t.order] === undefined
-                        || this._positions[t.order].value !== null) {
+                    if (this._positions[t.order] === undefined || this._positions[t.order].value !== null) {
                         obj[t.order] = {
                             value: Utils.formatPosition(t),
                             lastUpdated: sent
@@ -146,8 +145,7 @@ export class XAPI extends Listener {
                     }
                 });
                 Object.values(this._positions).forEach(t => {
-                    if (obj[t.order] === undefined
-                        && t.value !== null) {
+                    if (obj[t.order] === undefined && t.value !== null) {
                         const elapsedMs = t.lastUpdated.elapsedMs();
                         if (elapsedMs <= 1000) {
                             obj[t.order] = t;
