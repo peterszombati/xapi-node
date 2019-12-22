@@ -53,6 +53,7 @@ export interface AddTransaction {
 }
 
 export interface TradePosition {
+    [key: string]: number | boolean | CMD_FIELD | string
 //  TODO:close_price: number
 //  TODO:profit: number
     close_time: number

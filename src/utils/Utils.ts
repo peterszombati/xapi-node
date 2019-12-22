@@ -28,6 +28,14 @@ class Utils {
         return {transactionId, command};
     }
 
+    static getObjectChanges(from: TradePosition, to: TradePosition) {
+        const obj: any = {};
+        Object.keys(from).filter(key => from[key] !== to[key]).forEach(key => {
+            obj[key] = to[key];
+        });
+        return obj;
+    }
+
     static formatPosition(t: STREAMING_TRADE_RECORD | TRADE_RECORD): TradePosition {
         return {
             close_time: t.close_time,

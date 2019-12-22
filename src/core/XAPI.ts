@@ -139,18 +139,18 @@ export class XAPI extends Listener {
             if (sent !== null && sent.elapsedMs() < 1000) {
                 const obj: TradePositions = {};
                 data.forEach(t => {
-                    if (this._positions[t.order] === undefined || this._positions[t.order].value !== null) {
-                        obj[t.order] = {
+                    if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
+                        obj[t.position] = {
                             value: Utils.formatPosition(t),
                             lastUpdated: sent
                         };
                     }
                 });
                 Object.values(this._positions).forEach(t => {
-                    if (obj[t.order] === undefined && t.value !== null) {
+                    if (obj[t.position] === undefined && t.value !== null) {
                         const elapsedMs = t.lastUpdated.elapsedMs();
                         if (elapsedMs <= 1000) {
-                            obj[t.order] = t;
+                            obj[t.position] = t;
                         }
                     }
                 });
@@ -162,11 +162,20 @@ export class XAPI extends Listener {
 
         this.Stream.listen.getTrades((t, time) => {
             if (t.state === 'Deleted') {
-                if (this._positions[t.order] !== undefined) {
-                    this._positions[t.order] = { value: null, lastUpdated: time };
+                if (this._positions[t.position] !== undefined) {
+                    this._positions[t.position] = { value: null, lastUpdated: time };
                 }
             } else {
-                this._positions[t.order] = { value: Utils.formatPosition(t), lastUpdated: time };
+                if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
+                    if (this._positions[t.position] !== undefined) {
+                        const { value } = this._positions[t.position];
+                        if (value) {
+                            Log.info("Position changed [" + t.position + "]:\n"
+                                + JSON.stringify(Utils.getObjectChanges(value, Utils.formatPosition(t)), null, '\t'));
+                        }
+                    }
+                    this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
+                }
             }
         });
 
