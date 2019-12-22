@@ -43,5 +43,27 @@ x.onReady(() => {
 });
 ```
 
+### 3. Example placing buy limit on BITCOIN
+```ts
+x.Socket.send.tradeTransaction({
+	cmd: CMD_FIELD.BUY_LIMIT,
+	customComment: null,
+	expiration: new Date().getTime() + 60000 * 60 * 24 * 365,
+	offset: 0,
+	order: 0,
+	price: 100,
+	sl: 0,
+	symbol: 'BITCOIN',
+	tp: 8000,
+	type: TYPE_FIELD.OPEN,
+	volume: 10
+}).then(({returnData}) => {
+	console.log('Success ' + returnData.order);
+}).catch(e => {
+	console.error('Failed');
+	console.error(e);
+});
+```
+
 ### Now you can support these projects with bitcoin
 BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F [www.blockchain.com](https://www.blockchain.com/btc/address/3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F)
