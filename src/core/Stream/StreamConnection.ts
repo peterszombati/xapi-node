@@ -32,14 +32,14 @@ export class StreamConnection extends Queue {
                 this.lastReceivedMessage = new Time();
                 this.callListener('command_' + json.command, [json.data, new Time()]);
             } catch (e) {
-                const { name, message, stack } = new Error(e);
+                const {name, message, stack} = new Error(e);
                 Log.error('Stream Handle WebSocket Message Error');
                 Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
             }
         });
 
         this.WebSocket.onError((error: any) => {
-            const { name, message, stack } = new Error(error);
+            const {name, message, stack} = new Error(error);
             Log.error('Stream WebSocket Error');
             Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
         });

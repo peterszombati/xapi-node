@@ -148,8 +148,7 @@ export class XAPI extends Listener {
                 });
                 Object.values(this._positions).forEach(t => {
                     if (obj[t.position] === undefined && t.value !== null) {
-                        const elapsedMs = t.lastUpdated.elapsedMs();
-                        if (elapsedMs <= 1000) {
+                        if (t.lastUpdated.elapsedMs() <= 1000) {
                             obj[t.position] = t;
                         }
                     }
@@ -164,12 +163,12 @@ export class XAPI extends Listener {
             if (t.state === 'Deleted') {
                 if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
                     Log.info("Position deleted [" + t.position + ", " + t.symbol + "]");
-                    this._positions[t.position] = { value: null, lastUpdated: time };
+                    this._positions[t.position] = {value: null, lastUpdated: time};
                 }
             } else {
                 if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
                     if (this._positions[t.position] !== undefined) {
-                        const { value } = this._positions[t.position];
+                        const {value} = this._positions[t.position];
                         if (value) {
                             Log.info("Position changed [" + t.position + ", " + t.symbol + "]:\n"
                                 + JSON.stringify(Utils.getObjectChanges(value, Utils.formatPosition(t)), null, '\t'));

@@ -50,7 +50,7 @@ class Stream extends StreamConnection {
             return this.sendSubscribe('Balance');
         },
         getCandles: (symbol: string) => {
-            return this.sendSubscribe('Candles', { symbol });
+            return this.sendSubscribe('Candles', {symbol});
         },
         getKeepAlive: () => {
             return this.sendSubscribe('KeepAlive');
@@ -62,7 +62,7 @@ class Stream extends StreamConnection {
             return this.sendSubscribe('Profits');
         },
         getTickPrices: (symbol: string, minArrivalTime: number = 0, maxLevel: number = 6) => {
-            return this.sendSubscribe('TickPrices', { symbol, minArrivalTime, maxLevel });
+            return this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel});
         },
         getTrades: () => {
             return this.sendSubscribe('Trades');

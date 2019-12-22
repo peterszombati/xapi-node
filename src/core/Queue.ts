@@ -16,6 +16,7 @@ export class Queue extends Listener {
     public get lastReceivedMessage() {
         return this._lastReceivedMessage;
     }
+
     public set lastReceivedMessage(time: Time | null) {
         this._lastReceivedMessage = time;
     }
