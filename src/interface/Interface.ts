@@ -77,5 +77,8 @@ export interface TradePosition {
 }
 
 export interface TradePositions {
-    [position: number]: TradePosition
+    [position: number]: {
+        value: TradePosition | null,
+        lastUpdated: Time
+    }
 }

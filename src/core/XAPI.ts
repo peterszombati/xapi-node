@@ -4,10 +4,9 @@ import {Listener} from '../modules/Listener';
 import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
 import {ConnectionStatus} from '..';
-import {TradePosition, TradePositions} from "../interface/Interface";
-import Utils from "../utils/Utils";
-import {Time} from "../modules/Time";
-import {PositionType} from "../enum/Enum";
+import {TradePosition, TradePositions} from '../interface/Interface';
+import Utils from '../utils/Utils';
+import {PositionType} from '../enum/Enum';
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
@@ -36,6 +35,7 @@ export class XAPI extends Listener {
     public Socket: Socket;
     private _rateLimit: number = DefaultRateLimit;
     private _tryReconnect: boolean = false;
+    private _positions: TradePositions = {};
 
     public get rateLimit() {
         return this._rateLimit;
@@ -49,24 +49,15 @@ export class XAPI extends Listener {
         interval: [],
         timeout: []
     };
-    private _positions: {
-        value: TradePositions | null,
-        lastUpdated: Time
-    } = {
-        value: null,
-        lastUpdated: new Time(false)
-    };
 
     public get openPositions(): TradePosition[] | null {
-        return this._positions.value === null
-            ? null
-            : Object.values(this._positions.value).filter(t => Utils.getPositionType(t) === PositionType.open);
+        return Object.values(this._positions)
+            .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.open);
     }
 
     public get limitPositions(): TradePosition[] | null {
-        return this._positions.value === null
-            ? null
-            : Object.values(this._positions.value).filter(t => Utils.getPositionType(t) === PositionType.limit);
+        return Object.values(this._positions)
+            .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.limit);
     }
 
     protected account: XAPIAccount = {
@@ -136,34 +127,40 @@ export class XAPI extends Listener {
         });
 
         this.Socket.listen.getTrades((data, time, transaction) => {
-            if (transaction.request.sent !== null) {
-                const elapsedMs = transaction.request.sent.elapsedMs();
-                if (elapsedMs !== null && elapsedMs < 1000) {
-                    const obj: TradePositions = {};
-                    data.forEach(t => {
-                        obj[t.order] = Utils.formatPosition(t);
-                    });
-                    this._positions = { value: obj, lastUpdated: time };
-                } else {
-                    Log.info("getTrades transaction (" + transaction.transactionId + ") is ignored")
-                }
+            const {sent} = transaction.request;
+            if (sent !== null && sent.elapsedMs() < 1000) {
+                const obj: TradePositions = {};
+                data.forEach(t => {
+                    if (this._positions[t.order] === undefined
+                        || this._positions[t.order].value !== null) {
+                        obj[t.order] = {
+                            value: Utils.formatPosition(t),
+                            lastUpdated: sent
+                        };
+                    }
+                });
+                Object.values(this._positions).forEach(t => {
+                    if (obj[t.order] === undefined
+                        && t.value !== null) {
+                        const elapsedMs = t.lastUpdated.elapsedMs();
+                        if (elapsedMs <= 1000) {
+                            obj[t.order] = t;
+                        }
+                    }
+                });
+                this._positions = obj;
+            } else {
+                Log.info('getTrades transaction (' + transaction.transactionId + ') is ignored')
             }
         });
 
         this.Stream.listen.getTrades((t, time) => {
             if (t.state === 'Deleted') {
-                if (this._positions.value !== null
-                &&  this._positions.value[t.order] !== undefined) {
-                    delete this._positions.value[t.order];
+                if (this._positions[t.order] !== undefined) {
+                    this._positions[t.order] = { value: null, lastUpdated: time };
                 }
             } else {
-                if (this._positions.value === null) {
-                    this._positions.value = {
-                        [t.order]: Utils.formatPosition(t)
-                    };
-                } else {
-                    this._positions.value[t.order] = Utils.formatPosition(t);
-                }
+                this._positions[t.order] = { value: Utils.formatPosition(t), lastUpdated: time };
             }
         });
 
