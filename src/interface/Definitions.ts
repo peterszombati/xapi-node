@@ -1,4 +1,5 @@
 import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD} from '..';
+import {STATE_FIELD} from "../enum/Enum";
 
 export interface CHART_RANGE_INFO_RECORD {
     end: number,
@@ -255,8 +256,8 @@ export interface TRADE_RECORD {
     close_timeString?: string
     expirationString?: string
 
-    type?: number
-    state?: string
+    type?: TYPE_FIELD
+    state?: STATE_FIELD
 }
 
 export interface STREAMING_TRADE_RECORD {
@@ -283,6 +284,6 @@ export interface STREAMING_TRADE_RECORD {
     tp: number
     volume: number
 
-    type: number
-    state: string
+    type: TYPE_FIELD
+    state: STATE_FIELD
 }

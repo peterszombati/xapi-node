@@ -60,16 +60,26 @@ import {
     DAY_FIELD,
     PERIOD_FIELD,
     TYPE_FIELD,
+    STATE_FIELD,
     REQUEST_STATUS_FIELD,
     REQUEST_STATUS,
-    ConnectionStatus
+    ConnectionStatus,
+    Candle,
+    errorCode
 } from './enum/Enum';
 
-export {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, TYPE_FIELD, REQUEST_STATUS_FIELD, REQUEST_STATUS, ConnectionStatus}
-
-import {Candle} from './enum/candle';
-
-export {Candle}
+export {
+    CMD_FIELD,
+    DAY_FIELD,
+    PERIOD_FIELD,
+    TYPE_FIELD,
+    STATE_FIELD,
+    REQUEST_STATUS_FIELD,
+    REQUEST_STATUS,
+    ConnectionStatus,
+    Candle,
+    errorCode
+}
 
 import {parseLogin} from './modules/parseLogin';
 

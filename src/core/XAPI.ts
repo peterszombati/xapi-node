@@ -3,7 +3,7 @@ import Socket from './Socket/Socket';
 import {Listener} from '../modules/Listener';
 import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
-import {ConnectionStatus} from '..';
+import {CMD_FIELD, ConnectionStatus, TYPE_FIELD} from '..';
 import {TradePosition, TradePositions} from '../interface/Interface';
 import Utils from '../utils/Utils';
 import {PositionType} from '../enum/Enum';
@@ -160,24 +160,31 @@ export class XAPI extends Listener {
         });
 
         this.Stream.listen.getTrades((t, time) => {
-            if (t.state === 'Deleted') {
+            if (t.type === TYPE_FIELD.PENDING
+                && t.cmd !== CMD_FIELD.BUY_LIMIT
+                && t.cmd !== CMD_FIELD.SELL_LIMIT
+                && t.cmd !== CMD_FIELD.BUY_STOP
+                && t.cmd !== CMD_FIELD.SELL_STOP) {
+                Log.info("Position pending [" + [t.position, t.symbol].join(', ') + "]");
+            } else if (t.state === 'Deleted') {
                 if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
-                    Log.info("Position deleted [" + t.position + ", " + t.symbol + "]");
+                    Log.info("Position deleted [" + [t.position, t.symbol].join(', ') + "]");
                     this._positions[t.position] = {value: null, lastUpdated: time};
                 }
-            } else {
-                if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
-                    if (this._positions[t.position] !== undefined) {
-                        const {value} = this._positions[t.position];
-                        if (value) {
-                            Log.info("Position changed [" + t.position + ", " + t.symbol + "]:\n"
-                                + JSON.stringify(Utils.getObjectChanges(value, Utils.formatPosition(t)), null, '\t'));
+            } else if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
+                if (this._positions[t.position] !== undefined) {
+                    const {value} = this._positions[t.position];
+                    if (value) {
+                        const changes = Utils.getObjectChanges(value, Utils.formatPosition(t));
+                        if (Object.keys(changes).length > 0) {
+                            Log.info("Position changed [" + [t.position, t.symbol].join(', ') + "]:\n"
+                                + JSON.stringify(changes, null, '\t'));
                         }
-                    } else {
-                        Log.info("Position created [" + t.position + ", " + t.symbol + "]");
                     }
-                    this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
+                } else {
+                    Log.info("Position created [" + [t.position, t.symbol].join(', ') + "]");
                 }
+                this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
             }
         });
 
