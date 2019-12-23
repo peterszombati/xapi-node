@@ -1,6 +1,6 @@
 import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface';
 import {Listener} from '../modules/Listener';
-import {Time} from '../modules/Time';
+import {Time} from '..';
 import {Log} from '../utils/Log';
 import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../enum/Enum';
 import Utils from '../utils/Utils';

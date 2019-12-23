@@ -1,6 +1,6 @@
 import {TransactionResolveSocket} from '../../interface/Interface';
 import XAPI from '../XAPI';
-import {Time} from '../../modules/Time';
+import {Time} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import {Log} from '../../utils/Log';
 import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../../enum/Enum';

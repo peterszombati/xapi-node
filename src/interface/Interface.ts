@@ -1,4 +1,4 @@
-import {Time} from '../modules/Time';
+import {Time} from '..';
 import {CMD_FIELD, TransactionStatus, TransactionType} from '../enum/Enum';
 
 export interface Transactions {
