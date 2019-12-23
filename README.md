@@ -4,7 +4,7 @@ This project is made possible to get data from Forex market, execute market or l
 
 This module may can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
-WebSocket protocol description: http://developers.xstore.pro/documentation/
+WebSocket protocol description: https://peterszombati.github.io/xapi-node/
 
 This module is usable on Front-end too.
 
