@@ -87,7 +87,7 @@ x.Socket.send.tradeTransaction({
 });
 ```
 
-### 5. Listening price data for EURUSD
+### 5. Listening EURUSD price data
 ```ts
 x.Stream.listen.getTickPrices((data) => {
     console.log(data.symbol + ': ' + data.ask + ' price | ' + data.askVolume + ' volume');
