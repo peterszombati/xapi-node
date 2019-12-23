@@ -25,7 +25,8 @@
     "trading",
     "xtb",
     "forex",
-    "trading-api"
+    "trading-api",
+    "xopenhub"
   ],
   "prepare": "npm run build",
   "author": "Peter Szombati",
