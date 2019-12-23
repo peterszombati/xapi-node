@@ -103,6 +103,7 @@ EURUSD: 1.10913 price | 1000000 volume
 EURUSD: 1.10916 price | 1000000 volume
 EURUSD: 1.10922 price | 3000000 volume
 EURUSD: 1.10931 price | 3500000 volume
+...
 */
 ```
 
