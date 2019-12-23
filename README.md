@@ -87,5 +87,5 @@ x.Socket.send.tradeTransaction({
 });
 ```
 
-### Now you can support these projects with bitcoin
+### Now you can donate these projects with bitcoin
 BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F [www.blockchain.com](https://www.blockchain.com/btc/address/3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F)
