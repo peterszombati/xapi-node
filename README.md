@@ -87,5 +87,24 @@ x.Socket.send.tradeTransaction({
 });
 ```
 
+### 5. Listening price data for EURUSD
+```ts
+x.Stream.listen.getTickPrices((data) => {
+    console.log(data.symbol + ': ' + data.ask + ' price | ' + data.askVolume + ' volume');
+});
+
+x.onReady(() => {
+    x.Stream.subscribe.getTickPrices('EURUSD')
+        .catch(() => { console.error('subscribe for EURUSD failed')});
+});
+/* output
+EURUSD: 1.10912 price | 500000 volume
+EURUSD: 1.10913 price | 1000000 volume
+EURUSD: 1.10916 price | 1000000 volume
+EURUSD: 1.10922 price | 3000000 volume
+EURUSD: 1.10931 price | 3500000 volume
+*/
+```
+
 ### Now you can donate these projects with bitcoin
 BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F [www.blockchain.com](https://www.blockchain.com/btc/address/3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F)
