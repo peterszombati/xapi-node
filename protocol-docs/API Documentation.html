@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)http://developers.xstore.pro/documentation/# -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>API Documentation</title>
+	
+
+
+    <link rel="stylesheet" href="./API Documentation_files/bootstrap.min.css">
+	<link rel="stylesheet" href="./API Documentation_files/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="./API Documentation_files/font-awesome.min.css">
+	<link rel="stylesheet" href="./API Documentation_files/documentation.css">
+    <script src="./API Documentation_files/ganalytics.js.download"></script>
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="http://developers.xstore.pro/"><div id="logo"></div></a>
+                <a class="brand" href="http://developers.xstore.pro/documentation/current">xAPI Protocol Documentation</a>
+          
+                <div class="nav-collapse collapse">
+                    <ul class="nav pull-right">
+                  
+                        <li><a href="https://playground.xapi.pro/" target="_blank"><i class="icon-suitcase"></i> Playground</a></li>
+
+                                                <li><a href="http://developers.xstore.pro/api/wrappers/2.5.0" target="_blank"><i class="icon-download-alt"></i> Download wrappers</a></li>
+                        
+                        <li><a href="http://developers.xstore.pro/api/changelog/2.5.0" target="_blank"><i class="icon-file-text"></i> Changelog</a></li>
+
+                        <li><a href="http://developers.xstore.pro/documentation/#" onclick="window.print()"><i class="icon-print"></i> Print</a></li>
+        
+                 		<li class=""><span>Version: </span></li>
+                    	<li class="dropdown" id="choose-version-dropdown">
+                            <a href="http://developers.xstore.pro/documentation/#" class="dropdown-toggle" data-toggle="dropdown"> 2.5.0<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                        
+                                                            
+                                <li class="nav-header">Current</li>
+                                <li><a href="http://developers.xstore.pro/documentation/2.5.0">2.5.0</a></li>
+                                
+																
+                                									<li class="nav-header">Previous</li>
+									<li><a href="http://developers.xstore.pro/documentation/2.5.0">2.5.0</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.14">2.4.14</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.13">2.4.13</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.12">2.4.12</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.11">2.4.11</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.10">2.4.10</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.9">2.4.9</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.8">2.4.8</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.7">2.4.7</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.6">2.4.6</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.5">2.4.5</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.4">2.4.4</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.3">2.4.3</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.2">2.4.2</a></li><li><a href="http://developers.xstore.pro/documentation/2.4.1">2.4.1</a></li><li><a href="http://developers.xstore.pro/documentation/2.4">2.4</a></li><li><a href="http://developers.xstore.pro/documentation/2.3.4">2.3.4</a></li><li><a href="http://developers.xstore.pro/documentation/2.3.3">2.3.3</a></li><li><a href="http://developers.xstore.pro/documentation/2.3.2">2.3.2</a></li><li><a href="http://developers.xstore.pro/documentation/2.3">2.3</a></li><li><a href="http://developers.xstore.pro/documentation/2.2">2.2</a></li>                                
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <div id="side-menu">
+        <h1>Menu</h1>
+
+        <ul>
+            <!-- MENU -->
+
+<li><a href="http://developers.xstore.pro/documentation/#introduction">Introduction</a></li>
+
+<li><a href="http://developers.xstore.pro/documentation/#definitions">Definitions</a></li>
+
+<li><a href="http://developers.xstore.pro/documentation/#general-data-format">General data format</a></li>
+
+<li><a href="http://developers.xstore.pro/documentation/#communication-with-the-xstation-api">Communication with the API</a></li>
+
+<li>
+
+    <ul>
+
+        <li><a href="http://developers.xstore.pro/documentation/#connection-validation">Connection validation</a></li>
+
+        <li><a href="http://developers.xstore.pro/documentation/#default-login-credentials">Default login credentials</a></li>
+
+        <li><a href="http://developers.xstore.pro/documentation/#input-data-format">Input data format</a></li>
+
+        <li><a href="http://developers.xstore.pro/documentation/#output-data-format">Output data format</a></li>
+
+        <li><a href="http://developers.xstore.pro/documentation/#time-format">Time format</a></li>
+
+        <li><a href="http://developers.xstore.pro/documentation/#floating-number-format">Floating number format</a></li>
+
+    </ul>
+
+</li>
+
+<li><a href="http://developers.xstore.pro/documentation/#available-commands">Available commands</a></li>
+
+<li>
+
+    <ul>
+
+        <li><a href="http://developers.xstore.pro/documentation/#login">Login</a></li>
+
+        <li><a href="http://developers.xstore.pro/documentation/#logout">Logout</a></li>
+
+        
+
+    </ul>
+
+</li>
+
+<li><a href="http://developers.xstore.pro/documentation/#available-streaming-commands">Available streaming commands</a></li>
+
+<li>
+
+    <ul>
+
+        <!-- STREAMING MENU -->
+
+        
+<li><a href="http://developers.xstore.pro/documentation/#streamgetBalance">getBalance</a></li><li><a href="http://developers.xstore.pro/documentation/#streamgetCandles">getCandles</a></li><li><a href="http://developers.xstore.pro/documentation/#streamgetKeepAlive">getKeepAlive</a></li><li><a href="http://developers.xstore.pro/documentation/#streamgetNews">getNews</a></li><li><a href="http://developers.xstore.pro/documentation/#streamgetProfits">getProfits</a></li><li><a href="http://developers.xstore.pro/documentation/#streamgetTickPrices">getTickPrices</a></li><li><a href="http://developers.xstore.pro/documentation/#streamgetTrades">getTrades</a></li><li><a href="http://developers.xstore.pro/documentation/#streamgetTradeStatus">getTradeStatus</a></li><li><a href="http://developers.xstore.pro/documentation/#streamping">ping</a></li>
+        <!-- /STREAMING MENU -->
+
+    </ul>
+
+</li>
+
+<li><a href="http://developers.xstore.pro/documentation/#retrieving-trading-data">Retrieving trading data</a></li>
+
+        <li>
+
+            <ul>
+
+                <!-- COMMANDS MENU -->
+
+                
+<li><a href="http://developers.xstore.pro/documentation/#getAllSymbols">getAllSymbols</a></li><li><a href="http://developers.xstore.pro/documentation/#getCalendar">getCalendar</a></li><li><a href="http://developers.xstore.pro/documentation/#getChartLastRequest">getChartLastRequest</a></li><li><a href="http://developers.xstore.pro/documentation/#getChartRangeRequest">getChartRangeRequest</a></li><li><a href="http://developers.xstore.pro/documentation/#getCommissionDef">getCommissionDef</a></li><li><a href="http://developers.xstore.pro/documentation/#getCurrentUserData">getCurrentUserData</a></li><li><a href="http://developers.xstore.pro/documentation/#getIbsHistory">getIbsHistory</a></li><li><a href="http://developers.xstore.pro/documentation/#getMarginLevel">getMarginLevel</a></li><li><a href="http://developers.xstore.pro/documentation/#getMarginTrade">getMarginTrade</a></li><li><a href="http://developers.xstore.pro/documentation/#getNews">getNews</a></li><li><a href="http://developers.xstore.pro/documentation/#getProfitCalculation">getProfitCalculation</a></li><li><a href="http://developers.xstore.pro/documentation/#getServerTime">getServerTime</a></li><li><a href="http://developers.xstore.pro/documentation/#getStepRules">getStepRules</a></li><li><a href="http://developers.xstore.pro/documentation/#getSymbol">getSymbol</a></li><li><a href="http://developers.xstore.pro/documentation/#getTickPrices">getTickPrices</a></li><li><a href="http://developers.xstore.pro/documentation/#getTradeRecords">getTradeRecords</a></li><li><a href="http://developers.xstore.pro/documentation/#getTrades">getTrades</a></li><li><a href="http://developers.xstore.pro/documentation/#getTradesHistory">getTradesHistory</a></li><li><a href="http://developers.xstore.pro/documentation/#getTradingHours">getTradingHours</a></li><li><a href="http://developers.xstore.pro/documentation/#getVersion">getVersion</a></li><li><a href="http://developers.xstore.pro/documentation/#ping">ping</a></li><li><a href="http://developers.xstore.pro/documentation/#tradeTransaction">tradeTransaction</a></li><li><a href="http://developers.xstore.pro/documentation/#tradeTransactionStatus">tradeTransactionStatus</a></li>
+                <!-- /COMMANDS MENU -->
+
+            </ul>
+
+        </li>
+
+<li><a href="http://developers.xstore.pro/documentation/#error-messages">Error messages</a></li>
+
+<!-- /MENU -->
+
+        </ul>
+    </div>
+
+    <div id="page-wrapper">
+    	<div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span10 offset1">
+                    <!-- MAIN CONTENT -->
+                        
+    <div id="title">
+      <h1>xAPI<br>Protocol Documentation</h1>
+      <p>Version 2.5.0</p>
+    </div>
+
+    <ol>
+      <li id="introduction">
+          <h2>Introduction</h2>
+        <p>This document presents information on API communication protocol. The communication protocol of the API uses JSON format. </p>
+        <p>JSON format used by the server doesn't allow extensions (e.g. comments, other flags). JSON format standardization document is available under the following link: <a href="http://tools.ietf.org/html/rfc4627">http://tools.ietf.org/html/rfc4627</a>.</p>
+        <p>The connection is performed by clean socket connection. For real trading SSL connection will be used.</p>
+      </li>
+
+
+
+      <li id="definitions">
+        <h2>Definitions</h2>
+        <p>The following definitions will be used in this specification document:</p>
+        <ul>
+          <li><strong>simple type:</strong> type, which value is itself: int, int64, string, double, bool;</li>
+          <li><strong>j-value (JSON value):</strong> any simple type, j-object or j-array;</li>
+          <li><strong>j-object (JSON object):</strong> a record containing any number of named j-values (pair <string, j-value="">);</string,></li>
+          <li><strong>j-array (JSON array):</strong> an array where each element is j-value;</li>
+          <li><strong>j-subvalue:</strong> j-value which is a component of a j-object.</li>
+        </ul>
+        <p>A j-object can contain zero elements. A j-array can have zero length. The name of j-value can be an empty string.</p>
+        <p>Encoding of strings is set to UTF-8. In this format the server sends and receives data.</p>
+
+
+        <p>Definition of unix-time:</p>
+        <pre>Unix time, or POSIX time, is a system for describing points in time, defined as the number of milliseconds elapsed since midnight Coordinated Universal Time (UTC) of January 1, 1970.</pre>
+      </li>
+
+      <li id="general-data-format">
+
+        <h2>General data format</h2>
+
+
+
+        <p>Each packet consists of exactly one main, unnamed j-value. The data stream consists of consecutive j–values, with no punctuation.</p>
+        <p>The main j-value is a j-object containing exactly two j-subvalues which are j-objects. The first j-subobject is named <strong>header</strong> and consists of at least a field type as a simple type string. This is a packet type. The second j-subobject of the main packet j-object is named <strong>data</strong> and its content is specific to a given packet type. The specifications for different types of packages are described in the next chapter.</p>
+
+
+
+        <p>A sample of properly defined packet:</p>
+
+<pre>{
+	"command" : "login",
+	"arguments" : {
+		"userId" : "1000",
+		"password": "PASSWORD"
+	}
+}</pre>
+<p>Every single command sent to the API is allowed to contain an optional field called <strong>customTag</strong>. The API guarantees to return the very same customTag in the command’s response. For example, the following command:</p>
+<pre>{
+	"command" : "login",
+	"arguments" : {
+		"userId" : "1000",
+		"password": "PASSWORD"
+	},
+	"customTag": "my_login_command_id"
+}</pre>
+<p>returns (in case of a successful login):</p>
+<pre>{
+	"status": true,
+	"customTag": "my_login_command_id"
+}</pre>
+    </li>
+
+    <li id="communication-with-the-xstation-api">
+        <h2>Communication with the API</h2>
+
+        <h3>XTB Clients:</h3>
+
+        <p>Host:</p>
+        <ul>
+          <li>xapi.xtb.com</li>
+        </ul>
+        <p>Here are the details of DEMO and REAL servers hosted on each of the addresses above:</p>
+        <ul>
+
+          <li>DEMO: main port: 5124, streaming port: 5125,</li>
+          <li>REAL: main port: 5112, streaming port: 5113.</li>
+        </ul>
+
+		<p>Furthermore, WebSockets can be used to connect to the API using the following addresses:</p>
+        <ul>
+          <li>wss://ws.xtb.com/demo</li>
+          <li>wss://ws.xtb.com/demoStream</li>
+		  <li>wss://ws.xtb.com/real</li>
+		  <li>wss://ws.xtb.com/realStream</li>
+        </ul>
+
+        <h3>X Open Hub Clients:</h3>
+
+        <p>Host:<br>There are two addresses (that can be used interchangeably)</p>
+
+        <ul>
+            <li>xapia.x-station.eu</li>
+            <li>xapib.x-station.eu</li>
+        </ul>
+
+        <p>Here are the details of DEMO and REAL servers hosted on each of the addresses above:</p>
+        <ul>
+
+            <li>DEMO: main port: 5124, streaming port: 5125,</li>
+            <li>REAL: main port: 5112, streaming port: 5113.</li>
+        </ul>
+
+        <p>Furthermore, WebSockets can be used to connect to the API using the following addresses:</p>
+        <ul>
+            <li>wss://ws.xapi.pro/demo</li>
+            <li>wss://ws.xapi.pro/demoStream</li>
+            <li>wss://ws.xapi.pro/real</li>
+            <li>wss://ws.xapi.pro/realStream</li>
+        </ul>
+		
+        <p>All servers use <strong>SSL</strong> connection.</p>
+
+        <p>Communication is established as long as both server and client have opened and connected sockets.</p>
+
+        <p>For convenience server guarantees that every separate reply to client command returned by server will be separated by two new line characters ("\n").</p>
+
+
+        <ol>
+
+            <li id="connection-validation">
+
+                <h3>Connection validation</h3>
+
+
+
+            <p>In order to provide best service for all users API set rules on connection and data send process. If any of the following rules is breached, then connection is closed immediately without server notification.</p>
+
+
+            <p>List of rules:</p>
+            <ul>
+              <li>At most <strong>50</strong> simultaneous connections from the same client address are allowed (an attempt to obtain the 51st connection returns the error <a href="http://developers.xstore.pro/documentation/#error-messages">EX008</a>). If you need this rule can be lenified please contact the <a href="mailto:support@xstore.pro">xStore Support Team</a>.</li>
+              <li>Every new connection that fails to deliver data within <strong>one second</strong> from when it is established may be forced to close with no notification.</li>
+              <li>Each command invocation should not contain more than <strong>1kB</strong> of data.</li>
+              <li>User should send requests in <strong>200 ms</strong> intervals. This rule can be broken, but if it happens <strong>6 times</strong> in a row the connection is dropped.</li>
+              <li>Each command should be a <strong>proper JSON object</strong>.</li>
+            </ul>
+
+
+            <p><strong>Exception:</strong></p>
+            <p>If the client sends a request that is a valid JSON object, but does not conform to the published API (incorrect command, missing fields, etc.), the response is sent back with the error description but the connection is not closed. </p>
+            <p>This rule prevents incorrect messages from reaching further down the processing chain and allows clients to analyze and understand the source of problem.</p>
+            </li>
+
+            <li id="default-login-credentials">
+
+                <h3>Default login credentials</h3>
+
+
+
+                <p>Default login credentials can be obtained at: <a href="http://developers.xstore.pro/panel">http://developers.xstore.pro/panel/</a>.</p>
+
+            </li>
+
+            <li id="input-data-format">
+
+              <h3>Input data format</h3>
+
+            <p>The input data format is a JSON object that consists of service name and command name. Some commands also require an object of command's arguments.</p>
+            <p>If optional <code>prettyPrint</code> field is set to true, an output JSON is printed in human-readable format. <code>prettyPrint</code> field can be omitted. </p>
+
+<pre>{
+	"command": "commandName",
+	"arguments": {
+		"arg1Name": 10,
+		"arg2Name": "Some text",
+		...
+	},
+	"prettyPrint": true
+}</pre>
+
+            </li>
+
+          <li id="output-data-format">
+            <h3>Output data format</h3>
+
+            <p>The output data format is a JSON object that consists of <code>status</code> and <code>returnData</code> fields if command succeeded, or <code>status</code>, <code>errorCode</code> and <code>errorDescr</code> fields if an error occurred.</p>
+
+            <pre>{
+	"status": true,
+	"returnData": JSON value
+}</pre>
+            <p>or, in case of an error:</p>
+
+            <pre>{
+	"status": false,
+	"errorCode": "E123",
+	"errorDescr": "Error description"
+}</pre>
+          </li>
+
+
+
+            <li id="time-format">
+
+                <h3>Time format</h3>
+
+
+
+                <p>Time is number of milliseconds from 01.01.1970, 00:00 GMT.</p>
+
+            </li>
+
+
+
+            <li id="floating-number-format">
+
+                <h3>Floating number format</h3>
+
+                <p>In all Floating numbers '.' (period) is used as a decimal separator.</p>
+
+            </li>
+
+        </ol>
+
+    </li>
+
+    <li id="available-commands">
+
+        <h2>Available commands</h2>
+
+
+
+        <p>Request-Reply commands are performed on main connection socket. The reply is sent by main connection socket.</p>
+
+
+
+
+
+        <ol>
+
+            <li id="login">
+
+                <h3>Login</h3>
+
+
+       <p>In order to perform any action client application have to perform login process. No functionality is available before proper login process.</p> 
+            <p>After initial login, a new session is created and all commands are executed for a logged user until he/she logs out or drops the connection.</p>
+            <p></p><h5 class="request">Request:</h5><p></p>
+			<p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>Name</th><th>Type</th><th>Desc</th></tr></thead><tbody><tr><td>userId</td><td>String</td><td>userId</td></tr><tr><td>password</td><td>String</td><td>password</td></tr><tr><td>appId</td><td>String</td><td>(optional, deprecated)</td></tr><tr><td>appName</td><td>String</td><td>(optional) application name</td></tr></tbody></table><p>Example:</p>
+
+
+
+<pre>{
+	"command": "login",
+	"arguments": {
+		"userId": "1000",
+		"password": "PASSWORD",
+		"appId": "test",
+		"appName": "test"
+	}
+}
+</pre>
+
+                  <p>After successful login the system responds with the <code>status</code> message that can contain the String representing <code>streamSessionId</code> field:</p>
+
+<pre>
+{
+	"status": true,
+	"streamSessionId": "8469308861804289383"
+}
+
+</pre>			
+            <p>The <code>streamSessionId</code> field of the string type, if present, is a token that can be used to establish a streaming subscription on a separate network connection. <code>streamSessionId</code> is used in streaming subscription commands.</p>
+            <p><code>streamSessionId</code> is unique for the given main session and will change between login sessions.</p> 
+          </li>
+          <li id="logout">
+            <h3>Logout</h3>
+
+            <p>Format of input:</p>
+<pre>{
+	"command": "logout"
+}
+</pre>
+            <p>No <code>returnData</code> field in output. Only <code>status</code> message is sent.</p>
+          </li>
+
+            <li id="retrieving-trading-data">
+
+                <h3>Retrieving trading data</h3>
+
+                
+<ol class="commands"><li class="command" id="getAllSymbols"><h4>Command: <strong>getAllSymbols</strong></h4><p class="description">Description: Returns array of all symbols available for the user.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "getAllSymbols"
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#SYMBOL_RECORD"><code>SYMBOL_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [SYMBOL_RECORD, SYMBOL_RECORD, ...]	
+}</pre><p class="record" id="SYMBOL_RECORD"><strong>Format of </strong><code>SYMBOL_RECORD</code>:</p><p class="description">Please be advised that result values for profit and margin calculation can be used optionally, because server is able to perform all profit/margin calculations for Client application by commands described later in this document.</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>ask</td><td>Floating number</td><td>Ask price in base currency</td></tr><tr><td>bid</td><td>Floating number</td><td>Bid price in base currency</td></tr><tr><td>categoryName</td><td>String</td><td>Category name</td></tr><tr><td>contractSize</td><td>Number</td><td>Size of 1 lot</td></tr><tr><td>currency</td><td>String</td><td>Currency</td></tr><tr><td>currencyPair</td><td>Boolean</td><td>Indicates whether the symbol represents a currency pair</td></tr><tr><td>currencyProfit</td><td>String</td><td>The currency of calculated profit</td></tr><tr><td>description</td><td>String</td><td>Description</td></tr><tr><td>expiration</td><td>Time</td><td>Null if not applicable</td></tr><tr><td>groupName</td><td>String</td><td>Symbol group name</td></tr><tr><td>high</td><td>Floating number</td><td>The highest price of the day in base currency</td></tr><tr><td>initialMargin</td><td>Number</td><td>Initial margin for 1 lot order, used for profit/margin calculation</td></tr><tr><td>instantMaxVolume</td><td>Number</td><td>Maximum instant volume multiplied by 100 (in lots)</td></tr><tr><td>leverage</td><td>Floating number</td><td>Symbol leverage</td></tr><tr><td>longOnly</td><td>Boolean</td><td>Long only</td></tr><tr><td>lotMax</td><td>Floating number</td><td>Maximum size of trade</td></tr><tr><td>lotMin</td><td>Floating number</td><td>Minimum size of trade</td></tr><tr><td>lotStep</td><td>Floating number</td><td>A value of minimum step by which the size of trade can be changed (within <code>lotMin</code> - <code>lotMax</code> range)</td></tr><tr><td>low</td><td>Floating number</td><td>The lowest price of the day in base currency</td></tr><tr><td>marginHedged</td><td>Number</td><td>Used for profit calculation</td></tr><tr><td>marginHedgedStrong</td><td>Boolean</td><td>For margin calculation</td></tr><tr><td>marginMaintenance</td><td>Number</td><td>For margin calculation, null if not applicable</td></tr><tr><td>marginMode</td><td>Number</td><td>For margin calculation</td></tr><tr><td>percentage</td><td>Floating number</td><td>Percentage</td></tr><tr><td>pipsPrecision</td><td>Number</td><td>Number of symbol's pip decimal places</td></tr><tr><td>precision</td><td>Number</td><td>Number of symbol's price decimal places</td></tr><tr><td>profitMode</td><td>Number</td><td>For profit calculation</td></tr><tr><td>quoteId</td><td>Number</td><td>Source of price</td></tr><tr><td>shortSelling</td><td>Boolean</td><td>Indicates whether short selling is allowed on the instrument</td></tr><tr><td>spreadRaw</td><td>Floating number</td><td>The difference between raw ask and bid prices</td></tr><tr><td>spreadTable</td><td>Floating number</td><td>Spread representation</td></tr><tr><td>starting</td><td>Time</td><td>Null if not applicable</td></tr><tr><td>stepRuleId</td><td>Number</td><td>Appropriate step rule ID from <a href="http://developers.xstore.pro/documentation/#getStepRules"><code>getStepRules <i class="icon-share"></i></code></a> command response</td></tr><tr><td>stopsLevel</td><td>Number</td><td>Minimal distance (in pips) from the current price where the stopLoss/takeProfit can be set</td></tr><tr><td>swap_rollover3days</td><td>Number</td><td>Time when additional swap is accounted for weekend</td></tr><tr><td>swapEnable</td><td>Boolean</td><td>Indicates whether swap value is added to position on end of day</td></tr><tr><td>swapLong</td><td>Floating number</td><td>Swap value for long positions in pips</td></tr><tr><td>swapShort</td><td>Floating number</td><td>Swap value for short positions in pips</td></tr><tr><td>swapType</td><td>Number</td><td>Type of swap calculated</td></tr><tr><td>symbol</td><td>String</td><td>Symbol name</td></tr><tr><td>tickSize</td><td>Floating number</td><td>Smallest possible price change, used for profit/margin calculation, null if not applicable</td></tr><tr><td>tickValue</td><td>Floating number</td><td>Value of smallest possible price change (in base currency), used for profit/margin calculation, null if not applicable</td></tr><tr><td>time</td><td>Time</td><td>Ask &amp; bid tick time</td></tr><tr><td>timeString</td><td>String</td><td>Time in String</td></tr><tr><td>trailingEnabled</td><td>Boolean</td><td>Indicates whether trailing stop (offset) is applicable to the instrument.</td></tr><tr><td>type</td><td>Number</td><td>Instrument class number</td></tr></tbody></table><p>Example:</p><pre>{
+	"ask": 4000.0,
+	"bid": 4000.0,
+	"categoryName": "Forex",
+	"contractSize": 100000,
+	"currency": "USD",
+	"currencyPair": true,
+	"currencyProfit": "SEK",
+	"description": "USD/PLN",
+	"expiration": null,
+	"groupName": "Minor",
+	"high": 4000.0,
+	"initialMargin": 0,
+	"instantMaxVolume": 0,
+	"leverage": 1.5,
+	"longOnly": false,
+	"lotMax": 10.0,
+	"lotMin": 0.1,
+	"lotStep": 0.1,
+	"low": 3500.0,
+	"marginHedged": 0,
+	"marginHedgedStrong": false,
+	"marginMaintenance": null,
+	"marginMode": 101,
+	"percentage": 100.0,
+	"precision": 2,
+	"profitMode": 5,
+	"quoteId": 1,
+	"shortSelling": true,
+	"spreadRaw": 0.000003,
+	"spreadTable": 0.00042,
+	"starting": null,
+	"stepRuleId": 1,
+	"stopsLevel": 0,
+	"swap_rollover3days": 0,
+	"swapEnable": true,
+	"swapLong": -2.55929,
+	"swapShort": 0.131,
+	"swapType": 0,
+	"symbol": "USDPLN",
+	"tickSize": 1.0,
+	"tickValue": 1.0,
+	"time": 1272446136891,
+	"timeString": "Thu May 23 12:23:44 EDT 2013",
+	"trailingEnabled": true,
+	"type": 21
+}</pre><p id="quoteId"><strong>Possible values of </strong><code>quoteId</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>fixed</td><td>1</td><td><desc>fixed</desc></td></tr><tr><td>float</td><td>2</td><td><desc>float</desc></td></tr><tr><td>depth</td><td>3</td><td><desc>depth</desc></td></tr><tr><td>cross</td><td>4</td><td><desc>cross</desc></td></tr></tbody></table><p id="marginMode"><strong>Possible values of </strong><code>marginMode</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>Forex</td><td>101</td><td><desc>Forex</desc></td></tr><tr><td>CFD leveraged</td><td>102</td><td><desc>CFD leveraged</desc></td></tr><tr><td>CFD</td><td>103</td><td><desc>CFD</desc></td></tr></tbody></table><p id="profitMode"><strong>Possible values of </strong><code>profitMode</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>FOREX</td><td>5</td><td><desc>FOREX</desc></td></tr><tr><td>CFD</td><td>6</td><td><desc>CFD</desc></td></tr></tbody></table></li><li class="command" id="getCalendar"><h4>Command: <strong>getCalendar</strong></h4><p class="description">Description: Returns calendar with market events.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "getCalendar"
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#CALENDAR_RECORD"><code>CALENDAR_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [CALENDAR_RECORD, CALENDAR_RECORD, ...]	
+}</pre><p class="record" id="CALENDAR_RECORD"><strong>Format of </strong><code>CALENDAR_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>country</td><td>String</td><td>Two letter country code</td></tr><tr><td>current</td><td>String</td><td>Market value (current), empty before time of release of this value (time from "time" record)</td></tr><tr><td>forecast</td><td>String</td><td>Forecasted value</td></tr><tr><td>impact</td><td>String</td><td>Impact on market</td></tr><tr><td>period</td><td>String</td><td>Information period</td></tr><tr><td>previous</td><td>String</td><td>Value from previous information release</td></tr><tr><td>time</td><td>Time</td><td>Time, when the information will be released (in this time empty "current" value should be changed with exact released value)</td></tr><tr><td>title</td><td>String</td><td>Name of the indicator for which values will be released</td></tr></tbody></table><p>Example:</p><pre>{
+	"country": "CA",
+	"current": "",
+	"forecast": "",
+	"impact": "3",
+	"period": "(FEB)",
+	"previous": "58.3",
+	"time": 1374846900000,
+	"title": "Ivey Purchasing Managers Index"
+}</pre><p id="impact"><strong>Possible values of </strong><code>impact</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>low</td><td>1</td><td><desc>low</desc></td></tr><tr><td>medium</td><td>2</td><td><desc>medium</desc></td></tr><tr><td>high</td><td>3</td><td><desc>high</desc></td></tr></tbody></table></li><li class="command" id="getChartLastRequest"><h4>Command: <strong>getChartLastRequest</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetCandles"><code>getCandles <i class="icon-share"></i></code></a> which is the preferred way of retrieving current candle data.</strong> Returns chart info, from start date to the current time. If the chosen period of <a href="http://developers.xstore.pro/documentation/#CHART_LAST_INFO_RECORD"><code>CHART_LAST_INFO_RECORD <i class="icon-share"></i></code></a> is greater than 1 minute, the last candle returned by the API can change until the end of the period (the candle is being automatically updated every minute).
+			</p><p>Limitations: there are limitations in charts data availability. Detailed ranges for charts data, what can be accessed with specific period, are as follows:</p>
+			<p>PERIOD_M1 --- &lt;0-1) month, i.e. one month time <br>
+			PERIOD_M30 --- &lt;1-7) month, six months time<br>
+			PERIOD_H4 --- &lt;7-13) month, six months time<br>
+			PERIOD_D1 --- 13 month, and earlier on</p>
+			<p>Note, that specific PERIOD_ is the lowest (i.e. the most detailed) period, accessible in listed range. For instance, in months range &lt;1-7)  you can access periods: PERIOD_M30, PERIOD_H1, PERIOD_H4, PERIOD_D1, PERIOD_W1, PERIOD_MN1. Specific data ranges availability is guaranteed, however those ranges may be wider, e.g.: PERIOD_M1 may be accessible for 1.5 months back from now, where 1.0 months is guaranteed.</p>
+			<p>Example scenario:</p>
+			<ul><li>request charts of 5 minutes period, for 3 months time span, back from now;</li>
+			<li>response: you are guaranteed to get 1 month of 5 minutes charts; because, 5 minutes period charts are not accessible 2 months and 3 months back from now.</li></ul>
+			<p></p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>info</td><td>CHART_LAST_INFO_RECORD</td><td>info</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getChartLastRequest",
+	"arguments": {
+		"info": CHART_LAST_INFO_RECORD
+	}
+}</pre><p class="record" id="CHART_LAST_INFO_RECORD"><strong>Format of </strong><code>CHART_LAST_INFO_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>period</td><td>Number</td><td>Period code</td></tr><tr><td>start</td><td>Time</td><td>Start of chart block (rounded down to the nearest interval and excluding)</td></tr><tr><td>symbol</td><td>String</td><td>Symbol</td></tr></tbody></table><p>Example:</p><pre>{
+	"period": 5,
+	"start": 1262944112000,
+	"symbol": "PKN.PL"
+}</pre><p id="period"><strong>Possible values of </strong><code>period</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>PERIOD_M1</td><td>1</td><td><desc>1 minute</desc></td></tr><tr><td>PERIOD_M5</td><td>5</td><td><desc>5 minutes</desc></td></tr><tr><td>PERIOD_M15</td><td>15</td><td><desc>15 minutes</desc></td></tr><tr><td>PERIOD_M30</td><td>30</td><td><desc>30 minutes</desc></td></tr><tr><td>PERIOD_H1</td><td>60</td><td><desc>60 minutes (1 hour)</desc></td></tr><tr><td>PERIOD_H4</td><td>240</td><td><desc>240 minutes (4 hours)</desc></td></tr><tr><td>PERIOD_D1</td><td>1440</td><td><desc>1440 minutes (1 day)</desc></td></tr><tr><td>PERIOD_W1</td><td>10080</td><td><desc>10080 minutes (1 week)</desc></td></tr><tr><td>PERIOD_MN1</td><td>43200</td><td><desc>43200 minutes (30 days)</desc></td></tr></tbody></table><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>digits</td><td>Number</td><td>Number of decimal places</td></tr><tr><td>rateInfos</td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#RATE_INFO_RECORD"><code>RATE_INFO_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"digits": 4,
+		"rateInfos": [RATE_INFO_RECORD, RATE_INFO_RECORD, ...]
+	}	
+}</pre><p class="record" id="RATE_INFO_RECORD"><strong>Format of </strong><code>RATE_INFO_RECORD</code>:</p><p class="description"></p><p>Price values must be divided by 10 to the power of digits in order to obtain exact prices.</p><p></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>close</td><td>Floating number</td><td>Value of close price (shift from open price)</td></tr><tr><td>ctm</td><td>Time</td><td>Candle start time in CET / CEST time zone (see Daylight Saving Time, DST)</td></tr><tr><td>ctmString</td><td>String</td><td>String representation of the 'ctm' field</td></tr><tr><td>high</td><td>Floating number</td><td>Highest value in the given period (shift from open price)</td></tr><tr><td>low</td><td>Floating number</td><td>Lowest value in the given period (shift from open price)</td></tr><tr><td>open</td><td>Floating number</td><td>Open price (in base currency * 10 to the power of digits)</td></tr><tr><td>vol</td><td>Floating number</td><td>Volume in lots</td></tr></tbody></table><p>Example:</p><pre>{
+	"close": 1.0,
+	"ctm": 1389362640000,
+	"ctmString": "Jan 10, 2014 3:04:00 PM",
+	"high": 6.0,
+	"low": 0.0,
+	"open": 41848.0,
+	"vol": 0.0
+}</pre></li><li class="command" id="getChartRangeRequest"><h4>Command: <strong>getChartRangeRequest</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetCandles"><code>getCandles <i class="icon-share"></i></code></a> which is the preferred way of retrieving current candle data.</strong> Returns chart info with data between given start and end dates.
+			</p><p>Limitations: there are limitations in charts data availability. Detailed ranges for charts data, what can be accessed with specific period, are as follows:</p>
+			<p>PERIOD_M1 --- &lt;0-1) month, i.e. one month time <br>
+			PERIOD_M30 --- &lt;1-7) month, six months time<br>
+			PERIOD_H4 --- &lt;7-13) month, six months time<br>
+			PERIOD_D1 --- 13 month, and earlier on</p>
+			<p>Note, that specific PERIOD_ is the lowest (i.e. the most detailed) period, accessible in listed range. For instance, in months range &lt;1-7)  you can access periods: PERIOD_M30, PERIOD_H1, PERIOD_H4, PERIOD_D1, PERIOD_W1, PERIOD_MN1. Specific data ranges availability is guaranteed, however those ranges may be wider, e.g.: PERIOD_M1 may be accessible for 1.5 months back from now, where 1.0 months is guaranteed.</p>
+			<p></p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>info</td><td>CHART_RANGE_INFO_RECORD</td><td>info</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getChartRangeRequest",
+	"arguments": {
+		"info": CHART_RANGE_INFO_RECORD
+	}
+}</pre><p class="record" id="CHART_RANGE_INFO_RECORD"><strong>Format of </strong><code>CHART_RANGE_INFO_RECORD</code>:</p><p class="description"></p><p>Ticks field - if ticks is not set or value is 0, <a href="http://developers.xstore.pro/documentation/#getChartRangeRequest"><code>getChartRangeRequest <i class="icon-share"></i></code></a> works as before (you must send valid <code>start</code> and <code>end</code> time fields).<br>
+			If ticks value is not equal to 0, field <code>end</code> is ignored.<br>
+			If ticks &gt;0 (e.g. N) then API returns N candles from time start.<br>
+			If ticks &lt;0 then API returns N candles to time start.<br>
+			It is possible for API to return fewer chart candles than set in tick field.</p><p></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>end</td><td>Time</td><td>End of chart block (rounded down to the nearest interval and excluding)</td></tr><tr><td>period</td><td>Number</td><td>Period code</td></tr><tr><td>start</td><td>Time</td><td>Start of chart block (rounded down to the nearest interval and excluding)</td></tr><tr><td>symbol</td><td>String</td><td>Symbol</td></tr><tr><td>ticks</td><td>Number</td><td>Number of ticks needed, this field is optional, please read the description above</td></tr></tbody></table><p>Example:</p><pre>{
+	"end": 1262944412000,
+	"period": 5,
+	"start": 1262944112000,
+	"symbol": "PKN.PL",
+	"ticks": 0
+}</pre><p id="period"><strong>Possible values of </strong><code>period</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>PERIOD_M1</td><td>1</td><td><desc>1 minute</desc></td></tr><tr><td>PERIOD_M5</td><td>5</td><td><desc>5 minutes</desc></td></tr><tr><td>PERIOD_M15</td><td>15</td><td><desc>15 minutes</desc></td></tr><tr><td>PERIOD_M30</td><td>30</td><td><desc>30 minutes</desc></td></tr><tr><td>PERIOD_H1</td><td>60</td><td><desc>60 minutes (1 hour)</desc></td></tr><tr><td>PERIOD_H4</td><td>240</td><td><desc>240 minutes (4 hours)</desc></td></tr><tr><td>PERIOD_D1</td><td>1440</td><td><desc>1440 minutes (1 day)</desc></td></tr><tr><td>PERIOD_W1</td><td>10080</td><td><desc>10080 minutes (1 week)</desc></td></tr><tr><td>PERIOD_MN1</td><td>43200</td><td><desc>43200 minutes (30 days)</desc></td></tr></tbody></table><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>digits</td><td>Number</td><td>Number of decimal places</td></tr><tr><td>rateInfos</td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#RATE_INFO_RECORD"><code>RATE_INFO_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"digits": 4,
+		"rateInfos": [RATE_INFO_RECORD, RATE_INFO_RECORD, ...]
+	}	
+}</pre><p class="record" id="RATE_INFO_RECORD"><strong>Format of </strong><code>RATE_INFO_RECORD</code>:</p><p class="description"></p><p>Price values must be divided by 10 to the power of digits in order to obtain exact prices.</p><p></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>close</td><td>Floating number</td><td>Value of close price (shift from open price)</td></tr><tr><td>ctm</td><td>Time</td><td>Candle start time in CET / CEST time zone (see Daylight Saving Time, DST)</td></tr><tr><td>ctmString</td><td>String</td><td>String representation of the 'ctm' field</td></tr><tr><td>high</td><td>Floating number</td><td>Highest value in the given period (shift from open price)</td></tr><tr><td>low</td><td>Floating number</td><td>Lowest value in the given period (shift from open price)</td></tr><tr><td>open</td><td>Floating number</td><td>Open price (in base currency * 10 to the power of digits)</td></tr><tr><td>vol</td><td>Floating number</td><td>Volume in lots</td></tr></tbody></table><p>Example:</p><pre>{
+	"close": 1.0,
+	"ctm": 1389362640000,
+	"ctmString": "Jan 10, 2014 3:04:00 PM",
+	"high": 6.0,
+	"low": 0.0,
+	"open": 41848.0,
+	"vol": 0.0
+}</pre></li><li class="command" id="getCommissionDef"><h4>Command: <strong>getCommissionDef</strong></h4><p class="description">Description: Returns calculation of commission and rate of exchange. The value is calculated as expected value, and therefore might not be perfectly accurate.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbol</td><td>String</td><td>symbol</td></tr><tr><td>volume</td><td>Floating number</td><td>volume</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getCommissionDef",
+	"arguments": {
+		"symbol": "T.US",
+		"volume": 1.0
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>commission</td><td>Floating number</td><td>calculated commission in account currency, could be null if not applicable</td></tr><tr><td>rateOfExchange</td><td>Floating number</td><td>rate of exchange between account currency and instrument base currency, could be null if not applicable</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"commission": 0.51,
+		"rateOfExchange": 0.1609
+	}	
+}</pre></li><li class="command" id="getCurrentUserData"><h4>Command: <strong>getCurrentUserData</strong></h4><p class="description">Description: Returns information about account currency, and account leverage.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "getCurrentUserData"
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>companyUnit</td><td>Number</td><td>Unit the account is assigned to.</td></tr><tr><td>currency</td><td>String</td><td>account currency</td></tr><tr><td>group</td><td>String</td><td>group</td></tr><tr><td>ibAccount</td><td>Boolean</td><td>Indicates whether this account is an IB account.</td></tr><tr><td>leverage</td><td>Number</td><td>This field should not be used. It is inactive and its value is always 1.</td></tr><tr><td>leverageMultiplier</td><td>Floating number</td><td>The factor used for margin calculations. The actual value of leverage can be calculated by dividing this value by 100.</td></tr><tr><td>spreadType</td><td>String</td><td>spreadType, null if not applicable</td></tr><tr><td>trailingStop</td><td>Boolean</td><td>Indicates whether this account is enabled to use trailing stop.</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"companyUnit": 8,
+		"currency": "PLN",
+		"group": "demoPLeurSTANDARD200",
+		"ibAccount": false,
+		"leverage": 1,
+		"leverageMultiplier": 0.25,
+		"spreadType": "FLOAT",
+		"trailingStop": false
+	}	
+}</pre></li><li class="command" id="getIbsHistory"><h4>Command: <strong>getIbsHistory</strong></h4><p class="description">Description: Returns IBs data from the given time range.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>end</td><td>Time</td><td>End of IBs history block</td></tr><tr><td>start</td><td>Time</td><td>Start of IBs history block</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getIbsHistory",
+	"arguments": {
+		"end": 1395053810991,
+		"start": 1394449010991
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#IB_RECORD"><code>IB_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [IB_RECORD, IB_RECORD, ...]	
+}</pre><p class="record" id="IB_RECORD"><strong>Format of </strong><code>IB_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>closePrice</td><td>Floating number</td><td>IB close price or null if not allowed to view</td></tr><tr><td>login</td><td>String</td><td>IB user login or null if not allowed to view</td></tr><tr><td>nominal</td><td>Floating number</td><td>IB nominal or null if not allowed to view</td></tr><tr><td>openPrice</td><td>Floating number</td><td>IB open price or null if not allowed to view</td></tr><tr><td>side</td><td>Number</td><td>Operation code or null if not allowed to view</td></tr><tr><td>surname</td><td>String</td><td>IB user surname or null if not allowed to view</td></tr><tr><td>symbol</td><td>String</td><td>Symbol or null if not allowed to view</td></tr><tr><td>timestamp</td><td>Time</td><td>Time the record was created or null if not allowed to view</td></tr><tr><td>volume</td><td>Floating number</td><td>Volume in lots or null if not allowed to view</td></tr></tbody></table><p>Example:</p><pre>{
+	"closePrice": 1.39302,
+	"login": "12345",
+	"nominal": 6.00,
+	"openPrice": 1.39376,
+	"side": 0,
+	"surname": "IB_Client_1",
+	"symbol": "EURUSD",
+	"timestamp": 1395755870000,
+	"volume": 1.0
+}</pre><p id="side"><strong>Possible values of </strong><code>side</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>BUY</td><td>0</td><td><desc>buy</desc></td></tr><tr><td>SELL</td><td>1</td><td><desc>sell</desc></td></tr></tbody></table></li><li class="command" id="getMarginLevel"><h4>Command: <strong>getMarginLevel</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetBalance"><code>getBalance <i class="icon-share"></i></code></a> which is the preferred way of retrieving account indicators.</strong> Returns various account indicators.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "getMarginLevel"
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>balance</td><td>Floating number</td><td>balance in account currency</td></tr><tr><td>credit</td><td>Floating number</td><td>credit</td></tr><tr><td>currency</td><td>String</td><td>user currency</td></tr><tr><td>equity</td><td>Floating number</td><td>sum of balance and all profits in account currency</td></tr><tr><td>margin</td><td>Floating number</td><td>margin requirements in account currency</td></tr><tr><td>margin_free</td><td>Floating number</td><td>free margin in account currency</td></tr><tr><td>margin_level</td><td>Floating number</td><td>margin level percentage</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"balance": 995800269.43,
+		"credit": 1000.00,
+		"currency": "PLN",
+		"equity": 995985397.56,
+		"margin": 572634.43,
+		"margin_free": 995227635.00,
+		"margin_level": 173930.41
+	}	
+}</pre></li><li class="command" id="getMarginTrade"><h4>Command: <strong>getMarginTrade</strong></h4><p class="description">Description: Returns expected margin for given instrument and volume. The value is calculated as expected margin value, and therefore might not be perfectly accurate.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbol</td><td>String</td><td>symbol</td></tr><tr><td>volume</td><td>Floating number</td><td>volume</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getMarginTrade",
+	"arguments": {
+		"symbol": "EURPLN",
+		"volume": 1.0
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>margin</td><td>Floating number</td><td>calculated margin in account currency</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"margin": 4399.350
+	}	
+}</pre></li><li class="command" id="getNews"><h4>Command: <strong>getNews</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetNews"><code>getNews <i class="icon-share"></i></code></a> which is the preferred way of retrieving news data.</strong> Returns news from trading server which were sent within specified period of time.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>end</td><td>Time</td><td>Time, 0 means current time for simplicity</td></tr><tr><td>start</td><td>Time</td><td>Time</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getNews",
+	"arguments": {
+		"end": 0,
+		"start": 1275993488000
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#NEWS_TOPIC_RECORD"><code>NEWS_TOPIC_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [NEWS_TOPIC_RECORD, NEWS_TOPIC_RECORD, ...]	
+}</pre><p class="record" id="NEWS_TOPIC_RECORD"><strong>Format of </strong><code>NEWS_TOPIC_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>body</td><td>String</td><td>Body</td></tr><tr><td>bodylen</td><td>Number</td><td>Body length</td></tr><tr><td>key</td><td>String</td><td>News key</td></tr><tr><td>time</td><td>Time</td><td>Time</td></tr><tr><td>timeString</td><td>String</td><td>Time string</td></tr><tr><td>title</td><td>String</td><td>News title</td></tr></tbody></table><p>Example:</p><pre>{
+	"body": "&lt;html&gt;...&lt;/html&gt;",
+	"bodylen": 110,
+	"key": "1f6da766abd29927aa854823f0105c23",
+	"time": 1262944112000,
+	"timeString": "May 17, 2013 4:30:00 PM",
+	"title": "Breaking trend"
+}</pre></li><li class="command" id="getProfitCalculation"><h4>Command: <strong>getProfitCalculation</strong></h4><p class="description">Description: Calculates estimated profit for given deal data Should be used for calculator-like apps only. Profit for opened transactions should be taken from server, due to higher precision of server calculation.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>closePrice</td><td>Floating number</td><td>theoretical close price of order</td></tr><tr><td>cmd</td><td>Number</td><td>Operation code</td></tr><tr><td>openPrice</td><td>Floating number</td><td>theoretical open price of order</td></tr><tr><td>symbol</td><td>String</td><td>symbol</td></tr><tr><td>volume</td><td>Floating number</td><td>volume</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getProfitCalculation",
+	"arguments": {
+		"closePrice": 1.3000,
+		"cmd": 0,
+		"openPrice": 1.2233,
+		"symbol": "EURPLN",
+		"volume": 1.0
+	}
+}</pre><p id="cmd"><strong>Possible values of </strong><code>cmd</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>BUY</td><td>0</td><td><desc>buy</desc></td></tr><tr><td>SELL</td><td>1</td><td><desc>sell</desc></td></tr><tr><td>BUY_LIMIT</td><td>2</td><td><desc>buy limit</desc></td></tr><tr><td>SELL_LIMIT</td><td>3</td><td><desc>sell limit</desc></td></tr><tr><td>BUY_STOP</td><td>4</td><td><desc>buy stop</desc></td></tr><tr><td>SELL_STOP</td><td>5</td><td><desc>sell stop</desc></td></tr><tr><td>BALANCE</td><td>6</td><td><desc>Read only. Used in <a href="http://developers.xstore.pro/documentation/#getTradesHistory"><code>getTradesHistory <i class="icon-share"></i></code></a> for manager's deposit/withdrawal operations (profit&gt;0 for deposit, profit&lt;0 for withdrawal).</desc></td></tr><tr><td>CREDIT</td><td>7</td><td><desc>Read only</desc></td></tr></tbody></table><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>profit</td><td>Floating number</td><td>Profit in account currency</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"profit": 714.303
+	}	
+}</pre></li><li class="command" id="getServerTime"><h4>Command: <strong>getServerTime</strong></h4><p class="description">Description: Returns current time on trading server.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "getServerTime"
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>time</td><td>Time</td><td>Time</td></tr><tr><td>timeString</td><td>String</td><td>Time described in form set on server (local time of server)</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"time": 1392211379731,
+		"timeString": "Feb 12, 2014 2:22:59 PM"
+	}	
+}</pre></li><li class="command" id="getStepRules"><h4>Command: <strong>getStepRules</strong></h4><p class="description">Description: Returns a list of step rules for DMAs.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "getStepRules"
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#STEP_RULE_RECORD"><code>STEP_RULE_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [STEP_RULE_RECORD, STEP_RULE_RECORD, ...]	
+}</pre><p class="record" id="STEP_RULE_RECORD"><strong>Format of </strong><code>STEP_RULE_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>id</td><td>Number</td><td>Step rule ID</td></tr><tr><td>name</td><td>String</td><td>Step rule name</td></tr><tr><td>steps</td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#STEP_RECORD"><code>STEP_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"id": 1,
+	"name": "Forex",
+	"steps": [STEP_RECORD, STEP_RECORD, ...]
+}</pre><p class="record" id="STEP_RECORD"><strong>Format of </strong><code>STEP_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>fromValue</td><td>Floating number</td><td>Lower border of the volume range</td></tr><tr><td>step</td><td>Floating number</td><td>lotStep value in the given volume range</td></tr></tbody></table><p>Example:</p><pre>{
+	"fromValue": 0.1,
+	"step": 0.0025
+}</pre></li><li class="command" id="getSymbol"><h4>Command: <strong>getSymbol</strong></h4><p class="description">Description: Returns information about symbol available for the user.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbol</td><td>String</td><td>symbol</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getSymbol",
+	"arguments": {
+		"symbol": "EURPLN"
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>SYMBOL_RECORD</td><td><a href="http://developers.xstore.pro/documentation/#SYMBOL_RECORD"><code>SYMBOL_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": SYMBOL_RECORD	
+}</pre><p class="record" id="SYMBOL_RECORD"><strong>Format of </strong><code>SYMBOL_RECORD</code>:</p><p class="description">Please be advised that result values for profit and margin calculation can be used optionally, because server is able to perform all profit/margin calculations for Client application by commands described later in this document.</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>ask</td><td>Floating number</td><td>Ask price in base currency</td></tr><tr><td>bid</td><td>Floating number</td><td>Bid price in base currency</td></tr><tr><td>categoryName</td><td>String</td><td>Category name</td></tr><tr><td>contractSize</td><td>Number</td><td>Size of 1 lot</td></tr><tr><td>currency</td><td>String</td><td>Currency</td></tr><tr><td>currencyPair</td><td>Boolean</td><td>Indicates whether the symbol represents a currency pair</td></tr><tr><td>currencyProfit</td><td>String</td><td>The currency of calculated profit</td></tr><tr><td>description</td><td>String</td><td>Description</td></tr><tr><td>expiration</td><td>Time</td><td>Null if not applicable</td></tr><tr><td>groupName</td><td>String</td><td>Symbol group name</td></tr><tr><td>high</td><td>Floating number</td><td>The highest price of the day in base currency</td></tr><tr><td>initialMargin</td><td>Number</td><td>Initial margin for 1 lot order, used for profit/margin calculation</td></tr><tr><td>instantMaxVolume</td><td>Number</td><td>Maximum instant volume multiplied by 100 (in lots)</td></tr><tr><td>leverage</td><td>Floating number</td><td>Symbol leverage</td></tr><tr><td>longOnly</td><td>Boolean</td><td>Long only</td></tr><tr><td>lotMax</td><td>Floating number</td><td>Maximum size of trade</td></tr><tr><td>lotMin</td><td>Floating number</td><td>Minimum size of trade</td></tr><tr><td>lotStep</td><td>Floating number</td><td>A value of minimum step by which the size of trade can be changed (within <code>lotMin</code> - <code>lotMax</code> range)</td></tr><tr><td>low</td><td>Floating number</td><td>The lowest price of the day in base currency</td></tr><tr><td>marginHedged</td><td>Number</td><td>Used for profit calculation</td></tr><tr><td>marginHedgedStrong</td><td>Boolean</td><td>For margin calculation</td></tr><tr><td>marginMaintenance</td><td>Number</td><td>For margin calculation, null if not applicable</td></tr><tr><td>marginMode</td><td>Number</td><td>For margin calculation</td></tr><tr><td>percentage</td><td>Floating number</td><td>Percentage</td></tr><tr><td>pipsPrecision</td><td>Number</td><td>Number of symbol's pip decimal places</td></tr><tr><td>precision</td><td>Number</td><td>Number of symbol's price decimal places</td></tr><tr><td>profitMode</td><td>Number</td><td>For profit calculation</td></tr><tr><td>quoteId</td><td>Number</td><td>Source of price</td></tr><tr><td>shortSelling</td><td>Boolean</td><td>Indicates whether short selling is allowed on the instrument</td></tr><tr><td>spreadRaw</td><td>Floating number</td><td>The difference between raw ask and bid prices</td></tr><tr><td>spreadTable</td><td>Floating number</td><td>Spread representation</td></tr><tr><td>starting</td><td>Time</td><td>Null if not applicable</td></tr><tr><td>stepRuleId</td><td>Number</td><td>Appropriate step rule ID from <a href="http://developers.xstore.pro/documentation/#getStepRules"><code>getStepRules <i class="icon-share"></i></code></a> command response</td></tr><tr><td>stopsLevel</td><td>Number</td><td>Minimal distance (in pips) from the current price where the stopLoss/takeProfit can be set</td></tr><tr><td>swap_rollover3days</td><td>Number</td><td>Time when additional swap is accounted for weekend</td></tr><tr><td>swapEnable</td><td>Boolean</td><td>Indicates whether swap value is added to position on end of day</td></tr><tr><td>swapLong</td><td>Floating number</td><td>Swap value for long positions in pips</td></tr><tr><td>swapShort</td><td>Floating number</td><td>Swap value for short positions in pips</td></tr><tr><td>swapType</td><td>Number</td><td>Type of swap calculated</td></tr><tr><td>symbol</td><td>String</td><td>Symbol name</td></tr><tr><td>tickSize</td><td>Floating number</td><td>Smallest possible price change, used for profit/margin calculation, null if not applicable</td></tr><tr><td>tickValue</td><td>Floating number</td><td>Value of smallest possible price change (in base currency), used for profit/margin calculation, null if not applicable</td></tr><tr><td>time</td><td>Time</td><td>Ask &amp; bid tick time</td></tr><tr><td>timeString</td><td>String</td><td>Time in String</td></tr><tr><td>trailingEnabled</td><td>Boolean</td><td>Indicates whether trailing stop (offset) is applicable to the instrument.</td></tr><tr><td>type</td><td>Number</td><td>Instrument class number</td></tr></tbody></table><p>Example:</p><pre>{
+	"ask": 4000.0,
+	"bid": 4000.0,
+	"categoryName": "Forex",
+	"contractSize": 100000,
+	"currency": "USD",
+	"currencyPair": true,
+	"currencyProfit": "SEK",
+	"description": "USD/PLN",
+	"expiration": null,
+	"groupName": "Minor",
+	"high": 4000.0,
+	"initialMargin": 0,
+	"instantMaxVolume": 0,
+	"leverage": 1.5,
+	"longOnly": false,
+	"lotMax": 10.0,
+	"lotMin": 0.1,
+	"lotStep": 0.1,
+	"low": 3500.0,
+	"marginHedged": 0,
+	"marginHedgedStrong": false,
+	"marginMaintenance": null,
+	"marginMode": 101,
+	"percentage": 100.0,
+	"precision": 2,
+	"profitMode": 5,
+	"quoteId": 1,
+	"shortSelling": true,
+	"spreadRaw": 0.000003,
+	"spreadTable": 0.00042,
+	"starting": null,
+	"stepRuleId": 1,
+	"stopsLevel": 0,
+	"swap_rollover3days": 0,
+	"swapEnable": true,
+	"swapLong": -2.55929,
+	"swapShort": 0.131,
+	"swapType": 0,
+	"symbol": "USDPLN",
+	"tickSize": 1.0,
+	"tickValue": 1.0,
+	"time": 1272446136891,
+	"timeString": "Thu May 23 12:23:44 EDT 2013",
+	"trailingEnabled": true,
+	"type": 21
+}</pre><p id="quoteId"><strong>Possible values of </strong><code>quoteId</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>fixed</td><td>1</td><td><desc>fixed</desc></td></tr><tr><td>float</td><td>2</td><td><desc>float</desc></td></tr><tr><td>depth</td><td>3</td><td><desc>depth</desc></td></tr><tr><td>cross</td><td>4</td><td><desc>cross</desc></td></tr></tbody></table><p id="marginMode"><strong>Possible values of </strong><code>marginMode</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>Forex</td><td>101</td><td><desc>Forex</desc></td></tr><tr><td>CFD leveraged</td><td>102</td><td><desc>CFD leveraged</desc></td></tr><tr><td>CFD</td><td>103</td><td><desc>CFD</desc></td></tr></tbody></table><p id="profitMode"><strong>Possible values of </strong><code>profitMode</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>FOREX</td><td>5</td><td><desc>FOREX</desc></td></tr><tr><td>CFD</td><td>6</td><td><desc>CFD</desc></td></tr></tbody></table></li><li class="command" id="getTickPrices"><h4>Command: <strong>getTickPrices</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetTickPrices"><code>getTickPrices <i class="icon-share"></i></code></a> which is the preferred way of retrieving ticks data.</strong> Returns array of current quotations for given symbols, only quotations that changed from given timestamp are returned. New timestamp obtained from output will be used as an argument of the next call of this command.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>level</td><td>Number</td><td>price level</td></tr><tr><td>symbols</td><td>array</td><td>Array of symbol names (Strings)</td></tr><tr><td>timestamp</td><td>Time</td><td>The time from which the most recent tick should be looked for. Historical prices cannot be obtained using this parameter. It can only be used to verify whether a price has changed since the given time.</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getTickPrices",
+	"arguments": {
+		"level": 0,
+		"symbols": ["EURPLN", "AGO.PL", ...],
+		"timestamp": 1262944112000
+	}
+}</pre><p id="level"><strong>Possible values of </strong><code>level</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td></td><td>-1</td><td><desc>all available levels</desc></td></tr><tr><td></td><td>0</td><td><desc>base level bid and ask price for instrument</desc></td></tr><tr><td></td><td>&gt;0</td><td><desc>specified level</desc></td></tr></tbody></table><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>quotations</td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#TICK_RECORD"><code>TICK_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"quotations": [TICK_RECORD, TICK_RECORD, ...]
+	}	
+}</pre><p class="record" id="TICK_RECORD"><strong>Format of </strong><code>TICK_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>ask</td><td>Floating number</td><td>Ask price in base currency</td></tr><tr><td>askVolume</td><td>Number</td><td>Number of available lots to buy at given price or null if not applicable</td></tr><tr><td>bid</td><td>Floating number</td><td>Bid price in base currency</td></tr><tr><td>bidVolume</td><td>Number</td><td>Number of available lots to buy at given price or null if not applicable</td></tr><tr><td>high</td><td>Floating number</td><td>The highest price of the day in base currency</td></tr><tr><td>level</td><td>Number</td><td>Price level</td></tr><tr><td>low</td><td>Floating number</td><td>The lowest price of the day in base currency</td></tr><tr><td>spreadRaw</td><td>Floating number</td><td>The difference between raw ask and bid prices</td></tr><tr><td>spreadTable</td><td>Floating number</td><td>Spread representation</td></tr><tr><td>symbol</td><td>String</td><td>Symbol</td></tr><tr><td>timestamp</td><td>Time</td><td>Timestamp</td></tr></tbody></table><p>Example:</p><pre>{
+	"ask": 4000.0,
+	"askVolume": 15000,
+	"bid": 4000.0,
+	"bidVolume": 16000,
+	"high": 4000.0,
+	"level": 0,
+	"low": 3500.0,
+	"spreadRaw": 0.000003,
+	"spreadTable": 0.00042,
+	"symbol": "KOMB.CZ",
+	"timestamp": 1272529161605
+}</pre><p id="level"><strong>Possible values of </strong><code>level</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td></td><td>-1</td><td><desc>all available levels</desc></td></tr><tr><td></td><td>0</td><td><desc>base level bid and ask price for instrument</desc></td></tr><tr><td></td><td>&gt;0</td><td><desc>specified level</desc></td></tr></tbody></table></li><li class="command" id="getTradeRecords"><h4>Command: <strong>getTradeRecords</strong></h4><p class="description">Description: Returns array of trades listed in <code>orders</code> argument.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>orders</td><td>array</td><td>Array of orders (position numbers)</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getTradeRecords",
+	"arguments": {
+		"orders": [7489839, 7489841, ...]
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#TRADE_RECORD"><code>TRADE_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [TRADE_RECORD, TRADE_RECORD, ...]	
+}</pre><p class="record" id="TRADE_RECORD"><strong>Format of </strong><code>TRADE_RECORD</code>:</p><p class="description"><code>cmd</code> is the operation code, for user's trade operations it equals to <code>cmd</code> from <a href="http://developers.xstore.pro/documentation/#TRADE_TRANS_INFO"><code>TRADE_TRANS_INFO <i class="icon-share"></i></code></a> record used as an argument in <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>close_price</td><td>Floating number</td><td>Close price in base currency</td></tr><tr><td>close_time</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>close_timeString</td><td>String</td><td>Null if order is not closed</td></tr><tr><td>closed</td><td>Boolean</td><td>Closed</td></tr><tr><td>cmd</td><td>Number</td><td>Operation code</td></tr><tr><td>comment</td><td>String</td><td>Comment</td></tr><tr><td>commission</td><td>Floating number</td><td>Commission in account currency, null if not applicable</td></tr><tr><td>customComment</td><td>String</td><td>The value the customer may provide in order to retrieve it later.</td></tr><tr><td>digits</td><td>Number</td><td>Number of decimal places</td></tr><tr><td>expiration</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>expirationString</td><td>String</td><td>Null if order is not closed</td></tr><tr><td>margin_rate</td><td>Floating number</td><td>Margin rate</td></tr><tr><td>offset</td><td>Number</td><td>Trailing offset</td></tr><tr><td>open_price</td><td>Floating number</td><td>Open price in base currency</td></tr><tr><td>open_time</td><td>Time</td><td>Open time</td></tr><tr><td>open_timeString</td><td>String</td><td>Open time string</td></tr><tr><td>order</td><td>Number</td><td>Order number for opened transaction</td></tr><tr><td>order2</td><td>Number</td><td>Order number for closed transaction</td></tr><tr><td>position</td><td>Number</td><td>Order number common both for opened and closed transaction</td></tr><tr><td>profit</td><td>Floating number</td><td>Profit in account currency</td></tr><tr><td>sl</td><td>Floating number</td><td>Zero if stop loss is not set (in base currency)</td></tr><tr><td>storage</td><td>Floating number</td><td>order swaps in account currency</td></tr><tr><td>symbol</td><td>String</td><td>symbol name or null for deposit/withdrawal operations</td></tr><tr><td>timestamp</td><td>Time</td><td>Timestamp</td></tr><tr><td>tp</td><td>Floating number</td><td>Zero if take profit is not set (in base currency)</td></tr><tr><td>volume</td><td>Floating number</td><td>Volume in lots</td></tr></tbody></table><p>Example:</p><pre>{
+	"close_price": 1.3256,
+	"close_time": null,
+	"close_timeString": null,
+	"closed": false,
+	"cmd": 0,
+	"comment": "Web Trader",
+	"commission": 0.0,
+	"customComment": "Some text",
+	"digits": 4,
+	"expiration": null,
+	"expirationString": null,
+	"margin_rate": 0.0,
+	"offset": 0,
+	"open_price": 1.4,
+	"open_time": 1272380927000,
+	"open_timeString": "Fri Jan 11 10:03:36 CET 2013",
+	"order": 7497776,
+	"order2": 1234567,
+	"position": 1234567,
+	"profit": -2196.44,
+	"sl": 0.0,
+	"storage": -4.46,
+	"symbol": "EURUSD",
+	"timestamp": 1272540251000,
+	"tp": 0.0,
+	"volume": 0.10
+}</pre><p id="cmd"><strong>Possible values of </strong><code>cmd</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>BUY</td><td>0</td><td><desc>buy</desc></td></tr><tr><td>SELL</td><td>1</td><td><desc>sell</desc></td></tr><tr><td>BUY_LIMIT</td><td>2</td><td><desc>buy limit</desc></td></tr><tr><td>SELL_LIMIT</td><td>3</td><td><desc>sell limit</desc></td></tr><tr><td>BUY_STOP</td><td>4</td><td><desc>buy stop</desc></td></tr><tr><td>SELL_STOP</td><td>5</td><td><desc>sell stop</desc></td></tr><tr><td>BALANCE</td><td>6</td><td><desc>Read only. Used in <a href="http://developers.xstore.pro/documentation/#getTradesHistory"><code>getTradesHistory <i class="icon-share"></i></code></a> for manager's deposit/withdrawal operations (profit&gt;0 for deposit, profit&lt;0 for withdrawal).</desc></td></tr><tr><td>CREDIT</td><td>7</td><td><desc>Read only</desc></td></tr></tbody></table></li><li class="command" id="getTrades"><h4>Command: <strong>getTrades</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetTrades"><code>getTrades <i class="icon-share"></i></code></a> which is the preferred way of retrieving trades data.</strong> Returns array of user's trades.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>openedOnly</td><td>boolean</td><td>if true then only opened trades will be returned</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getTrades",
+	"arguments": {
+		"openedOnly": true
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#TRADE_RECORD"><code>TRADE_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [TRADE_RECORD, TRADE_RECORD, ...]	
+}</pre><p class="record" id="TRADE_RECORD"><strong>Format of </strong><code>TRADE_RECORD</code>:</p><p class="description"><code>cmd</code> is the operation code, for user's trade operations it equals to <code>cmd</code> from <a href="http://developers.xstore.pro/documentation/#TRADE_TRANS_INFO"><code>TRADE_TRANS_INFO <i class="icon-share"></i></code></a> record used as an argument in <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>close_price</td><td>Floating number</td><td>Close price in base currency</td></tr><tr><td>close_time</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>close_timeString</td><td>String</td><td>Null if order is not closed</td></tr><tr><td>closed</td><td>Boolean</td><td>Closed</td></tr><tr><td>cmd</td><td>Number</td><td>Operation code</td></tr><tr><td>comment</td><td>String</td><td>Comment</td></tr><tr><td>commission</td><td>Floating number</td><td>Commission in account currency, null if not applicable</td></tr><tr><td>customComment</td><td>String</td><td>The value the customer may provide in order to retrieve it later.</td></tr><tr><td>digits</td><td>Number</td><td>Number of decimal places</td></tr><tr><td>expiration</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>expirationString</td><td>String</td><td>Null if order is not closed</td></tr><tr><td>margin_rate</td><td>Floating number</td><td>Margin rate</td></tr><tr><td>offset</td><td>Number</td><td>Trailing offset</td></tr><tr><td>open_price</td><td>Floating number</td><td>Open price in base currency</td></tr><tr><td>open_time</td><td>Time</td><td>Open time</td></tr><tr><td>open_timeString</td><td>String</td><td>Open time string</td></tr><tr><td>order</td><td>Number</td><td>Order number for opened transaction</td></tr><tr><td>order2</td><td>Number</td><td>Order number for closed transaction</td></tr><tr><td>position</td><td>Number</td><td>Order number common both for opened and closed transaction</td></tr><tr><td>profit</td><td>Floating number</td><td>Profit in account currency</td></tr><tr><td>sl</td><td>Floating number</td><td>Zero if stop loss is not set (in base currency)</td></tr><tr><td>storage</td><td>Floating number</td><td>order swaps in account currency</td></tr><tr><td>symbol</td><td>String</td><td>symbol name or null for deposit/withdrawal operations</td></tr><tr><td>timestamp</td><td>Time</td><td>Timestamp</td></tr><tr><td>tp</td><td>Floating number</td><td>Zero if take profit is not set (in base currency)</td></tr><tr><td>volume</td><td>Floating number</td><td>Volume in lots</td></tr></tbody></table><p>Example:</p><pre>{
+	"close_price": 1.3256,
+	"close_time": null,
+	"close_timeString": null,
+	"closed": false,
+	"cmd": 0,
+	"comment": "Web Trader",
+	"commission": 0.0,
+	"customComment": "Some text",
+	"digits": 4,
+	"expiration": null,
+	"expirationString": null,
+	"margin_rate": 0.0,
+	"offset": 0,
+	"open_price": 1.4,
+	"open_time": 1272380927000,
+	"open_timeString": "Fri Jan 11 10:03:36 CET 2013",
+	"order": 7497776,
+	"order2": 1234567,
+	"position": 1234567,
+	"profit": -2196.44,
+	"sl": 0.0,
+	"storage": -4.46,
+	"symbol": "EURUSD",
+	"timestamp": 1272540251000,
+	"tp": 0.0,
+	"volume": 0.10
+}</pre><p id="cmd"><strong>Possible values of </strong><code>cmd</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>BUY</td><td>0</td><td><desc>buy</desc></td></tr><tr><td>SELL</td><td>1</td><td><desc>sell</desc></td></tr><tr><td>BUY_LIMIT</td><td>2</td><td><desc>buy limit</desc></td></tr><tr><td>SELL_LIMIT</td><td>3</td><td><desc>sell limit</desc></td></tr><tr><td>BUY_STOP</td><td>4</td><td><desc>buy stop</desc></td></tr><tr><td>SELL_STOP</td><td>5</td><td><desc>sell stop</desc></td></tr><tr><td>BALANCE</td><td>6</td><td><desc>Read only. Used in <a href="http://developers.xstore.pro/documentation/#getTradesHistory"><code>getTradesHistory <i class="icon-share"></i></code></a> for manager's deposit/withdrawal operations (profit&gt;0 for deposit, profit&lt;0 for withdrawal).</desc></td></tr><tr><td>CREDIT</td><td>7</td><td><desc>Read only</desc></td></tr></tbody></table></li><li class="command" id="getTradesHistory"><h4>Command: <strong>getTradesHistory</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetTrades"><code>getTrades <i class="icon-share"></i></code></a> which is the preferred way of retrieving trades data.</strong> Returns array of user's trades which were closed within specified period of time.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>end</td><td>Time</td><td>Time, 0 means current time for simplicity</td></tr><tr><td>start</td><td>Time</td><td>Time, 0 means last month interval</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getTradesHistory",
+	"arguments": {
+		"end": 0,
+		"start": 1275993488000
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#TRADE_RECORD"><code>TRADE_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [TRADE_RECORD, TRADE_RECORD, ...]	
+}</pre><p class="record" id="TRADE_RECORD"><strong>Format of </strong><code>TRADE_RECORD</code>:</p><p class="description"><code>cmd</code> is the operation code, for user's trade operations it equals to <code>cmd</code> from <a href="http://developers.xstore.pro/documentation/#TRADE_TRANS_INFO"><code>TRADE_TRANS_INFO <i class="icon-share"></i></code></a> record used as an argument in <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>close_price</td><td>Floating number</td><td>Close price in base currency</td></tr><tr><td>close_time</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>close_timeString</td><td>String</td><td>Null if order is not closed</td></tr><tr><td>closed</td><td>Boolean</td><td>Closed</td></tr><tr><td>cmd</td><td>Number</td><td>Operation code</td></tr><tr><td>comment</td><td>String</td><td>Comment</td></tr><tr><td>commission</td><td>Floating number</td><td>Commission in account currency, null if not applicable</td></tr><tr><td>customComment</td><td>String</td><td>The value the customer may provide in order to retrieve it later.</td></tr><tr><td>digits</td><td>Number</td><td>Number of decimal places</td></tr><tr><td>expiration</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>expirationString</td><td>String</td><td>Null if order is not closed</td></tr><tr><td>margin_rate</td><td>Floating number</td><td>Margin rate</td></tr><tr><td>offset</td><td>Number</td><td>Trailing offset</td></tr><tr><td>open_price</td><td>Floating number</td><td>Open price in base currency</td></tr><tr><td>open_time</td><td>Time</td><td>Open time</td></tr><tr><td>open_timeString</td><td>String</td><td>Open time string</td></tr><tr><td>order</td><td>Number</td><td>Order number for opened transaction</td></tr><tr><td>order2</td><td>Number</td><td>Order number for closed transaction</td></tr><tr><td>position</td><td>Number</td><td>Order number common both for opened and closed transaction</td></tr><tr><td>profit</td><td>Floating number</td><td>Profit in account currency</td></tr><tr><td>sl</td><td>Floating number</td><td>Zero if stop loss is not set (in base currency)</td></tr><tr><td>storage</td><td>Floating number</td><td>order swaps in account currency</td></tr><tr><td>symbol</td><td>String</td><td>symbol name or null for deposit/withdrawal operations</td></tr><tr><td>timestamp</td><td>Time</td><td>Timestamp</td></tr><tr><td>tp</td><td>Floating number</td><td>Zero if take profit is not set (in base currency)</td></tr><tr><td>volume</td><td>Floating number</td><td>Volume in lots</td></tr></tbody></table><p>Example:</p><pre>{
+	"close_price": 1.3256,
+	"close_time": null,
+	"close_timeString": null,
+	"closed": false,
+	"cmd": 0,
+	"comment": "Web Trader",
+	"commission": 0.0,
+	"customComment": "Some text",
+	"digits": 4,
+	"expiration": null,
+	"expirationString": null,
+	"margin_rate": 0.0,
+	"offset": 0,
+	"open_price": 1.4,
+	"open_time": 1272380927000,
+	"open_timeString": "Fri Jan 11 10:03:36 CET 2013",
+	"order": 7497776,
+	"order2": 1234567,
+	"position": 1234567,
+	"profit": -2196.44,
+	"sl": 0.0,
+	"storage": -4.46,
+	"symbol": "EURUSD",
+	"timestamp": 1272540251000,
+	"tp": 0.0,
+	"volume": 0.10
+}</pre><p id="cmd"><strong>Possible values of </strong><code>cmd</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>BUY</td><td>0</td><td><desc>buy</desc></td></tr><tr><td>SELL</td><td>1</td><td><desc>sell</desc></td></tr><tr><td>BUY_LIMIT</td><td>2</td><td><desc>buy limit</desc></td></tr><tr><td>SELL_LIMIT</td><td>3</td><td><desc>sell limit</desc></td></tr><tr><td>BUY_STOP</td><td>4</td><td><desc>buy stop</desc></td></tr><tr><td>SELL_STOP</td><td>5</td><td><desc>sell stop</desc></td></tr><tr><td>BALANCE</td><td>6</td><td><desc>Read only. Used in <a href="http://developers.xstore.pro/documentation/#getTradesHistory"><code>getTradesHistory <i class="icon-share"></i></code></a> for manager's deposit/withdrawal operations (profit&gt;0 for deposit, profit&lt;0 for withdrawal).</desc></td></tr><tr><td>CREDIT</td><td>7</td><td><desc>Read only</desc></td></tr></tbody></table></li><li class="command" id="getTradingHours"><h4>Command: <strong>getTradingHours</strong></h4><p class="description">Description: Returns quotes and trading times.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbols</td><td>array</td><td>Array of symbol names (Strings)</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getTradingHours",
+	"arguments": {
+		"symbols": ["EURPLN", "AGO.PL", ...]
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td></td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#TRADING_HOURS_RECORD"><code>TRADING_HOURS_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": [TRADING_HOURS_RECORD, TRADING_HOURS_RECORD, ...]	
+}</pre><p class="record" id="TRADING_HOURS_RECORD"><strong>Format of </strong><code>TRADING_HOURS_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>quotes</td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#QUOTES_RECORD"><code>QUOTES_RECORD <i class="icon-share"></i></code></a></td></tr><tr><td>symbol</td><td>String</td><td>Symbol</td></tr><tr><td>trading</td><td>array</td><td>Array of <a href="http://developers.xstore.pro/documentation/#TRADING_RECORD"><code>TRADING_RECORD <i class="icon-share"></i></code></a></td></tr></tbody></table><p>Example:</p><pre>{
+	"quotes": [QUOTES_RECORD, QUOTES_RECORD, ...],
+	"symbol": "USDPLN",
+	"trading": [TRADING_RECORD, TRADING_RECORD, ...]
+}</pre><p class="record" id="QUOTES_RECORD"><strong>Format of </strong><code>QUOTES_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>day</td><td>Number</td><td>Day of week</td></tr><tr><td>fromT</td><td>Time</td><td>Start time in ms from 00:00 CET / CEST time zone (see Daylight Saving Time, DST)</td></tr><tr><td>toT</td><td>Time</td><td>End time in ms from 00:00 CET / CEST time zone (see Daylight Saving Time, DST)</td></tr></tbody></table><p>Example:</p><pre>{
+	"day": 2,
+	"fromT": 63000000,
+	"toT": 63300000
+}</pre><p id="day"><strong>Possible values of </strong><code>day</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td></td><td>1</td><td><desc>Monday</desc></td></tr><tr><td></td><td>2</td><td><desc>Tuesday</desc></td></tr><tr><td></td><td>3</td><td><desc>Wednesday</desc></td></tr><tr><td></td><td>4</td><td><desc>Thursday</desc></td></tr><tr><td></td><td>5</td><td><desc>Friday</desc></td></tr><tr><td></td><td>6</td><td><desc>Saturday</desc></td></tr><tr><td></td><td>7</td><td><desc>Sunday</desc></td></tr></tbody></table><p class="record" id="TRADING_RECORD"><strong>Format of </strong><code>TRADING_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>day</td><td>Number</td><td>Day of week</td></tr><tr><td>fromT</td><td>Time</td><td>Start time in ms from 00:00 CET / CEST time zone (see Daylight Saving Time, DST)</td></tr><tr><td>toT</td><td>Time</td><td>End time in ms from 00:00 CET / CEST time zone (see Daylight Saving Time, DST)</td></tr></tbody></table><p>Example:</p><pre>{
+	"day": 2,
+	"fromT": 63000000,
+	"toT": 63300000
+}</pre><p id="day"><strong>Possible values of </strong><code>day</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td></td><td>1</td><td><desc>Monday</desc></td></tr><tr><td></td><td>2</td><td><desc>Tuesday</desc></td></tr><tr><td></td><td>3</td><td><desc>Wednesday</desc></td></tr><tr><td></td><td>4</td><td><desc>Thursday</desc></td></tr><tr><td></td><td>5</td><td><desc>Friday</desc></td></tr><tr><td></td><td>6</td><td><desc>Saturday</desc></td></tr><tr><td></td><td>7</td><td><desc>Sunday</desc></td></tr></tbody></table></li><li class="command" id="getVersion"><h4>Command: <strong>getVersion</strong></h4><p class="description">Description: Returns the current API version.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "getVersion"
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>version</td><td>String</td><td>current API version</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"version": "2.4.15"
+	}	
+}</pre></li><li class="command" id="ping"><h4>Command: <strong>ping</strong></h4><p class="description">Description: Regularly calling this function is enough to refresh the internal state of all the components in the system. It is recommended that any application that does not execute other commands, should call this command at least once every 10 minutes. Please note that the streaming counterpart of this function is combination of <a href="http://developers.xstore.pro/documentation/#streamping"><code>ping <i class="icon-share"></i></code></a> and <a href="http://developers.xstore.pro/documentation/#streamgetKeepAlive"><code>getKeepAlive <i class="icon-share"></i></code></a>.</p><h5 class="request">Request:</h5><p>Example:</p><pre>{
+	"command": "ping"
+}</pre><h5 class="request">Response:</h5><p>Example:</p><pre>{
+	"status": true	
+}</pre></li><li class="command" id="tradeTransaction"><h4>Command: <strong>tradeTransaction</strong></h4><p class="description">Description: Starts trade transaction. tradeTransaction  sends main transaction information to the server.
+				</p><div class="alert alert-info">
+				  <p><b>How to verify that the trade request was accepted?</b></p>
+				  <p>The <code>status</code> field set to 'true' <b>does not</b> imply that the transaction was accepted. It only means, that the server acquired your request and began to process it. To analyse the status of the transaction (for example to verify if it was accepted or rejected) use the <a href="http://developers.xstore.pro/documentation/#tradeTransactionStatus"><code>tradeTransactionStatus <i class="icon-share"></i></code></a> command with the <code>order</code> number, that came back with the response of the <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command. You can find the example here: <a href="http://developers.xstore.pro/api/tutorials/opening_and_closing_trades2" target="_blank">developers.xstore.pro/api/tutorials/opening_and_closing_trades2</a></p>
+				</div>
+			<p></p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>tradeTransInfo</td><td>TRADE_TRANS_INFO</td><td>tradeTransInfo</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "tradeTransaction",
+	"arguments": {
+		"tradeTransInfo": TRADE_TRANS_INFO
+	}
+}</pre><p class="record" id="TRADE_TRANS_INFO"><strong>Format of </strong><code>TRADE_TRANS_INFO</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>cmd</td><td>Number</td><td>Operation code</td></tr><tr><td>customComment</td><td>String</td><td>The value the customer may provide in order to retrieve it later.</td></tr><tr><td>expiration</td><td>Time</td><td>Pending order expiration time</td></tr><tr><td>offset</td><td>Number</td><td>Trailing offset</td></tr><tr><td>order</td><td>Number</td><td>0 or position number for closing/modifications</td></tr><tr><td>price</td><td>Floating number</td><td>Trade price</td></tr><tr><td>sl</td><td>Floating number</td><td>Stop loss</td></tr><tr><td>symbol</td><td>String</td><td>Trade symbol</td></tr><tr><td>tp</td><td>Floating number</td><td>Take profit</td></tr><tr><td>type</td><td>Number</td><td>Trade transaction type</td></tr><tr><td>volume</td><td>Floating number</td><td>Trade volume</td></tr></tbody></table><p>Example:</p><pre>{
+	"cmd": 2,
+	"customComment": "Some text",
+	"expiration": 1462006335000,
+	"offset": 0,
+	"order": 82188055,
+	"price": 1.12,
+	"sl": 0.0,
+	"symbol": "EURUSD",
+	"tp": 0.0,
+	"type": 0,
+	"volume": 5.0
+}</pre><p id="cmd"><strong>Possible values of </strong><code>cmd</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>BUY</td><td>0</td><td><desc>buy</desc></td></tr><tr><td>SELL</td><td>1</td><td><desc>sell</desc></td></tr><tr><td>BUY_LIMIT</td><td>2</td><td><desc>buy limit</desc></td></tr><tr><td>SELL_LIMIT</td><td>3</td><td><desc>sell limit</desc></td></tr><tr><td>BUY_STOP</td><td>4</td><td><desc>buy stop</desc></td></tr><tr><td>SELL_STOP</td><td>5</td><td><desc>sell stop</desc></td></tr><tr><td>BALANCE</td><td>6</td><td><desc>Read only. Used in <a href="http://developers.xstore.pro/documentation/#getTradesHistory"><code>getTradesHistory <i class="icon-share"></i></code></a> for manager's deposit/withdrawal operations (profit&gt;0 for deposit, profit&lt;0 for withdrawal).</desc></td></tr><tr><td>CREDIT</td><td>7</td><td><desc>Read only</desc></td></tr></tbody></table><p id="type"><strong>Possible values of </strong><code>type</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>OPEN</td><td>0</td><td><desc>order open, used for opening orders</desc></td></tr><tr><td>PENDING</td><td>1</td><td><desc>order pending, only used in the streaming <a href="http://developers.xstore.pro/documentation/#streamgetTrades"><code>getTrades <i class="icon-share"></i></code></a> command</desc></td></tr><tr><td>CLOSE</td><td>2</td><td><desc>order close</desc></td></tr><tr><td>MODIFY</td><td>3</td><td><desc>order modify, only used in the <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command</desc></td></tr><tr><td>DELETE</td><td>4</td><td><desc>order delete, only used in the <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command</desc></td></tr></tbody></table><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>order</td><td>Number</td><td>order</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"order": 43
+	}	
+}</pre></li><li class="command" id="tradeTransactionStatus"><h4>Command: <strong>tradeTransactionStatus</strong></h4><p class="description">Description: <strong>Please note that this function can be usually replaced by its streaming equivalent <a href="http://developers.xstore.pro/documentation/#streamgetTradeStatus"><code>getTradeStatus <i class="icon-share"></i></code></a> which is the preferred way of retrieving transaction status data.</strong> Returns current transaction status. At any time of transaction processing client might check the status of transaction on server side. In order to do that client must provide unique order taken from <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> invocation.</p><h5 class="request">Request:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>order</td><td>Number</td><td>order</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "tradeTransactionStatus",
+	"arguments": {
+		"order": 43
+	}
+}</pre><h5 class="request">Response:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>ask</td><td>Floating number</td><td>Price in base currency</td></tr><tr><td>bid</td><td>Floating number</td><td>Price in base currency</td></tr><tr><td>customComment</td><td>String</td><td>The value the customer may provide in order to retrieve it later.</td></tr><tr><td>message</td><td>String</td><td>Can be null</td></tr><tr><td>order</td><td>Number</td><td>Unique order number</td></tr><tr><td>requestStatus</td><td>Number</td><td>Request status code, described below</td></tr></tbody></table><p>Example:</p><pre>{
+	"status": true,
+	"returnData": {
+		"ask": 1.392,
+		"bid": 1.392,
+		"customComment": "Some text",
+		"message": null,
+		"order": 43,
+		"requestStatus": 3
+	}	
+}</pre><p id="requestStatus"><strong>Possible values of </strong><code>requestStatus</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>ERROR</td><td>0</td><td><desc>error</desc></td></tr><tr><td>PENDING</td><td>1</td><td><desc>pending</desc></td></tr><tr><td>ACCEPTED</td><td>3</td><td><desc>The transaction has been executed successfully</desc></td></tr><tr><td>REJECTED</td><td>4</td><td><desc>The transaction has been rejected</desc></td></tr></tbody></table></li></ol>
+            </li>
+
+        </ol>
+
+    </li>
+
+    <li id="available-streaming-commands">
+
+        <h2>Available streaming commands</h2>
+
+        <p>Each streaming command takes as an argument <code>streamSessionId</code> which is sent in response message for login command performed in main connection. <code>streamSessionId</code> token allows to identify user in streaming connection. In one streaming connection multiple commands with different <code>streamSessionId</code> can be invoked. It will cause sending streaming data for multiple login sessions in one streaming connection. <code>streamSessionId</code> is valid until logout command is performed on main connection or main connection is disconnected.</p>
+
+        
+<ol class="commands"><li id="streamgetBalance">
+			<h4>Command: <strong>getBalance</strong></h4>
+			<p class="description">Description: Allows to get actual account indicators values in real-time, as soon as they are available in the system.</p>
+			<h5>Subscribe format:</h5><p>Example:</p><pre>{
+	"command": "getBalance",
+	"streamSessionId": "8469308861804289383"
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Example:</p><pre>{
+	"command": "stopBalance"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "balance",
+	"data": STREAMING_BALANCE_RECORD
+}</pre>
+			<p class="record" id="STREAMING_BALANCE_RECORD"><strong>Format of </strong><code>STREAMING_BALANCE_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>balance</td><td>Floating number</td><td>balance in account currency</td></tr><tr><td>credit</td><td>Floating number</td><td>credit in account currency</td></tr><tr><td>equity</td><td>Floating number</td><td>sum of balance and all profits in account currency</td></tr><tr><td>margin</td><td>Floating number</td><td>margin requirements</td></tr><tr><td>marginFree</td><td>Floating number</td><td>free margin</td></tr><tr><td>marginLevel</td><td>Floating number</td><td>margin level percentage</td></tr></tbody></table><p>Example:</p><pre>{
+	"balance": 995800269.43,
+	"credit": 1000.00,
+	"equity": 995985397.56,
+	"margin": 572634.43,
+	"marginFree": 995227635.00,
+	"marginLevel": 173930.41
+}</pre>
+		</li><li id="streamgetCandles">
+			<h4>Command: <strong>getCandles</strong></h4>
+			<p class="description">Description: Subscribes for and unsubscribes from API chart candles. The interval of every candle is 1 minute. A new candle arrives every minute.</p>
+			<h5>Subscribe format:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbol</td><td>String</td><td>Symbol</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getCandles",
+	"streamSessionId": "8469308861804289383",
+	"symbol": "EURUSD"
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbol</td><td>String</td><td>Symbol</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "stopCandles",
+	"symbol": "EURUSD"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "candle",
+	"data": STREAMING_CANDLE_RECORD
+}</pre>
+			<p class="record" id="STREAMING_CANDLE_RECORD"><strong>Format of </strong><code>STREAMING_CANDLE_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>close</td><td>Floating number</td><td>Close price in base currency</td></tr><tr><td>ctm</td><td>Time</td><td>Candle start time in CET time zone (Central European Time)</td></tr><tr><td>ctmString</td><td>String</td><td>String representation of the <code>ctm</code> field</td></tr><tr><td>high</td><td>Floating number</td><td>Highest value in the given period in base currency</td></tr><tr><td>low</td><td>Floating number</td><td>Lowest value in the given period in base currency</td></tr><tr><td>open</td><td>Floating number</td><td>Open price in base currency</td></tr><tr><td>quoteId</td><td>Number</td><td>Source of price</td></tr><tr><td>symbol</td><td>String</td><td>Symbol</td></tr><tr><td>vol</td><td>Floating number</td><td>Volume in lots</td></tr></tbody></table><p>Example:</p><pre>{
+	"close": 4.1849,
+	"ctm": 1378369375000,
+	"ctmString": "Sep 05, 2013 10:22:55 AM",
+	"high": 4.1854,
+	"low": 4.1848,
+	"open": 4.1848,
+	"quoteId": 2,
+	"symbol": "EURUSD",
+	"vol": 0.0
+}</pre><p id="quoteId"><strong>Possible values of </strong><code>quoteId</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>fixed</td><td>1</td><td><desc>fixed</desc></td></tr><tr><td>float</td><td>2</td><td><desc>float</desc></td></tr><tr><td>depth</td><td>3</td><td><desc>depth</desc></td></tr><tr><td>cross</td><td>4</td><td><desc>cross</desc></td></tr></tbody></table>
+		</li><li id="streamgetKeepAlive">
+			<h4>Command: <strong>getKeepAlive</strong></h4>
+			<p class="description">Description: Subscribes for and unsubscribes from 'keep alive' messages. A new 'keep alive' message is sent by the API every 3 seconds.</p>
+			<h5>Subscribe format:</h5><p>Example:</p><pre>{
+	"command": "getKeepAlive",
+	"streamSessionId": "8469308861804289383"
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Example:</p><pre>{
+	"command": "stopKeepAlive"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "keepAlive",
+	"data": STREAMING_KEEP_ALIVE_RECORD
+}</pre>
+			<p class="record" id="STREAMING_KEEP_ALIVE_RECORD"><strong>Format of </strong><code>STREAMING_KEEP_ALIVE_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>timestamp</td><td>Time</td><td>Current timestamp</td></tr></tbody></table><p>Example:</p><pre>{
+	"timestamp": 1362944112000
+}</pre>
+		</li><li id="streamgetNews">
+			<h4>Command: <strong>getNews</strong></h4>
+			<p class="description">Description: Subscribes for and unsubscribes from news.</p>
+			<h5>Subscribe format:</h5><p>Example:</p><pre>{
+	"command": "getNews",
+	"streamSessionId": "8469308861804289383"
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Example:</p><pre>{
+	"command": "stopNews"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "news",
+	"data": STREAMING_NEWS_RECORD
+}</pre>
+			<p class="record" id="STREAMING_NEWS_RECORD"><strong>Format of </strong><code>STREAMING_NEWS_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>body</td><td>String</td><td>Body</td></tr><tr><td>key</td><td>String</td><td>News key</td></tr><tr><td>time</td><td>Time</td><td>Time</td></tr><tr><td>title</td><td>String</td><td>News title</td></tr></tbody></table><p>Example:</p><pre>{
+	"body": "&lt;html&gt;...&lt;/html&gt;",
+	"key": "1f6da766abd29927aa854823f0105c23",
+	"time": 1262944112000,
+	"title": "Breaking trend"
+}</pre>
+		</li><li id="streamgetProfits">
+			<h4>Command: <strong>getProfits</strong></h4>
+			<p class="description">Description: Subscribes for and unsubscribes from profits.</p>
+			<h5>Subscribe format:</h5><p>Example:</p><pre>{
+	"command": "getProfits",
+	"streamSessionId": "8469308861804289383"
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Example:</p><pre>{
+	"command": "stopProfits"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "profit",
+	"data": STREAMING_PROFIT_RECORD
+}</pre>
+			<p class="record" id="STREAMING_PROFIT_RECORD"><strong>Format of </strong><code>STREAMING_PROFIT_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>order</td><td>Number</td><td>Order number</td></tr><tr><td>order2</td><td>Number</td><td>Transaction ID</td></tr><tr><td>position</td><td>Number</td><td>Position number</td></tr><tr><td>profit</td><td>Floating number</td><td>Profit in account currency</td></tr></tbody></table><p>Example:</p><pre>{
+	"order": 7497776,
+	"order2": 7497777,
+	"position": 7497776,
+	"profit": 7076.52
+}</pre>
+		</li><li id="streamgetTickPrices">
+			<h4>Command: <strong>getTickPrices</strong></h4>
+			<p class="description">Description: Establishes subscription for quotations and allows to obtain the relevant information in real-time, as soon as it is available in the system. The <a href="http://developers.xstore.pro/documentation/#streamgetTickPrices"><code>getTickPrices <i class="icon-share"></i></code></a> command can be invoked many times for the same symbol, but only one subscription for a given symbol will be created. Please beware that when multiple records are available, the order in which they are received is not guaranteed.</p>
+			<h5>Subscribe format:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbol</td><td>String</td><td>Symbol</td></tr><tr><td>minArrivalTime</td><td>Number</td><td>This field is optional and defines the minimal interval in milliseconds between any two consecutive updates. If this field is not present, or it is set to 0 (zero), ticks - if available - are sent to the client with interval equal to 200 milliseconds. In order to obtain ticks as frequently as server allows you, set it to 1 (one).</td></tr><tr><td>maxLevel</td><td>Number</td><td>This field is optional and specifies the maximum level of the quote that the user is interested in. If this field is not specified, the subscription is active for all levels that are managed in the system.</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "getTickPrices",
+	"streamSessionId": "8469308861804289383",
+	"symbol": "EURUSD",
+	"minArrivalTime": 5000,
+	"maxLevel": 2
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Parameters:</p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>symbol</td><td>String</td><td>Symbol</td></tr></tbody></table><p>Example:</p><pre>{
+	"command": "stopTickPrices",
+	"symbol": "EURUSD"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "tickPrices",
+	"data": STREAMING_TICK_RECORD
+}</pre>
+			<p class="record" id="STREAMING_TICK_RECORD"><strong>Format of </strong><code>STREAMING_TICK_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>ask</td><td>Floating number</td><td>Ask price in base currency</td></tr><tr><td>askVolume</td><td>Number</td><td>Number of available lots to buy at given price or null if not applicable</td></tr><tr><td>bid</td><td>Floating number</td><td>Bid price in base currency</td></tr><tr><td>bidVolume</td><td>Number</td><td>Number of available lots to buy at given price or null if not applicable</td></tr><tr><td>high</td><td>Floating number</td><td>The highest price of the day in base currency</td></tr><tr><td>level</td><td>Number</td><td>Price level</td></tr><tr><td>low</td><td>Floating number</td><td>The lowest price of the day in base currency</td></tr><tr><td>quoteId</td><td>Number</td><td>Source of price, detailed description below</td></tr><tr><td>spreadRaw</td><td>Floating number</td><td>The difference between raw ask and bid prices</td></tr><tr><td>spreadTable</td><td>Floating number</td><td>Spread representation</td></tr><tr><td>symbol</td><td>String</td><td>Symbol</td></tr><tr><td>timestamp</td><td>Time</td><td>Timestamp</td></tr></tbody></table><p>Example:</p><pre>{
+	"ask": 4000.0,
+	"askVolume": 15000,
+	"bid": 4000.0,
+	"bidVolume": 16000,
+	"high": 4000.0,
+	"level": 0,
+	"low": 3500.0,
+	"quoteId": 0,
+	"spreadRaw": 0.000003,
+	"spreadTable": 0.00042,
+	"symbol": "KOMB.CZ",
+	"timestamp": 1272529161605
+}</pre><p id="quoteId"><strong>Possible values of </strong><code>quoteId</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>fixed</td><td>1</td><td><desc>fixed</desc></td></tr><tr><td>float</td><td>2</td><td><desc>float</desc></td></tr><tr><td>depth</td><td>3</td><td><desc>depth</desc></td></tr><tr><td>cross</td><td>4</td><td><desc>cross</desc></td></tr></tbody></table>
+		</li><li id="streamgetTrades">
+			<h4>Command: <strong>getTrades</strong></h4>
+			<p class="description">Description: Establishes subscription for user trade status data and allows to obtain the relevant information in real-time, as soon as it is available in the system. Please beware that when multiple records are available, the order in which they are received is not guaranteed.</p>
+			<h5>Subscribe format:</h5><p>Example:</p><pre>{
+	"command": "getTrades",
+	"streamSessionId": "8469308861804289383"
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Example:</p><pre>{
+	"command": "stopTrades"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "trade",
+	"data": STREAMING_TRADE_RECORD
+}</pre>
+			<p class="record" id="STREAMING_TRADE_RECORD"><strong>Format of </strong><code>STREAMING_TRADE_RECORD</code>:</p><p class="description"></p><p>New <a href="http://developers.xstore.pro/documentation/#STREAMING_TRADE_RECORD"><code>STREAMING_TRADE_RECORD <i class="icon-share"></i></code></a> are sent by streaming socket only in several cases:</p>
+<ul><li>- Opening the trade</li>
+<li>- Closing the trade</li>
+<li>- Modification of trade parameters</li>
+<li>- Explicit trade update done by server system to synchronize data.</li></ul>
+
+<p>Situation that trade was closed can be checked by field <code>closed</code> set to true in <a href="http://developers.xstore.pro/documentation/#STREAMING_TRADE_RECORD"><code>STREAMING_TRADE_RECORD <i class="icon-share"></i></code></a> format. Also 
+<code>close_time</code> field will NOT be set to null. Various reasons of trade close could be found out by information in 
+<code>comment</code> field of <a href="http://developers.xstore.pro/documentation/#STREAMING_TRADE_RECORD"><code>STREAMING_TRADE_RECORD <i class="icon-share"></i></code></a> for closed order. If the <code>comment</code> remained unchanged from that 
+of opened order, then the order was closed by user. If there is annotation in <code>comment</code> string like:</p>
+<ul><li>- "[S/L]", then the trade was closed by stop loss </li>
+<li>- "[T/P]", then the trade was closed by take profit</li>
+<li>- "[S/O margin level% equity / margin (currency)]", then the trade was closed because of Stop Out (lack of money to maintain position). The example comment: [S/O -1968861.79% -24217.00 / 1.23 (USD)]</li></ul>
+<p>The annotation are in brackets (regular or square, depending on situation) with additional data about the closing 
+action.</p><p></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>close_price</td><td>Floating number</td><td>Close price in base currency</td></tr><tr><td>close_time</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>closed</td><td>Boolean</td><td>Closed</td></tr><tr><td>cmd</td><td>Number</td><td>Operation code</td></tr><tr><td>comment</td><td>String</td><td>Comment</td></tr><tr><td>commission</td><td>Floating number</td><td>Commission in account currency, null if not applicable</td></tr><tr><td>customComment</td><td>String</td><td>The value the customer may provide in order to retrieve it later.</td></tr><tr><td>digits</td><td>Number</td><td>Number of decimal places</td></tr><tr><td>expiration</td><td>Time</td><td>Null if order is not closed</td></tr><tr><td>margin_rate</td><td>Floating number</td><td>Margin rate</td></tr><tr><td>offset</td><td>Number</td><td>Trailing offset</td></tr><tr><td>open_price</td><td>Floating number</td><td>Open price in base currency</td></tr><tr><td>open_time</td><td>Time</td><td>Open time</td></tr><tr><td>order</td><td>Number</td><td>Order number for opened transaction</td></tr><tr><td>order2</td><td>Number</td><td>Transaction id</td></tr><tr><td>position</td><td>Number</td><td>Position number (if type is 0 and 2) or transaction parameter (if type is 1)</td></tr><tr><td>profit</td><td>Floating number</td><td>null unless the trade is closed (type=2) or opened (type=0)</td></tr><tr><td>sl</td><td>Floating number</td><td>Zero if stop loss is not set (in base currency)</td></tr><tr><td>state</td><td>String</td><td>Trade state, should be used for detecting pending order's cancellation</td></tr><tr><td>storage</td><td>Floating number</td><td>Storage</td></tr><tr><td>symbol</td><td>String</td><td>Symbol</td></tr><tr><td>tp</td><td>Floating number</td><td>Zero if take profit is not set (in base currency)</td></tr><tr><td>type</td><td>Number</td><td>type</td></tr><tr><td>volume</td><td>Floating number</td><td>Volume in lots</td></tr></tbody></table><p>Example:</p><pre>{
+	"close_price": 1.3256,
+	"close_time": null,
+	"closed": false,
+	"cmd": 0,
+	"comment": "Web Trader",
+	"commission": 0.0,
+	"customComment": "Some text",
+	"digits": 4,
+	"expiration": null,
+	"margin_rate": 3.9149000,
+	"offset": 0,
+	"open_price": 1.4,
+	"open_time": 1272380927000,
+	"order": 7497776,
+	"order2": 1234567,
+	"position": 1234567,
+	"profit": 68.392,
+	"sl": 0.0,
+	"state": "Modified",
+	"storage": -4.46,
+	"symbol": "EURUSD",
+	"tp": 0.0,
+	"type": 0,
+	"volume": 0.10
+}</pre><p id="cmd"><strong>Possible values of </strong><code>cmd</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>BUY</td><td>0</td><td><desc>buy</desc></td></tr><tr><td>SELL</td><td>1</td><td><desc>sell</desc></td></tr><tr><td>BUY_LIMIT</td><td>2</td><td><desc>buy limit</desc></td></tr><tr><td>SELL_LIMIT</td><td>3</td><td><desc>sell limit</desc></td></tr><tr><td>BUY_STOP</td><td>4</td><td><desc>buy stop</desc></td></tr><tr><td>SELL_STOP</td><td>5</td><td><desc>sell stop</desc></td></tr><tr><td>BALANCE</td><td>6</td><td><desc>Read only. Used in <a href="http://developers.xstore.pro/documentation/#getTradesHistory"><code>getTradesHistory <i class="icon-share"></i></code></a> for manager's deposit/withdrawal operations (profit&gt;0 for deposit, profit&lt;0 for withdrawal).</desc></td></tr><tr><td>CREDIT</td><td>7</td><td><desc>Read only</desc></td></tr></tbody></table><p id="state"><strong>Possible values of </strong><code>state</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>MODIFIED</td><td>"Modified"</td><td><desc>modified</desc></td></tr><tr><td>DELETED</td><td>"Deleted"</td><td><desc>deleted</desc></td></tr></tbody></table><p id="type"><strong>Possible values of </strong><code>type</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>OPEN</td><td>0</td><td><desc>order open, used for opening orders</desc></td></tr><tr><td>PENDING</td><td>1</td><td><desc>order pending, only used in the streaming <a href="http://developers.xstore.pro/documentation/#streamgetTrades"><code>getTrades <i class="icon-share"></i></code></a> command</desc></td></tr><tr><td>CLOSE</td><td>2</td><td><desc>order close</desc></td></tr><tr><td>MODIFY</td><td>3</td><td><desc>order modify, only used in the <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command</desc></td></tr><tr><td>DELETE</td><td>4</td><td><desc>order delete, only used in the <a href="http://developers.xstore.pro/documentation/#tradeTransaction"><code>tradeTransaction <i class="icon-share"></i></code></a> command</desc></td></tr></tbody></table>
+		</li><li id="streamgetTradeStatus">
+			<h4>Command: <strong>getTradeStatus</strong></h4>
+			<p class="description">Description: Allows to get status for sent trade requests in real-time, as soon as it is available in the system. Please beware that when multiple records are available, the order in which they are received is not guaranteed.</p>
+			<h5>Subscribe format:</h5><p>Example:</p><pre>{
+	"command": "getTradeStatus",
+	"streamSessionId": "8469308861804289383"
+}</pre>
+			<h5>Unsubscribe format:</h5><p>Example:</p><pre>{
+	"command": "stopTradeStatus"
+}</pre>
+			<h5>Format of data in stream:</h5><pre>{
+	"command": "tradeStatus",
+	"data": STREAMING_TRADE_STATUS_RECORD
+}</pre>
+			<p class="record" id="STREAMING_TRADE_STATUS_RECORD"><strong>Format of </strong><code>STREAMING_TRADE_STATUS_RECORD</code>:</p><p class="description"></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>type</th><th>description</th></tr></thead><tbody><tr><td>customComment</td><td>String</td><td>The value the customer may provide in order to retrieve it later.</td></tr><tr><td>message</td><td>String</td><td>Can be null</td></tr><tr><td>order</td><td>Number</td><td>Unique order number</td></tr><tr><td>price</td><td>Floating number</td><td>Price in base currency</td></tr><tr><td>requestStatus</td><td>Number</td><td>Request status code, described below</td></tr></tbody></table><p>Example:</p><pre>{
+	"customComment": "Some text",
+	"message": null,
+	"order": 43,
+	"price": 1.392,
+	"requestStatus": 3
+}</pre><p id="requestStatus"><strong>Possible values of </strong><code>requestStatus</code><strong> field:</strong></p><table class="table table-bordered table-striped"><thead><tr><th>name</th><th>value</th><th>description</th></tr></thead><tbody><tr><td>ERROR</td><td>0</td><td><desc>error</desc></td></tr><tr><td>PENDING</td><td>1</td><td><desc>pending</desc></td></tr><tr><td>ACCEPTED</td><td>3</td><td><desc>The transaction has been executed successfully</desc></td></tr><tr><td>REJECTED</td><td>4</td><td><desc>The transaction has been rejected</desc></td></tr></tbody></table>
+		</li><li id="streamping">
+			<h4>Command: <strong>ping</strong></h4>
+			<p class="description">Description: Description: Regularly calling this function is enough to refresh the internal state of all the components in the system. Streaming connection, when any command is not sent by client in the session, generates only one way network traffic. It is recommended that any application that does not execute other commands, should call this command at least once every 10 minutes.
+			</p><p>Note: There is no response in return to this command.</p>
+			<p></p>
+			<h5>Subscribe format:</h5><p>Example:</p><pre>{
+	"command": "ping",
+	"streamSessionId": "8469308861804289383"
+}</pre>
+		</li></ol>
+    </li>
+
+    <li id="error-messages">
+
+        <h2>Error messages</h2>
+
+        <p>Main reason of generated transaction server error messages is an error in the business logic of the application.</p>
+        <p>Errors list returned from transaction server:</p>
+
+        
+<table class="table table-bordered table-striped"><thead><tr><th>Error code</th><th>Error description</th></tr></thead><tbody><tr><td>BE001</td><td><description>Invalid price</description></td></tr><tr><td>BE002</td><td><description>Invalid StopLoss or TakeProfit</description></td></tr><tr><td>BE003</td><td><description>Invalid volume</description></td></tr><tr><td>BE004</td><td><description>Login disabled</description></td></tr><tr><td>BE005</td><td><description>userPasswordCheck: Invalid login or password.</description></td></tr><tr><td>BE006</td><td><description>Market for instrument is closed</description></td></tr><tr><td>BE007</td><td><description>Mismatched parameters</description></td></tr><tr><td>BE008</td><td><description>Modification is denied</description></td></tr><tr><td>BE009</td><td><description>Not enough money on account to perform trade</description></td></tr><tr><td>BE010</td><td><description>Off quotes</description></td></tr><tr><td>BE011</td><td><description>Opposite positions prohibited</description></td></tr><tr><td>BE012</td><td><description>Short positions prohibited</description></td></tr><tr><td>BE013</td><td><description>Price has changed</description></td></tr><tr><td>BE014</td><td><description>Request too frequent</description></td></tr><tr><td>BE016, BE017</td><td><description>Too many trade requests</description></td></tr><tr><td>BE018</td><td><description>Trading on instrument disabled</description></td></tr><tr><td>BE019</td><td><description>Trading timeout</description></td></tr><tr><td>BE020-BE037, BE099</td><td><description>Other error</description></td></tr><tr><td>BE094</td><td><description>Symbol does not exist for given account</description></td></tr><tr><td>BE095</td><td><description>Account cannot trade on given symbol</description></td></tr><tr><td>BE096</td><td><description>Pending order cannot be closed. Pending order must be deleted</description></td></tr><tr><td>BE097</td><td><description>Cannot close already closed order</description></td></tr><tr><td>BE098</td><td><description>No such transaction</description></td></tr><tr><td>BE101</td><td><description>Unknown instrument symbol</description></td></tr><tr><td>BE102</td><td><description>Unknown transaction type</description></td></tr><tr><td>BE103</td><td><description>User is not logged</description></td></tr><tr><td>BE104</td><td><description>Method does not exist</description></td></tr><tr><td>BE105</td><td><description>Incorrect period given</description></td></tr><tr><td>BE106</td><td><description>Missing data</description></td></tr><tr><td>BE110</td><td><description>Incorrect command format</description></td></tr><tr><td>BE115, BE116</td><td><description>Symbol does not exist</description></td></tr><tr><td>BE117</td><td><description>Invalid token</description></td></tr><tr><td>BE118</td><td><description>User already logged</description></td></tr><tr><td>BE200</td><td><description>Session timed out.</description></td></tr><tr><td>EX000</td><td><description>Invalid parameters</description></td></tr><tr><td>EX001, EX002, SExxx, BE000</td><td><description>Internal error, in case of such error, please contact support</description></td></tr><tr><td>EX003</td><td><description>Internal error, request timed out</description></td></tr><tr><td>EX004</td><td><description>Login credentials are incorrect or this login is not allowed to use an application with this appId</description></td></tr><tr><td>EX005</td><td><description>Internal error, system overloaded</description></td></tr><tr><td>EX006</td><td><description>No access</description></td></tr><tr><td>EX007</td><td><description>userPasswordCheck: Invalid login or password. This login/password is disabled for 10 minutes (the specific login and password pair is blocked after an unsuccessful login attempt).</description></td></tr><tr><td>EX008</td><td><description>You have reached the connection limit. For details see the <a href="http://developers.xstore.pro/documentation/#connection-validation">Connection validation section</a>.</description></td></tr><tr><td>EX009</td><td><description>Data limit potentially exceeded. Please narrow your request range. The potential data size is calculated by: (end_time - start_time) / interval. The limit is 50 000 candles</description></td></tr><tr><td>EX010</td><td><description>Your login is on the black list, perhaps due to previous misuse. For details please contact support.</description></td></tr><tr><td>EX011</td><td><description>You are not allowed to execute this command. For details please contact support.</description></td></tr></tbody></table>
+    </li>
+
+  </ol>
+                    <!-- /MAIN CONTENT -->
+                </div>
+            </div>
+        </div> <!-- /container -->
+    </div> <!-- /page-wrapper -->
+
+    <script src="./API Documentation_files/jquery-1.8.3.min.js.download"></script>
+    <script src="./API Documentation_files/bootstrap.min.js.download"></script>
+    <script src="./API Documentation_files/jquery-scrollTo.min.js.download"></script>
+    <script src="./API Documentation_files/jquery-ui.js.download"></script>
+    <script>
+
+        $(document).ready(function($) {
+        });
+
+        $('div#page-wrapper li>h2, div#page-wrapper li>h3, div#page-wrapper li>h4').hover(
+            
+            function() { 
+                var id = $(this).parent().attr('id');
+                var element = $('<a href="#' + id + '" class="shortlink"> <i class="icon-link category-hover"></i></a>');
+                $(this).append(element);
+
+                element.on('click', function() {
+                    $.scrollTo($(this).attr("href"), 500);
+                });
+            },
+
+           function(){ 
+                $(this).find('a .category-hover').parent().remove(); 
+            }
+        );
+
+        $('i.icon-share').parent().parent().on('click', function() {
+            var targetId = $(this).attr("href");
+            $.scrollTo(targetId, 500, {
+                onAfter: function() {
+                    $(targetId).delay("300").effect( "highlight", {color:"yellow"}, 1500 );
+                }
+            });
+        });
+
+        $('#side-menu a').on('click', function() {
+            var targetId = $(this).attr("href");
+            $.scrollTo(targetId, 500, {
+                onAfter: function() {
+                }
+            });
+        });
+
+
+    </script>
+
+
+
+</body></html>

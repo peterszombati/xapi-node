@@ -1,0 +1,196 @@
+
+html{
+	margin-top: 30px;
+}
+body {
+}
+
+h2 {
+	margin-top: 50px;
+}
+
+h3 {
+	margin-top: 30px;
+}
+
+h4 {
+	margin-top: 30px; 
+	font-size: 20px;
+}
+
+h5 {
+	margin-top: 22px;
+	font-size: 18px;
+}
+
+h2, h3, h4, h5, .record {
+	padding-top:50px;
+    margin-top:-50px;
+    -webkit-background-clip:content-box;
+    background-clip:content-box;
+}
+
+.navbar .nav>li span {
+	color: #999;
+	text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+	float: none;
+	padding: 10px 15px 10px;
+	text-decoration: none;
+	display: block;
+}
+
+#choose-version-dropdown a.dropdown-toggle {
+
+padding-left: 0px;
+}
+
+#title {
+	margin-top: 150px;
+	text-align: center;
+	margin-bottom: 100px;
+}
+#title p {
+	font-size: 1.4em;
+}
+
+#logo {
+	height: 30px;
+	width: 30px;
+	background-image: url('http://developers.xstore.pro/public/img/logo-small.png');
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	margin: 5px;
+	padding: 0;
+	float: left;
+}
+
+#page-wrapper {
+	font-size: 2.0em;
+}
+
+#page-wrapper p, 
+#page-wrapper ul,
+#page-wrapper table {
+	font-size: 0.5em;
+}
+
+.field-name {
+	color: #08c;
+}
+
+code {
+	color: #08c;
+}
+
+table.request-fields {
+
+}
+
+table.reply-fields {
+	
+}
+
+a {
+	color: #08c;
+}
+
+#side-menu {
+	position: fixed;
+	width: 250px;
+	left: 0;
+	top: 40px;
+	bottom: 0;
+	overflow-y: scroll;
+}
+
+#side-menu h1 {
+	background-color: #4d297d;
+	padding-left: 10px;
+	margin: 0;
+	font-size: 25px;
+	color: #ddd;
+	font-weight: normal;
+}
+
+#side-menu ul {
+	margin: 0px;
+}
+
+#side-menu a {
+	padding-top: 3px;
+	padding-bottom: 3px;
+	display: block;
+	border-bottom: 1px solid #444;
+	color: #aaa;
+}
+
+#side-menu a:hover {
+	color: #000;
+	text-decoration: none;
+	background-color: #fff;
+}
+
+#side-menu ul li a {
+	padding-left: 10px;
+}
+
+#side-menu ul li ul li a {
+	padding-left: 25px;
+}
+
+#side-menu ul li ul li ul li a {
+	padding-left: 40px;
+}
+
+#side-menu li {
+	list-style: none;
+	background-color: #333;
+}
+
+#page-wrapper {
+	margin-left: 250px;
+/*	position: absolute;
+	left: 250px;
+	right: 0;
+	top: 40px;
+	bottom: 0;
+	overflow-y: scroll;*/
+}
+
+.shortlink {
+	color: #999;
+}
+
+.shortlink:hover {
+	color: #aaa;
+	text-decoration: none;
+}
+
+ul ul, ul ol, ol ol, ol ul {
+	margin-bottom: 15px;
+}
+
+@media print {
+	.navbar {
+		display: none;
+	}
+
+	i.icon-share {
+		display: none;
+	}
+
+	#side-menu {
+		display: none;
+	}
+
+	#page-wrapper {
+		position: static;
+		top: 0;
+		left: 0;
+		margin: 0 20px;
+	}
+
+	#page-wrapper ol p {
+		text-align: justify;
+	}
+}
