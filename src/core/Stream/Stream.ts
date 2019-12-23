@@ -10,7 +10,7 @@ import {
     STREAMING_TRADE_STATUS_RECORD
 } from '../..';
 import {StreamConnection} from './StreamConnection';
-import {Time} from '../../modules/Time';
+import {Time} from '../..';
 
 class Stream extends StreamConnection {
 
