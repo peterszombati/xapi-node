@@ -1,7 +1,7 @@
 {
   "name": "xapi-node",
   "version": "1.8.2",
-  "description": "This package is make possible to get data from market, execute order or limit orders with NodeJS through WebSocket connection",
+  "description": "This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "dependencies": {
