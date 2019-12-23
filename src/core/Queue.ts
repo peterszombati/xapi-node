@@ -150,8 +150,8 @@ export class Queue extends Listener {
             };
         }
         transaction.status = TransactionStatus.successful;
-        if (transaction.transactionPromise.resolve !== null) {
-            const {resolve} = transaction.transactionPromise;
+        const {resolve} = transaction.transactionPromise;
+        if (resolve !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
             if (transaction.type === TransactionType.STREAM) {
                 Log.hidden(' Stream (' + transaction.transactionId + '): ' + transaction.command + ', ' + JSON.stringify(transaction.request.arguments), 'INFO');
@@ -164,11 +164,9 @@ export class Queue extends Listener {
                     + ', (' + elapsedMs + 'ms)', 'INFO');
                 resolve({returnData, time, transaction})
             }
-            if (transaction.command !== 'ping') {
-                Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
-            }
-        } else {
-            Log.hidden('Transaction archived (promise resolve is null):\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+        }
+        if (transaction.command !== 'ping') {
+            Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
         }
     }
 
@@ -188,8 +186,8 @@ export class Queue extends Listener {
             + transaction.command + ', '
             + (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
             + '\nReason:\n' + JSON.stringify(json, null, '\t'), 'ERROR');
-        if (transaction.transactionPromise.reject !== null) {
-            const {reject} = transaction.transactionPromise;
+        const {reject} = transaction.transactionPromise;
+        if (reject !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
             reject({
                 reason: json,
