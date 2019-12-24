@@ -75,7 +75,9 @@ export class SocketConnection extends Queue {
         }
 
         if (status === ConnectionStatus.CONNECTING) {
-            this.ping();
+            this.ping().catch(e => {
+                Log.error('Socket: ping request failed');
+            });
             this.openTimeout = setTimeout(() => {
                 this.openTimeout = null;
                 if (this.status === ConnectionStatus.CONNECTING) {
