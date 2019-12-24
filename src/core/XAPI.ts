@@ -50,15 +50,22 @@ export class XAPI extends Listener {
         timeout: []
     };
 
-    public get openPositions(): TradePosition[] | null {
+    public get openPositions(): TradePosition[] {
         return Object.values(this._positions)
             .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.open)
             .map(t => t.value);
     }
 
-    public get limitPositions(): TradePosition[] | null {
+    public get limitPositions(): TradePosition[] {
         return Object.values(this._positions)
             .filter(t => t.value !== null && Utils.getPositionType(t.value) === PositionType.limit)
+            .map(t => t.value);
+    }
+
+    public get positions(): TradePosition[] {
+        return Object.values(this._positions)
+            .filter(t => t.value !== null
+                && (Utils.getPositionType(t.value) === PositionType.limit || Utils.getPositionType(t.value) === PositionType.open))
             .map(t => t.value);
     }
 
