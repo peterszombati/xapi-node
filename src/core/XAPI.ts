@@ -104,11 +104,15 @@ export class XAPI extends Listener {
                 Log.hidden('Stream ' + (status === ConnectionStatus.CONNECTED ? 'open' : 'closed'), 'INFO');
 
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
-                    if (status === ConnectionStatus.CONNECTED && this.Stream.session.length > 0) {
+                    if (this.isReady) {
                         this.Socket.send.getTrades(true).then(() => {
-                            this.callListener('xapi_onReady');
+                            if (this.isReady) {
+                                this.callListener('xapi_onReady');
+                            }
                         }).catch(e => {
-                            this.callListener('xapi_onReady');
+                            if (this.isReady) {
+                                this.callListener('xapi_onReady');
+                            }
                         });
                     }
 
@@ -271,12 +275,16 @@ export class XAPI extends Listener {
 
     public set session(session: string) {
         this.Stream.session = session;
-        if (this.Stream.status === ConnectionStatus.CONNECTED && session !== null && session.length > 0) {
+        if (this.isReady) {
             this.Stream.ping();
             this.Socket.send.getTrades(true).then(() => {
-                this.callListener('xapi_onReady');
+                if (this.isReady) {
+                    this.callListener('xapi_onReady');
+                }
             }).catch(e => {
-                this.callListener('xapi_onReady');
+                if (this.isReady) {
+                    this.callListener('xapi_onReady');
+                }
             });
         }
     }
@@ -289,6 +297,12 @@ export class XAPI extends Listener {
 
     public get isConnectionReady(): boolean {
         return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED;
+    }
+
+    public get isReady(): boolean {
+        return this.Stream.status === ConnectionStatus.CONNECTED
+            && this.Socket.status === ConnectionStatus.CONNECTED
+            && this.Stream.session.length > 0;
     }
 
     public disconnect() {
