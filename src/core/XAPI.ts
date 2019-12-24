@@ -112,6 +112,9 @@ export class XAPI extends Listener {
 
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     if (this.isReady) {
+                        this.Stream.ping().catch(e => {
+                            Log.error('Stream: ping request failed');
+                        });
                         this.Socket.send.getTrades(true).then(() => {
                             if (this.isReady) {
                                 this.callListener('xapi_onReady');
@@ -283,7 +286,9 @@ export class XAPI extends Listener {
     public set session(session: string) {
         this.Stream.session = session;
         if (this.isReady) {
-            this.Stream.ping();
+            this.Stream.ping().catch(e => {
+                Log.error('Stream: ping request failed');
+            });
             this.Socket.send.getTrades(true).then(() => {
                 if (this.isReady) {
                     this.callListener('xapi_onReady');
