@@ -109,13 +109,7 @@ export class SocketConnection extends Queue {
     }
 
     private tryLogin(retries: number = 2) {
-        this.XAPI.Socket.login().then(() => {
-            Log.hidden('Login is successful (userId = ' + this.XAPI.accountId
-                + ', accountType = ' + this.XAPI.accountType + ')', 'INFO');
-            this.ping().catch(e => {
-                Log.error('Socket: ping request failed');
-            });
-        }).catch(e => {
+        this.login().catch(e => {
             Log.hidden('Login is rejected (userId = ' + this.XAPI.accountId
                 + ', accountType = ' + this.XAPI.accountType
                 + ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');

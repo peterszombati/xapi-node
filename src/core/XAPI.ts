@@ -145,6 +145,8 @@ export class XAPI extends Listener {
         });
 
         this.Socket.listen.login((data, time, transaction) => {
+            Log.hidden('Login is successful (userId = ' + this.accountId
+                + ', accountType = ' + this.accountType + ')', 'INFO');
             this.session = data.streamSessionId;
         });
 
