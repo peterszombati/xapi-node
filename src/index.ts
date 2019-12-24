@@ -82,8 +82,8 @@ export {
 }
 
 import {parseLogin} from './modules/parseLogin';
-import Utils from "./utils/Utils";
-import {Time} from "./modules/Time";
-import {TradePosition} from "./interface/Interface";
+import Utils from './utils/Utils';
+import {Time} from './modules/Time';
+import {TradePosition} from './interface/Interface';
 
 export {parseLogin, Utils, Time, TradePosition};
