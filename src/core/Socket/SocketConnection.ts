@@ -112,7 +112,9 @@ export class SocketConnection extends Queue {
         this.XAPI.Socket.login().then(() => {
             Log.hidden('Login is successful (userId = ' + this.XAPI.accountId
                 + ', accountType = ' + this.XAPI.accountType + ')', 'INFO');
-            this.ping();
+            this.ping().catch(e => {
+                Log.error('Socket: ping request failed');
+            });
         }).catch(e => {
             Log.hidden('Login is rejected (userId = ' + this.XAPI.accountId
                 + ', accountType = ' + this.XAPI.accountType
