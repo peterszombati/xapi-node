@@ -340,7 +340,7 @@ export class XAPI extends Listener {
     }
 
     public onReady(callBack: () => void, key: string | null = null) {
-        if (this.Stream.session.length > 0 && this.isConnectionReady) {
+        if (this.isReady) {
             callBack();
         }
         this.addListener('xapi_onReady', callBack, key);
