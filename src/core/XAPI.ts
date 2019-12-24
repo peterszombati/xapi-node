@@ -97,7 +97,7 @@ export class XAPI extends Listener {
             safe: safe === true
         };
         if (this.account.safe) {
-            Log.warn('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
+            Log.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
         }
         this.Stream.onConnectionChange(status => {
             if (status !== ConnectionStatus.CONNECTING) {
