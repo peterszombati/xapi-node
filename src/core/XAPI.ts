@@ -36,6 +36,37 @@ export class XAPI extends Listener {
     private _rateLimit: number = DefaultRateLimit;
     private _tryReconnect: boolean = false;
     private _positions: TradePositions = {};
+    private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
+        interval: [],
+        timeout: []
+    };
+    protected account: XAPIAccount = {
+        type: 'demo',
+        accountId: '',
+        host: '',
+        appName: undefined,
+        safe: false
+    };
+
+    public get accountType(): string | null {
+        return this.account.type;
+    }
+
+    public get isTradingDisabled(): boolean {
+        return this.account.safe;
+    }
+
+    public get accountId(): string {
+        return this.account.accountId;
+    }
+
+    public get appName(): string | undefined {
+        return this.account.appName;
+    }
+
+    public get hostName(): string {
+        return this.account.host;
+    }
 
     public get rateLimit() {
         return this._rateLimit;
@@ -44,11 +75,6 @@ export class XAPI extends Listener {
     public get tryReconnect() {
         return this._tryReconnect;
     }
-
-    private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
-        interval: [],
-        timeout: []
-    };
 
     public get openPositions(): TradePosition[] {
         return Object.values(this._positions)
@@ -68,14 +94,6 @@ export class XAPI extends Listener {
                 && (Utils.getPositionType(t.value) === PositionType.limit || Utils.getPositionType(t.value) === PositionType.open))
             .map(t => t.value);
     }
-
-    protected account: XAPIAccount = {
-        type: 'demo',
-        accountId: '',
-        host: '',
-        appName: undefined,
-        safe: false
-    };
 
     public getLogger(): Logger4Interface {
         return Log;
@@ -147,7 +165,21 @@ export class XAPI extends Listener {
         this.Socket.listen.login((data, time, transaction) => {
             Log.hidden('Login is successful (userId = ' + this.accountId
                 + ', accountType = ' + this.accountType + ')', 'INFO');
-            this.session = data.streamSessionId;
+            this.Stream.session = data.streamSessionId;
+            if (this.isReady) {
+                this.Stream.ping().catch(e => {
+                    Log.error('Stream: ping request failed');
+                });
+                this.Socket.send.getTrades(true).then(() => {
+                    if (this.isReady) {
+                        this.callListener('xapi_onReady');
+                    }
+                }).catch(e => {
+                    if (this.isReady) {
+                        this.callListener('xapi_onReady');
+                    }
+                });
+            }
         });
 
         this.Socket.listen.getTrades((data, time, transaction) => {
@@ -263,44 +295,6 @@ export class XAPI extends Listener {
         this.timer.interval.forEach(i => clearInterval(i));
         this.timer.timeout.forEach(i => clearTimeout(i));
         this.timer = {interval: [], timeout: []};
-    }
-
-    public get accountType(): string | null {
-        return this.account.type;
-    }
-
-    public get isTradingDisabled(): boolean {
-        return this.account.safe;
-    }
-
-    public get accountId(): string {
-        return this.account.accountId;
-    }
-
-    public get appName(): string | undefined {
-        return this.account.appName;
-    }
-
-    public get hostName(): string {
-        return this.account.host;
-    }
-
-    public set session(session: string) {
-        this.Stream.session = session;
-        if (this.isReady) {
-            this.Stream.ping().catch(e => {
-                Log.error('Stream: ping request failed');
-            });
-            this.Socket.send.getTrades(true).then(() => {
-                if (this.isReady) {
-                    this.callListener('xapi_onReady');
-                }
-            }).catch(e => {
-                if (this.isReady) {
-                    this.callListener('xapi_onReady');
-                }
-            });
-        }
     }
 
     public connect() {
