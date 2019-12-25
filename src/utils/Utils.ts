@@ -104,14 +104,14 @@ class Utils {
     }
 
     static getPositionType(position: TradePosition): PositionType {
-        if (position.cmd === CMD_FIELD.BALANCE || position.cmd === CMD_FIELD.CREDIT) {
-            return PositionType.source;
-        } else if (position.cmd === CMD_FIELD.SELL || position.cmd === CMD_FIELD.BUY) {
+        if (position.cmd === CMD_FIELD.SELL || position.cmd === CMD_FIELD.BUY) {
             return position.close_time === null && !position.closed
                 ? PositionType.open
                 : PositionType.closed;
         } else {
-            return PositionType.limit;
+            return position.cmd === CMD_FIELD.BALANCE || position.cmd === CMD_FIELD.CREDIT
+                ? PositionType.source
+                : PositionType.limit;
         }
     }
 }
