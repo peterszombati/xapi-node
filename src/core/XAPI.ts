@@ -239,7 +239,7 @@ export class XAPI extends Listener {
             }
         });
 
-        this.addListener('xapi_onReady', () => {
+        this.onReady(() => {
             this.stopTimer();
             this.Stream.subscribe.getTrades().catch(e => {
                 Log.error('Stream: getTrades request failed');
