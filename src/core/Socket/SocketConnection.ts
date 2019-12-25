@@ -6,11 +6,12 @@ import {Log} from '../../utils/Log';
 import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import Utils from '../../utils/Utils';
+import {Timer} from "../../modules/Timer";
 
 export class SocketConnection extends Queue {
     private XAPI: XAPI;
     private _password: string;
-    private loginTimeout: NodeJS.Timeout | null = null;
+    private loginTimeout: Timer = new Timer();
 
     constructor(XAPI: XAPI, password: string) {
         super(XAPI.rateLimit, TransactionType.SOCKET);
@@ -59,27 +60,15 @@ export class SocketConnection extends Queue {
             this.callListener('xapi_onConnectionChange', [status]);
         }
 
-        if (this.loginTimeout !== null) {
-            clearTimeout(this.loginTimeout);
-            this.loginTimeout = null;
-        }
-
-        if (this.openTimeout !== null) {
-            clearTimeout(this.openTimeout);
-            this.openTimeout = null;
-        }
-
-        if (this.reconnectTimeout !== null) {
-            clearTimeout(this.reconnectTimeout);
-            this.reconnectTimeout = null;
-        }
+        this.loginTimeout.clear();
+        this.openTimeout.clear();
+        this.reconnectTimeout.clear();
 
         if (status === ConnectionStatus.CONNECTING) {
             this.ping().catch(e => {
                 Log.error('Socket: ping request failed');
             });
-            this.openTimeout = setTimeout(() => {
-                this.openTimeout = null;
+            this.openTimeout.setTimeout(() => {
                 if (this.status === ConnectionStatus.CONNECTING) {
                     this.status = ConnectionStatus.CONNECTED;
                     this.callListener('xapi_onConnectionChange', [ConnectionStatus.CONNECTED]);
@@ -88,8 +77,7 @@ export class SocketConnection extends Queue {
             }, 1000);
         } else {
             if (this.XAPI.tryReconnect) {
-                this.reconnectTimeout = setTimeout(() => {
-                    this.reconnectTimeout = null;
+                this.reconnectTimeout.setTimeout(() => {
                     if (this.XAPI.tryReconnect && this.status === ConnectionStatus.DISCONNECTED) {
                         this.connect();
                     }
@@ -114,11 +102,7 @@ export class SocketConnection extends Queue {
                 + ', accountType = ' + this.XAPI.accountType
                 + ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');
             if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
-                if (this.loginTimeout !== null) {
-                    clearTimeout(this.loginTimeout);
-                }
-                this.loginTimeout = setTimeout(() => {
-                    this.loginTimeout = null;
+                this.loginTimeout.setTimeout(() => {
                     Log.hidden('Try to login (retries = ' + retries + ')', 'INFO');
                     this.tryLogin(retries - 1);
                 }, 500);

@@ -5,11 +5,12 @@ import {Log} from '../utils/Log';
 import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../enum/Enum';
 import Utils from '../utils/Utils';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
+import {Timer} from "../modules/Timer";
 
 export class Queue extends Listener {
     public status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
-    protected openTimeout: NodeJS.Timeout | null = null;
-    protected reconnectTimeout: NodeJS.Timeout | null = null;
+    protected openTimeout: Timer = new Timer();
+    protected reconnectTimeout: Timer = new Timer();
     public transactions: Transactions = {};
     private _lastReceivedMessage: Time | null = null;
     public get lastReceivedMessage() {
