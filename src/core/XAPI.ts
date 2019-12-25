@@ -263,6 +263,8 @@ export class XAPI extends Listener {
                         Log.error('Stream: ping request failed');
                     });
                 }
+                this.timer.timeout.forEach(i => clearTimeout(i));
+                this.timer.timeout = [];
                 this.timer.timeout.push(setTimeout(() => {
                     if (this.Socket.status === ConnectionStatus.CONNECTED
                         && !this.Socket.isQueueContains('getServerTime')) {
