@@ -56,15 +56,8 @@ export class StreamConnection extends Queue {
             this.callListener('xapi_onConnectionChange', [status]);
         }
 
-        if (this.openTimeout !== null) {
-            clearTimeout(this.openTimeout);
-            this.openTimeout = null;
-        }
-
-        if (this.reconnectTimeout !== null) {
-            clearTimeout(this.reconnectTimeout);
-            this.reconnectTimeout = null;
-        }
+        this.openTimeout.clear();
+        this.reconnectTimeout.clear();
 
         if (status === ConnectionStatus.CONNECTING) {
             if (this.session.length > 0) {
@@ -73,8 +66,7 @@ export class StreamConnection extends Queue {
                 });
             }
 
-            this.openTimeout = setTimeout(() => {
-                this.openTimeout = null;
+            this.openTimeout.setTimeout(() => {
                 if (this.status === ConnectionStatus.CONNECTING) {
                     this.status = ConnectionStatus.CONNECTED;
                     this.callListener('xapi_onConnectionChange', [ConnectionStatus.CONNECTED]);
@@ -82,8 +74,7 @@ export class StreamConnection extends Queue {
             }, 1000);
         } else {
             if (this.XAPI.tryReconnect) {
-                this.reconnectTimeout = setTimeout(() => {
-                    this.reconnectTimeout = null;
+                this.reconnectTimeout.setTimeout(() => {
                     if (this.XAPI.tryReconnect && this.status === ConnectionStatus.DISCONNECTED) {
                         this.connect();
                     }
