@@ -1,5 +1,5 @@
 import {Time} from '..';
-import {CMD_FIELD, TransactionStatus, TransactionType} from '../enum/Enum';
+import {CMD_FIELD, PositionType, TransactionStatus, TransactionType} from '../enum/Enum';
 
 export interface Transactions {
     [transactionId: string]: Transaction<any, any>
@@ -77,6 +77,7 @@ export interface TradePosition {
     symbol: string
     tp: number
     volume: number
+    position_type: PositionType
 }
 
 export interface TradePositions {

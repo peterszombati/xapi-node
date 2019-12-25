@@ -77,17 +77,17 @@ export class XAPI extends Listener {
     }
 
     public get openPositions(): TradePosition[] {
-        return this.positions.filter(t => Utils.getPositionType(t) === PositionType.open);
+        return this.positions.filter(t => t.position_type === PositionType.open);
     }
 
     public get limitPositions(): TradePosition[] {
-        return this.positions.filter(t => Utils.getPositionType(t) === PositionType.limit);
+        return this.positions.filter(t => t.position_type === PositionType.limit);
     }
 
     public get positions(): TradePosition[] {
         return Object.values(this._positions)
             .filter(t => t.value !== null
-                && (Utils.getPositionType(t.value) === PositionType.limit || Utils.getPositionType(t.value) === PositionType.open))
+                && (t.value.position_type === PositionType.limit || t.value.position_type === PositionType.open))
             .map(t => t.value);
     }
 
