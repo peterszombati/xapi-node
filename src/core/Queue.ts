@@ -99,7 +99,7 @@ export class Queue extends Listener {
     }
 
     protected addTransaction(newTransaction: AddTransaction): Transaction<null, null> {
-        this.transactions[newTransaction.transactionId] = {
+        return this.transactions[newTransaction.transactionId] = {
             command: newTransaction.command,
             type: this.type,
             request: {json: newTransaction.json, arguments: newTransaction.args, sent: null},
@@ -110,7 +110,6 @@ export class Queue extends Listener {
             transactionPromise: {resolve: newTransaction.resolve, reject: newTransaction.reject},
             urgent: newTransaction.urgent
         };
-        return this.transactions[newTransaction.transactionId];
     }
 
     public rejectOldTransactions(): void {
