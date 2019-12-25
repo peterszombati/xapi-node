@@ -222,11 +222,13 @@ export class XAPI extends Listener {
                 && t.cmd !== CMD_FIELD.SELL_LIMIT
                 && t.cmd !== CMD_FIELD.BUY_STOP
                 && t.cmd !== CMD_FIELD.SELL_STOP) {
-                Log.info('Position pending [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']');
+//TODO          Log.info('Position pending [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']');
+                this.callListener(Listeners.xapi_onPendingPosition, [Utils.formatPosition(t)]);
             } else if (t.state === 'Deleted') {
                 if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
-                    Log.info('Position deleted [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']');
+//TODO              Log.info('Position deleted [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']');
                     this._positions[t.position] = {value: null, lastUpdated: time};
+                    this.callListener(Listeners.xapi_onDeletePosition, [Utils.formatPosition(t)]);
                 }
             } else if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
                 if (this._positions[t.position] !== undefined) {
@@ -234,12 +236,14 @@ export class XAPI extends Listener {
                     if (value) {
                         const changes = Utils.getObjectChanges(value, Utils.formatPosition(t));
                         if (Object.keys(changes).length > 0) {
-                            Log.info('Position changed [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']:\n'
-                                + JSON.stringify(changes, null, '\t'));
+//TODO                      Log.info('Position changed [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']:\n'
+//TODO                          + JSON.stringify(changes, null, '\t'));
+                            this.callListener(Listeners.xapi_onChangePosition, [Utils.formatPosition(t)]);
                         }
                     }
                 } else {
-                    Log.info('Position created [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']');
+//TODO              Log.info('Position created [' + [t.position, t.symbol, TYPE_FIELD[t.type], CMD_FIELD[t.cmd], t.volume].join(', ') + ']');
+                    this.callListener(Listeners.xapi_onCreatePosition, [Utils.formatPosition(t)]);
                 }
                 this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
             }
@@ -345,6 +349,22 @@ export class XAPI extends Listener {
 
     public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
         this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
+    }
+
+    public onCreatePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+        this.addListener(Listeners.xapi_onCreatePosition, callBack, key);
+    }
+
+    public onDeletePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+        this.addListener(Listeners.xapi_onDeletePosition, callBack, key);
+    }
+
+    public onChangePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+        this.addListener(Listeners.xapi_onChangePosition, callBack, key);
+    }
+
+    public onPendingPosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+        this.addListener(Listeners.xapi_onPendingPosition, callBack, key);
     }
 
 }
