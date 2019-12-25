@@ -317,6 +317,8 @@ export class XAPI extends Listener {
         return new Promise((resolve, reject) => {
             this.Stream.session = '';
             this._tryReconnect = false;
+            this.Socket.stopTimer();
+            this.Stream.stopTimer();
             this.Stream.closeConnection();
             if (this.Socket.status) {
                 this.Socket.logout()

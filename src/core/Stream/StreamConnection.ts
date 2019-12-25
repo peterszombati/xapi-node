@@ -75,7 +75,7 @@ export class StreamConnection extends Queue {
         } else {
             if (this.XAPI.tryReconnect) {
                 this.reconnectTimeout.setTimeout(() => {
-                    if (this.XAPI.tryReconnect && this.status === ConnectionStatus.DISCONNECTED) {
+                    if (this.status === ConnectionStatus.DISCONNECTED) {
                         this.connect();
                     }
                 }, 2000);

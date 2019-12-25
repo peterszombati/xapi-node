@@ -40,6 +40,11 @@ export class Queue extends Listener {
         this.type = type;
     }
 
+    public stopTimer() {
+        this.openTimeout.clear();
+        this.reconnectTimeout.clear();
+    }
+
     private addQueu(transaction: Transaction<any, any>): void {
         const {urgent, transactionId} = transaction;
         if (this.queueSize >= 150) {
