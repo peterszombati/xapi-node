@@ -110,25 +110,23 @@ export class Queue extends Listener {
 
     public rejectOldTransactions(): void {
         Object.values(this.transactions)
-            .filter(t => t.transactionPromise.reject !== null)
+            .filter(t => t.transactionPromise.reject !== null && t.createdAt.elapsedMs() > 60000)
             .forEach(transaction => {
-                if (transaction.createdAt.elapsedMs() > 60000) {
-                    this.rejectTransaction({code: errorCode.XAPINODE_3, explain: 'Timeout'}, transaction);
-                }
+                this.rejectTransaction({code: errorCode.XAPINODE_3, explain: 'Timeout'}, transaction);
             });
     }
 
-    public removeOldTransactions(): number {
-        let deleted = 0;
+    public removeOldTransactions(): { removed: number} {
+        let removed = 0;
         Object.values(this.transactions)
-            .filter(t => t.transactionPromise.reject === null && t.transactionPromise.resolve === null)
+            .filter(t => t.transactionPromise.reject === null
+                && t.transactionPromise.resolve === null
+                && t.createdAt.elapsedMs() > 86400000)
             .forEach(transaction => {
-                if (transaction.createdAt.elapsedMs() > 86400000) {
-                    delete this.transactions[transaction.transactionId];
-                    deleted += 1;
-                }
+                delete this.transactions[transaction.transactionId];
+                removed += 1;
             });
-        return deleted;
+        return { removed };
     }
 
     private sendMessage(json: string): Time | null {
