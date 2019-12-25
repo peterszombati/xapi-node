@@ -22,12 +22,13 @@ export class Listener {
         this._listeners[listenerId][key] = callBack;
     }
 
-    public callListener(listenerId: string, params: any[] = []) {
+    public callListener(listenerId: string, params: any[] = []): any[] {
         let errors: any[] = [];
+        let values: any[] = [];
         if (this._listeners[listenerId] !== undefined) {
             Object.keys(this._listeners[listenerId]).forEach((key: string) => {
                 try {
-                    this._listeners[listenerId][key](...params);
+                    values.push(this._listeners[listenerId][key](...params));
                 } catch (e) {
                     errors.push(e);
                 }
@@ -36,6 +37,7 @@ export class Listener {
         if (errors.length > 0) {
             throw errors[0];
         }
+        return values;
     }
 
 }
