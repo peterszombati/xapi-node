@@ -198,14 +198,6 @@ export class Queue extends Listener {
     }
 
     protected sendJSON(transaction: Transaction<any, any>, addQueu: boolean): boolean {
-        if (transaction.request.json.length > 1000) {
-            this.rejectTransaction({
-                code: errorCode.XAPINODE_0,
-                explain: 'Each command invocation should not contain more than 1kB of data.'
-            }, transaction);
-            return true;
-        }
-
         if (!this.isRateLimitReached()) {
             if (this.queueSize === 0 || !addQueu) {
                 const sentTime = this.sendMessage(transaction.request.json);

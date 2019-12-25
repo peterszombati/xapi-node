@@ -108,7 +108,12 @@ export class StreamConnection extends Queue {
                 reject,
                 urgent
             });
-            if (this.status === ConnectionStatus.DISCONNECTED) {
+            if (transaction.request.json.length > 1000) {
+                this.rejectTransaction({
+                    code: errorCode.XAPINODE_0,
+                    explain: 'Each command invocation should not contain more than 1kB of data.'
+                }, transaction);
+            } else if (this.status === ConnectionStatus.DISCONNECTED) {
                 this.rejectTransaction({
                     code: errorCode.XAPINODE_1,
                     explain: 'Stream closed'
