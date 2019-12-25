@@ -9,9 +9,17 @@ import {Timer} from "../modules/Timer";
 
 export class Queue extends Listener {
     public status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
+    public transactions: Transactions = {};
+    private type: TransactionType;
+    private messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = {urgent: [], normal: []};
+    private _transactionIdIncrement: number = 0;
+    private messagesElapsedTime: Time[] = [];
+    private messageSender: Timer = new Timer();
+    private rateLimit: number;
     protected openTimeout: Timer = new Timer();
     protected reconnectTimeout: Timer = new Timer();
-    public transactions: Transactions = {};
+    protected WebSocket: WebSocketWrapper;
+
     private _lastReceivedMessage: Time | null = null;
     public get lastReceivedMessage() {
         return this._lastReceivedMessage;
@@ -21,18 +29,9 @@ export class Queue extends Listener {
         this._lastReceivedMessage = time;
     }
 
-    protected WebSocket: WebSocketWrapper;
-    private type: TransactionType;
-    private messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = {urgent: [], normal: []};
-    private _transactionIdIncrement: number = 0;
-
     private get queueSize() {
         return this.messageQueues.urgent.length + this.messageQueues.normal.length;
     }
-
-    private messagesElapsedTime: Time[] = [];
-    private messageSender: Timer = new Timer();
-    private rateLimit: number;
 
     constructor(rateLimit: number, type: TransactionType) {
         super();
