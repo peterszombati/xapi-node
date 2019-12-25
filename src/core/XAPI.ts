@@ -91,6 +91,16 @@ export class XAPI extends Listener {
             .map(t => t.value);
     }
 
+    public get isConnectionReady(): boolean {
+        return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED;
+    }
+
+    public get isReady(): boolean {
+        return this.Stream.status === ConnectionStatus.CONNECTED
+            && this.Socket.status === ConnectionStatus.CONNECTED
+            && this.Stream.session.length > 0;
+    }
+
     public getLogger(): Logger4Interface {
         return Log;
     }
@@ -299,16 +309,6 @@ export class XAPI extends Listener {
         this.Socket.connect();
     }
 
-    public get isConnectionReady(): boolean {
-        return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED;
-    }
-
-    public get isReady(): boolean {
-        return this.Stream.status === ConnectionStatus.CONNECTED
-            && this.Socket.status === ConnectionStatus.CONNECTED
-            && this.Stream.session.length > 0;
-    }
-
     public disconnect() {
         return new Promise((resolve, reject) => {
             this.Stream.session = '';
@@ -318,8 +318,7 @@ export class XAPI extends Listener {
             this.Stream.closeConnection();
             if (this.Socket.status) {
                 this.Socket.logout()
-                    .catch(() => {
-                    })
+                    .catch()
                     .then(() => {
                         this.Socket.closeConnection();
                         resolve();
