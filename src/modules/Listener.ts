@@ -26,10 +26,18 @@ export class Listener {
     }
 
     public callListener(listenerId: string, params: any[] = []) {
+        let errors: any[] = [];
         if (this._listeners[listenerId] !== undefined) {
             Object.keys(this._listeners[listenerId]).forEach((key: string) => {
-                this._listeners[listenerId][key](...params);
+                try {
+                    this._listeners[listenerId][key](...params);
+                } catch (e) {
+                    errors.push(e);
+                }
             });
+        }
+        if (errors.length > 0) {
+            throw errors[0];
         }
     }
 
