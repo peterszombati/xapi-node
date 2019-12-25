@@ -6,7 +6,7 @@ import {changeLogger, Log} from '../utils/Log';
 import {CMD_FIELD, ConnectionStatus, TYPE_FIELD} from '..';
 import {TradePosition, TradePositions} from '../interface/Interface';
 import Utils from '../utils/Utils';
-import {PositionType} from '../enum/Enum';
+import {Listeners, PositionType} from '../enum/Enum';
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
@@ -141,16 +141,16 @@ export class XAPI extends Listener {
                         });
                         this.Socket.send.getTrades(true).then(() => {
                             if (this.isReady) {
-                                this.callListener('xapi_onReady');
+                                this.callListener(Listeners.xapi_onReady);
                             }
                         }).catch(e => {
                             if (this.isReady) {
-                                this.callListener('xapi_onReady');
+                                this.callListener(Listeners.xapi_onReady);
                             }
                         });
                     }
 
-                    this.callListener('xapi_onConnectionChange', [status]);
+                    this.callListener(Listeners.xapi_onConnectionChange, [status]);
                 }
             }
         });
@@ -163,7 +163,7 @@ export class XAPI extends Listener {
                     this.stopTimer();
                 }
                 if (this.Stream.status === ConnectionStatus.CONNECTED) {
-                    this.callListener('xapi_onConnectionChange', [status]);
+                    this.callListener(Listeners.xapi_onConnectionChange, [status]);
                 }
             }
         });
@@ -178,11 +178,11 @@ export class XAPI extends Listener {
                 });
                 this.Socket.send.getTrades(true).then(() => {
                     if (this.isReady) {
-                        this.callListener('xapi_onReady');
+                        this.callListener(Listeners.xapi_onReady);
                     }
                 }).catch(e => {
                     if (this.isReady) {
-                        this.callListener('xapi_onReady');
+                        this.callListener(Listeners.xapi_onReady);
                     }
                 });
             }
@@ -336,15 +336,15 @@ export class XAPI extends Listener {
         if (this.isReady) {
             callBack();
         }
-        this.addListener('xapi_onReady', callBack, key);
+        this.addListener(Listeners.xapi_onReady, callBack, key);
     }
 
     public onReject(callBack: (err: any) => void, key: string | null = null) {
-        this.addListener('xapi_onReject', callBack, key);
+        this.addListener(Listeners.xapi_onReject, callBack, key);
     }
 
     public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-        this.addListener('xapi_onConnectionChange', callBack, key);
+        this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
     }
 
 }

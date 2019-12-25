@@ -105,3 +105,13 @@ export enum errorCode {
     BE005 = 'BE005', // "userPasswordCheck: Invalid login or password"
     BE118 = 'BE118' // User already logged
 }
+
+export enum Listeners {
+    xapi_onCreatePosition='xapi_onCreatePosition',
+    xapi_onDeletePosition='xapi_onDeletePosition',
+    xapi_onChangePosition='xapi_onChangePosition',
+    xapi_onPendingPosition='xapi_onPendingPosition',
+    xapi_onConnectionChange='xapi_onConnectionChange',
+    xapi_onReject='xapi_onReject',
+    xapi_onReady='xapi_onReady'
+}

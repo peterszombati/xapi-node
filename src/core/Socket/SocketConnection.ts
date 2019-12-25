@@ -3,7 +3,7 @@ import XAPI from '../XAPI';
 import {Time} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import {Log} from '../../utils/Log';
-import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../../enum/Enum';
+import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import Utils from '../../utils/Utils';
 import {Timer} from "../../modules/Timer";
@@ -49,7 +49,7 @@ export class SocketConnection extends Queue {
     }
 
     public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-        this.addListener('xapi_onConnectionChange', callBack, key);
+        this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
     }
 
     private setConnectionStatus(status: ConnectionStatus) {
@@ -57,7 +57,7 @@ export class SocketConnection extends Queue {
 
         if (this.status !== status) {
             this.status = status;
-            this.callListener('xapi_onConnectionChange', [status]);
+            this.callListener(Listeners.xapi_onConnectionChange, [status]);
         }
 
         this.loginTimeout.clear();
@@ -71,7 +71,7 @@ export class SocketConnection extends Queue {
             this.openTimeout.setTimeout(() => {
                 if (this.status === ConnectionStatus.CONNECTING) {
                     this.status = ConnectionStatus.CONNECTED;
-                    this.callListener('xapi_onConnectionChange', [ConnectionStatus.CONNECTED]);
+                    this.callListener(Listeners.xapi_onConnectionChange, [ConnectionStatus.CONNECTED]);
                     this.tryLogin(2);
                 }
             }, 1000);
@@ -110,7 +110,7 @@ export class SocketConnection extends Queue {
                 Log.error('Disconnect from stream and socket (reason = \'login error code is ' + e.reason.code + '\')');
                 this.XAPI.disconnect();
             }
-            this.XAPI.callListener('xapi_onReject', [e])
+            this.XAPI.callListener(Listeners.xapi_onReject, [e])
         });
     }
 
