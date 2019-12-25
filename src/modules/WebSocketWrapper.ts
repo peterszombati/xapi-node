@@ -12,17 +12,17 @@ export class WebSocketWrapper extends Listener {
             this.ws = new WebSocketClient(url);
             this.ws.on('open', () => {
                 this._status = true;
-                this.callListener('open');
+                this.callListener('ws_open');
             });
             this.ws.on('close', () => {
                 this._status = false;
-                this.callListener('close');
+                this.callListener('ws_close');
             });
             this.ws.on('message', (message: any) => {
-                this.callListener('message', [message]);
+                this.callListener('ws_message', [message]);
             });
             this.ws.on('error', (error: any) => {
-                this.callListener('error', [error]);
+                this.callListener('ws_error', [error]);
             });
         } else {
             // JavaScript browser module
@@ -30,22 +30,22 @@ export class WebSocketWrapper extends Listener {
             this.ws.onopen = () => {
                 if (this._status === false) {
                     this._status = true;
-                    this.callListener('statusChange', [true]);
+                    this.callListener('ws_statusChange', [true]);
                 }
-                this.callListener('open');
+                this.callListener('ws_open');
             };
             this.ws.onclose = () => {
                 if (this._status) {
                     this._status = false;
-                    this.callListener('statusChange', [false]);
+                    this.callListener('ws_statusChange', [false]);
                 }
-                this.callListener('close');
+                this.callListener('ws_close');
             };
             this.ws.onmessage = (event: any) => {
-                this.callListener('message', [event.data]);
+                this.callListener('ws_message', [event.data]);
             };
             this.ws.onerror = (error: any) => {
-                this.callListener('error', [error]);
+                this.callListener('ws_error', [error]);
             };
         }
     }
@@ -55,23 +55,23 @@ export class WebSocketWrapper extends Listener {
     }
 
     onStatusChange(callback: (status: boolean) => void) {
-        this.addListener('statusChange', callback);
+        this.addListener('ws_statusChange', callback);
     }
 
     onOpen(callback: () => void) {
-        this.addListener('open', callback);
+        this.addListener('ws_open', callback);
     }
 
     onMessage(callback: (message: any) => void) {
-        this.addListener('message', callback);
+        this.addListener('ws_message', callback);
     }
 
     onError(callback: (error: any) => void) {
-        this.addListener('error', callback);
+        this.addListener('ws_error', callback);
     }
 
     onClose(callback: () => void) {
-        this.addListener('close', callback);
+        this.addListener('ws_close', callback);
     }
 
     send(data: any) {
