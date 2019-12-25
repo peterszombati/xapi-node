@@ -16,13 +16,10 @@ export class Listener {
         if (this._listeners[listenerId] === undefined) {
             this._listeners[listenerId] = {};
         }
-        if (key === null) {
-            key = 'g' + Object.keys(this._listeners[listenerId]).length;
-            this._listeners[listenerId][key] = callBack;
-        } else {
-            this._listeners[listenerId]['s' + key] = callBack;
-        }
-
+        key = key === null
+            ? 'g' + Object.keys(this._listeners[listenerId]).length
+            : 's' + key;
+        this._listeners[listenerId][key] = callBack;
     }
 
     public callListener(listenerId: string, params: any[] = []) {
