@@ -227,7 +227,7 @@ export class Queue extends Listener {
             this.addQueu(transaction);
         }
 
-        if (this.queueSize > 0 && this.messageSender === null) {
+        if (this.queueSize > 0 && this.messageSender.isNull()) {
             this.callCleanQueuTimeout();
         }
         return false;
