@@ -10,7 +10,6 @@ import XAPI from '../core/XAPI';
 import {ConnectionStatus, parseLogin} from '..';
 import Logger4 from 'logger4';
 import * as path from 'path';
-import {Time} from '..';
 
 process
     .on('unhandledRejection', (reason, p) => {
