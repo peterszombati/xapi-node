@@ -31,7 +31,7 @@ export class Queue extends Listener {
     }
 
     private messagesElapsedTime: Time[] = [];
-    private messageSender: NodeJS.Timeout | null = null;
+    private messageSender: Timer = new Timer();
     private rateLimit: number;
 
     constructor(rateLimit: number, type: TransactionType) {
@@ -84,10 +84,7 @@ export class Queue extends Listener {
         }
         this.messageQueues = {urgent: [], normal: []};
         this.messagesElapsedTime = [];
-        if (this.messageSender != null) {
-            clearTimeout(this.messageSender);
-            this.messageSender = null;
-        }
+        this.messageSender.clear();
     }
 
     public createTransactionId(): string {
@@ -242,12 +239,7 @@ export class Queue extends Listener {
         } else {
             const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
             const timeoutMs = Math.max(this.rateLimit - elapsedMs, 0);
-
-            if (this.messageSender !== null) {
-                clearTimeout(this.messageSender);
-            }
-            this.messageSender = setTimeout(() => {
-                this.messageSender = null;
+            this.messageSender.setTimeout(() => {
                 this.tryCleanQueue();
             }, timeoutMs);
         }
