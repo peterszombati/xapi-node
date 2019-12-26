@@ -60,6 +60,18 @@ export enum REQUEST_STATUS {
 }
 
 // xapi-node
+export const CHART_RATE_LIMIT_BY_PERIOD: any = {
+    PERIOD_M1: 28800, // 1 month
+    PERIOD_M5: 17280, // 3 month
+    PERIOD_M15: 5760, // 3 month
+    PERIOD_M30: 6720, // 7 month
+    PERIOD_H1: 3360, // 7 month
+    PERIOD_H4: 1560, // 13 month
+    PERIOD_D1: 19200, // 80 years
+    PERIOD_W1: 3840, // 80 years
+    PERIOD_MN1: 960 // 80 years
+};
+
 export enum TransactionStatus {
     waiting = 0,
     sent = 1,

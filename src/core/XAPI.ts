@@ -3,10 +3,10 @@ import Socket from './Socket/Socket';
 import {Listener} from '../modules/Listener';
 import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
-import {CMD_FIELD, ConnectionStatus, TYPE_FIELD} from '..';
+import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, Time, TYPE_FIELD} from '..';
 import {TradePosition, TradePositions} from '../interface/Interface';
 import Utils from '../utils/Utils';
-import {Listeners, PositionType} from '../enum/Enum';
+import {CHART_RATE_LIMIT_BY_PERIOD, Listeners, PositionType} from '../enum/Enum';
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
@@ -353,6 +353,37 @@ export class XAPI extends Listener {
             } else {
                 this.Socket.closeConnection();
                 resolve();
+            }
+        });
+    }
+
+    public loadChart({
+                symbol,
+                period = PERIOD_FIELD.PERIOD_M1,
+                ticks = -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]],
+                startUTC = null
+            } : {
+        symbol: string,
+        period?: PERIOD_FIELD | undefined,
+        ticks?: number,
+        startUTC?: number | null
+    }): Promise<{symbol: string, period: PERIOD_FIELD, candles: number[][], digits: number}> {
+        return (startUTC !== null
+            ? this.Socket.send.getChartLastRequest(period, startUTC, symbol)
+            : this.Socket.send.getChartRangeRequest(
+                0,
+                period,
+                this.serverTime,
+                symbol,
+                ticks)
+            ).then((data) => {
+            return {
+                symbol,
+                period,
+                candles: data.returnData.rateInfos.map((candle) => {
+                    return [candle.ctm, candle.open, candle.close + candle.open, candle.low + candle.open, candle.high + candle.open, candle.vol];
+                }),
+                digits: data.returnData.digits
             }
         });
     }
