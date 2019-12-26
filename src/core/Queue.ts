@@ -155,7 +155,7 @@ export class Queue extends Listener {
             if (transaction.type === TransactionType.STREAM) {
                 Log.hidden(' Stream (' + transaction.transactionId + '): ' + transaction.command + ', ' + JSON.stringify(transaction.request.arguments), 'INFO');
                 resolve({transaction});
-            } else {
+            } else if (transaction.request.sent !== null) {
                 const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent);
                 Log.hidden('Socket (' + transaction.transactionId + '): '
                     + transaction.command + ', '

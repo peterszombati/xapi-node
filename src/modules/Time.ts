@@ -17,12 +17,9 @@ export class Time {
         return this;
     }
 
-    public getDifference(time: Time | null): number | null {
-        const a = time == null ? null : time.elapsedMs();
+    public getDifference(time: Time): number {
+        const a = time.elapsedMs();
         const b = this.elapsedMs();
-        if (a === null || b === null) {
-            return null;
-        }
         return a - b;
     }
 
