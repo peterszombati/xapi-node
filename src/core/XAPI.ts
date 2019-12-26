@@ -36,6 +36,7 @@ export class XAPI extends Listener {
     private _rateLimit: number = DefaultRateLimit;
     private _tryReconnect: boolean = false;
     private _positions: TradePositions = {};
+    private _serverTime: { timestamp: number, ping: number, received: Time } | null = null;
     private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
         interval: [],
         timeout: []
@@ -99,6 +100,15 @@ export class XAPI extends Listener {
         return this.Stream.status === ConnectionStatus.CONNECTED
             && this.Socket.status === ConnectionStatus.CONNECTED
             && this.Stream.session.length > 0;
+    }
+
+    public get serverTime(): number {
+        if (this._serverTime === null) {
+            return Date.now();
+        } else {
+            const elapsedMs = this._serverTime.received.elapsedMs();
+            return Math.floor(this._serverTime.timestamp + this._serverTime.ping + (elapsedMs === null ? 0 : elapsedMs));
+        }
     }
 
     public getLogger(): Logger4Interface {
@@ -246,6 +256,17 @@ export class XAPI extends Listener {
                     this.callListener(Listeners.xapi_onCreatePosition, [Utils.formatPosition(t)]);
                 }
                 this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
+            }
+        });
+
+        this.Socket.listen.getServerTime((data, time, transaction) => {
+            if (transaction.response.received !== null && transaction.request.sent !== null) {
+                const dif = transaction.response.received.getDifference(transaction.request.sent);
+                this._serverTime = {
+                    timestamp: data.time,
+                    ping: dif,
+                    received: transaction.response.received
+                };
             }
         });
 
