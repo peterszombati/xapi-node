@@ -11,8 +11,7 @@ import {
 } from '../..';
 import {Transaction} from '../../interface/Interface';
 import {
-    getChartLastRequestResponse,
-    getChartRangeRequestResponse,
+    getChartRequestResponse,
     getCommissionDefResponse,
     getCurrentUserDataResponse,
     getMarginLevelResponse,
@@ -60,10 +59,10 @@ class Socket extends SocketConnection {
         getCalendar: (callBack: SocketListen<CALENDAR_RECORD[]>, key: string | null = null) => {
             this.addListener('command_' + 'getCalendar', callBack, key);
         },
-        getChartLastRequest: (callBack: SocketListen<getChartLastRequestResponse>, key: string | null = null) => {
+        getChartLastRequest: (callBack: SocketListen<getChartRequestResponse>, key: string | null = null) => {
             this.addListener('command_' + 'getChartLastRequest', callBack, key);
         },
-        getChartRangeRequest: (callBack: SocketListen<getChartRangeRequestResponse>, key: string | null = null) => {
+        getChartRangeRequest: (callBack: SocketListen<getChartRequestResponse>, key: string | null = null) => {
             this.addListener('command_' + 'getChartRangeRequest', callBack, key);
         },
         getCommissionDef: (callBack: SocketListen<getCommissionDefResponse>, key: string | null = null) => {
@@ -136,7 +135,7 @@ class Socket extends SocketConnection {
             return this.sendCommand<CALENDAR_RECORD[]>('getCalendar');
         },
         getChartLastRequest: (period: PERIOD_FIELD, start: number, symbol: string) => {
-            return this.sendCommand<getChartLastRequestResponse>('getChartLastRequest', {
+            return this.sendCommand<getChartRequestResponse>('getChartLastRequest', {
                 'info': {
                     period,
                     start,
@@ -145,7 +144,7 @@ class Socket extends SocketConnection {
             });
         },
         getChartRangeRequest: (end: number, period: PERIOD_FIELD, start: number, symbol: string, ticks: number = 0) => {
-            return this.sendCommand<getChartRangeRequestResponse>('getChartRangeRequest', {
+            return this.sendCommand<getChartRequestResponse>('getChartRangeRequest', {
                 'info': {
                     end,
                     period,

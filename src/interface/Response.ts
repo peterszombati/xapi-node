@@ -1,12 +1,7 @@
 import {RATE_INFO_RECORD, TICK_RECORD} from './Definitions';
 import {REQUEST_STATUS_FIELD} from '..';
 
-export interface getChartRangeRequestResponse {
-    digits: number
-    rateInfos: RATE_INFO_RECORD[]
-}
-
-export interface getChartLastRequestResponse {
+export interface getChartRequestResponse {
     digits: number
     rateInfos: RATE_INFO_RECORD[]
 }
