@@ -232,15 +232,16 @@ export class Queue extends Listener {
         while (this.queueSize > 0) {
             const urgent = this.messageQueues.urgent.length > 0;
             const {transactionId} = urgent ? this.messageQueues.urgent[0] : this.messageQueues.normal[0];
-            const isSent = this.sendJSON(this.transactions[transactionId], false);
-            if (isSent) {
-                if (urgent) {
-                    this.messageQueues.urgent.shift();
-                } else {
-                    this.messageQueues.normal.shift();
+            if (this.transactions[transactionId].status === TransactionStatus.waiting) {
+                const isSent = this.sendJSON(this.transactions[transactionId], false);
+                if (!isSent) {
+                    return;
                 }
+            }
+            if (urgent) {
+                this.messageQueues.urgent.shift();
             } else {
-                return;
+                this.messageQueues.normal.shift();
             }
         }
     }
