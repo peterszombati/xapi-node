@@ -104,7 +104,10 @@ export class Queue extends Listener {
         Object.values(this.transactions)
             .filter(t => t.transactionPromise.reject !== null && t.createdAt.elapsedMs() > 60000)
             .forEach(transaction => {
-                this.rejectTransaction({code: errorCode.XAPINODE_3, explain: 'Timeout'}, transaction);
+                this.rejectTransaction({
+                    code: errorCode.XAPINODE_3,
+                    explain: 'Timeout'
+                }, transaction);
             });
     }
 
