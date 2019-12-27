@@ -10,6 +10,7 @@ import {Timer} from "../modules/Timer";
 export class Queue extends Listener {
     public status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
     public transactions: Transactions = {};
+    public lastReceivedMessage: Time | null = null;
     private type: TransactionType;
     private messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = {urgent: [], normal: []};
     private _transactionIdIncrement: number = 0;
@@ -19,15 +20,6 @@ export class Queue extends Listener {
     protected openTimeout: Timer = new Timer();
     protected reconnectTimeout: Timer = new Timer();
     protected WebSocket: WebSocketWrapper;
-
-    private _lastReceivedMessage: Time | null = null;
-    public get lastReceivedMessage() {
-        return this._lastReceivedMessage;
-    }
-
-    public set lastReceivedMessage(time: Time | null) {
-        this._lastReceivedMessage = time;
-    }
 
     private get queueSize() {
         return this.messageQueues.urgent.length + this.messageQueues.normal.length;
@@ -63,17 +55,17 @@ export class Queue extends Listener {
     }
 
     private addElapsedTime(time: Time) {
-        this.messagesElapsedTime.push(time);
         if (this.messagesElapsedTime.length > 4) {
-            this.messagesElapsedTime.shift();
+            this.messagesElapsedTime = [...this.messagesElapsedTime.slice(1,5), time];
+        } else {
+            this.messagesElapsedTime.push(time);
         }
     }
 
     private isRateLimitReached() {
-        if (this.messagesElapsedTime.length < 4) {
-            return false;
-        }
-        return this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs() < this.rateLimit;
+        return this.messagesElapsedTime.length < 4
+            ? false
+            : this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs() < this.rateLimit;
     }
 
     protected resetMessageTube() {
