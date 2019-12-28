@@ -63,8 +63,8 @@ class Utils {
     };
 
     static transactionToJSONString(transaction: Transaction<any, any>): string {
-        const response = JSON.stringify(transaction.response.json);
         try {
+            const response = JSON.stringify(transaction.response.json);
             const createdAtUTC = transaction.createdAt.getUTC();
             const sentUTC = transaction.request.sent == null ? null : transaction.request.sent.getUTC();
             const receivedUTC = transaction.response.received == null ? null : transaction.response.received.getUTC();
@@ -96,12 +96,9 @@ class Utils {
 
     static formatNumber(number: number, length: number): string {
         let result = number.toString();
-
-        if (length - result.length > 0) {
-            return '0'.repeat(length - result.length) + result;
-        }
-
-        return result;
+        return (length - result.length > 0)
+            ? '0'.repeat(length - result.length) + result
+            : result;
     }
 
     static getPositionType({cmd, closed, close_time}: {cmd: CMD_FIELD, closed: boolean, close_time: number}): PositionType {
