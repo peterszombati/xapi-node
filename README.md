@@ -84,7 +84,7 @@ x.Socket.send.tradeTransaction({
 ### 5. Listening EURUSD price data
 ```ts
 x.Stream.listen.getTickPrices((data) => {
-    console.log(data.symbol + ': ' + data.ask + ' price | ' + data.askVolume + ' volume');
+    console.log(data.symbol + ': ' + data.ask + ' | ' + data.askVolume + ' volume');
 });
 
 x.onReady(() => {
@@ -92,13 +92,26 @@ x.onReady(() => {
         .catch(() => { console.error('subscribe for EURUSD failed')});
 });
 /* output
-EURUSD: 1.10912 price | 500000 volume
-EURUSD: 1.10913 price | 1000000 volume
-EURUSD: 1.10916 price | 1000000 volume
-EURUSD: 1.10922 price | 3000000 volume
-EURUSD: 1.10931 price | 3500000 volume
+EURUSD: 1.10912 | 500000 volume | 0 level
+EURUSD: 1.10913 | 1000000 volume | 1 level
+EURUSD: 1.10916 | 1000000 volume | 2 level
+EURUSD: 1.10922 | 3000000 volume | 3 level
+EURUSD: 1.10931 | 3500000 volume | 4 level
 ...
 */
+```
+### 6. get EURUSD M1 candle chart
+```ts
+x.onReady(() => {
+    x.loadChart({
+        symbol:'EURUSD',
+        period: PERIOD_FIELD.PERIOD_M1
+    }).then(({ candles, digits}) => {
+        console.log(candles.length);
+        console.log(candles[0]);
+        console.log('digits = ' + digits);
+    })
+});
 ```
 
 ## Donation
