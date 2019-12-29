@@ -193,7 +193,7 @@ export class SocketConnection extends Queue {
                     explain: 'Trading disabled in login config (safe = true)'
                 }, transaction);
             } else {
-                this.sendJSON(transaction, true);
+                this.sendMessage(transaction, true);
             }
         });
     }

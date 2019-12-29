@@ -124,7 +124,7 @@ export class Queue extends Listener {
         return { removed };
     }
 
-    private sendMessage(json: string): Time | null {
+    private sendJSON(json: string): Time | null {
         try {
             const time: Time = new Time();
             this.WebSocket.send(json);
@@ -191,10 +191,10 @@ export class Queue extends Listener {
         Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
     }
 
-    protected sendJSON(transaction: Transaction<any, any>, addQueu: boolean): boolean {
+    protected sendMessage(transaction: Transaction<any, any>, addQueu: boolean): boolean {
         if (!this.isRateLimitReached()) {
             if (this.queueSize === 0 || !addQueu) {
-                const sentTime = this.sendMessage(transaction.request.json);
+                const sentTime = this.sendJSON(transaction.request.json);
                 if (sentTime !== null) {
                     this.addElapsedTime(sentTime);
                     transaction.request.sent = sentTime;
@@ -236,7 +236,7 @@ export class Queue extends Listener {
             const urgent = this.messageQueues.urgent.length > 0;
             const {transactionId} = urgent ? this.messageQueues.urgent[0] : this.messageQueues.normal[0];
             if (this.transactions[transactionId].status === TransactionStatus.waiting) {
-                const isSent = this.sendJSON(this.transactions[transactionId], false);
+                const isSent = this.sendMessage(this.transactions[transactionId], false);
                 if (!isSent) {
                     return;
                 }

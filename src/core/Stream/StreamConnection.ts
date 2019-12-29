@@ -124,7 +124,7 @@ export class StreamConnection extends Queue {
                     explain: 'User is not logged'
                 }, transaction);
             } else {
-                this.sendJSON(transaction, true);
+                this.sendMessage(transaction, true);
             }
         });
     }
