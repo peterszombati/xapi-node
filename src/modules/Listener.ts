@@ -1,7 +1,6 @@
 export class Listener {
 
-    constructor() {
-    }
+    constructor() {}
 
     private _listeners: any = {};
 
@@ -10,16 +9,15 @@ export class Listener {
     }
 
     public addListener(listenerId: string, callBack: any, key: string | null = null) {
-        if (typeof (callBack) !== 'function') {
-            return;
+        if (typeof (callBack) === 'function') {
+            if (this._listeners[listenerId] === undefined) {
+                this._listeners[listenerId] = {};
+            }
+            key = key === null
+                ? 'g' + Object.keys(this._listeners[listenerId]).length
+                : 's' + key;
+            this._listeners[listenerId][key] = callBack;
         }
-        if (this._listeners[listenerId] === undefined) {
-            this._listeners[listenerId] = {};
-        }
-        key = key === null
-            ? 'g' + Object.keys(this._listeners[listenerId]).length
-            : 's' + key;
-        this._listeners[listenerId][key] = callBack;
     }
 
     public callListener(listenerId: string, params: any[] = []): any[] {
