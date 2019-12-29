@@ -178,7 +178,7 @@ export class SocketConnection extends Queue {
                 this.rejectTransaction({
                     code: errorCode.XAPINODE_1,
                     explain: 'Socket closed'
-                }, this.transactions[transactionId]);
+                }, transaction);
             } else if (this.XAPI.Stream.session.length === 0
                 && 'login' !== command
                 && 'ping' !== command
@@ -191,7 +191,7 @@ export class SocketConnection extends Queue {
                 this.rejectTransaction({
                     code: errorCode.XAPINODE_4,
                     explain: 'Trading disabled in login config (safe = true)'
-                }, this.transactions[transactionId]);
+                }, transaction);
             } else {
                 this.sendJSON(transaction, true);
             }
