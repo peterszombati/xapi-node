@@ -340,6 +340,7 @@ export class XAPI extends Listener {
         return new Promise((resolve, reject) => {
             this.Stream.session = '';
             this._tryReconnect = false;
+            this.stopTimer();
             this.Socket.stopTimer();
             this.Stream.stopTimer();
             this.Stream.closeConnection();
