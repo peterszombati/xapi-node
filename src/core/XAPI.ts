@@ -127,6 +127,9 @@ export class XAPI extends Listener {
                 }: XAPIConfig) {
         super();
         changeLogger(logger);
+        if (logger.path === null && (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports)) {
+            console.log('[xapi-node]: Logger path is not defined');
+        }
         this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
         this.Socket = new Socket(this, password);
         this.Stream = new Stream(this);
