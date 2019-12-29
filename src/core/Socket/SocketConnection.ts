@@ -6,7 +6,7 @@ import {Log} from '../../utils/Log';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import Utils from '../../utils/Utils';
-import {Timer} from "../../modules/Timer";
+import {Timer} from '../..';
 
 export class SocketConnection extends Queue {
     private XAPI: XAPI;
