@@ -1,10 +1,10 @@
 import {TransactionResolveSocket} from '../../interface/Interface';
-import XAPI from '../XAPI';
 import {Time, Utils, Timer} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import {Log} from '../../utils/Log';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
+import {XAPI} from '../XAPI';
 
 export class SocketConnection extends Queue {
     private XAPI: XAPI;

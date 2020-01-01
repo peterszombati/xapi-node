@@ -1,4 +1,3 @@
-import XAPI from '../XAPI';
 import {
     STREAMING_BALANCE_RECORD,
     STREAMING_CANDLE_RECORD,
@@ -11,6 +10,7 @@ import {
     Time
 } from '../..';
 import {StreamConnection} from './StreamConnection';
+import {XAPI} from '../XAPI';
 
 export class Stream extends StreamConnection {
 

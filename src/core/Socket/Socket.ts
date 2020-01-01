@@ -1,4 +1,3 @@
-import XAPI from '../XAPI';
 import {
     CALENDAR_RECORD,
     IB_RECORD,
@@ -41,6 +40,7 @@ import {
 import {CMD_FIELD, PERIOD_FIELD} from '../..';
 import {SocketConnection} from './SocketConnection';
 import {Time} from '../..';
+import {XAPI} from '../XAPI';
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>): void
