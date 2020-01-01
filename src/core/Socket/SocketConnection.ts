@@ -19,13 +19,8 @@ export class SocketConnection extends Queue {
 
     public connect() {
         this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName + '/' + this.XAPI.accountType);
-        this.WebSocket.onOpen(() => {
-            this.setConnectionStatus(ConnectionStatus.CONNECTING);
-        });
-
-        this.WebSocket.onClose(() => {
-            this.setConnectionStatus(ConnectionStatus.DISCONNECTED);
-        });
+        this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING));
+        this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
 
         this.WebSocket.onMessage((message: any) => {
             try {
