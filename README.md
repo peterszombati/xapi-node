@@ -32,6 +32,9 @@ x.connect();
 
 x.onReady(() => {
     console.log('Connection is ready');
+    
+    // Disconnect
+    x.disconnect().then(() => console.log('Disconnected'));
 });
 x.onReject((e) => {
     console.error(e);
@@ -107,7 +110,7 @@ x.onReady(() => {
     x.loadChart({
         symbol:'EURUSD',
         period: PERIOD_FIELD.PERIOD_M1
-    }).then(({ candles, digits}) => {
+    }).then(({candles, digits}) => {
         console.log(candles.length);
         console.log(candles[0]);
         console.log('digits = ' + digits);
