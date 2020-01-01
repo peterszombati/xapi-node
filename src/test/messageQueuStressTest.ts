@@ -6,7 +6,7 @@
 }
  */
 
-import XAPI from '../core/XAPI';
+import {XAPI} from '../core/XAPI';
 import {parseLogin} from '..';
 import Logger4 from 'logger4';
 import * as path from 'path';
