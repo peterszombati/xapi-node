@@ -7,7 +7,7 @@ export class Listener {
         return this._listeners;
     }
 
-    public addListener(listenerId: string, callBack: any, key: string | null = null) {
+    public addListener(listenerId: string, callBack: any, key: string | null = null): void {
         if (typeof (callBack) === 'function') {
             if (this._listeners[listenerId] === undefined) {
                 this._listeners[listenerId] = {};
