@@ -23,20 +23,26 @@ export class SocketConnection extends Queue {
         this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
 
         this.WebSocket.onMessage((message: any) => {
+            this.lastReceivedMessage = new Time();
             try {
-                const json = JSON.parse(message.toString().trim());
-                this.lastReceivedMessage = new Time();
-                this.handleSocketMessage(json, new Time());
+                let json = JSON.parse(message.toString().trim());
+                try {
+                    this.handleSocketMessage(json, new Time());
+                } catch (e) {
+                    const {name, message, stack} = new Error(e);
+                    Log.error('Socket WebSocket Handle Message ERROR');
+                    Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+                }
             } catch (e) {
                 const {name, message, stack} = new Error(e);
-                Log.error('Socket Handle WebSocket Message Error');
+                Log.error('Socket WebSocket JSON parse ERROR');
                 Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
             }
         });
 
         this.WebSocket.onError((error: any) => {
             const {name, message, stack} = new Error(error);
-            Log.error('Socket WebSocket Error');
+            Log.error('Socket WebSocket ERROR');
             Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
         });
     }
