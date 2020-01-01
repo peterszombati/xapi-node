@@ -16,7 +16,8 @@ This module is usable on Front-end too.
 npm i xapi-node
 ```
 
-### 2. Example Authentication
+### 2. Example usage
+#### Authentication
 ```ts
 // TypeScript
 import XAPI from 'xapi-node';
@@ -37,7 +38,7 @@ x.onReject((e) => {
 });
 ```
 
-### 3. Example placing buy limit on BITCOIN [CFD]
+#### placing buy limit on BITCOIN [CFD]
 ```ts
 x.Socket.send.tradeTransaction({
     cmd: CMD_FIELD.BUY_LIMIT,
@@ -59,7 +60,7 @@ x.Socket.send.tradeTransaction({
 });
 ```
 
-### 4. Example placing buy limit on US30 (Dow Jones Industrial Average)
+#### placing buy limit on US30 (Dow Jones Industrial Average)
 ```ts
 x.Socket.send.tradeTransaction({
     cmd: CMD_FIELD.BUY_LIMIT,
@@ -81,7 +82,7 @@ x.Socket.send.tradeTransaction({
 });
 ```
 
-### 5. Listening EURUSD price data
+#### Listening EURUSD price data
 ```ts
 x.Stream.listen.getTickPrices((data) => {
     console.log(data.symbol + ': ' + data.ask + ' | ' + data.askVolume + ' volume | ' + data.level + ' level' );
@@ -100,7 +101,7 @@ EURUSD: 1.10931 | 3500000 volume | 4 level
 ...
 */
 ```
-### 6. get EURUSD M1 candle chart
+#### get EURUSD M1 candle chart
 ```ts
 x.onReady(() => {
     x.loadChart({
