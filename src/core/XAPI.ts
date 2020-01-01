@@ -423,5 +423,3 @@ export class XAPI extends Listener {
     }
 
 }
-
-export default XAPI;
