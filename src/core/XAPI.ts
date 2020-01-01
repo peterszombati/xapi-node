@@ -3,7 +3,7 @@ import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
 import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, Time, TYPE_FIELD, Utils} from '..';
 import {TradePosition, TradePositions} from '../interface/Interface';
-import {CHART_RATE_LIMIT_BY_PERIOD, Listeners, PositionType} from '../enum/Enum';
+import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType} from '../enum/Enum';
 import {Socket} from "./Socket/Socket";
 import {Stream} from "./Stream/Stream";
 
@@ -345,6 +345,22 @@ export class XAPI extends Listener {
                 resolve();
             }
         });
+    }
+
+    public getAccountCurrencyValue(anotherCurrency: string) {
+        return Currency2Pair[anotherCurrency] === undefined
+            ? Promise.reject(anotherCurrency + ' is not relevant currency')
+            : this.Socket.send.getSymbol(Currency2Pair[anotherCurrency]).then(({returnData}) => {
+                return this.Socket.send.getProfitCalculation(
+                    1,
+                    CMD_FIELD.BUY,
+                    0,
+                    Currency2Pair[anotherCurrency],
+                    1,
+                ).then(({returnData: returnData2}) => {
+                    return returnData2.profit / returnData.contractSize;
+                });
+            });
     }
 
     public loadChart({

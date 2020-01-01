@@ -127,3 +127,28 @@ export enum Listeners {
     xapi_onReject='xapi_onReject',
     xapi_onReady='xapi_onReady'
 }
+
+export const Currency2Pair: any = {
+    'HUF': 'EURHUF',
+    'USD': 'EURUSD',
+    'JPY': 'USDJPY',
+    'GBP': 'EURGBP',
+    'TRY': 'EURTRY',
+    'CHF': 'USDCHF',
+    'CZK': 'USDCZK',
+    'BRL': 'USDBRL',
+    'PLN': 'USDPLN',
+    'MXN': 'USDMXN',
+    'ZAR': 'USDZAR',
+    'RON': 'USDRON',
+    'AUD': 'EURAUD',
+    'CAD': 'USDCAD',
+    'SEK': 'USDSEK',
+    'NOK': 'EURNOK',
+    'NZD': 'EURNZD',
+    'EUR': 'DE30',
+    'CLP': 'USDCLP',
+    'DKK': 'VWS.DK_4',
+    'BTC': 'XEMBTC',
+    'ETH': 'TRXETH'
+};
