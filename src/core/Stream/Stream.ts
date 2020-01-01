@@ -46,57 +46,29 @@ class Stream extends StreamConnection {
     };
 
     public subscribe = {
-        getBalance: () => {
-            return this.sendSubscribe('Balance');
-        },
-        getCandles: (symbol: string) => {
-            return this.sendSubscribe('Candles', {symbol});
-        },
-        getKeepAlive: () => {
-            return this.sendSubscribe('KeepAlive');
-        },
-        getNews: () => {
-            return this.sendSubscribe('News');
-        },
-        getProfits: () => {
-            return this.sendSubscribe('Profits');
-        },
-        getTickPrices: (symbol: string, minArrivalTime: number = 0, maxLevel: number = 6) => {
-            return this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel});
-        },
-        getTrades: () => {
-            return this.sendSubscribe('Trades');
-        },
-        getTradeStatus: () => {
-            return this.sendSubscribe('TradeStatus');
-        },
+        getBalance: () => this.sendSubscribe('Balance'),
+        getCandles: (symbol: string) => this.sendSubscribe('Candles', {symbol}),
+        getKeepAlive: () => this.sendSubscribe('KeepAlive'),
+        getNews: () => this.sendSubscribe('News'),
+        getProfits: () => this.sendSubscribe('Profits'),
+        getTickPrices: (
+            symbol: string,
+            minArrivalTime: number = 0,
+            maxLevel: number = 6
+        ) => this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel}),
+        getTrades: () => this.sendSubscribe('Trades'),
+        getTradeStatus: () => this.sendSubscribe('TradeStatus'),
     };
 
     public unSubscribe = {
-        getBalance: () => {
-            return this.sendUnsubscribe('Balance');
-        },
-        getCandles: (symbol: string) => {
-            return this.sendUnsubscribe('Candles', {symbol});
-        },
-        getKeepAlive: () => {
-            return this.sendUnsubscribe('KeepAlive');
-        },
-        getNews: () => {
-            return this.sendUnsubscribe('News');
-        },
-        getProfits: () => {
-            return this.sendUnsubscribe('Profits');
-        },
-        getTickPrices: (symbol: string) => {
-            return this.sendUnsubscribe('TickPrices', {symbol});
-        },
-        getTrades: () => {
-            return this.sendUnsubscribe('Trades');
-        },
-        getTradeStatus: () => {
-            return this.sendUnsubscribe('TradeStatus');
-        },
+        getBalance: () => this.sendUnsubscribe('Balance'),
+        getCandles: (symbol: string) => this.sendUnsubscribe('Candles', {symbol}),
+        getKeepAlive: () => this.sendUnsubscribe('KeepAlive'),
+        getNews: () => this.sendUnsubscribe('News'),
+        getProfits: () => this.sendUnsubscribe('Profits'),
+        getTickPrices: (symbol: string) => this.sendUnsubscribe('TickPrices', {symbol}),
+        getTrades: () => this.sendUnsubscribe('Trades'),
+        getTradeStatus: () => this.sendUnsubscribe('TradeStatus'),
     };
 
 }

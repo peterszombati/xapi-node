@@ -128,113 +128,89 @@ class Socket extends SocketConnection {
     };
 
     public send = {
-        getAllSymbols: () => {
-            return this.sendCommand<SYMBOL_RECORD[]>('getAllSymbols');
-        },
-        getCalendar: () => {
-            return this.sendCommand<CALENDAR_RECORD[]>('getCalendar');
-        },
-        getChartLastRequest: (period: PERIOD_FIELD, start: number, symbol: string) => {
-            return this.sendCommand<getChartRequestResponse>('getChartLastRequest', {
-                'info': {
-                    period,
-                    start,
-                    symbol
-                }
-            });
-        },
-        getChartRangeRequest: (end: number, period: PERIOD_FIELD, start: number, symbol: string, ticks: number = 0) => {
-            return this.sendCommand<getChartRequestResponse>('getChartRangeRequest', {
-                'info': {
-                    end,
-                    period,
-                    start,
-                    symbol,
-                    ticks
-                }
-            });
-        },
-        getCommissionDef: (symbol: string, volume: number) => {
-            return this.sendCommand<getCommissionDefResponse>('getCommissionDef', {
-                symbol,
-                volume
-            });
-        },
-        getCurrentUserData: () => {
-            return this.sendCommand<getCurrentUserDataResponse>('getCurrentUserData');
-        },
-        getIbsHistory: (start: number, end: number) => {
-            return this.sendCommand<IB_RECORD[]>('getIbsHistory', {
-                end,
-                start
-            });
-        },
-        getMarginLevel: () => {
-            return this.sendCommand<getMarginLevelResponse>('getMarginLevel');
-        },
-        getMarginTrade: (symbol: string, volume: number) => {
-            return this.sendCommand<getMarginTradeResponse>('getMarginTrade', {
-                symbol,
-                volume
-            });
-        },
-        getNews: (start: number, end: number) => {
-            return this.sendCommand<NEWS_TOPIC_RECORD[]>('getNews', {
+        getAllSymbols: () => this.sendCommand<SYMBOL_RECORD[]>('getAllSymbols'),
+        getCalendar: () => this.sendCommand<CALENDAR_RECORD[]>('getCalendar'),
+        getChartLastRequest: (
+            period: PERIOD_FIELD,
+            start: number,
+            symbol: string
+        ) =>
+            this.sendCommand<getChartRequestResponse>('getChartLastRequest', {
+            'info': {
+                period,
                 start,
-                end
-            });
-        },
-        getProfitCalculation: (closePrice: number, cmd: CMD_FIELD, openPrice: number, symbol: string, volume: number) => {
-            return this.sendCommand<getProfitCalculationResponse>('getProfitCalculation', {
-                closePrice,
-                cmd,
-                openPrice,
-                symbol,
-                volume
-            });
-        },
-        getServerTime: () => {
-            return this.sendCommand<getServerTimeResponse>('getServerTime', {}, null, true);
-        },
-        getStepRules: () => {
-            return this.sendCommand<STEP_RULE_RECORD[]>('getStepRules');
-        },
-        getSymbol: (symbol: string) => {
-            return this.sendCommand<SYMBOL_RECORD>('getSymbol', {
                 symbol
-            });
-        },
-        getTickPrices: (symbols: string[], timestamp: number = 0, level: number = -1) => {
-            return this.sendCommand<getTickPricesResponse>('getTickPrices', {
-                level,
-                symbols,
-                timestamp
-            });
-        },
-        getTradeRecords: (orders: number[]) => {
-            return this.sendCommand<TRADE_RECORD[]>('getTradeRecords', {
-                orders
-            });
-        },
-        getTrades: (openedOnly: boolean = true) => {
-            return this.sendCommand<TRADE_RECORD[]>('getTrades', {
-                openedOnly
-            });
-        },
-        getTradesHistory: (start: number, end: number) => {
-            return this.sendCommand<TRADE_RECORD[]>('getTradesHistory', {
+            }
+        }),
+        getChartRangeRequest: (
+            end: number,
+            period: PERIOD_FIELD,
+            start: number,
+            symbol: string,
+            ticks: number = 0
+        ) => this.sendCommand<getChartRequestResponse>('getChartRangeRequest', {
+            'info': {
                 end,
-                start
-            });
-        },
-        getTradingHours: (symbols: string[]) => {
-            return this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {
-                symbols
-            });
-        },
-        getVersion: () => {
-            return this.sendCommand<getVersionResponse>('getVersion');
-        },
+                period,
+                start,
+                symbol,
+                ticks
+            }
+        }),
+        getCommissionDef: (symbol: string, volume: number) => this.sendCommand<getCommissionDefResponse>('getCommissionDef', {
+            symbol,
+            volume
+        }),
+        getCurrentUserData: () => this.sendCommand<getCurrentUserDataResponse>('getCurrentUserData'),
+        getIbsHistory: (start: number, end: number) => this.sendCommand<IB_RECORD[]>('getIbsHistory', {
+            end,
+            start
+        }),
+        getMarginLevel: () => this.sendCommand<getMarginLevelResponse>('getMarginLevel'),
+        getMarginTrade: (symbol: string, volume: number) => this.sendCommand<getMarginTradeResponse>('getMarginTrade', {
+            symbol,
+            volume
+        }),
+        getNews: (start: number, end: number) => this.sendCommand<NEWS_TOPIC_RECORD[]>('getNews', {
+            start,
+            end
+        }),
+        getProfitCalculation: (
+            closePrice: number,
+            cmd: CMD_FIELD,
+            openPrice: number,
+            symbol: string,
+            volume: number
+        ) => this.sendCommand<getProfitCalculationResponse>('getProfitCalculation', {
+            closePrice,
+            cmd,
+            openPrice,
+            symbol,
+            volume
+        }),
+        getServerTime: () => this.sendCommand<getServerTimeResponse>('getServerTime', {}, null, true),
+        getStepRules: () => this.sendCommand<STEP_RULE_RECORD[]>('getStepRules'),
+        getSymbol: (symbol: string) => this.sendCommand<SYMBOL_RECORD>('getSymbol', {
+            symbol
+        }),
+        getTickPrices: (symbols: string[], timestamp: number = 0, level: number = -1) => this.sendCommand<getTickPricesResponse>('getTickPrices', {
+            level,
+            symbols,
+            timestamp
+        }),
+        getTradeRecords: (orders: number[]) => this.sendCommand<TRADE_RECORD[]>('getTradeRecords', {
+            orders
+        }),
+        getTrades: (openedOnly: boolean = true) => this.sendCommand<TRADE_RECORD[]>('getTrades', {
+            openedOnly
+        }),
+        getTradesHistory: (start: number, end: number) => this.sendCommand<TRADE_RECORD[]>('getTradesHistory', {
+            end,
+            start
+        }),
+        getTradingHours:
+            (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {symbols}),
+        getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
         tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO) => {
             const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
             const transactionId = this.createTransactionId();
