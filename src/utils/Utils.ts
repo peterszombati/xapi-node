@@ -2,7 +2,7 @@ import {TradePosition, Transaction} from '../interface/Interface';
 import {CMD_FIELD, STREAMING_TRADE_RECORD, TRADE_RECORD} from '..';
 import {PositionType} from '../enum/Enum';
 
-class Utils {
+export class Utils {
 
     static hideSecretInfo(transaction: Transaction<any, any>): Transaction<any, any> {
         return {
@@ -113,5 +113,3 @@ class Utils {
         }
     }
 }
-
-export default Utils;

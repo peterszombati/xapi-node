@@ -1,12 +1,11 @@
-import Stream from './Stream/Stream';
-import Socket from './Socket/Socket';
 import {Listener} from '../modules/Listener';
 import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
-import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, Time, TYPE_FIELD} from '..';
+import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, Time, TYPE_FIELD, Utils} from '..';
 import {TradePosition, TradePositions} from '../interface/Interface';
-import Utils from '../utils/Utils';
 import {CHART_RATE_LIMIT_BY_PERIOD, Listeners, PositionType} from '../enum/Enum';
+import {Socket} from "./Socket/Socket";
+import {Stream} from "./Stream/Stream";
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;

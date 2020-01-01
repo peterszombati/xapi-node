@@ -7,12 +7,12 @@ import {
     STREAMING_PROFIT_RECORD,
     STREAMING_TICK_RECORD,
     STREAMING_TRADE_RECORD,
-    STREAMING_TRADE_STATUS_RECORD
+    STREAMING_TRADE_STATUS_RECORD,
+    Time
 } from '../..';
 import {StreamConnection} from './StreamConnection';
-import {Time} from '../..';
 
-class Stream extends StreamConnection {
+export class Stream extends StreamConnection {
 
     constructor(XAPI: XAPI) {
         super(XAPI);
@@ -72,5 +72,3 @@ class Stream extends StreamConnection {
     };
 
 }
-
-export default Stream;

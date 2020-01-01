@@ -1,5 +1,4 @@
 export class Listener {
-
     constructor() {}
 
     private _listeners: any = {};

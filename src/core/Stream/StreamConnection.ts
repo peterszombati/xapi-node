@@ -146,5 +146,4 @@ export class StreamConnection extends Queue {
     protected sendUnsubscribe(command: string, completion: any = {}) {
         return this.sendCommand(`stop${command}`, completion);
     }
-
 }

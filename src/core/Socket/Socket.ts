@@ -46,7 +46,7 @@ interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>): void
 }
 
-class Socket extends SocketConnection {
+export class Socket extends SocketConnection {
 
     constructor(XAPI: XAPI, password: string) {
         super(XAPI, password);
@@ -238,7 +238,4 @@ class Socket extends SocketConnection {
             });
         }
     };
-
 }
-
-export default Socket;
