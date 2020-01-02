@@ -1,38 +1,38 @@
 {
-  "name": "xapi-node",
-  "version": "1.9.8",
-  "description": "This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "dependencies": {
-    "logger4": "^1.6.0",
-    "ws": "^7.2.1"
-  },
-  "devDependencies": {
-    "@types/node": "^11.15.3",
-    "typescript": "^3.4.5"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/peterszombati/xapi-node.git"
-  },
-  "keywords": [
-    "xstation5",
-    "trading",
-    "xtb",
-    "forex",
-    "trading-api",
-    "xopenhub"
-  ],
-  "prepare": "npm run build",
-  "author": "Peter Szombati",
-  "license": "BSD 4-Clause",
-  "bugs": {
-    "url": "https://github.com/peterszombati/xapi-node/issues"
-  },
-  "homepage": "https://github.com/peterszombati/xapi-node#readme"
+	"name": "xapi-node",
+	"version": "1.9.8",
+	"description": "This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
+	"main": "build/index.js",
+	"types": "build/index.d.ts",
+	"dependencies": {
+		"logger4": "^1.6.0",
+		"ws": "^7.2.1"
+	},
+	"devDependencies": {
+		"@types/node": "^11.15.3",
+		"typescript": "^3.4.5"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/peterszombati/xapi-node.git"
+	},
+	"keywords": [
+		"xstation5",
+		"trading",
+		"xtb",
+		"forex",
+		"trading-api",
+		"xopenhub"
+	],
+	"prepare": "npm run build",
+	"author": "Peter Szombati",
+	"license": "BSD 4-Clause",
+	"bugs": {
+		"url": "https://github.com/peterszombati/xapi-node/issues"
+	},
+	"homepage": "https://github.com/peterszombati/xapi-node#readme"
 }
