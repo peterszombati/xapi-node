@@ -119,13 +119,13 @@ export enum errorCode {
 }
 
 export enum Listeners {
-    xapi_onCreatePosition='xapi_onCreatePosition',
-    xapi_onDeletePosition='xapi_onDeletePosition',
-    xapi_onChangePosition='xapi_onChangePosition',
-    xapi_onPendingPosition='xapi_onPendingPosition',
-    xapi_onConnectionChange='xapi_onConnectionChange',
-    xapi_onReject='xapi_onReject',
-    xapi_onReady='xapi_onReady'
+    xapi_onCreatePosition = 'xapi_onCreatePosition',
+    xapi_onDeletePosition = 'xapi_onDeletePosition',
+    xapi_onChangePosition = 'xapi_onChangePosition',
+    xapi_onPendingPosition = 'xapi_onPendingPosition',
+    xapi_onConnectionChange = 'xapi_onConnectionChange',
+    xapi_onReject = 'xapi_onReject',
+    xapi_onReady = 'xapi_onReady'
 }
 
 export const Currency2Pair: any = {

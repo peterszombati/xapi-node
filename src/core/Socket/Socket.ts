@@ -111,12 +111,12 @@ export class Socket extends SocketConnection {
             symbol: string
         ) =>
             this.sendCommand<getChartRequestResponse>('getChartLastRequest', {
-            'info': {
-                period,
-                start,
-                symbol
-            }
-        }),
+                'info': {
+                    period,
+                    start,
+                    symbol
+                }
+            }),
         getChartRangeRequest: (
             end: number,
             period: PERIOD_FIELD,

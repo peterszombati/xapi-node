@@ -54,7 +54,7 @@ export class Queue extends Listener {
 
     private addElapsedTime(time: Time) {
         if (this.messagesElapsedTime.length > 4) {
-            this.messagesElapsedTime = [...this.messagesElapsedTime.slice(1,5), time];
+            this.messagesElapsedTime = [...this.messagesElapsedTime.slice(1, 5), time];
         } else {
             this.messagesElapsedTime.push(time);
         }
@@ -109,7 +109,7 @@ export class Queue extends Listener {
             });
     }
 
-    public removeOldTransactions(): { removed: number} {
+    public removeOldTransactions(): { removed: number } {
         let removed = 0;
         Object.values(this.transactions)
             .filter(t => t.transactionPromise.reject === null
@@ -119,7 +119,7 @@ export class Queue extends Listener {
                 delete this.transactions[transaction.transactionId];
                 removed += 1;
             });
-        return { removed };
+        return {removed};
     }
 
     private sendJSON(json: string): Time | null {

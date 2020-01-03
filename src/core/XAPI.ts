@@ -51,44 +51,56 @@ export class XAPI extends Listener {
     public get accountType(): string | null {
         return this.account.type;
     }
+
     public get isTradingDisabled(): boolean {
         return this.account.safe;
     }
+
     public get accountId(): string {
         return this.account.accountId;
     }
+
     public get appName(): string | undefined {
         return this.account.appName;
     }
+
     public get hostName(): string {
         return this.account.host;
     }
+
     public get rateLimit() {
         return this._rateLimit;
     }
+
     public get tryReconnect() {
         return this._tryReconnect;
     }
+
     public get openPositions(): TradePosition[] {
         return this.positions.filter(t => t.position_type === PositionType.open);
     }
+
     public get limitPositions(): TradePosition[] {
         return this.positions.filter(t => t.position_type === PositionType.limit);
     }
+
     public get positions(): TradePosition[] {
         return Object.values(this._positions)
             .filter(t => t.value !== null
                 && (t.value.position_type === PositionType.limit || t.value.position_type === PositionType.open))
             .map(t => t.value);
     }
+
     public get isConnectionReady(): boolean {
         return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED;
     }
+
     public get isReady(): boolean {
         return this.Stream.status === ConnectionStatus.CONNECTED
             && this.Socket.status === ConnectionStatus.CONNECTED
             && this.Stream.session.length > 0;
     }
+
     public get serverTime(): number {
         if (this._serverTime === null) {
             return Date.now();
@@ -97,6 +109,7 @@ export class XAPI extends Listener {
             return Math.floor(this._serverTime.timestamp + this._serverTime.ping + (elapsedMs === null ? 0 : elapsedMs));
         }
     }
+
     public getLogger(): Logger4Interface {
         return Log;
     }
@@ -364,25 +377,25 @@ export class XAPI extends Listener {
     }
 
     public loadChart({
-                symbol,
-                period = PERIOD_FIELD.PERIOD_M1,
-                ticks = -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]],
-                startUTC = null
-            } : {
+                         symbol,
+                         period = PERIOD_FIELD.PERIOD_M1,
+                         ticks = -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]],
+                         startUTC = null
+                     }: {
         symbol: string,
         period?: PERIOD_FIELD | undefined,
         ticks?: number,
         startUTC?: number | null
-    }): Promise<{symbol: string, period: PERIOD_FIELD, candles: number[][], digits: number}> {
+    }): Promise<{ symbol: string, period: PERIOD_FIELD, candles: number[][], digits: number }> {
         return (startUTC !== null
-            ? this.Socket.send.getChartLastRequest(period, startUTC, symbol)
-            : this.Socket.send.getChartRangeRequest(
-                0,
-                period,
-                this.serverTime,
-                symbol,
-                ticks)
-            ).then((data) => {
+                ? this.Socket.send.getChartLastRequest(period, startUTC, symbol)
+                : this.Socket.send.getChartRangeRequest(
+                    0,
+                    period,
+                    this.serverTime,
+                    symbol,
+                    ticks)
+        ).then((data) => {
             return {
                 symbol,
                 period,

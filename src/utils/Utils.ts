@@ -58,7 +58,7 @@ export class Utils {
             symbol: t.symbol,
             tp: t.tp,
             volume: t.volume,
-            position_type: Utils.getPositionType({ cmd: t.cmd, closed: t.closed, close_time: t.close_time})
+            position_type: Utils.getPositionType({cmd: t.cmd, closed: t.closed, close_time: t.close_time})
         };
     };
 
@@ -101,7 +101,7 @@ export class Utils {
             : result;
     }
 
-    static getPositionType({cmd, closed, close_time}: {cmd: CMD_FIELD, closed: boolean, close_time: number}): PositionType {
+    static getPositionType({cmd, closed, close_time}: { cmd: CMD_FIELD, closed: boolean, close_time: number }): PositionType {
         if (cmd === CMD_FIELD.SELL || cmd === CMD_FIELD.BUY) {
             return close_time === null && !closed
                 ? PositionType.open
@@ -113,13 +113,13 @@ export class Utils {
         }
     }
 
-    static getContractValue({ price, lot, contractSize, currency, currencyProfit }:
-            { price: number, lot: number, contractSize: number, currency: string, currencyProfit: string }) {
+    static getContractValue({price, lot, contractSize, currency, currencyProfit}:
+                                { price: number, lot: number, contractSize: number, currency: string, currencyProfit: string }) {
         return lot * contractSize * ((currency === currencyProfit) ? price : 1);
     }
 
-    static getProfit({ openPrice, closePrice, isBuy, lot, contractSize }:
-            { openPrice: number, closePrice: number, isBuy: boolean, lot: number, contractSize: number }) {
+    static getProfit({openPrice, closePrice, isBuy, lot, contractSize}:
+                         { openPrice: number, closePrice: number, isBuy: boolean, lot: number, contractSize: number }) {
         return (isBuy ? closePrice - openPrice : openPrice - closePrice) * lot * contractSize;
     }
 
