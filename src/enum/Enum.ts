@@ -124,6 +124,7 @@ export enum Listeners {
     xapi_onChangePosition = 'xapi_onChangePosition',
     xapi_onPendingPosition = 'xapi_onPendingPosition',
     xapi_onConnectionChange = 'xapi_onConnectionChange',
+    xapi_onCashTransaction = 'xapi_onCashTransaction',
     xapi_onReject = 'xapi_onReject',
     xapi_onReady = 'xapi_onReady'
 }
