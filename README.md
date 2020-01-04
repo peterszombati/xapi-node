@@ -1,3 +1,5 @@
+[![Logo](https://github.com/peterszombati/xapi-node/tree/master/docs/xtb-logo.png)](https://www.xtb.com/en)
+
 # xapi-node
 
 This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection
