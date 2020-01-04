@@ -1,4 +1,4 @@
-[![Logo](https://github.com/peterszombati/xapi-node/tree/master/docs/xtb-logo.png)](https://www.xtb.com/en)
+[![Logo](https://github.com/peterszombati/xapi-node/raw/master/docs/xtb-logo.png)](https://www.xtb.com/en)
 
 # xapi-node
 
