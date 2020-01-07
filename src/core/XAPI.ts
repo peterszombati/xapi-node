@@ -371,7 +371,7 @@ export class XAPI extends Listener {
             });
     }
 
-    public loadChart({
+    public getPriceHistory({
                          symbol,
                          period = PERIOD_FIELD.PERIOD_M1,
                          ticks = -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]],
