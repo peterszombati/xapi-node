@@ -4,8 +4,8 @@ import {changeLogger, Log} from '../utils/Log';
 import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, Time, TYPE_FIELD, Utils} from '..';
 import {TradePosition, TradePositions} from '../interface/Interface';
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType} from '../enum/Enum';
-import {Socket} from "./Socket/Socket";
-import {Stream} from "./Stream/Stream";
+import {Socket} from './Socket/Socket';
+import {Stream} from './Stream/Stream';
 
 export const DefaultHostname = 'ws.xtb.com';
 export const DefaultRateLimit = 850;
