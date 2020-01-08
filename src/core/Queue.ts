@@ -48,7 +48,7 @@ export class Queue extends Listener {
                 this.messageQueues.normal.push({transactionId});
             }
             Log.hidden((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
-                + ' (' + transaction.transactionId + '): added to queue (messages in queue = ' + this.queueSize + ')', 'INFO');
+                + ' (' + transaction.transactionId + '): ' + transaction.command + ' added to queue (messages in queue = ' + this.queueSize + ')', 'INFO');
         }
     }
 
