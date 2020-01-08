@@ -151,11 +151,7 @@ export class XAPI extends Listener {
                         this.Stream.ping().catch(e => {
                             Log.error('Stream: ping request failed');
                         });
-                        this.Socket.send.getTrades(true).then(() => {
-                            if (this.isReady) {
-                                this.callListener(Listeners.xapi_onReady);
-                            }
-                        }).catch(e => {
+                        this.Socket.send.getTrades(true).catch().then(() => {
                             if (this.isReady) {
                                 this.callListener(Listeners.xapi_onReady);
                             }
@@ -181,18 +177,13 @@ export class XAPI extends Listener {
         });
 
         this.Socket.listen.login((data, time, transaction) => {
-            Log.hidden('Login is successful (userId = ' + this.accountId
-                + ', accountType = ' + this.accountType + ')', 'INFO');
+            Log.hidden('Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')', 'INFO');
             this.Stream.session = data.streamSessionId;
             if (this.isReady) {
                 this.Stream.ping().catch(e => {
                     Log.error('Stream: ping request failed');
                 });
-                this.Socket.send.getTrades(true).then(() => {
-                    if (this.isReady) {
-                        this.callListener(Listeners.xapi_onReady);
-                    }
-                }).catch(e => {
+                this.Socket.send.getTrades(true).catch().then(() => {
                     if (this.isReady) {
                         this.callListener(Listeners.xapi_onReady);
                     }
