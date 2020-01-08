@@ -5,7 +5,6 @@ export class Timer {
     setInterval(callback: () => void, ms: number) {
         this.clear();
         this.interval = setInterval(() => {
-            this.interval = null;
             callback();
         }, ms);
     }
