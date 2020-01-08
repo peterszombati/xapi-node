@@ -106,10 +106,10 @@ EURUSD: 1.10931 | 3500000 volume | 4 level
 ...
 */
 ```
-#### get EURUSD M1 candle chart
+#### get EURUSD M1 price history
 ```ts
 x.onReady(() => {
-    x.loadChart({
+    x.getPriceHistory({
         symbol:'EURUSD',
         period: PERIOD_FIELD.PERIOD_M1
     }).then(({candles, digits}) => {
