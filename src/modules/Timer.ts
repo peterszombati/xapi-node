@@ -21,9 +21,11 @@ export class Timer {
     clear() {
         if (this.timeout !== null) {
             clearTimeout(this.timeout);
+            this.timeout = null;
         }
         if (this.interval !== null) {
             clearInterval(this.interval);
+            this.interval = null;
         }
     }
 
