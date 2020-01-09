@@ -87,7 +87,7 @@ export class SocketConnection extends Queue {
 
     private tryLogin(retries: number = 2) {
         this.login().catch(e => {
-            Log.hidden('Login is rejected (userId = ' + this.XAPI.accountId
+            Log.error('Login is rejected (userId = ' + this.XAPI.accountId
                 + ', accountType = ' + this.XAPI.accountType
                 + ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');
             if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
