@@ -18,9 +18,7 @@ export class Time {
     }
 
     public getDifference(time: Time): number {
-        const a = time.elapsedMs();
-        const b = this.elapsedMs();
-        return a - b;
+        return time.elapsedMs() - this.elapsedMs();
     }
 
     public get(): Date {
