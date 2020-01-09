@@ -129,7 +129,7 @@ export class SocketConnection extends Queue {
                 this.callListener('command_' + command, [returnData, time, this.transactions[transactionId]]);
             } else {
                 Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n'
-                    + JSON.stringify(returnData, null, '\t'));
+                    + JSON.stringify(message, null, '\t'));
             }
         } else if (message.status !== undefined && message.errorCode !== undefined) {
             const {errorCode} = message;
