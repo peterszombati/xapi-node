@@ -4,6 +4,9 @@ export class Timer {
 
     setInterval(callback: () => void, ms: number) {
         this.clear();
+        if (this.interval !== null) {
+            clearInterval(this.interval);
+        }
         this.interval = setInterval(() => {
             callback();
         }, ms);
@@ -11,6 +14,9 @@ export class Timer {
 
     setTimeout(callback: () => void, ms: number) {
         this.clear();
+        if (this.timeout !== null) {
+            clearTimeout(this.timeout);
+        }
         this.timeout = setTimeout(() => {
             this.timeout = null;
             callback();
