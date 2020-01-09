@@ -62,7 +62,6 @@ import {
     TYPE_FIELD,
     STATE_FIELD,
     REQUEST_STATUS_FIELD,
-    REQUEST_STATUS,
     ConnectionStatus,
     Candle,
     errorCode
@@ -75,7 +74,6 @@ export {
     TYPE_FIELD,
     STATE_FIELD,
     REQUEST_STATUS_FIELD,
-    REQUEST_STATUS,
     ConnectionStatus,
     Candle,
     errorCode

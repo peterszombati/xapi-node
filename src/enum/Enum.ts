@@ -52,13 +52,6 @@ export enum PERIOD_FIELD {
     PERIOD_MN1 = 43200
 }
 
-export enum REQUEST_STATUS {
-    ERROR = 0,
-    PENDING = 1,
-    ACCEPTED = 3,
-    REJECTED = 4
-}
-
 // xapi-node
 export const CHART_RATE_LIMIT_BY_PERIOD: any = {
     PERIOD_M1: 28800, // 1 month

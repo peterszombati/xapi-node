@@ -1,4 +1,4 @@
-import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, STATE_FIELD, TYPE_FIELD} from '..';
+import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, REQUEST_STATUS_FIELD, STATE_FIELD, TYPE_FIELD} from '..';
 
 export interface CHART_RANGE_INFO_RECORD {
     end: number,
@@ -88,10 +88,10 @@ export interface STREAMING_CANDLE_RECORD {
 
 export interface STREAMING_TRADE_STATUS_RECORD {
     customComment: string
-    message: string
+    message: string | null
     order: number
     price: number
-    requestStatus: number
+    requestStatus: REQUEST_STATUS_FIELD
 }
 
 export interface CALENDAR_RECORD {
