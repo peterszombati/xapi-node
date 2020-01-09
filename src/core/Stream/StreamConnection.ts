@@ -51,14 +51,9 @@ export class StreamConnection extends Queue {
 
     private setConnectionStatus(status: ConnectionStatus) {
         this.resetMessageTube();
-
-        if (this.status !== status) {
-            this.status = status;
-            this.callListener(Listeners.xapi_onConnectionChange, [status]);
-        }
-
         this.openTimeout.clear();
         this.reconnectTimeout.clear();
+        this.status = status;
 
         if (status === ConnectionStatus.CONNECTING) {
             if (this.session.length > 0) {
@@ -68,17 +63,12 @@ export class StreamConnection extends Queue {
             }
 
             this.openTimeout.setTimeout(() => {
-                if (this.status === ConnectionStatus.CONNECTING) {
-                    this.status = ConnectionStatus.CONNECTED;
-                    this.callListener(Listeners.xapi_onConnectionChange, [ConnectionStatus.CONNECTED]);
-                }
+                this.status = ConnectionStatus.CONNECTED;
             }, 1000);
         } else {
             if (this.XAPI.tryReconnect) {
                 this.reconnectTimeout.setTimeout(() => {
-                    if (this.status === ConnectionStatus.DISCONNECTED) {
-                        this.connect();
-                    }
+                    this.connect();
                 }, 2000);
             }
 

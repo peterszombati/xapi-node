@@ -53,33 +53,23 @@ export class SocketConnection extends Queue {
 
     private setConnectionStatus(status: ConnectionStatus) {
         this.resetMessageTube();
-
-        if (this.status !== status) {
-            this.status = status;
-            this.callListener(Listeners.xapi_onConnectionChange, [status]);
-        }
-
-        this.loginTimeout.clear();
         this.openTimeout.clear();
         this.reconnectTimeout.clear();
+        this.loginTimeout.clear();
+        this.status = status;
 
         if (status === ConnectionStatus.CONNECTING) {
             this.ping().catch(e => {
                 Log.error('Socket: ping request failed');
             });
             this.openTimeout.setTimeout(() => {
-                if (this.status === ConnectionStatus.CONNECTING) {
-                    this.status = ConnectionStatus.CONNECTED;
-                    this.callListener(Listeners.xapi_onConnectionChange, [ConnectionStatus.CONNECTED]);
-                    this.tryLogin(2);
-                }
+                this.status = ConnectionStatus.CONNECTED;
+                this.tryLogin(2);
             }, 1000);
         } else {
             if (this.XAPI.tryReconnect) {
                 this.reconnectTimeout.setTimeout(() => {
-                    if (this.status === ConnectionStatus.DISCONNECTED) {
-                        this.connect();
-                    }
+                    this.connect();
                 }, 2000);
             }
 

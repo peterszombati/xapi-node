@@ -2,11 +2,20 @@ import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../inter
 import {Listener} from '../modules/Listener';
 import {Time, Utils, Timer} from '..';
 import {Log} from '../utils/Log';
-import {ConnectionStatus, errorCode, TransactionStatus, TransactionType} from '../enum/Enum';
+import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
 
 export class Queue extends Listener {
-    public status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
+    private _status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
+    public get status() {
+        return this._status;
+    }
+    public set status(status: ConnectionStatus) {
+        if (this._status !== status) {
+            this._status = status;
+            this.callListener(Listeners.xapi_onConnectionChange, [status]);
+        }
+    }
     public transactions: Transactions = {};
     public lastReceivedMessage: Time | null = null;
     private type: TransactionType;
