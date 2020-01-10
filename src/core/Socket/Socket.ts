@@ -3,7 +3,7 @@ import {
     CMD_FIELD,
     IB_RECORD,
     NEWS_TOPIC_RECORD,
-    PERIOD_FIELD,
+    PERIOD_FIELD, REQUEST_STATUS_FIELD,
     STEP_RULE_RECORD,
     SYMBOL_RECORD,
     Time,
@@ -42,7 +42,6 @@ import {
 } from '../../interface/Request';
 import {SocketConnection} from './SocketConnection';
 import {XAPI} from '../XAPI';
-import {REQUEST_STATUS_FIELD} from '../../../build';
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>): void
