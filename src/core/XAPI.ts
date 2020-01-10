@@ -42,6 +42,7 @@ export interface XAPIAccount {
 
 export interface Orders {
     [order: number]: {
+        order: number,
         resolve: any,
         reject: any,
         data: STREAMING_TRADE_STATUS_RECORD | null,
@@ -298,6 +299,7 @@ export class XAPI extends Listener {
                     delete this.orders[s.order];
                 } else {
                     this.orders[s.order] = {
+                        order: s.order,
                         reject: undefined,
                         resolve: undefined,
                         data: s,
@@ -361,6 +363,25 @@ export class XAPI extends Listener {
                     Log.error('Stream: getTrades request failed');
                 });
             }, 60000));
+            this.timer.interval.push(setInterval(() => {
+                if (this.Socket.status === ConnectionStatus.CONNECTED) {
+                    Object.values(this.orders).forEach(order => {
+                        if (order.time.elapsedMs() > 5000 && order.resolve !== undefined && order.reject !== undefined) {
+                            this.Socket.send.tradeTransactionStatus(order.order).then(({returnData}) => {
+                                const {resolve, reject} = this.orders[order.order] || {};
+                                if (resolve !== undefined && reject !== undefined && returnData.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
+                                    if (returnData.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+                                        resolve({...returnData, ask: undefined, price: returnData.bid});
+                                    } else {
+                                        reject({...returnData, ask: undefined, price: returnData.bid});
+                                    }
+                                    delete this.orders[order.order];
+                                }
+                            });
+                        }
+                    })
+                }
+            }, 5100));
         }, 'constructor');
     }
 

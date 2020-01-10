@@ -214,6 +214,7 @@ export class Socket extends SocketConnection {
                         const {data} = this.XAPI.orders[returnData.order] || {};
                         if (data === undefined || data === null) {
                             this.XAPI.orders[returnData.order] = {
+                                order: returnData.order,
                                 resolve,
                                 reject,
                                 data: null,
