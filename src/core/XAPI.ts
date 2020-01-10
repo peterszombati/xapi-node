@@ -180,11 +180,15 @@ export class XAPI extends Listener {
                         this.Stream.ping().catch(e => {
                             Log.error('Stream: ping request failed');
                         });
-                        this.Socket.send.getTrades(true).catch().then(() => {
-                            if (this.isReady) {
-                                this.callListener(Listeners.xapi_onReady);
-                            }
-                        });
+                        if (this.isSubscribeTrades) {
+                            this.Socket.send.getTrades(true).catch().then(() => {
+                                if (this.isReady) {
+                                    this.callListener(Listeners.xapi_onReady);
+                                }
+                            });
+                        } else {
+                            this.callListener(Listeners.xapi_onReady);
+                        }
                     }
 
                     this.callListener(Listeners.xapi_onConnectionChange, [status]);
@@ -311,12 +315,14 @@ export class XAPI extends Listener {
 
         this.onReady(() => {
             this.stopTimer();
-            this.Stream.subscribe.getTrades().catch(e => {
-                Log.error('Stream: getTrades request failed');
-            });
-            this.Stream.subscribe.getTradeStatus().catch(e => {
-                Log.error('Stream: getTrades request failed');
-            });
+            if (this.isSubscribeTrades) {
+                this.Stream.subscribe.getTrades().catch(e => {
+                    Log.error('Stream: getTrades request failed');
+                });
+                this.Stream.subscribe.getTradeStatus().catch(e => {
+                    Log.error('Stream: getTrades request failed');
+                });
+            }
             this.timer.interval.push(setInterval(() => {
                 if (this.Socket.status === ConnectionStatus.CONNECTED
                     && !this.Socket.isQueueContains('ping')) {
@@ -340,15 +346,16 @@ export class XAPI extends Listener {
                         });
                     }
                 }, 1000));
-                this.timer.timeout.push(setTimeout(() => {
-                    if (this.Socket.status === ConnectionStatus.CONNECTED
-                        && !this.Socket.isQueueContains('getTrades')) {
-                        this.Socket.send.getTrades(true).catch(e => {
-                            Log.error('Socket: getTrades request failed');
-                        });
-                    }
-                }, 2000));
-
+                if (this.isSubscribeTrades) {
+                    this.timer.timeout.push(setTimeout(() => {
+                        if (this.Socket.status === ConnectionStatus.CONNECTED
+                            && !this.Socket.isQueueContains('getTrades')) {
+                            this.Socket.send.getTrades(true).catch(e => {
+                                Log.error('Socket: getTrades request failed');
+                            });
+                        }
+                    }, 2000));
+                }
                 this.Socket.rejectOldTransactions();
                 this.Stream.rejectOldTransactions();
                 if (Object.keys(this.Socket.transactions).length > 20000) {
@@ -358,11 +365,16 @@ export class XAPI extends Listener {
                     this.Stream.removeOldTransactions();
                 }
             }, 19000));
-            this.timer.interval.push(setInterval(() => {
-                this.Stream.subscribe.getTrades().catch(e => {
-                    Log.error('Stream: getTrades request failed');
-                });
-            }, 60000));
+            if (this.isSubscribeTrades) {
+                this.timer.interval.push(setInterval(() => {
+                    this.Stream.subscribe.getTrades().catch(e => {
+                        Log.error('Stream: getTrades request failed');
+                    });
+                    this.Stream.subscribe.getTradeStatus().catch(e => {
+                        Log.error('Stream: getTrades request failed');
+                    });
+                }, 60000));
+            }
             this.timer.interval.push(setInterval(() => {
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     Object.values(this.orders).forEach(order => {
@@ -370,10 +382,17 @@ export class XAPI extends Listener {
                             this.Socket.send.tradeTransactionStatus(order.order).then(({returnData}) => {
                                 const {resolve, reject} = this.orders[order.order] || {};
                                 if (resolve !== undefined && reject !== undefined && returnData.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
+                                    const obj = {
+                                        price: returnData.bid,
+                                        requestStatus: returnData.requestStatus,
+                                        order: returnData.order,
+                                        message: returnData.message,
+                                        customComment: returnData.customComment
+                                    };
                                     if (returnData.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-                                        resolve({...returnData, ask: undefined, price: returnData.bid});
+                                        resolve(obj);
                                     } else {
-                                        reject({...returnData, ask: undefined, price: returnData.bid});
+                                        reject(obj);
                                     }
                                     delete this.orders[order.order];
                                 }
