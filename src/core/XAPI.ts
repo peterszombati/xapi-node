@@ -396,6 +396,8 @@ export class XAPI extends Listener {
                                     }
                                     delete this.orders[order.order];
                                 }
+                            }).catch(e => {
+                                Log.error(e);
                             });
                         }
                     })
