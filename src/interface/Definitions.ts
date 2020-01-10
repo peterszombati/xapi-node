@@ -90,8 +90,8 @@ export interface STREAMING_TRADE_STATUS_RECORD {
     customComment: string | null
     message: string | null
     order: number
-    price: number
-    requestStatus: REQUEST_STATUS_FIELD
+    price: number | null
+    requestStatus: REQUEST_STATUS_FIELD | null
 }
 
 export interface CALENDAR_RECORD {

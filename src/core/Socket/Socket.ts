@@ -5,6 +5,7 @@ import {
     NEWS_TOPIC_RECORD,
     PERIOD_FIELD,
     STEP_RULE_RECORD,
+    STREAMING_TRADE_STATUS_RECORD,
     SYMBOL_RECORD,
     Time,
     TRADE_RECORD,
@@ -188,7 +189,7 @@ export class Socket extends SocketConnection {
         getTradingHours:
             (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {symbols}),
         getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
-        tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO) => {
+        tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO): Promise<STREAMING_TRADE_STATUS_RECORD> => {
             const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
             const transactionId = this.createTransactionId();
             return new Promise((resolve, reject) => {
