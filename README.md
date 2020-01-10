@@ -57,8 +57,8 @@ x.Socket.send.tradeTransaction({
     tp: 8000,
     type: TYPE_FIELD.OPEN,
     volume: 10
-}).then(({returnData}) => {
-    console.log('Success ' + returnData.order);
+}).then(({order}) => {
+    console.log('Success ' + order);
 }).catch(e => {
     console.error('Failed');
     console.error(e);
@@ -79,8 +79,8 @@ x.Socket.send.tradeTransaction({
     tp: 26500,
     type: TYPE_FIELD.OPEN,
     volume: 0.2
-}).then(({returnData}) => {
-    console.log('Success ' + returnData.order);
+}).then(({order}) => {
+    console.log('Success ' + order);
 }).catch(e => {
     console.error('Failed');
     console.error(e);
@@ -117,6 +117,29 @@ x.onReady(() => {
         console.log(candles[0]);
         console.log('digits = ' + digits);
     })
+});
+```
+#### market buy EURUSD (1.0 lot / 100000 EUR)
+```ts
+x.onReady(() => {
+    x.Socket.send.tradeTransaction({
+        cmd: CMD_FIELD.BUY,
+        customComment: null,
+        expiration: x.serverTime + 5000,
+        offset: 0,
+        order: 0,
+        price: 1,
+        symbol: 'EURUSD',
+        tp: 0,
+        sl: 0,
+        type: TYPE_FIELD.OPEN,
+        volume: 1
+    }).then(({order}) => {
+        console.log('Success ' + order);
+    }).catch(e => {
+        console.error('Failed');
+        console.error(e);
+    });
 });
 ```
 
