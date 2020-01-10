@@ -209,20 +209,21 @@ export class Socket extends SocketConnection {
                         type,
                         volume: parseFloat(volume.toFixed(2))
                     }
-                }, transactionId, true).then(({returnData}) => {
+                }, transactionId, true).then(({returnData, time}) => {
                     if (this.XAPI.isSubscribeTrades) {
                         const {data} = this.XAPI.orders[returnData.order] || {};
                         if (data === undefined || data === null) {
                             this.XAPI.orders[returnData.order] = {
                                 resolve,
                                 reject,
-                                data: null
+                                data: null,
+                                time
                             }
                         } else {
-                            if (data.value.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-                                resolve(data.value);
+                            if (data.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+                                resolve(data);
                             } else {
-                                reject(data.value);
+                                reject(data);
                             }
                             delete this.XAPI.orders[returnData.order];
                         }

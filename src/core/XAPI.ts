@@ -44,7 +44,8 @@ export interface Orders {
     [order: number]: {
         resolve: any,
         reject: any,
-        data: { value: STREAMING_TRADE_STATUS_RECORD, time: Time } | null
+        data: STREAMING_TRADE_STATUS_RECORD | null,
+        time: Time
     }
 }
 
@@ -299,7 +300,8 @@ export class XAPI extends Listener {
                     this.orders[s.order] = {
                         reject: undefined,
                         resolve: undefined,
-                        data: { value: s, time }
+                        data: s,
+                        time
                     }
                 }
             }
