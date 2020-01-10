@@ -1,4 +1,4 @@
-import {Time} from '..';
+import {REQUEST_STATUS_FIELD, Time} from '..';
 import {CMD_FIELD, PositionType, TransactionStatus, TransactionType} from '../enum/Enum';
 
 export interface Transactions {
@@ -85,4 +85,11 @@ export interface TradePositions {
         value: TradePosition | null,
         lastUpdated: Time
     }
+}
+
+export interface TradeStatus {
+    customComment: string | null
+    message: string | null
+    order: number
+    requestStatus: REQUEST_STATUS_FIELD | null
 }

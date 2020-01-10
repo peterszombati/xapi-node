@@ -6,12 +6,11 @@ import {
     ConnectionStatus,
     PERIOD_FIELD,
     REQUEST_STATUS_FIELD,
-    STREAMING_TRADE_STATUS_RECORD,
     Time,
     TYPE_FIELD,
     Utils
 } from '..';
-import {TradePosition, TradePositions} from '../interface/Interface';
+import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface';
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType} from '../enum/Enum';
 import {Socket} from './Socket/Socket';
 import {Stream} from './Stream/Stream';
@@ -45,7 +44,7 @@ export interface Orders {
         order: number,
         resolve: any,
         reject: any,
-        data: STREAMING_TRADE_STATUS_RECORD | null,
+        data: TradeStatus | null,
         time: Time
     }
 }
@@ -294,6 +293,7 @@ export class XAPI extends Listener {
         this.Stream.listen.getTradeStatus((s,time) => {
             if (s.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
                 const {resolve,reject} = this.orders[s.order] || {};
+                delete s.price;
                 if (resolve !== undefined && reject !== undefined) {
                     if (s.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
                         resolve(s);
@@ -383,7 +383,6 @@ export class XAPI extends Listener {
                                 const {resolve, reject} = this.orders[order.order] || {};
                                 if (resolve !== undefined && reject !== undefined && returnData.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
                                     const obj = {
-                                        price: returnData.bid,
                                         requestStatus: returnData.requestStatus,
                                         order: returnData.order,
                                         message: returnData.message,

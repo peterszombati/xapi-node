@@ -5,14 +5,13 @@ import {
     NEWS_TOPIC_RECORD,
     PERIOD_FIELD,
     STEP_RULE_RECORD,
-    STREAMING_TRADE_STATUS_RECORD,
     SYMBOL_RECORD,
     Time,
     TRADE_RECORD,
     TRADE_TRANS_INFO,
     TRADING_HOURS_RECORD
 } from '../..';
-import {Transaction} from '../../interface/Interface';
+import {TradeStatus, Transaction} from '../../interface/Interface';
 import {
     getChartRequestResponse,
     getCommissionDefResponse,
@@ -189,7 +188,7 @@ export class Socket extends SocketConnection {
         getTradingHours:
             (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {symbols}),
         getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
-        tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO): Promise<STREAMING_TRADE_STATUS_RECORD> => {
+        tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO): Promise<TradeStatus> => {
             const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
             const transactionId = this.createTransactionId();
             return new Promise((resolve, reject) => {
@@ -233,7 +232,6 @@ export class Socket extends SocketConnection {
                             customComment: null,
                             message: null,
                             order: returnData.order,
-                            price: null,
                             requestStatus: null
                         });
                     }
