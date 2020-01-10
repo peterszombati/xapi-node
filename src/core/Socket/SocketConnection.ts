@@ -7,7 +7,7 @@ import {Queue} from '../Queue';
 import {XAPI} from '../XAPI';
 
 export class SocketConnection extends Queue {
-    private XAPI: XAPI;
+    protected XAPI: XAPI;
     private _password: string;
     private loginTimeout: Timer = new Timer();
 

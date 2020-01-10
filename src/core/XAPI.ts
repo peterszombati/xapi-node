@@ -1,7 +1,16 @@
 import {Listener} from '../modules/Listener';
 import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
-import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, Time, TYPE_FIELD, Utils} from '..';
+import {
+    CMD_FIELD,
+    ConnectionStatus,
+    PERIOD_FIELD,
+    REQUEST_STATUS_FIELD,
+    STREAMING_TRADE_STATUS_RECORD,
+    Time,
+    TYPE_FIELD,
+    Utils
+} from '..';
 import {TradePosition, TradePositions} from '../interface/Interface';
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType} from '../enum/Enum';
 import {Socket} from './Socket/Socket';
@@ -19,6 +28,7 @@ export interface XAPIConfig {
     rateLimit?: number | undefined,
     logger?: Logger4Interface
     safe?: boolean
+    subscribeTrades?: boolean
 }
 
 export interface XAPIAccount {
@@ -26,7 +36,16 @@ export interface XAPIAccount {
     type: string,
     appName?: string | undefined,
     host: string,
-    safe: boolean
+    safe: boolean,
+    subscribeTrades: boolean
+}
+
+export interface Orders {
+    [order: number]: {
+        resolve: any,
+        reject: any,
+        data: { value: STREAMING_TRADE_STATUS_RECORD, time: Time } | null
+    }
 }
 
 export class XAPI extends Listener {
@@ -45,8 +64,10 @@ export class XAPI extends Listener {
         accountId: '',
         host: '',
         appName: undefined,
-        safe: false
+        safe: false,
+        subscribeTrades: true
     };
+    public orders: Orders = {};
 
     public get accountType(): string | null {
         return this.account.type;
@@ -74,6 +95,10 @@ export class XAPI extends Listener {
 
     public get tryReconnect() {
         return this._tryReconnect;
+    }
+
+    public get isSubscribeTrades() {
+        return this.account.subscribeTrades;
     }
 
     public get openPositions(): TradePosition[] {
@@ -122,7 +147,8 @@ export class XAPI extends Listener {
                     host = undefined,
                     rateLimit = undefined,
                     logger = new EmptyLogger(),
-                    safe = undefined
+                    safe = undefined,
+                    subscribeTrades = undefined
                 }: XAPIConfig) {
         super();
         changeLogger(logger);
@@ -137,7 +163,8 @@ export class XAPI extends Listener {
             accountId,
             appName,
             host: host === undefined ? DefaultHostname : host,
-            safe: safe === true
+            safe: safe === true,
+            subscribeTrades: subscribeTrades !== false
         };
         if (this.account.safe) {
             Log.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
@@ -258,9 +285,32 @@ export class XAPI extends Listener {
             }
         });
 
+        this.Stream.listen.getTradeStatus((s,time) => {
+            if (s.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
+                const {resolve,reject} = this.orders[s.order] || {};
+                if (resolve !== undefined && reject !== undefined) {
+                    if (s.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+                        resolve(s);
+                    } else {
+                        reject(s);
+                    }
+                    delete this.orders[s.order];
+                } else {
+                    this.orders[s.order] = {
+                        reject: undefined,
+                        resolve: undefined,
+                        data: { value: s, time }
+                    }
+                }
+            }
+        });
+
         this.onReady(() => {
             this.stopTimer();
             this.Stream.subscribe.getTrades().catch(e => {
+                Log.error('Stream: getTrades request failed');
+            });
+            this.Stream.subscribe.getTradeStatus().catch(e => {
                 Log.error('Stream: getTrades request failed');
             });
             this.timer.interval.push(setInterval(() => {

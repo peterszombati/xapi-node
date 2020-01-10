@@ -87,7 +87,7 @@ export interface STREAMING_CANDLE_RECORD {
 }
 
 export interface STREAMING_TRADE_STATUS_RECORD {
-    customComment: string
+    customComment: string | null
     message: string | null
     order: number
     price: number

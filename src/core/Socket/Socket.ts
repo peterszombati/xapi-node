@@ -1,9 +1,12 @@
 import {
     CALENDAR_RECORD,
+    CMD_FIELD,
     IB_RECORD,
     NEWS_TOPIC_RECORD,
+    PERIOD_FIELD,
     STEP_RULE_RECORD,
     SYMBOL_RECORD,
+    Time,
     TRADE_RECORD,
     TRADE_TRANS_INFO,
     TRADING_HOURS_RECORD
@@ -37,10 +40,9 @@ import {
     tradeTransaction,
     tradeTransactionStatus
 } from '../../interface/Request';
-import {CMD_FIELD, PERIOD_FIELD} from '../..';
 import {SocketConnection} from './SocketConnection';
-import {Time} from '../..';
 import {XAPI} from '../XAPI';
+import {REQUEST_STATUS_FIELD} from '../../../build';
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>): void
@@ -189,23 +191,51 @@ export class Socket extends SocketConnection {
         tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO) => {
             const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
             const transactionId = this.createTransactionId();
-            return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
-                'tradeTransInfo': {
-                    cmd,
-                    customComment: (customComment == null || customComment.length === 0)
-                        ? 'x' + transactionId
-                        : 'x' + transactionId + '_' + customComment,
-                    expiration: (expiration instanceof Date) ? expiration.getTime() : expiration,
-                    offset,
-                    order,
-                    price,
-                    sl,
-                    symbol,
-                    tp,
-                    type,
-                    volume: parseFloat(volume.toFixed(2))
-                }
-            }, transactionId, true);
+            return new Promise((resolve, reject) => {
+                return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
+                    'tradeTransInfo': {
+                        cmd,
+                        customComment: (customComment == null || customComment.length === 0)
+                            ? 'x' + transactionId
+                            : 'x' + transactionId + '_' + customComment,
+                        expiration: (expiration instanceof Date) ? expiration.getTime() : expiration,
+                        offset,
+                        order,
+                        price,
+                        sl,
+                        symbol,
+                        tp,
+                        type,
+                        volume: parseFloat(volume.toFixed(2))
+                    }
+                }, transactionId, true).then(({returnData}) => {
+                    if (this.XAPI.isSubscribeTrades) {
+                        const {data} = this.XAPI.orders[returnData.order] || {};
+                        if (data === undefined || data === null) {
+                            this.XAPI.orders[returnData.order] = {
+                                resolve,
+                                reject,
+                                data: null
+                            }
+                        } else {
+                            if (data.value.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+                                resolve(data.value);
+                            } else {
+                                reject(data.value);
+                            }
+                            delete this.XAPI.orders[returnData.order];
+                        }
+                    } else {
+                        resolve({
+                            customComment: null,
+                            message: null,
+                            order: returnData.order,
+                            price: null,
+                            requestStatus: null
+                        });
+                    }
+                }).catch(reject);
+            });
         },
         tradeTransactionStatus: (order: number) => this.sendCommand<tradeTransactionStatusResponse>('tradeTransactionStatus', {
             order
