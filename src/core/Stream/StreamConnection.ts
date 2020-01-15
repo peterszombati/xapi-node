@@ -20,12 +20,12 @@ export class StreamConnection extends Queue {
         this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING));
         this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
 
-        this.WebSocket.onMessage((message: any) => {
+        this.WebSocket.onMessage((json: any) => {
             this.lastReceivedMessage = new Time();
             try {
-                let json = JSON.parse(message.toString().trim());
+                const message = JSON.parse(json.toString().trim());
                 try {
-                    this.callListener('command_' + json.command, [json.data, new Time()]);
+                    this.callListener('command_' + message.command, [message.data, new Time()]);
                 } catch (e) {
                     const {name, message, stack} = new Error(e);
                     Log.error('Stream WebSocket Handle Message ERROR');
@@ -34,7 +34,7 @@ export class StreamConnection extends Queue {
             } catch (e) {
                 const {name, message, stack} = new Error(e);
                 Log.error('Stream WebSocket JSON parse ERROR');
-                Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+                Log.hidden(name + '\n' + message + (stack ? '\n' + stack : '') + '\n\n' + json, 'ERROR');
             }
         });
 
