@@ -144,7 +144,7 @@ x.onReady(() => {
 ```
 
 ## Donation
-Now you can donate these projects with bitcoin
+Now you can donate these projects with bitcoin, HUF, USD
 
 USD IBAN bank account: HU77 1201 1069 0166 6164 0020 0000 (SWIFT: UBRTHUHB)
 
