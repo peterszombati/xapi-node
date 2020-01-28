@@ -61,7 +61,7 @@ export class StreamConnection extends Queue {
             if (this.session.length > 0) {
                 this.pingTimeout.setTimeout(() => {
                     this.ping().catch(e => {
-                        Log.error('Stream: ping request failed');
+                        Log.error('Stream: ping request failed (StreamConnection.ts:64)');
                     });
                 }, 100);
             }
