@@ -1,5 +1,5 @@
 import {TransactionResolveStream} from '../../interface/Interface';
-import {Time} from '../..';
+import {Time, Timer} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import {Log} from '../../utils/Log';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
@@ -9,6 +9,7 @@ import {XAPI} from '../XAPI';
 export class StreamConnection extends Queue {
     private XAPI: XAPI;
     public session: string = '';
+    private pingTimeout: Timer = new Timer();
 
     constructor(XAPI: XAPI) {
         super(XAPI.rateLimit, TransactionType.STREAM);
@@ -53,13 +54,16 @@ export class StreamConnection extends Queue {
         this.resetMessageTube();
         this.openTimeout.clear();
         this.reconnectTimeout.clear();
+        this.pingTimeout.clear();
         this.status = status;
 
         if (status === ConnectionStatus.CONNECTING) {
             if (this.session.length > 0) {
-                this.ping().catch(e => {
-                    Log.error('Stream: ping request failed');
-                });
+                this.pingTimeout.setTimeout(() => {
+                    this.ping().catch(e => {
+                        Log.error('Stream: ping request failed');
+                    });
+                }, 100);
             }
 
             this.openTimeout.setTimeout(() => {
