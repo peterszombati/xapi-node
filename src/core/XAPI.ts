@@ -1,15 +1,7 @@
 import {Listener} from '../modules/Listener';
 import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
-import {
-    CMD_FIELD,
-    ConnectionStatus,
-    PERIOD_FIELD,
-    REQUEST_STATUS_FIELD,
-    Time,
-    TYPE_FIELD,
-    Utils
-} from '..';
+import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, REQUEST_STATUS_FIELD, Time, TYPE_FIELD, Utils} from '..';
 import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface';
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType} from '../enum/Enum';
 import {Socket} from './Socket/Socket';
@@ -212,9 +204,11 @@ export class XAPI extends Listener {
             Log.hidden('Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')', 'INFO');
             this.Stream.session = data.streamSessionId;
             if (this.isReady) {
-                this.Stream.ping().catch(e => {
-                    Log.error('Stream: ping request failed');
-                });
+                if (this.Stream.status === ConnectionStatus.CONNECTED) {
+                    this.Stream.ping().catch(e => {
+                        Log.error('Stream: ping request failed');
+                    });
+                }
                 this.Socket.send.getTrades(true).catch().then(() => {
                     if (this.isReady) {
                         this.callListener(Listeners.xapi_onReady);
