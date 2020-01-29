@@ -10,6 +10,7 @@ export class SocketConnection extends Queue {
     protected XAPI: XAPI;
     private _password: string;
     private loginTimeout: Timer = new Timer();
+    private pingTimeout: Timer = new Timer();
 
     constructor(XAPI: XAPI, password: string) {
         super(XAPI.rateLimit, TransactionType.SOCKET);
@@ -55,13 +56,16 @@ export class SocketConnection extends Queue {
         this.resetMessageTube();
         this.openTimeout.clear();
         this.reconnectTimeout.clear();
+        this.pingTimeout.clear();
         this.loginTimeout.clear();
         this.status = status;
 
         if (status === ConnectionStatus.CONNECTING) {
-            this.ping().catch(e => {
-                Log.error('Socket: ping request failed (SocketConnection.ts:63)');
-            });
+            this.pingTimeout.setTimeout(() => {
+                this.ping().catch(e => {
+                    Log.error('Socket: ping request failed (SocketConnection.ts:63)');
+                });
+            }, 100);
             this.openTimeout.setTimeout(() => {
                 this.status = ConnectionStatus.CONNECTED;
                 this.tryLogin(2);
