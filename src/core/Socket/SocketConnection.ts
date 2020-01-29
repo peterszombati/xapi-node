@@ -74,7 +74,7 @@ export class SocketConnection extends Queue {
             if (this.XAPI.tryReconnect) {
                 this.reconnectTimeout.setTimeout(() => {
                     this.connect();
-                }, 2000);
+                }, 3000);
             }
 
             for (const transactionId in this.transactions) {
