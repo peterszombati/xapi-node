@@ -1,10 +1,10 @@
-[![Logo](https://github.com/peterszombati/xapi-node/raw/master/docs/xtb-logo.png)](https://www.xtb.com/en)
+[![Logo](https://github.com/peterszombati/xapi-node/raw/master/docs/bfb-logo.png)](https://my.bfb.by/#/registration?ref=3030057)
 
 # xapi-node
 
 This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection
 
-This module may can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
+This module may can be used for [BFB Capital](https://my.bfb.by/#/registration?ref=3030057) xStation5 accounts
 
 WebSocket protocol description: https://peterszombati.github.io/xapi-node/
 
