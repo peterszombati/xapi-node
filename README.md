@@ -1,10 +1,12 @@
 [![Logo](https://github.com/peterszombati/xapi-node/raw/master/docs/bfb-logo.png)](https://my.bfb.by/#/registration?ref=3030057)
 
+[![Logo](https://github.com/peterszombati/xapi-node/raw/master/docs/xtb-logo.png)](https://www.xtb.com/en)
+
 # xapi-node
 
 This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection
 
-This module may can be used for [BFB Capital](https://my.bfb.by/#/registration?ref=3030057) xStation5 accounts
+This module may can be used for [BFB Capital](https://my.bfb.by/#/registration?ref=3030057) and [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
 WebSocket protocol description: https://peterszombati.github.io/xapi-node/
 
@@ -27,6 +29,30 @@ import XAPI from 'xapi-node';
 const x = new XAPI({
     accountId: '(xStation5) accountID',
     password: '(xStation5) password',
+    type: 'real' // or demo
+});
+
+x.connect();
+
+x.onReady(() => {
+    console.log('Connection is ready');
+    
+    // Disconnect
+    x.disconnect().then(() => console.log('Disconnected'));
+});
+x.onReject((e) => {
+    console.error(e);
+});
+```
+#### Authentication only for XTB accounts
+```ts
+// TypeScript
+import XAPI from 'xapi-node';
+
+const x = new XAPI({
+    accountId: '(xStation5) accountID',
+    password: '(xStation5) password',
+    host: 'ws.xtb.com', // only for XTB accounts
     type: 'real' // or demo
 });
 
