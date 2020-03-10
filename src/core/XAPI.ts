@@ -52,14 +52,7 @@ export class XAPI extends Listener {
         interval: [],
         timeout: []
     };
-    protected account: XAPIAccount = {
-        type: 'demo',
-        accountId: '',
-        host: '',
-        appName: undefined,
-        safe: false,
-        subscribeTrades: true
-    };
+    protected account: XAPIAccount;
     public orders: Orders = {};
 
     public get accountType(): string | null {
@@ -149,8 +142,6 @@ export class XAPI extends Listener {
             console.log('[xapi-node]: Logger path is not defined');
         }
         this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
-        this.Socket = new Socket(this, password);
-        this.Stream = new Stream(this);
         this.account = {
             type: (type.toLowerCase() === 'real') ? 'real' : 'demo',
             accountId,
@@ -159,6 +150,8 @@ export class XAPI extends Listener {
             safe: safe === true,
             subscribeTrades: subscribeTrades !== false
         };
+        this.Socket = new Socket(this, password);
+        this.Stream = new Stream(this);
         if (this.account.safe) {
             Log.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
         }
