@@ -93,9 +93,9 @@ export class StreamConnection extends Queue {
             const transaction = this.addTransaction({
                 command,
                 json: JSON.stringify({
-                    ...completion,
                     command,
                     'streamSessionId': this.session,
+                    ...completion,
                 }),
                 args: completion,
                 transactionId: this.createTransactionId(),
