@@ -84,5 +84,6 @@ import {Utils} from './utils/Utils';
 import {Time} from './modules/Time';
 import {TradePosition, TradeStatus} from './interface/Interface';
 import {Timer} from './modules/Timer';
+import {ListenerChild} from "./modules/Listener";
 
-export {parseLogin, Utils, Time, TradePosition, Timer, TradeStatus};
+export {parseLogin, Utils, Time, TradePosition, Timer, TradeStatus, ListenerChild};
