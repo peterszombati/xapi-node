@@ -1,14 +1,14 @@
 export class ListenerChild {
-    listener: Listener;
-    listenerId: string;
-    key: string;
+    private listener: Listener;
+    private readonly listenerId: string;
+    private readonly key: string;
     constructor(listener: Listener, listenerId: string, key: string) {
         this.listener = listener;
         this.listenerId = listenerId;
         this.key = key;
     }
 
-    stopListen() {
+    public stopListen() {
         this.listener.remove(this.listenerId, this.key);
     }
 }
