@@ -7,7 +7,7 @@
  */
 
 import {XAPI} from '../core/XAPI';
-import {ConnectionStatus, parseLogin, PERIOD_FIELD} from '..';
+import {ConnectionStatus, parseLogin} from '..';
 import Logger4 from 'logger4';
 import * as path from 'path';
 
