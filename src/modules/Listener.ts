@@ -1,3 +1,17 @@
+export class ListenerChild {
+    listener: Listener;
+    listenerId: string;
+    key: string;
+    constructor(listener: Listener, listenerId: string, key: string) {
+        this.listener = listener;
+        this.listenerId = listenerId;
+        this.key = key;
+    }
+
+    stopListen() {
+        this.listener.remove(this.listenerId, this.key);
+    }
+}
 export class Listener {
     constructor() {
     }
@@ -8,7 +22,18 @@ export class Listener {
         return this._listeners;
     }
 
-    public addListener(listenerId: string, callBack: any, key: string | null = null): void {
+    public remove(listenerId: string, key: string) {
+        if (this._listeners[listenerId] !== undefined) {
+            if (this._listeners[listenerId][key] !== undefined) {
+                delete this._listeners[listenerId][key];
+                if (Object.keys(this._listeners[listenerId]).length === 0) {
+                    delete this._listeners[listenerId];
+                }
+            }
+        }
+    }
+
+    public addListener(listenerId: string, callBack: any, key: string | null = null): ListenerChild {
         if (typeof (callBack) === 'function') {
             if (this._listeners[listenerId] === undefined) {
                 this._listeners[listenerId] = {};
@@ -17,7 +42,9 @@ export class Listener {
                 ? 'g' + Object.keys(this._listeners[listenerId]).length
                 : 's' + key;
             this._listeners[listenerId][key] = callBack;
+            return new ListenerChild(this, listenerId, key);
         }
+        throw new Error('addListener "callBack" parameter is not callback');
     }
 
     public callListener(listenerId: string, params: any[] = []): any[] {
