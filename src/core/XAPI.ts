@@ -475,30 +475,30 @@ export class XAPI extends Listener {
         if (this.isReady) {
             callBack();
         }
-        this.addListener(Listeners.xapi_onReady, callBack, key);
+        return this.addListener(Listeners.xapi_onReady, callBack, key);
     }
 
     public onReject(callBack: (err: any) => void, key: string | null = null) {
-        this.addListener(Listeners.xapi_onReject, callBack, key);
+        return this.addListener(Listeners.xapi_onReject, callBack, key);
     }
 
     public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-        this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
+        return this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
     }
 
     public onCreatePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-        this.addListener(Listeners.xapi_onCreatePosition, callBack, key);
+        return this.addListener(Listeners.xapi_onCreatePosition, callBack, key);
     }
 
     public onDeletePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-        this.addListener(Listeners.xapi_onDeletePosition, callBack, key);
+        return this.addListener(Listeners.xapi_onDeletePosition, callBack, key);
     }
 
     public onChangePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-        this.addListener(Listeners.xapi_onChangePosition, callBack, key);
+        return this.addListener(Listeners.xapi_onChangePosition, callBack, key);
     }
 
     public onPendingPosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-        this.addListener(Listeners.xapi_onPendingPosition, callBack, key);
+        return this.addListener(Listeners.xapi_onPendingPosition, callBack, key);
     }
 }
