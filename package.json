@@ -6,7 +6,7 @@
 	"types": "build/index.d.ts",
 	"dependencies": {
 		"logger4": "^1.6.0",
-		"ws": "^7.2.1"
+		"ws": "^7.2.3"
 	},
 	"devDependencies": {
 		"@types/node": "^11.15.3",
