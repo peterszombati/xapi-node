@@ -415,10 +415,12 @@ export class XAPI extends Listener {
                     .catch()
                     .then(() => {
                         this.Socket.closeConnection();
+                        Log.info(this.account.accountId + ' disconnected');
                         resolve();
                     });
             } else {
                 this.Socket.closeConnection();
+                Log.info(this.account.accountId + ' disconnected');
                 resolve();
             }
         });
