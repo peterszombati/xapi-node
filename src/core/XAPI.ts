@@ -47,6 +47,7 @@ export class XAPI extends Listener {
     private _rateLimit: number = DefaultRateLimit;
     private _tryReconnect: boolean = false;
     private _positions: TradePositions = {};
+    private _positionsUpdated: Time | null = null;
     private _serverTime: { timestamp: number, ping: number, received: Time } | null = null;
     private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
         interval: [],
@@ -93,6 +94,10 @@ export class XAPI extends Listener {
 
     public get limitPositions(): TradePosition[] {
         return this.positions.filter(t => t.position_type === PositionType.limit);
+    }
+
+    public get positionsUpdated(): Time | null {
+        return this._positionsUpdated;
     }
 
     public get positions(): TradePosition[] {
@@ -228,6 +233,7 @@ export class XAPI extends Listener {
                     }
                 });
                 this._positions = obj;
+                this._positionsUpdated = new Time();
             } else {
                 Log.info('getTrades transaction (' + transaction.transactionId + ') is ignored')
             }
