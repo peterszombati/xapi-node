@@ -60,8 +60,8 @@ export const CHART_RATE_LIMIT_BY_PERIOD: any = {
     PERIOD_M30: 6720, // 7 month
     PERIOD_H1: 3360, // 7 month
     PERIOD_H4: 1560, // 13 month
-    PERIOD_D1: 19200, // 80 years
-    PERIOD_W1: 3840, // 80 years
+    PERIOD_D1: 19200, // 52 years
+    PERIOD_W1: 3840, // 73 years
     PERIOD_MN1: 960 // 80 years
 };
 
