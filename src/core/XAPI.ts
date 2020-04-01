@@ -167,7 +167,7 @@ export class XAPI extends Listener {
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     if (this.isReady) {
                         this.Stream.ping().catch(e => {
-                            Log.error('Stream: ping request failed (XAPI.ts:165)');
+                            Log.error('Stream: ping request failed (XAPI.ts:170)');
                         });
                         if (this.isSubscribeTrades) {
                             this.Socket.send.getTrades(true).catch().then(() => {
@@ -203,7 +203,7 @@ export class XAPI extends Listener {
             this.Stream.session = data.streamSessionId;
             if (this.isReady) {
                 this.Stream.ping().catch(e => {
-                    Log.error('Stream: ping request failed (XAPI.ts: 201)');
+                    Log.error('Stream: ping request failed (XAPI.ts:206)');
                 });
                 this.Socket.send.getTrades(true).catch().then(() => {
                     if (this.isReady) {
@@ -308,23 +308,23 @@ export class XAPI extends Listener {
             this.stopTimer();
             if (this.isSubscribeTrades) {
                 this.Stream.subscribe.getTrades().catch(e => {
-                    Log.error('Stream: getTrades request failed (XAPI.ts:305)');
+                    Log.error('Stream: getTrades request failed (XAPI.ts:311)');
                 });
                 this.Stream.subscribe.getTradeStatus().catch(e => {
-                    Log.error('Stream: getTrades request failed (XAPI.ts:308)');
+                    Log.error('Stream: getTrades request failed (XAPI.ts:314)');
                 });
             }
             this.timer.interval.push(setInterval(() => {
                 if (this.Socket.status === ConnectionStatus.CONNECTED
                     && !this.Socket.isQueueContains('ping')) {
                     this.Socket.ping().catch(e => {
-                        Log.error('Socket: ping request failed (XAPI.ts:315)');
+                        Log.error('Socket: ping request failed (XAPI.ts:321)');
                     });
                 }
                 if (this.Stream.status === ConnectionStatus.CONNECTED
                     && !this.Stream.isQueueContains('ping')) {
                     this.Stream.ping().catch(e => {
-                        Log.error('Stream: ping request failed (XAPI.ts:321)');
+                        Log.error('Stream: ping request failed (XAPI.ts:327)');
                     });
                 }
                 this.timer.timeout.forEach(i => clearTimeout(i));
@@ -333,7 +333,7 @@ export class XAPI extends Listener {
                     if (this.Socket.status === ConnectionStatus.CONNECTED
                         && !this.Socket.isQueueContains('getServerTime')) {
                         this.Socket.send.getServerTime().catch(e => {
-                            Log.error('Socket: getServerTime request failed (XAPI.ts:330)');
+                            Log.error('Socket: getServerTime request failed (XAPI.ts:336)');
                         });
                     }
                 }, 1000));
@@ -342,7 +342,7 @@ export class XAPI extends Listener {
                         if (this.Socket.status === ConnectionStatus.CONNECTED
                             && !this.Socket.isQueueContains('getTrades')) {
                             this.Socket.send.getTrades(true).catch(e => {
-                                Log.error('Socket: getTrades request failed (XAPI.ts:339)');
+                                Log.error('Socket: getTrades request failed (XAPI.ts:345)');
                             });
                         }
                     }, 2000));
@@ -359,10 +359,10 @@ export class XAPI extends Listener {
             if (this.isSubscribeTrades) {
                 this.timer.interval.push(setInterval(() => {
                     this.Stream.subscribe.getTrades().catch(e => {
-                        Log.error('Stream: getTrades request failed (XAPI.ts:356)');
+                        Log.error('Stream: getTrades request failed (XAPI.ts:362)');
                     });
                     this.Stream.subscribe.getTradeStatus().catch(e => {
-                        Log.error('Stream: getTrades request failed (XAPI.ts:359)');
+                        Log.error('Stream: getTrades request failed (XAPI.ts:365)');
                     });
                 }, 60000));
             }
