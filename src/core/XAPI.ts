@@ -235,7 +235,7 @@ export class XAPI extends Listener {
                 this._positions = obj;
                 this._positionsUpdated = new Time();
             } else {
-                Log.info('getTrades transaction (' + transaction.transactionId + ') is ignored')
+                Log.hidden('getTrades transaction (' + transaction.transactionId + ') is ignored')
             }
         });
 
