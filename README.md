@@ -178,4 +178,4 @@ HUF IBAN bank account: HU12 1177 3339 0142 1172 0000 0000 (SWIFT: OTPVHUHB)
 
 BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F [www.blockchain.com](https://www.blockchain.com/btc/address/3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F)
 
-#### Next version will be released after first donation was received, in this project was invested more than 200 working hours
+#### Next version will be released after first donation was received, in this project I was invested more than 200 working hours
