@@ -12,14 +12,12 @@ export class SocketConnection extends Queue {
     private loginTimeout: Timer = new Timer();
     private pingTimeout: Timer = new Timer();
 
-    constructor(XAPI: XAPI, password: string) {
+    constructor(XAPI: XAPI, password: string, url: string) {
         super(XAPI.rateLimit, TransactionType.SOCKET);
-        this._password = password;
         this.XAPI = XAPI;
-    }
+        this.WebSocket = new WebSocketWrapper(url);
+        this._password = password;
 
-    public connect() {
-        this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName + '/' + this.XAPI.accountType);
         this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING));
         this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
 
@@ -48,6 +46,10 @@ export class SocketConnection extends Queue {
         });
     }
 
+    public connect() {
+        this.WebSocket.connect();
+    }
+
     public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
         this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
     }
@@ -55,7 +57,6 @@ export class SocketConnection extends Queue {
     private setConnectionStatus(status: ConnectionStatus) {
         this.resetMessageTube();
         this.openTimeout.clear();
-        this.reconnectTimeout.clear();
         this.pingTimeout.clear();
         this.loginTimeout.clear();
         this.status = status;
@@ -71,12 +72,6 @@ export class SocketConnection extends Queue {
                 this.tryLogin(2);
             }, 1000);
         } else {
-            if (this.XAPI.tryReconnect) {
-                this.reconnectTimeout.setTimeout(() => {
-                    this.connect();
-                }, 3000);
-            }
-
             for (const transactionId in this.transactions) {
                 const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
                 if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
@@ -192,9 +187,7 @@ export class SocketConnection extends Queue {
     }
 
     public closeConnection() {
-        if (this.WebSocket !== null) {
-            this.WebSocket.close();
-        }
+        this.WebSocket.close();
     }
 
     public ping() {

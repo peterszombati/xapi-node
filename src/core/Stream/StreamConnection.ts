@@ -11,13 +11,10 @@ export class StreamConnection extends Queue {
     public session: string = '';
     private pingTimeout: Timer = new Timer();
 
-    constructor(XAPI: XAPI) {
+    constructor(XAPI: XAPI, url: string) {
         super(XAPI.rateLimit, TransactionType.STREAM);
         this.XAPI = XAPI;
-    }
-
-    public connect() {
-        this.WebSocket = new WebSocketWrapper('wss://' + this.XAPI.hostName + '/' + this.XAPI.accountType + 'Stream');
+        this.WebSocket = new WebSocketWrapper(url);
         this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING));
         this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
 
@@ -46,6 +43,10 @@ export class StreamConnection extends Queue {
         });
     }
 
+    public connect() {
+        this.WebSocket.connect();
+    }
+
     public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
         this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
     }
@@ -53,7 +54,6 @@ export class StreamConnection extends Queue {
     private setConnectionStatus(status: ConnectionStatus) {
         this.resetMessageTube();
         this.openTimeout.clear();
-        this.reconnectTimeout.clear();
         this.pingTimeout.clear();
         this.status = status;
 
@@ -70,12 +70,6 @@ export class StreamConnection extends Queue {
                 this.status = ConnectionStatus.CONNECTED;
             }, 1000);
         } else {
-            if (this.XAPI.tryReconnect) {
-                this.reconnectTimeout.setTimeout(() => {
-                    this.connect();
-                }, 3000);
-            }
-
             for (const transactionId in this.transactions) {
                 if (this.transactions[transactionId].status === TransactionStatus.waiting) {
                     this.rejectTransaction({
@@ -125,9 +119,7 @@ export class StreamConnection extends Queue {
     }
 
     public closeConnection() {
-        if (this.WebSocket !== null) {
-            this.WebSocket.close();
-        }
+        this.WebSocket.close();
     }
 
     public ping() {

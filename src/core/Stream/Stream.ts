@@ -14,7 +14,7 @@ import {XAPI} from '../XAPI';
 
 export class Stream extends StreamConnection {
     constructor(XAPI: XAPI) {
-        super(XAPI);
+        super(XAPI, 'wss://' + XAPI.hostName + '/' + XAPI.accountType + 'Stream');
     }
 
     public listen = {

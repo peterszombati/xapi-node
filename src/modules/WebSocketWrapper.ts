@@ -1,15 +1,40 @@
 import {Listener} from './Listener';
+import {Timer} from "./Timer";
+
+export const isNodeJS = () => typeof window === 'undefined' && typeof module !== 'undefined' && module.exports;
 
 export class WebSocketWrapper extends Listener {
     private ws: any = null;
     private _status = false;
+    private _tryReconnect = false;
+    private _connectionTimeout: Timer = new Timer();
+    private url: string;
 
-    constructor(url: string) {
+    constructor(url: string, tryReconnectOnFail: boolean = true) {
         super();
-        if (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports) {
+        this.url = url;
+        this._tryReconnect = tryReconnectOnFail;
+
+        this.onOpen(() => {
+            this._connectionTimeout.clear();
+        });
+        this.onClose(() => {
+            if (this._tryReconnect) {
+                this._connectionTimeout.setTimeout(() => {
+                    if (this._tryReconnect) {
+                        this.connect();
+                    }
+                }, 3000);
+            }
+        });
+    }
+
+    public connect() {
+        this._connectionTimeout.clear();
+        if (isNodeJS()) {
             // NodeJS module
             const WebSocketClient = require('ws');
-            this.ws = new WebSocketClient(url);
+            this.ws = new WebSocketClient(this.url);
             this.ws.on('open', () => {
                 this._status = true;
                 this.callListener('ws_open');
@@ -26,7 +51,7 @@ export class WebSocketWrapper extends Listener {
             });
         } else {
             // JavaScript browser module
-            this.ws = new WebSocket(url);
+            this.ws = new WebSocket(this.url);
             this.ws.onopen = () => {
                 if (this._status === false) {
                     this._status = true;
@@ -74,12 +99,19 @@ export class WebSocketWrapper extends Listener {
         this.addListener('ws_close', callback);
     }
 
-    send(data: any) {
-        this.ws.send(data);
+    send(data: any): Promise<void> {
+        if (this.status) {
+            this.ws.send(data);
+            return Promise.resolve();
+        } else {
+            return Promise.reject(this.url + ' websocket is not connected');
+        }
     }
 
     close() {
-        this.ws.close();
+        this._connectionTimeout.clear();
+        this._tryReconnect = false;
+        this.ws && this.ws.close();
     }
 
 }

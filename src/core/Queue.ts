@@ -25,7 +25,6 @@ export class Queue extends Listener {
     private messageSender: Timer = new Timer();
     private rateLimit: number;
     protected openTimeout: Timer = new Timer();
-    protected reconnectTimeout: Timer = new Timer();
     protected WebSocket: WebSocketWrapper;
 
     private get queueSize() {
@@ -40,7 +39,6 @@ export class Queue extends Listener {
 
     public stopTimer() {
         this.openTimeout.clear();
-        this.reconnectTimeout.clear();
     }
 
     private addQueu(transaction: Transaction<any, any>): void {

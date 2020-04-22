@@ -49,7 +49,7 @@ interface SocketListen<T> {
 
 export class Socket extends SocketConnection {
     constructor(XAPI: XAPI, password: string) {
-        super(XAPI, password);
+        super(XAPI, password, 'wss://' + XAPI.hostName + '/' + XAPI.accountType);
     }
 
     public listen = {
