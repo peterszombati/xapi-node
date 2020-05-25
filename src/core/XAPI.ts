@@ -56,6 +56,10 @@ export class XAPI extends Listener {
     protected account: XAPIAccount;
     public orders: Orders = {};
 
+    public get logger(): Logger4Interface {
+        return Log;
+    }
+
     public get accountType(): string | null {
         return this.account.type;
     }
@@ -124,10 +128,6 @@ export class XAPI extends Listener {
             const elapsedMs = this._serverTime.received.elapsedMs();
             return Math.floor(this._serverTime.timestamp + this._serverTime.ping + (elapsedMs === null ? 0 : elapsedMs));
         }
-    }
-
-    public getLogger(): Logger4Interface {
-        return Log;
     }
 
     constructor({
