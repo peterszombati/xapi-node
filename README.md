@@ -169,6 +169,29 @@ x.onReady(() => {
 });
 ```
 
+#### How to use other log modules than Logger4
+```ts
+import Logger4 from 'logger4';
+
+const logger = new Logger4({
+    printEnabled: false,
+    path: null,
+    directorySizeLimitMB: null
+});
+
+const x = new XAPI({...loginConfig, logger});
+
+x.logger.on((tag, log, type, params) => {
+    // You can bind your log module here
+    console.log({
+        tag,
+        log,
+        type,
+        params
+    });
+});
+```
+
 ## Donation
 Now you can donate these projects with Bitcoin, HUF, USD
 
