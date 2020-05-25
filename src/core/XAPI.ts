@@ -144,7 +144,7 @@ export class XAPI extends Listener {
         super();
         changeLogger(logger);
         if (logger.path === null && (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports)) {
-            Log.info('Logger path is not defined');
+            Log.info('Logger path is not defined (this means Logger4 will not saving logs)');
         }
         this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
         this.account = {
