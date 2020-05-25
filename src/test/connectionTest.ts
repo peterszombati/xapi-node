@@ -23,7 +23,11 @@ process
 export function connectionTest(jsonPath: string) {
     try {
         const login = parseLogin(jsonPath);
-        const logger = new Logger4({path: path.join(process.cwd(), 'logs', 'xapi'), directorySizeLimitMB: null});
+        const logger = new Logger4({
+            printEnabled: true,
+            path: path.join(process.cwd(), 'logs', 'xapi'),
+            directorySizeLimitMB: null
+        });
         const x = new XAPI({...login, logger});
         x.connect();
         x.onReady(() => {
