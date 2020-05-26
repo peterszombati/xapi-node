@@ -45,6 +45,7 @@ import {
 import {SocketConnection} from './SocketConnection';
 import {XAPI} from '../XAPI';
 import {TRADE_TRANS_INFO_MODIFY} from "../../interface/Definitions";
+import { Log } from '../../utils/Log';
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>): void
@@ -195,6 +196,13 @@ export class Socket extends SocketConnection {
             const transactionId = this.createTransactionId();
             return new Promise((resolve, reject) => {
                 const position = type === TYPE_FIELD.MODIFY ? this.XAPI.positions.find(p => p.position === order) : undefined;
+                if (type === TYPE_FIELD.MODIFY && position === undefined) {
+                    if (!this.XAPI.isSubscribeTrades) {
+                        Log.error('type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, you should set subscribeTrades = true in login config');
+                    } else {
+                        Log.error('type === MODIFY in tradeTransaction orderId = ' + order + ' not found, possible orderIds: ' + this.XAPI.positions.map(p => p.position).join(','))
+                    }
+                }
                 return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
                     'tradeTransInfo': {
                         cmd: position ? cmd || position.cmd : cmd,
