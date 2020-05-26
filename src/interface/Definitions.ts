@@ -193,6 +193,20 @@ export interface TRADE_TRANS_INFO {
     volume: number
 }
 
+export interface TRADE_TRANS_INFO_MODIFY {
+    cmd ?: CMD_FIELD
+    customComment ?: string | null
+    expiration ?: number | Date
+    offset ?: number
+    order ?: number
+    price ?: number
+    sl ?: number
+    symbol ?: string
+    tp ?: number
+    type: TYPE_FIELD.MODIFY
+    volume ?: number
+}
+
 export interface STREAMING_KEEP_ALIVE_RECORD {
     timestamp: number
 }

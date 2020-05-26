@@ -3,13 +3,15 @@ import {
     CMD_FIELD,
     IB_RECORD,
     NEWS_TOPIC_RECORD,
-    PERIOD_FIELD, REQUEST_STATUS_FIELD,
+    PERIOD_FIELD,
+    REQUEST_STATUS_FIELD,
     STEP_RULE_RECORD,
     SYMBOL_RECORD,
     Time,
     TRADE_RECORD,
     TRADE_TRANS_INFO,
-    TRADING_HOURS_RECORD
+    TRADING_HOURS_RECORD,
+    TYPE_FIELD
 } from '../..';
 import {TradeStatus, Transaction} from '../../interface/Interface';
 import {
@@ -42,6 +44,7 @@ import {
 } from '../../interface/Request';
 import {SocketConnection} from './SocketConnection';
 import {XAPI} from '../XAPI';
+import {TRADE_TRANS_INFO_MODIFY} from "../../interface/Definitions";
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>): void
@@ -187,25 +190,30 @@ export class Socket extends SocketConnection {
         getTradingHours:
             (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {symbols}),
         getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
-        tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO): Promise<TradeStatus> => {
+        tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY): Promise<TradeStatus> => {
             const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
             const transactionId = this.createTransactionId();
             return new Promise((resolve, reject) => {
+                const position = type === TYPE_FIELD.MODIFY ? this.XAPI.positions.find(p => p.position === order) : undefined;
                 return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
                     'tradeTransInfo': {
-                        cmd,
-                        customComment: (customComment == null || customComment.length === 0)
+                        cmd: position ? cmd || position.cmd : cmd,
+                        customComment: (customComment === undefined ||customComment === null || customComment.length === 0)
                             ? 'x' + transactionId
                             : 'x' + transactionId + '_' + customComment,
-                        expiration: (expiration instanceof Date) ? expiration.getTime() : expiration,
-                        offset,
+                        expiration: (expiration instanceof Date)
+                            ? expiration.getTime()
+                            : (position ? expiration || position.expiration : expiration),
+                        offset: position ? offset || position.offset : offset,
                         order,
-                        price,
-                        sl,
-                        symbol,
-                        tp,
+                        price: position ? price || position.open_price : price,
+                        sl: position ? sl || position.sl : sl,
+                        symbol: position ? symbol || position.symbol : symbol,
+                        tp: position ? tp || position.tp : tp,
                         type,
-                        volume: parseFloat(volume.toFixed(2))
+                        volume: volume === undefined
+                            ? (position ? position.volume : undefined)
+                            : parseFloat(volume.toFixed(2))
                     }
                 }, transactionId, true).then(({returnData, time}) => {
                     if (this.XAPI.isSubscribeTrades) {
