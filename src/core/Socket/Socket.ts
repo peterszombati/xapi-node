@@ -193,16 +193,19 @@ export class Socket extends SocketConnection {
         getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
         tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY): Promise<TradeStatus> => {
             const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
-            const transactionId = this.createTransactionId();
             return new Promise((resolve, reject) => {
                 const position = type === TYPE_FIELD.MODIFY ? this.XAPI.positions.find(p => p.position === order) : undefined;
                 if (type === TYPE_FIELD.MODIFY && position === undefined) {
-                    if (!this.XAPI.isSubscribeTrades) {
-                        Log.error('type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, you should set subscribeTrades = true in login config');
-                    } else {
-                        Log.error('type === MODIFY in tradeTransaction orderId = ' + order + ' not found, possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(','))
+                    const error = (!this.XAPI.isSubscribeTrades)
+                        ? 'type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, '
+                            + 'you should set subscribeTrades = true in login config'
+                        : 'type === MODIFY in tradeTransaction orderId = ' + order + ' not found,'
+                            +' possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(',')
+                    if (cmd === undefined) {
+                        return Promise.reject(error);
                     }
                 }
+                const transactionId = this.createTransactionId();
                 return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
                     'tradeTransInfo': {
                         cmd: position ? cmd || position.cmd : cmd,
