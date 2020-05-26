@@ -11,15 +11,6 @@ import {ConnectionStatus, parseLogin} from '..';
 import Logger4 from 'logger4';
 import * as path from 'path';
 
-process
-    .on('unhandledRejection', (reason, p) => {
-        console.error(reason, 'Unhandled Rejection at Promise', p);
-    })
-    .on('uncaughtException', err => {
-        console.error(err, 'Uncaught Exception thrown');
-        process.exit(1);
-    });
-
 export function getCandlesTest(jsonPath: string) {
     try {
         const login = parseLogin(jsonPath);
