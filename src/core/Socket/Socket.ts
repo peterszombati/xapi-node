@@ -212,7 +212,7 @@ export class Socket extends SocketConnection {
                         tp: position ? tp || position.tp : tp,
                         type,
                         volume: volume === undefined
-                            ? (position ? position.volume : undefined)
+                            ? (position ? parseFloat(position.volume.toFixed(2)) : undefined)
                             : parseFloat(volume.toFixed(2))
                     }
                 }, transactionId, true).then(({returnData, time}) => {
