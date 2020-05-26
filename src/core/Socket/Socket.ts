@@ -45,7 +45,7 @@ import {
 import {SocketConnection} from './SocketConnection';
 import {XAPI} from '../XAPI';
 import {TRADE_TRANS_INFO_MODIFY} from "../../interface/Definitions";
-import { Log } from '../../utils/Log';
+import {Log} from '../../utils/Log';
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>): void
@@ -211,7 +211,7 @@ export class Socket extends SocketConnection {
                 return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
                     'tradeTransInfo': {
                         cmd: position ? cmd || position.cmd : cmd,
-                        customComment: (customComment === undefined ||customComment === null || customComment.length === 0)
+                        customComment: (customComment === undefined || customComment === null || customComment.length === 0)
                             ? 'x' + transactionId
                             : 'x' + transactionId + '_' + customComment,
                         expiration: (expiration instanceof Date)

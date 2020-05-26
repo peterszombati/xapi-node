@@ -2,6 +2,7 @@ export class ListenerChild {
     private listener: Listener;
     private readonly listenerId: string;
     private readonly key: string;
+
     constructor(listener: Listener, listenerId: string, key: string) {
         this.listener = listener;
         this.listenerId = listenerId;
@@ -12,6 +13,7 @@ export class ListenerChild {
         this.listener.remove(this.listenerId, this.key);
     }
 }
+
 export class Listener {
     constructor() {
     }

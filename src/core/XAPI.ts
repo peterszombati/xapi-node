@@ -281,9 +281,9 @@ export class XAPI extends Listener {
             }
         });
 
-        this.Stream.listen.getTradeStatus((s,time) => {
+        this.Stream.listen.getTradeStatus((s, time) => {
             if (s.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
-                const {resolve,reject} = this.orders[s.order] || {};
+                const {resolve, reject} = this.orders[s.order] || {};
                 delete s.price;
                 if (resolve !== undefined && reject !== undefined) {
                     if (s.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {

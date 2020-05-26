@@ -10,12 +10,14 @@ export class Queue extends Listener {
     public get status() {
         return this._status;
     }
+
     public set status(status: ConnectionStatus) {
         if (this._status !== status) {
             this._status = status;
             this.callListener(Listeners.xapi_onConnectionChange, [status]);
         }
     }
+
     public transactions: Transactions = {};
     public lastReceivedMessage: Time | null = null;
     private type: TransactionType;
