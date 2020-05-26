@@ -200,7 +200,7 @@ export class Socket extends SocketConnection {
                     if (!this.XAPI.isSubscribeTrades) {
                         Log.error('type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, you should set subscribeTrades = true in login config');
                     } else {
-                        Log.error('type === MODIFY in tradeTransaction orderId = ' + order + ' not found, possible orderIds: ' + this.XAPI.positions.map(p => p.position).join(','))
+                        Log.error('type === MODIFY in tradeTransaction orderId = ' + order + ' not found, possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(','))
                     }
                 }
                 return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
