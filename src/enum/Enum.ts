@@ -145,3 +145,5 @@ export const Currency2Pair: any = {
     'BTC': 'XEMBTC',
     'ETH': 'TRXETH'
 };
+
+export type RelevantCurrencies = 'HUF' | 'USD' | 'JPY' | 'GBP' | 'TRY' | 'CHF' | 'CZK' | 'BRL' | 'PLN' | 'MXN' | 'ZAR' | 'RON' | 'AUD' | 'CAD' | 'SEK' | 'NOK' | 'NZD' | 'EUR' | 'CLP' | 'DKK' | 'BTC' | 'ETH';
