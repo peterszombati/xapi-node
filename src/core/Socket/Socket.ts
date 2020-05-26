@@ -203,6 +203,8 @@ export class Socket extends SocketConnection {
                             +' possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(',')
                     if (cmd === undefined) {
                         return Promise.reject(error);
+                    } else {
+                        Log.error(error);
                     }
                 }
                 const transactionId = this.createTransactionId();
