@@ -168,7 +168,21 @@ x.onReady(() => {
     });
 });
 ```
-
+#### modify open position (for example set new stop loss)
+```ts
+x.onReady(() => {
+    x.Socket.send.tradeTransaction({
+        order: 1234,
+        type: TYPE_FIELD.MODIFY,
+        sl: 1.05, // new stop loss level
+    }).then(({order}) => {
+        console.log('Success ' + order);
+    }).catch(e => {
+        console.error('Failed');
+        console.error(e);
+    });
+});
+```
 #### How to use other log modules than Logger4
 ```ts
 import Logger4 from 'logger4';
