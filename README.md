@@ -172,7 +172,7 @@ x.onReady(() => {
 ```ts
 x.onReady(() => {
     x.Socket.send.tradeTransaction({
-        order: 1234,
+        order: 1234, // position number you can find it in (x.positions)
         type: TYPE_FIELD.MODIFY,
         sl: 1.05, // new stop loss level
     }).then(({order}) => {
