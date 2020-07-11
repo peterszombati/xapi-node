@@ -372,31 +372,37 @@ export class XAPI extends Listener {
             this.timer.interval.push(setInterval(() => {
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     Object.values(this.orders).forEach(order => {
-                        if (order.time.elapsedMs() > 5000 && order.resolve !== undefined && order.reject !== undefined) {
-                            this.Socket.send.tradeTransactionStatus(order.order).then(({returnData}) => {
-                                const {resolve, reject} = this.orders[order.order] || {};
-                                if (resolve !== undefined && reject !== undefined && returnData.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
-                                    const obj = {
-                                        requestStatus: returnData.requestStatus,
-                                        order: returnData.order,
-                                        message: returnData.message,
-                                        customComment: returnData.customComment
-                                    };
-                                    if (returnData.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-                                        resolve(obj);
-                                    } else {
-                                        reject(obj);
-                                    }
-                                    delete this.orders[order.order];
-                                }
-                            }).catch(e => {
-                                Log.error(e);
-                            });
+                        if (order.time.elapsedMs() > 5000
+                            && order.resolve !== undefined
+                            && order.reject !== undefined) {
+                            this.refreshOrderStatus(order.order)
                         }
                     })
                 }
             }, 5100));
         }, 'constructor');
+    }
+
+    private refreshOrderStatus(order: number) {
+        this.Socket.send.tradeTransactionStatus(order).then(({returnData}) => {
+            const {resolve, reject} = this.orders[order] || {};
+            if (resolve !== undefined && reject !== undefined && returnData.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
+                const obj = {
+                    requestStatus: returnData.requestStatus,
+                    order: returnData.order,
+                    message: returnData.message,
+                    customComment: returnData.customComment
+                };
+                if (returnData.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+                    resolve(obj);
+                } else {
+                    reject(obj);
+                }
+                delete this.orders[order];
+            }
+        }).catch(e => {
+            Log.error(e);
+        });
     }
 
     private stopTimer() {
