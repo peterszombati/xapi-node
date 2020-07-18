@@ -22,7 +22,7 @@ export interface SYMBOL_RECORD {
     marginHedged: number
     longOnly: boolean
     timeString: string
-    categoryName: string
+    categoryName: 'STC' | 'FX' | 'CRT' | 'ETF' | 'IND' | 'CMD' | string
     lotStep: number
     marginMode: number
     leverage: number
