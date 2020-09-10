@@ -12,6 +12,11 @@ WebSocket protocol description: https://peterszombati.github.io/xapi-node/
 
 This module is usable on Front-end too.
 
+### Used by
+[Price moving](https://t.me/s/pricemoving)
+
+
+
 ## Getting started
 
 ### 1. Install via [npm](https://www.npmjs.com/package/xapi-node)
