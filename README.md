@@ -210,12 +210,3 @@ x.logger.on((tag, log, type, params) => {
     });
 });
 ```
-
-## Donation
-Now you can donate these projects with Bitcoin, HUF, USD
-
-USD IBAN bank account: HU77 1201 1069 0166 6164 0020 0000 (SWIFT: UBRTHUHB)
-
-HUF IBAN bank account: HU12 1177 3339 0142 1172 0000 0000 (SWIFT: OTPVHUHB)
-
-BTC: 3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F [www.blockchain.com](https://www.blockchain.com/btc/address/3Kng1TWvE8qzuoqYqeA2KmMcGucPZFJ75F)
