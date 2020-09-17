@@ -1,6 +1,6 @@
 import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface';
 import {Listener} from '../modules/Listener';
-import {Time, Utils, Timer} from '..';
+import {Time, Timer, Utils} from '..';
 import {Log} from '../utils/Log';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
@@ -150,8 +150,10 @@ export class Queue extends Listener {
                 json: returnData
             };
         }
+
         transaction.status = TransactionStatus.successful;
         const {resolve} = transaction.transactionPromise;
+
         if (resolve !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
             if (transaction.type === TransactionType.STREAM) {
@@ -166,6 +168,7 @@ export class Queue extends Listener {
                 resolve({returnData, time, transaction})
             }
         }
+
         if (transaction.command !== 'ping') {
             Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
         }
@@ -183,11 +186,14 @@ export class Queue extends Listener {
             received,
             json
         };
+
         Log.hidden(transaction.type + ' message rejected (' + transaction.transactionId + '): '
             + transaction.command + ', '
             + (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
             + '\nReason:\n' + JSON.stringify(json, null, '\t'), 'ERROR');
+
         const {reject} = transaction.transactionPromise;
+
         if (reject !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
             reject({
@@ -195,6 +201,7 @@ export class Queue extends Listener {
                 transaction: transaction.command === 'login' ? Utils.hideSecretInfo(transaction) : transaction
             });
         }
+
         Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
     }
 
@@ -223,6 +230,7 @@ export class Queue extends Listener {
         if (this.queueSize > 0 && this.messageSender.isNull()) {
             this.callCleanQueuTimeout();
         }
+
         return false;
     }
 
@@ -232,6 +240,7 @@ export class Queue extends Listener {
         } else {
             const elapsedMs = this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs();
             const timeoutMs = Math.max(this.rateLimit - elapsedMs, 0);
+
             this.messageSender.setTimeout(() => {
                 this.tryCleanQueue();
             }, timeoutMs);
@@ -248,6 +257,7 @@ export class Queue extends Listener {
                     return;
                 }
             }
+
             if (urgent) {
                 this.messageQueues.urgent.shift();
             } else {

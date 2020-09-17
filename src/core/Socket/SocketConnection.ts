@@ -1,5 +1,5 @@
 import {TransactionResolveSocket} from '../../interface/Interface';
-import {Time, Utils, Timer} from '../..';
+import {Time, Timer, Utils} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
 import {Log} from '../../utils/Log';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
@@ -67,6 +67,7 @@ export class SocketConnection extends Queue {
                     Log.error('Socket: ping request failed (SocketConnection.ts:67)');
                 });
             }, 100);
+
             this.openTimeout.setTimeout(() => {
                 this.status = ConnectionStatus.CONNECTED;
                 this.tryLogin(2);
@@ -89,6 +90,7 @@ export class SocketConnection extends Queue {
             Log.error('Login is rejected (userId = ' + this.XAPI.accountId
                 + ', accountType = ' + this.XAPI.accountType
                 + ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');
+
             if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
                 this.loginTimeout.setTimeout(() => {
                     Log.hidden('Try to login (retries = ' + retries + ')', 'INFO');
@@ -98,6 +100,7 @@ export class SocketConnection extends Queue {
                 Log.error('Disconnect from stream and socket (reason = \'login error code is ' + e.reason.code + '\')');
                 this.XAPI.disconnect();
             }
+
             this.XAPI.callListener(Listeners.xapi_onReject, [e])
         });
     }

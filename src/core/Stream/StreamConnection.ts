@@ -7,6 +7,7 @@ import {Queue} from '../Queue';
 import {XAPI} from '../XAPI';
 
 export class StreamConnection extends Queue {
+
     private XAPI: XAPI;
     public session: string = '';
     private pingTimeout: Timer = new Timer();
@@ -22,6 +23,7 @@ export class StreamConnection extends Queue {
             this.lastReceivedMessage = new Time();
             try {
                 const message = JSON.parse(json.toString().trim());
+
                 try {
                     this.callListener('command_' + message.command, [message.data, new Time()]);
                 } catch (e) {
@@ -97,6 +99,7 @@ export class StreamConnection extends Queue {
                 reject,
                 urgent
             });
+
             if (transaction.request.json.length > 1000) {
                 this.rejectTransaction({
                     code: errorCode.XAPINODE_0,
@@ -133,4 +136,5 @@ export class StreamConnection extends Queue {
     protected sendUnsubscribe(command: string, completion: any = {}) {
         return this.sendCommand(`stop${command}`, completion);
     }
+
 }

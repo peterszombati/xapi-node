@@ -116,6 +116,7 @@ export enum Listeners {
     xapi_onDeletePosition = 'xapi_onDeletePosition',
     xapi_onChangePosition = 'xapi_onChangePosition',
     xapi_onPendingPosition = 'xapi_onPendingPosition',
+    xapi_onBalanceChange = 'xapi_onBalanceChange',
     xapi_onConnectionChange = 'xapi_onConnectionChange',
     xapi_onReject = 'xapi_onReject',
     xapi_onReady = 'xapi_onReady'

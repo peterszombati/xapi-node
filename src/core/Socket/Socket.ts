@@ -198,9 +198,9 @@ export class Socket extends SocketConnection {
                 if (type === TYPE_FIELD.MODIFY && position === undefined) {
                     const error = (!this.XAPI.isSubscribeTrades)
                         ? 'type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, '
-                            + 'you should set subscribeTrades = true in login config'
+                        + 'you should set subscribeTrades = true in login config'
                         : 'type === MODIFY in tradeTransaction orderId = ' + order + ' not found,'
-                            +' possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(',')
+                        + ' possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(',')
                     if (cmd === undefined) {
                         return Promise.reject(error);
                     } else {

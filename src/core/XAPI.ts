@@ -1,7 +1,16 @@
 import {Listener} from '../modules/Listener';
 import {EmptyLogger, Logger4Interface} from 'logger4';
 import {changeLogger, Log} from '../utils/Log';
-import {CMD_FIELD, ConnectionStatus, PERIOD_FIELD, REQUEST_STATUS_FIELD, Time, TYPE_FIELD, Utils} from '..';
+import {
+    CMD_FIELD,
+    ConnectionStatus,
+    PERIOD_FIELD,
+    REQUEST_STATUS_FIELD,
+    STREAMING_TRADE_RECORD,
+    Time,
+    TYPE_FIELD,
+    Utils
+} from '..';
 import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface';
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType, RelevantCurrencies} from '../enum/Enum';
 import {Socket} from './Socket/Socket';
@@ -146,6 +155,7 @@ export class XAPI extends Listener {
         if (logger.path === null && (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports)) {
             Log.info('Logger path is not defined (this means Logger4 will not saving logs)');
         }
+
         this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
         this.account = {
             type: (type.toLowerCase() === 'real') ? 'real' : 'demo',
@@ -155,11 +165,14 @@ export class XAPI extends Listener {
             safe: safe === true,
             subscribeTrades: subscribeTrades !== false
         };
+
         this.Socket = new Socket(this, password);
         this.Stream = new Stream(this);
+
         if (this.account.safe) {
             Log.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
         }
+
         this.Stream.onConnectionChange(status => {
             if (status !== ConnectionStatus.CONNECTING) {
                 Log.hidden('Stream ' + (status === ConnectionStatus.CONNECTED ? 'open' : 'closed'), 'INFO');
@@ -169,6 +182,7 @@ export class XAPI extends Listener {
                         this.Stream.ping().catch(e => {
                             Log.error('Stream: ping request failed (XAPI.ts:170)');
                         });
+
                         if (this.isSubscribeTrades) {
                             this.Socket.send.getTrades(true).catch().then(() => {
                                 if (this.isReady) {
@@ -192,6 +206,7 @@ export class XAPI extends Listener {
                     this.Stream.session = '';
                     this.stopTimer();
                 }
+
                 if (this.Stream.status === ConnectionStatus.CONNECTED) {
                     this.callListener(Listeners.xapi_onConnectionChange, [status]);
                 }
@@ -215,6 +230,7 @@ export class XAPI extends Listener {
 
         this.Socket.listen.getTrades((data, time, transaction) => {
             const {sent} = transaction.request;
+
             if (sent !== null && sent.elapsedMs() < 1000) {
                 const obj: TradePositions = {};
                 data.forEach(t => {
@@ -225,6 +241,7 @@ export class XAPI extends Listener {
                         };
                     }
                 });
+
                 Object.values(this._positions).forEach(t => {
                     if (obj[t.position] === undefined && t.value !== null) {
                         if (t.lastUpdated.elapsedMs() <= 1000) {
@@ -232,6 +249,7 @@ export class XAPI extends Listener {
                         }
                     }
                 });
+
                 this._positions = obj;
                 this._positionsUpdated = new Time();
             } else {
@@ -241,8 +259,10 @@ export class XAPI extends Listener {
 
         this.Stream.listen.getTrades((t, time) => {
             if (t.cmd === CMD_FIELD.BALANCE || t.cmd === CMD_FIELD.CREDIT) {
+                this.callListener(Listeners.xapi_onBalanceChange, [t]);
                 return;
             }
+
             if (t.type === TYPE_FIELD.PENDING
                 && t.cmd !== CMD_FIELD.BUY_LIMIT
                 && t.cmd !== CMD_FIELD.SELL_LIMIT
@@ -257,6 +277,7 @@ export class XAPI extends Listener {
             } else if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
                 if (this._positions[t.position] !== undefined) {
                     const {value} = this._positions[t.position];
+
                     if (value) {
                         const changes = Utils.getObjectChanges(value, Utils.formatPosition(t));
                         if (Object.keys(changes).length > 0) {
@@ -266,6 +287,7 @@ export class XAPI extends Listener {
                 } else {
                     this.callListener(Listeners.xapi_onCreatePosition, [Utils.formatPosition(t)]);
                 }
+
                 this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
             }
         });
@@ -273,6 +295,7 @@ export class XAPI extends Listener {
         this.Socket.listen.getServerTime((data, time, transaction) => {
             if (transaction.response.received !== null && transaction.request.sent !== null) {
                 const dif = transaction.response.received.getDifference(transaction.request.sent);
+
                 this._serverTime = {
                     timestamp: data.time,
                     ping: dif,
@@ -459,11 +482,11 @@ export class XAPI extends Listener {
     }
 
     public getPriceHistory({
-                         symbol,
-                         period = PERIOD_FIELD.PERIOD_M1,
-                         ticks = -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]],
-                         startUTC = null
-                     }: {
+                               symbol,
+                               period = PERIOD_FIELD.PERIOD_M1,
+                               ticks = -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]],
+                               startUTC = null
+                           }: {
         symbol: string,
         period?: PERIOD_FIELD | undefined,
         ticks?: number,
@@ -519,4 +542,9 @@ export class XAPI extends Listener {
     public onPendingPosition(callBack: (position: TradePosition) => void, key: string | null = null) {
         return this.addListener(Listeners.xapi_onPendingPosition, callBack, key);
     }
+
+    public onBalanceChange(callBack: (data: STREAMING_TRADE_RECORD) => void, key: string | null = null) {
+        return this.addListener(Listeners.xapi_onBalanceChange, callBack, key);
+    }
+
 }
