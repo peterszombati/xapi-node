@@ -25,7 +25,7 @@ export class StreamConnection extends Queue {
                 const message = JSON.parse(json.toString().trim());
 
                 try {
-                    this.callListener('command_' + message.command, [message.data, new Time()]);
+                    this.callListener('command_' + message.command, [message.data, new Time(), json]);
                 } catch (e) {
                     const {name, message, stack} = new Error(e);
                     Log.error('Stream WebSocket Handle Message ERROR');

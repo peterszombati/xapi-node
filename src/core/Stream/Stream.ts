@@ -12,27 +12,31 @@ import {
 import {StreamConnection} from './StreamConnection';
 import {XAPI} from '../XAPI';
 
+interface StreamListen<T> {
+    (data: T, time: Time, jsonString: string): void
+}
+
 export class Stream extends StreamConnection {
     constructor(XAPI: XAPI) {
         super(XAPI, 'wss://' + XAPI.hostName + '/' + XAPI.accountType + 'Stream');
     }
 
     public listen = {
-        getBalance: (callBack: (data: STREAMING_BALANCE_RECORD, time: Time) => void, key: string | null = null) =>
+        getBalance: (callBack: StreamListen<STREAMING_BALANCE_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'balance', callBack, key),
-        getCandles: (callBack: (data: STREAMING_CANDLE_RECORD, time: Time) => void, key: string | null = null) =>
+        getCandles: (callBack: StreamListen<STREAMING_CANDLE_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'candle', callBack, key),
-        getKeepAlive: (callBack: (data: STREAMING_KEEP_ALIVE_RECORD, time: Time) => void, key: string | null = null) =>
+        getKeepAlive: (callBack: StreamListen<STREAMING_KEEP_ALIVE_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'keepAlive', callBack, key),
-        getNews: (callBack: (data: STREAMING_NEWS_RECORD, time: Time) => void, key: string | null = null) =>
+        getNews: (callBack: StreamListen<STREAMING_NEWS_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'news', callBack, key),
-        getProfits: (callBack: (data: STREAMING_PROFIT_RECORD, time: Time) => void, key: string | null = null) =>
+        getProfits: (callBack: StreamListen<STREAMING_PROFIT_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'profit', callBack, key),
-        getTickPrices: (callBack: (data: STREAMING_TICK_RECORD, time: Time) => void, key: string | null = null) =>
+        getTickPrices: (callBack: StreamListen<STREAMING_TICK_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'tickPrices', callBack, key),
-        getTrades: (callBack: (data: STREAMING_TRADE_RECORD, time: Time) => void, key: string | null = null) =>
+        getTrades: (callBack: StreamListen<STREAMING_TRADE_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'trade', callBack, key),
-        getTradeStatus: (callBack: (data: STREAMING_TRADE_STATUS_RECORD, time: Time) => void, key: string | null = null) =>
+        getTradeStatus: (callBack: StreamListen<STREAMING_TRADE_STATUS_RECORD>, key: string | null = null) =>
             this.addListener('command_' + 'tradeStatus', callBack, key),
     };
 

@@ -26,7 +26,7 @@ export class SocketConnection extends Queue {
             try {
                 const message = JSON.parse(json.toString().trim());
                 try {
-                    this.handleSocketMessage(message, new Time());
+                    this.handleSocketMessage(message, new Time(), json);
                 } catch (e) {
                     const {name, message, stack} = new Error(e);
                     Log.error('Socket WebSocket Handle Message ERROR');
@@ -116,7 +116,7 @@ export class SocketConnection extends Queue {
         }
     }
 
-    private handleSocketMessage(message: any, time: Time) {
+    private handleSocketMessage(message: any, time: Time, json: any) {
         if (message.status) {
             const returnData = message.streamSessionId === undefined
                 ? message.returnData
@@ -128,7 +128,7 @@ export class SocketConnection extends Queue {
 
             if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
                 this.resolveTransaction(returnData, time, this.transactions[transactionId]);
-                this.callListener('command_' + command, [returnData, time, this.transactions[transactionId]]);
+                this.callListener('command_' + command, [returnData, time, this.transactions[transactionId], json]);
             } else {
                 Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n'
                     + JSON.stringify(message, null, '\t'));

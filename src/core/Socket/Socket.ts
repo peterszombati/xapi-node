@@ -48,7 +48,7 @@ import {TRADE_TRANS_INFO_MODIFY} from "../../interface/Definitions";
 import {Log} from '../../utils/Log';
 
 interface SocketListen<T> {
-    (data: T, time: Time, transaction: Transaction<null, null>): void
+    (data: T, time: Time, transaction: Transaction<null, null>, jsonString: string): void
 }
 
 export class Socket extends SocketConnection {
