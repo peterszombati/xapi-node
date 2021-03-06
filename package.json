@@ -10,7 +10,13 @@
 	},
 	"devDependencies": {
 		"@types/node": "^11.15.3",
-		"typescript": "^3.4.5"
+		"typescript": "^3.4.5",
+		"ts-mocha": "^8.0.0",
+		"@types/chai": "^4.2.14",
+		"@types/mocha": "^8.0.3",
+		"chai": "^4.2.0",
+		"mocha": "^8.2.0",
+		"ts-node": "^9.0.0"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
