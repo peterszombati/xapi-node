@@ -434,10 +434,36 @@ export class XAPI extends Listener {
         this.timer = {interval: [], timeout: []};
     }
 
-    public connect() {
-        this._tryReconnect = true;
-        this.Stream.connect();
-        this.Socket.connect();
+    public connect(params: { timeout?: number | undefined } = {}): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            if (params && typeof params.timeout === 'number') {
+                if (params.timeout < 0) {
+                    reject(new Error(`Invalid parameter: connect({ timeout: ${params.timeout}})`))
+                    return
+                }
+
+                const timeoutId = setTimeout(() => {
+                    this.disconnect().then(() => {
+                        reject(new Error('Connection timeout'))
+                    })
+                }, params.timeout)
+
+                const listenerChild = this.onReady(() => {
+                    clearTimeout(timeoutId)
+                    listenerChild.stopListen()
+                    resolve()
+                })
+            } else {
+                const listenerChild = this.onReady(() => {
+                    listenerChild.stopListen()
+                    resolve()
+                })
+            }
+
+            this._tryReconnect = true
+            this.Stream.connect()
+            this.Socket.connect()
+        })
     }
 
     public disconnect() {
