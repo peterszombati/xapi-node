@@ -448,7 +448,7 @@ export class XAPI extends Listener {
             this.Socket.stopTimer();
             this.Stream.stopTimer();
             this.Stream.closeConnection();
-            if (this.Socket.status) {
+            if (this.Socket.status === ConnectionStatus.CONNECTED) {
                 this.Socket.logout()
                     .catch(() => {})
                     .then(() => {
