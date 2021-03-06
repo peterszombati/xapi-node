@@ -450,7 +450,7 @@ export class XAPI extends Listener {
             this.Stream.closeConnection();
             if (this.Socket.status) {
                 this.Socket.logout()
-                    .catch()
+                    .catch(() => {})
                     .then(() => {
                         this.Socket.closeConnection();
                         Log.info(this.account.accountId + ' disconnected');
