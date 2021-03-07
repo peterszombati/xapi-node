@@ -434,10 +434,16 @@ export class XAPI extends Listener {
         this.timer = {interval: [], timeout: []};
     }
 
+    private connectionProgress: boolean = false
     public connect(params: { timeout?: number | undefined } = {}): Promise<void> {
+        if (this.connectionProgress) {
+            return Promise.reject(new Error('Another connection process is in progress'))
+        }
+        this.connectionProgress = true
         return new Promise<void>((resolve, reject) => {
             if (params && typeof params.timeout === 'number') {
                 if (params.timeout < 0) {
+                    this.connectionProgress = false
                     reject(new Error(`Invalid parameter: connect({ timeout: ${params.timeout}})`))
                     return
                 }
@@ -451,11 +457,13 @@ export class XAPI extends Listener {
                 const listenerChild = this.onReady(() => {
                     clearTimeout(timeoutId)
                     listenerChild.stopListen()
+                    this.connectionProgress = false
                     resolve()
                 })
             } else {
                 const listenerChild = this.onReady(() => {
                     listenerChild.stopListen()
+                    this.connectionProgress = false
                     resolve()
                 })
             }
@@ -479,11 +487,13 @@ export class XAPI extends Listener {
                     .catch(() => {})
                     .then(() => {
                         this.Socket.closeConnection();
+                        this.connectionProgress = false;
                         Log.info(this.account.accountId + ' disconnected');
                         resolve();
                     });
             } else {
                 this.Socket.closeConnection();
+                this.connectionProgress = false;
                 Log.info(this.account.accountId + ' disconnected');
                 resolve();
             }
