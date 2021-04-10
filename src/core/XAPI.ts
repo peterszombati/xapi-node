@@ -530,9 +530,16 @@ export class XAPI extends Listener {
             return {
                 symbol,
                 period,
-                candles: data.returnData.rateInfos.map((candle) => {
-                    return [candle.ctm, candle.open, candle.close + candle.open, candle.low + candle.open, candle.high + candle.open, candle.vol];
-                }),
+                candles: data.returnData.rateInfos.map((candle) => (
+                    [
+                        candle.ctm,
+                        Math.round(candle.open),
+                        Math.round(Math.round(candle.close) + Math.round(candle.open)),
+                        Math.round(Math.round(candle.low) + Math.round(candle.open)),
+                        Math.round(Math.round(candle.high) + Math.round(candle.open)),
+                        candle.vol
+                    ]
+                )),
                 digits: data.returnData.digits
             }
         });
