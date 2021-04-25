@@ -1,6 +1,6 @@
-import XAPI, { parseLogin } from "../build"
 import * as path from "path"
 import Logger4 from "logger4"
+import XAPI, {parseLogin} from "../src";
 
 describe('sandbox', () => {
   it('sandbox', async () => {
