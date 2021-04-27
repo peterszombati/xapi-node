@@ -520,24 +520,24 @@ export class XAPI extends Listener {
     public getPriceHistory({
                                symbol,
                                period = PERIOD_FIELD.PERIOD_M1,
-                               ticks = -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]],
+                               ticks = null,
                                startUTC = null
                            }: {
         symbol: string,
         period?: PERIOD_FIELD | undefined,
-        ticks?: number,
+        ticks?: number | null,
         startUTC?: number | null
     }): Promise<{ symbol: string, period: PERIOD_FIELD, candles: number[][], digits: number }> {
-        return (startUTC !== null
+        return (startUTC !== null && ticks === null
                 ? this.Socket.send.getChartLastRequest(period, startUTC, symbol)
                 : this.Socket.send.getChartRangeRequest(
                     0,
                     period,
-                    this.serverTime,
+                    startUTC !== null ? startUTC : this.serverTime,
                     symbol,
-                    ticks)
-        ).then((data) => {
-            return {
+                    ticks === null ? -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]] : ticks)
+        ).then((data) => (
+            {
                 symbol,
                 period,
                 candles: data.returnData.rateInfos.map((candle) => (
@@ -552,7 +552,7 @@ export class XAPI extends Listener {
                 )),
                 digits: data.returnData.digits
             }
-        });
+        ))
     }
 
     public onReady(callBack: () => void, key: string | null = null) {
