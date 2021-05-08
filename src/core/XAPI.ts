@@ -450,6 +450,7 @@ export class XAPI extends Listener {
 
                 const timeoutId = setTimeout(() => {
                     this.disconnect().then(() => {
+                        this.connectionProgress = false
                         reject(new Error('Connection timeout'))
                     })
                 }, params.timeout)
