@@ -29,7 +29,7 @@ export class Queue extends Listener {
     protected openTimeout: Timer = new Timer();
     protected WebSocket: WebSocketWrapper;
 
-    private get queueSize() {
+    public get queueSize() {
         return this.messageQueues.urgent.length + this.messageQueues.normal.length;
     }
 
