@@ -13,6 +13,7 @@ export interface TransactionResolveSocket<T> {
     returnData: T,
     time: Time,
     transaction: Transaction<TransactionResolveSocket<T>, null>
+    json: string
 }
 
 export interface TransactionResolveStream {

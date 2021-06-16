@@ -127,7 +127,7 @@ export class SocketConnection extends Queue {
             const {transactionId, command} = Utils.parseCustomTag(customTag);
 
             if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
-                this.resolveTransaction(returnData, time, this.transactions[transactionId]);
+                this.resolveTransaction(json, returnData, time, this.transactions[transactionId]);
                 this.callListener('command_' + command, [returnData, time, this.transactions[transactionId], json]);
             } else {
                 Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n'

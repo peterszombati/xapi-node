@@ -142,7 +142,7 @@ export class Queue extends Listener {
         }
     }
 
-    protected resolveTransaction(returnData: any, time: Time, transaction: Transaction<any, any>) {
+    protected resolveTransaction(json: string, returnData: any, time: Time, transaction: Transaction<any, any>) {
         if (this.type === TransactionType.SOCKET) {
             transaction.response = {
                 status: true,
@@ -165,7 +165,7 @@ export class Queue extends Listener {
                     + transaction.command + ', '
                     + (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
                     + ', (' + elapsedMs + 'ms)', 'INFO');
-                resolve({returnData, time, transaction})
+                resolve({returnData, time, json, transaction})
             }
         }
 
@@ -216,7 +216,7 @@ export class Queue extends Listener {
                         ? TransactionStatus.successful
                         : TransactionStatus.sent;
                     if (transaction.type === TransactionType.STREAM) {
-                        this.resolveTransaction(null, new Time(), transaction);
+                        this.resolveTransaction('', null, new Time(), transaction);
                     }
                     return true;
                 }
