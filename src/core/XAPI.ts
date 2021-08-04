@@ -124,6 +124,15 @@ export class XAPI extends Listener {
         return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED;
     }
 
+    public get loadCapacity() {
+        const times = this.Socket._messagesElapsedTime.filter(i => i.elapsedMs() < 1500)
+        if (times.length <= 4) {
+            return times.length
+        } else {
+            return 5 + times[times.length - 4].elapsedMs()
+        }
+    }
+
     public get isReady(): boolean {
         return this.Stream.status === ConnectionStatus.CONNECTED
             && this.Socket.status === ConnectionStatus.CONNECTED

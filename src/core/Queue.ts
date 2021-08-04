@@ -24,6 +24,9 @@ export class Queue extends Listener {
     private messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = {urgent: [], normal: []};
     private _transactionIdIncrement: number = 0;
     private messagesElapsedTime: Time[] = [];
+    public get _messagesElapsedTime() {
+        return this.messagesElapsedTime
+    }
     private messageSender: Timer = new Timer();
     private rateLimit: number;
     protected openTimeout: Timer = new Timer();
