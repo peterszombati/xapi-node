@@ -1,7 +1,7 @@
-import {XAPI, XAPIConfig} from './core/XAPI';
+import {XAPI, XAPIConfig} from './core/XAPI'
 
-export default XAPI;
-export {XAPIConfig};
+export default XAPI
+export {XAPIConfig}
 
 import {
     CALENDAR_RECORD,
@@ -26,8 +26,8 @@ import {
     STREAMING_CANDLE_RECORD,
     STREAMING_BALANCE_RECORD,
     CHART_LAST_INFO_RECORD,
-    CHART_RANGE_INFO_RECORD
-} from './interface/Definitions';
+    CHART_RANGE_INFO_RECORD,
+} from './interface/Definitions'
 
 export {
     CALENDAR_RECORD,
@@ -52,7 +52,7 @@ export {
     STREAMING_CANDLE_RECORD,
     STREAMING_BALANCE_RECORD,
     CHART_LAST_INFO_RECORD,
-    CHART_RANGE_INFO_RECORD
+    CHART_RANGE_INFO_RECORD,
 }
 
 import {
@@ -62,10 +62,11 @@ import {
     TYPE_FIELD,
     STATE_FIELD,
     REQUEST_STATUS_FIELD,
+    CHART_RATE_LIMIT_BY_PERIOD,
     ConnectionStatus,
     Candle,
-    errorCode
-} from './enum/Enum';
+    errorCode,
+} from './enum/Enum'
 
 export {
     CMD_FIELD,
@@ -74,16 +75,17 @@ export {
     TYPE_FIELD,
     STATE_FIELD,
     REQUEST_STATUS_FIELD,
+    CHART_RATE_LIMIT_BY_PERIOD,
     ConnectionStatus,
     Candle,
-    errorCode
+    errorCode,
 }
 
-import {parseLogin} from './modules/parseLogin';
-import {Utils} from './utils/Utils';
-import {Time} from './modules/Time';
-import {TradePosition, TradeStatus} from './interface/Interface';
-import {Timer} from './modules/Timer';
-import {ListenerChild} from "./modules/Listener";
+import {parseLogin} from './modules/parseLogin'
+import {Utils} from './utils/Utils'
+import {Time} from './modules/Time'
+import {TradePosition, TradeStatus} from './interface/Interface'
+import {Timer} from './modules/Timer'
+import {ListenerChild} from "./modules/Listener"
 
-export {parseLogin, Utils, Time, TradePosition, Timer, TradeStatus, ListenerChild};
+export {parseLogin, Utils, Time, TradePosition, Timer, TradeStatus, ListenerChild}
