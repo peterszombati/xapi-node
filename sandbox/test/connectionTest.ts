@@ -6,8 +6,8 @@
 }
  */
 
-import {XAPI} from '../core/XAPI';
-import {ConnectionStatus, parseLogin} from '..';
+import {XAPI} from '../../src/core/XAPI';
+import {ConnectionStatus, parseLogin} from '../../src';
 import Logger4 from 'logger4';
 import * as path from 'path';
 

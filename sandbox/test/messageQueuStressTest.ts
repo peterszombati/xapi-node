@@ -6,11 +6,11 @@
 }
  */
 
-import {XAPI} from '../core/XAPI';
-import {parseLogin} from '..';
+import {XAPI} from '../../src/core/XAPI';
+import {parseLogin} from '../../src';
 import Logger4 from 'logger4';
 import * as path from 'path';
-import {Time} from '..';
+import {Time} from '../../src';
 
 export function messageQueuStressTest(jsonPath: string) {
     try {
