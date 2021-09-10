@@ -81,11 +81,11 @@ export {
     errorCode,
 }
 
-import {parseLogin} from './modules/parseLogin'
+import {parseJsonLogin} from './modules/parseJsonLogin'
 import {Utils} from './utils/Utils'
 import {Time} from './modules/Time'
 import {TradePosition, TradeStatus} from './interface/Interface'
 import {Timer} from './modules/Timer'
 import {ListenerChild} from "./modules/Listener"
 
-export {parseLogin, Utils, Time, TradePosition, Timer, TradeStatus, ListenerChild}
+export {parseJsonLogin, Utils, Time, TradePosition, Timer, TradeStatus, ListenerChild}

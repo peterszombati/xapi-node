@@ -1,18 +1,14 @@
-import * as fs from 'fs';
-import {XAPIConfig} from '..';
+import {XAPIConfig} from '..'
 
-export function parseLogin(loginJsonFile: string): XAPIConfig {
-    if (!fs.existsSync(loginJsonFile)) {
-        throw `${loginJsonFile} is not exists.`
-    }
+export function parseJsonLogin(jsonString: string): XAPIConfig {
     let json: any = {};
     try {
-        json = JSON.parse(fs.readFileSync(loginJsonFile).toString().trim())
+        json = JSON.parse(jsonString.trim())
     } catch (e) {
-        throw `${loginJsonFile} is not valid json file\n${e}`;
+        throw new Error('json parse failed')
     }
     if (typeof (json) !== 'object') {
-        throw `${loginJsonFile} is not valid json file\n${typeof (json)}`;
+        throw new Error(`json is not valid (typeof = ${typeof (json)})`)
     }
 
     const {accountId, password, type, rateLimit, host, appName}: XAPIConfig = json;
@@ -23,10 +19,10 @@ export function parseLogin(loginJsonFile: string): XAPIConfig {
         || !['undefined', 'string'].includes(typeof (host))
         || !['undefined', 'string'].includes(typeof (appName))
         || Object.keys(json).length > 6) {
-        throw `${loginJsonFile} is not valid`
+        throw new Error(`json is not valid`)
     }
     if (['real', 'demo'].every(x => x !== type.toLowerCase())) {
-        throw `${loginJsonFile} not contains valid type (it should be 'real' or 'demo')`;
+        throw new Error(`json not contains valid type (it should be 'real' or 'demo')`)
     }
     return {accountId, password, type: type.toLowerCase(), rateLimit, host, appName};
 }
