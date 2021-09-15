@@ -16,7 +16,7 @@ export class Queue extends Listener {
         if (times.length <= 4) {
             return times.length
         } else {
-            return 5 + times[times.length - 4].elapsedMs()
+            return 5 + (1500 - times[times.length - 4].elapsedMs())
         }
     }
 
