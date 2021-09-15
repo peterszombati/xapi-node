@@ -11,6 +11,15 @@ export class Queue extends Listener {
         return this._status;
     }
 
+    public get loadCapacity() {
+        const times = this.messagesElapsedTime.filter(i => i.elapsedMs() < 1500)
+        if (times.length <= 4) {
+            return times.length
+        } else {
+            return 5 + times[times.length - 4].elapsedMs()
+        }
+    }
+
     public set status(status: ConnectionStatus) {
         if (this._status !== status) {
             this._status = status;
