@@ -6,15 +6,15 @@
 }
  */
 
-import {XAPI} from '../../src/core/XAPI';
-import {parseLogin} from '../../src';
-import Logger4 from 'logger4';
-import * as path from 'path';
-import {Time} from '../../src';
+import {XAPI} from '../../src/core/XAPI'
+import Logger4 from 'logger4'
+import * as path from 'path'
+import {Time} from '../../src'
+import {parseLoginFile} from '../parseLoginFile'
 
 export function messageQueuStressTest(jsonPath: string) {
     try {
-        const login = parseLogin(jsonPath);
+        const login = parseLoginFile(jsonPath)
         const logger = new Logger4({
             printEnabled: true,
             path: path.join(process.cwd(), 'logs', 'xapi'),

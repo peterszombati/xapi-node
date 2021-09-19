@@ -6,14 +6,15 @@
 }
  */
 
-import {XAPI} from '../../src/core/XAPI';
-import {ConnectionStatus, parseLogin} from '../../src';
-import Logger4 from 'logger4';
-import * as path from 'path';
+import {XAPI} from '../../src/core/XAPI'
+import {ConnectionStatus} from '../../src'
+import Logger4 from 'logger4'
+import * as path from 'path'
+import {parseLoginFile} from '../parseLoginFile'
 
 export function connectionTest(jsonPath: string) {
     try {
-        const login = parseLogin(jsonPath);
+        const login = parseLoginFile(jsonPath)
         const logger = new Logger4({
             printEnabled: true,
             path: path.join(process.cwd(), 'logs', 'xapi'),
