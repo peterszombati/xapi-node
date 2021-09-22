@@ -1,6 +1,6 @@
 {
 	"name": "xapi-node",
-	"version": "2.4.10",
+	"version": "2.4.11",
 	"description": "This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
 	"main": "build/index.js",
 	"types": "build/index.d.ts",
