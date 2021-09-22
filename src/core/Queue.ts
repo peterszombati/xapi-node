@@ -4,6 +4,7 @@ import {Time, Timer, Utils} from '..';
 import {Log} from '../utils/Log';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
+import {JsonError} from "logger4";
 
 export class Queue extends Listener {
     private _status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
@@ -208,10 +209,10 @@ export class Queue extends Listener {
 
         if (reject !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
-            reject({
+            reject(new JsonError('Transaction Rejected',{
                 reason: json,
                 transaction: transaction.command === 'login' ? Utils.hideSecretInfo(transaction) : transaction
-            });
+            }))
         }
 
         Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
