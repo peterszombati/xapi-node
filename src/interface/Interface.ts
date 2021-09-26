@@ -41,6 +41,7 @@ export interface Transaction<Resolve, Reject> {
         resolve: null | ((resolve: Resolve | null) => void),
         reject: null | ((reject: Reject | null) => void)
     }
+    stack: string | undefined
 }
 
 export interface AddTransaction {
@@ -51,6 +52,7 @@ export interface AddTransaction {
     resolve: any,
     reject: any,
     urgent: boolean
+    stack: string | undefined
 }
 
 export interface TradePosition {

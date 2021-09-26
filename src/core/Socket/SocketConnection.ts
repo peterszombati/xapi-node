@@ -143,6 +143,7 @@ export class SocketConnection extends Queue {
 
     protected sendCommand<T>(command: string, args: any = {}, transactionId: string | null = null, urgent: boolean = false):
         Promise<TransactionResolveSocket<T>> {
+        const stack = new Error('').stack
         return new Promise((resolve: any, reject: any) => {
             if (transactionId === null) {
                 transactionId = this.createTransactionId();
@@ -158,7 +159,8 @@ export class SocketConnection extends Queue {
                 transactionId,
                 urgent,
                 resolve,
-                reject
+                reject,
+                stack,
             });
             if (transaction.request.json.length > 1000) {
                 this.rejectTransaction({

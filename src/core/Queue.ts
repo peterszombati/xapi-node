@@ -116,7 +116,8 @@ export class Queue extends Listener {
             createdAt: new Time(),
             status: TransactionStatus.waiting,
             transactionPromise: {resolve: newTransaction.resolve, reject: newTransaction.reject},
-            urgent: newTransaction.urgent
+            urgent: newTransaction.urgent,
+            stack: newTransaction.stack,
         };
     }
 
@@ -209,10 +210,12 @@ export class Queue extends Listener {
 
         if (reject !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
-            reject(new JsonError('Transaction Rejected',{
+            const error = new JsonError('Transaction Rejected',{
                 reason: json,
                 transaction: transaction.command === 'login' ? Utils.hideSecretInfo(transaction) : transaction
-            }))
+            })
+            error.stack = transaction.stack
+            reject(error)
         }
 
         Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
