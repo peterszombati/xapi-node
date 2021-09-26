@@ -45,7 +45,7 @@ import {
 import {SocketConnection} from './SocketConnection';
 import {XAPI} from '../XAPI';
 import {TRADE_TRANS_INFO_MODIFY} from "../../interface/Definitions";
-import {Log} from '../../utils/Log';
+import {LogV2} from '../../utils/LogV2';
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>, jsonString: string): void
@@ -202,9 +202,9 @@ export class Socket extends SocketConnection {
                         : 'type === MODIFY in tradeTransaction orderId = ' + order + ' not found,'
                         + ' possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(',')
                     if (cmd === undefined) {
-                        return Promise.reject(error);
+                        return Promise.reject(new Error(error));
                     } else {
-                        Log.error(error);
+                        LogV2.error(new Error(error));
                     }
                 }
                 const transactionId = this.createTransactionId();

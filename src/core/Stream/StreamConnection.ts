@@ -1,7 +1,7 @@
 import {TransactionResolveStream} from '../../interface/Interface';
 import {Time, Timer} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import {Log} from '../../utils/Log';
+import {LogV2} from "../../utils/LogV2";
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import {XAPI} from '../XAPI';
@@ -27,21 +27,15 @@ export class StreamConnection extends Queue {
                 try {
                     this.callListener('command_' + message.command, [message.data, new Time(), json]);
                 } catch (e) {
-                    const {name, message, stack} = new Error(e);
-                    Log.error('Stream WebSocket Handle Message ERROR');
-                    Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+                    LogV2.error(e, 'Stream WebSocket Handle Message ERROR');
                 }
             } catch (e) {
-                const {name, message, stack} = new Error(e);
-                Log.error('Stream WebSocket JSON parse ERROR');
-                Log.hidden(name + '\n' + message + (stack ? '\n' + stack : '') + '\n\n' + json, 'ERROR');
+                LogV2.error(e, 'Stream WebSocket JSON parse ERROR');
             }
         });
 
         this.WebSocket.onError((error: any) => {
-            const {name, message, stack} = new Error(error);
-            Log.error('Stream WebSocket ERROR');
-            Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+            LogV2.error(error, 'Stream WebSocket ERROR');
         });
     }
 
@@ -63,7 +57,7 @@ export class StreamConnection extends Queue {
             if (this.session.length > 0) {
                 this.pingTimeout.setTimeout(() => {
                     this.ping().catch(e => {
-                        Log.error('Stream: ping request failed (StreamConnection.ts:66)');
+                        LogV2.error(e, 'Stream: ping request failed (StreamConnection.ts:66)');
                     });
                 }, 100);
             }
@@ -85,6 +79,7 @@ export class StreamConnection extends Queue {
 
     protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
         Promise<TransactionResolveStream> {
+        const stack = new Error('').stack
         return new Promise((resolve: any, reject: any) => {
             const transaction = this.addTransaction({
                 command,
@@ -97,7 +92,8 @@ export class StreamConnection extends Queue {
                 transactionId: this.createTransactionId(),
                 resolve,
                 reject,
-                urgent
+                urgent,
+                stack,
             });
 
             if (transaction.request.json.length > 1000) {

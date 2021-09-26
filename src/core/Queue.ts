@@ -1,7 +1,7 @@
 import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface';
 import {Listener} from '../modules/Listener';
 import {Time, Timer, Utils} from '..';
-import {Log} from '../utils/Log';
+import {LogV2} from "../utils/LogV2";
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
 import {JsonError} from "logger4";
@@ -69,8 +69,7 @@ export class Queue extends Listener {
             } else {
                 this.messageQueues.normal.push({transactionId});
             }
-            Log.hidden((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
-                + ' (' + transaction.transactionId + '): ' + transaction.command + ' added to queue (messages in queue = ' + this.queueSize + ')', 'INFO');
+            LogV2.print('hidden', `${new Date().toISOString()}:${this.type === TransactionType.STREAM ? 'Stream' : 'Socket'};${transaction.transactionId};${transaction.command}; added to queue (messages in queue = ${this.queueSize})`);
         }
     }
 
@@ -90,8 +89,8 @@ export class Queue extends Listener {
 
     protected resetMessageTube() {
         if (this.queueSize > 0) {
-            Log.info((this.type === TransactionType.STREAM ? ' Stream' : 'Socket')
-                + ' Message queue reseted, deleted = ' + this.queueSize);
+            LogV2.info((this.type === TransactionType.STREAM ? 'Stream' : 'Socket')
+                + '; Message queue reseted, deleted = ' + this.queueSize);
         }
         this.messageQueues = {urgent: [], normal: []};
         this.messagesElapsedTime = [];
@@ -151,7 +150,7 @@ export class Queue extends Listener {
             this.WebSocket.send(json);
             return time;
         } catch (e) {
-            Log.error(e.toString());
+            LogV2.error(e);
             return null;
         }
     }
@@ -171,20 +170,17 @@ export class Queue extends Listener {
         if (resolve !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
             if (transaction.type === TransactionType.STREAM) {
-                Log.hidden(' Stream (' + transaction.transactionId + '): ' + transaction.command + ', ' + JSON.stringify(transaction.request.arguments), 'INFO');
+                LogV2.print('hidden',`${new Date().toISOString()}: Stream (${transaction.transactionId}): ${transaction.command}, ${JSON.stringify(transaction.request.arguments)}`);
                 resolve({transaction});
             } else if (transaction.request.sent !== null) {
                 const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent);
-                Log.hidden('Socket (' + transaction.transactionId + '): '
-                    + transaction.command + ', '
-                    + (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
-                    + ', (' + elapsedMs + 'ms)', 'INFO');
+                LogV2.print('hidden',`${new Date().toISOString()}: Socket (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)}, (${elapsedMs}ms)`);
                 resolve({returnData, time, json, transaction})
             }
         }
 
         if (transaction.command !== 'ping') {
-            Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+            LogV2.print('hidden', `${new Date().toISOString()}:Transaction archived:${Utils.transactionToJSONString(transaction)}`);
         }
     }
 
@@ -201,10 +197,7 @@ export class Queue extends Listener {
             json
         };
 
-        Log.hidden(transaction.type + ' message rejected (' + transaction.transactionId + '): '
-            + transaction.command + ', '
-            + (transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments))
-            + '\nReason:\n' + JSON.stringify(json, null, '\t'), 'ERROR');
+        LogV2.print('hidden', `${new Date().toISOString()}:${transaction.type} message rejected (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)};Reason: ${JSON.stringify(json)}`);
 
         const {reject} = transaction.transactionPromise;
 
@@ -218,7 +211,7 @@ export class Queue extends Listener {
             reject(error)
         }
 
-        Log.hidden('Transaction archived:\n' + Utils.transactionToJSONString(transaction), 'INFO', 'Transactions');
+        LogV2.print('hidden', new Date().toISOString() + ': Transaction archived:' + Utils.transactionToJSONString(transaction));
     }
 
     protected sendMessage(transaction: Transaction<any, any>, addQueu: boolean): boolean {

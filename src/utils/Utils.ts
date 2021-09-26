@@ -84,9 +84,10 @@ export class Utils {
                     )
                 },
                 transactionPromise: undefined
-            }, null, '\t');
+            })
         } catch (e) {
-            return '{}';
+            console.error(e)
+            return '{}'
         }
     }
 

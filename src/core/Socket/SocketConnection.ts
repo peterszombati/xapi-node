@@ -1,7 +1,7 @@
 import {TransactionResolveSocket} from '../../interface/Interface';
 import {Time, Timer, Utils} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import {Log} from '../../utils/Log';
+import {LogV2} from '../../utils/LogV2';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import {XAPI} from '../XAPI';
@@ -28,21 +28,15 @@ export class SocketConnection extends Queue {
                 try {
                     this.handleSocketMessage(message, new Time(), json);
                 } catch (e) {
-                    const {name, message, stack} = new Error(e);
-                    Log.error('Socket WebSocket Handle Message ERROR');
-                    Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+                    LogV2.error(e, 'Socket WebSocket Handle Message ERROR');
                 }
             } catch (e) {
-                const {name, message, stack} = new Error(e);
-                Log.error('Socket WebSocket JSON parse ERROR');
-                Log.hidden(name + '\n' + message + (stack ? '\n' + stack : '') + '\n\n' + json, 'ERROR');
+                LogV2.error(e, 'Socket WebSocket JSON parse ERROR');
             }
         });
 
         this.WebSocket.onError((error: any) => {
-            const {name, message, stack} = new Error(error);
-            Log.error('Socket WebSocket ERROR');
-            Log.hidden(name + '\n' + message + (stack ? '\n' + stack : ''), 'ERROR');
+            LogV2.error(error, 'Socket WebSocket ERROR');
         });
     }
 
@@ -64,7 +58,7 @@ export class SocketConnection extends Queue {
         if (status === ConnectionStatus.CONNECTING) {
             this.pingTimeout.setTimeout(() => {
                 this.ping().catch(e => {
-                    Log.error('Socket: ping request failed (SocketConnection.ts:67)');
+                    LogV2.error(e, 'Socket: ping request failed');
                 });
             }, 100);
 
@@ -87,17 +81,17 @@ export class SocketConnection extends Queue {
 
     private tryLogin(retries: number = 2) {
         this.login().catch(e => {
-            Log.error('Login is rejected (userId = ' + this.XAPI.accountId
+            LogV2.error(e, 'Login is rejected (userId = ' + this.XAPI.accountId
                 + ', accountType = ' + this.XAPI.accountType
-                + ')\nReason:\n' + JSON.stringify(e, null, '\t'), 'ERROR');
+                + ') Reason:' + JSON.stringify(e));
 
             if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
                 this.loginTimeout.setTimeout(() => {
-                    Log.hidden('Try to login (retries = ' + retries + ')', 'INFO');
+                    LogV2.print('hidden', `${new Date().toISOString()}: Try to login (retries = ${retries})`);
                     this.tryLogin(retries - 1);
                 }, 500);
             } else if (e.reason.code === errorCode.BE005) {
-                Log.error('Disconnect from stream and socket (reason = \'login error code is ' + e.reason.code + '\')');
+                LogV2.print('hidden', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`);
                 this.XAPI.disconnect();
             }
 
@@ -111,8 +105,7 @@ export class SocketConnection extends Queue {
         if (transactionId !== null && this.transactions[transactionId] !== undefined) {
             this.rejectTransaction({code, explain}, this.transactions[transactionId], false, received);
         } else {
-            Log.hidden('Socket error message:\n'
-                + JSON.stringify({code, explain, customTag}, null, '\t'), 'ERROR');
+            LogV2.print('hidden', `${new Date().toISOString()}: Socket error message: ${JSON.stringify({code, explain, customTag})}`);
         }
     }
 
@@ -130,8 +123,7 @@ export class SocketConnection extends Queue {
                 this.resolveTransaction(json, returnData, time, this.transactions[transactionId]);
                 this.callListener('command_' + command, [returnData, time, this.transactions[transactionId], json]);
             } else {
-                Log.error('Received a message without vaild customTag (customTag = ' + customTag + ')\n'
-                    + JSON.stringify(message, null, '\t'));
+                LogV2.error(new Error('Received a message without vaild customTag (customTag = ' + customTag + ') ' + JSON.stringify(message)));
             }
         } else if (message.status !== undefined && message.errorCode !== undefined) {
             const {errorCode} = message;

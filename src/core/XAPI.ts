@@ -1,6 +1,6 @@
 import {Listener} from '../modules/Listener';
-import {EmptyLogger, Logger4Interface} from 'logger4';
-import {changeLogger, Log} from '../utils/Log';
+import {Logger4V2} from 'logger4';
+import {LogV2, changeLogger} from '../utils/LogV2';
 import {
     CMD_FIELD,
     ConnectionStatus,
@@ -26,7 +26,7 @@ export interface XAPIConfig {
     appName?: string,
     host?: string | undefined,
     rateLimit?: number | undefined,
-    logger?: Logger4Interface
+    logger?: Logger4V2
     safe?: boolean
     subscribeTrades?: boolean
 }
@@ -65,8 +65,8 @@ export class XAPI extends Listener {
     protected account: XAPIAccount;
     public orders: Orders = {};
 
-    public get logger(): Logger4Interface {
-        return Log;
+    public get getLogger(): Logger4V2  {
+        return LogV2;
     }
 
     public get accountType(): string | null {
@@ -146,15 +146,12 @@ export class XAPI extends Listener {
                     appName = undefined,
                     host = undefined,
                     rateLimit = undefined,
-                    logger = new EmptyLogger(),
+                    logger = new Logger4V2(),
                     safe = undefined,
                     subscribeTrades = undefined
                 }: XAPIConfig) {
         super();
         changeLogger(logger);
-        if (logger.path === null && (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports)) {
-            Log.info('Logger path is not defined (this means Logger4 will not saving logs)');
-        }
 
         this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
         this.account = {
@@ -170,17 +167,17 @@ export class XAPI extends Listener {
         this.Stream = new Stream(this);
 
         if (this.account.safe) {
-            Log.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
+            logger.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
         }
 
         this.Stream.onConnectionChange(status => {
             if (status !== ConnectionStatus.CONNECTING) {
-                Log.hidden('Stream ' + (status === ConnectionStatus.CONNECTED ? 'open' : 'closed'), 'INFO');
+                logger.print('hidden', `${new Date().toISOString()}: Stream ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
 
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     if (this.isReady) {
                         this.Stream.ping().catch(e => {
-                            Log.error('Stream: ping request failed');
+                            logger.error(new Error('Stream: ping request failed'))
                         });
 
                         if (this.isSubscribeTrades) {
@@ -200,7 +197,7 @@ export class XAPI extends Listener {
         });
         this.Socket.onConnectionChange(status => {
             if (status !== ConnectionStatus.CONNECTING) {
-                Log.hidden('Socket ' + (status === ConnectionStatus.CONNECTED ? 'open' : 'closed'), 'INFO');
+                logger.print('hidden', `${new Date().toISOString()}: Socket ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
 
                 if (status === ConnectionStatus.DISCONNECTED) {
                     this.Stream.session = '';
@@ -214,11 +211,11 @@ export class XAPI extends Listener {
         });
 
         this.Socket.listen.login((data, time, transaction) => {
-            Log.hidden('Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')', 'INFO');
+            logger.print('hidden', new Date().toISOString() + ': Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')');
             this.Stream.session = data.streamSessionId;
             if (this.isReady) {
                 this.Stream.ping().catch(e => {
-                    Log.error('Stream: ping request failed');
+                    logger.error(e);
                 });
                 this.Socket.send.getTrades(true).catch().then(() => {
                     if (this.isReady) {
@@ -253,7 +250,7 @@ export class XAPI extends Listener {
                 this._positions = obj;
                 this._positionsUpdated = new Time();
             } else {
-                Log.hidden('getTrades transaction (' + transaction.transactionId + ') is ignored')
+                logger.print('hidden', new Date().toISOString() + ': getTrades transaction (' + transaction.transactionId + ') is ignored')
             }
         });
 
@@ -331,26 +328,26 @@ export class XAPI extends Listener {
             this.stopTimer();
             if (this.isSubscribeTrades) {
                 this.Stream.subscribe.getTrades().catch(e => {
-                    Log.error('Stream: getTrades request failed');
+                    logger.error(new Error('Stream: getTrades request failed'));
                 });
                 this.Stream.subscribe.getTradeStatus().catch(e => {
-                    Log.error('Stream: getTrades request failed');
+                    logger.error(new Error('Stream: getTradeStatus request failed'));
                 });
             }
             this.Socket.send.getServerTime().catch(e => {
-                Log.error('Socket: getServerTime request failed');
+                logger.error(new Error('Socket: getServerTime request failed'));
             });
             this.timer.interval.push(setInterval(() => {
                 if (this.Socket.status === ConnectionStatus.CONNECTED
                     && !this.Socket.isQueueContains('ping')) {
                     this.Socket.ping().catch(e => {
-                        Log.error('Socket: ping request failed');
+                        logger.error(new Error('Socket: ping request failed'));
                     });
                 }
                 if (this.Stream.status === ConnectionStatus.CONNECTED
                     && !this.Stream.isQueueContains('ping')) {
                     this.Stream.ping().catch(e => {
-                        Log.error('Stream: ping request failed');
+                        logger.error(new Error('Stream: ping request failed'));
                     });
                 }
                 this.timer.timeout.forEach(i => clearTimeout(i));
@@ -359,7 +356,7 @@ export class XAPI extends Listener {
                     if (this.Socket.status === ConnectionStatus.CONNECTED
                         && !this.Socket.isQueueContains('getServerTime')) {
                         this.Socket.send.getServerTime().catch(e => {
-                            Log.error('Socket: getServerTime request failed');
+                            logger.error(new Error('Socket: getServerTime request failed'));
                         });
                     }
                 }, 1000));
@@ -368,7 +365,7 @@ export class XAPI extends Listener {
                         if (this.Socket.status === ConnectionStatus.CONNECTED
                             && !this.Socket.isQueueContains('getTrades')) {
                             this.Socket.send.getTrades(true).catch(e => {
-                                Log.error('Socket: getTrades request failed');
+                                logger.error(new Error('Socket: getTrades request failed'));
                             });
                         }
                     }, 2000));
@@ -385,10 +382,10 @@ export class XAPI extends Listener {
             if (this.isSubscribeTrades) {
                 this.timer.interval.push(setInterval(() => {
                     this.Stream.subscribe.getTrades().catch(e => {
-                        Log.error('Stream: getTrades request failed');
+                        logger.error(new Error('Stream: getTrades request failed'));
                     });
                     this.Stream.subscribe.getTradeStatus().catch(e => {
-                        Log.error('Stream: getTrades request failed');
+                        logger.error(new Error('Stream: getTradeStatus request failed'));
                     });
                 }, 60000));
             }
@@ -424,7 +421,7 @@ export class XAPI extends Listener {
                 delete this.orders[order];
             }
         }).catch(e => {
-            Log.error(e);
+            LogV2.error(e);
         });
     }
 
@@ -491,13 +488,13 @@ export class XAPI extends Listener {
                     .then(() => {
                         this.Socket.closeConnection();
                         this.connectionProgress = false;
-                        Log.info(this.account.accountId + ' disconnected');
+                        LogV2.info(this.account.accountId + ' disconnected');
                         resolve();
                     });
             } else {
                 this.Socket.closeConnection();
                 this.connectionProgress = false;
-                Log.info(this.account.accountId + ' disconnected');
+                LogV2.info(this.account.accountId + ' disconnected');
                 resolve();
             }
         });
