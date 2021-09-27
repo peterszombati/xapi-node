@@ -65,7 +65,7 @@ export class XAPI extends Listener {
     protected account: XAPIAccount;
     public orders: Orders = {};
 
-    public get getLogger(): Logger4V2  {
+    public get logger(): Logger4V2  {
         return Log;
     }
 
