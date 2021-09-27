@@ -1,7 +1,7 @@
 import {TransactionResolveStream} from '../../interface/Interface';
 import {Time, Timer} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import {LogV2} from "../../utils/LogV2";
+import {Log} from "../../utils/Log";
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import {XAPI} from '../XAPI';
@@ -27,15 +27,15 @@ export class StreamConnection extends Queue {
                 try {
                     this.callListener('command_' + message.command, [message.data, new Time(), json]);
                 } catch (e) {
-                    LogV2.error(e, 'Stream WebSocket Handle Message ERROR');
+                    Log.error(e, 'Stream WebSocket Handle Message ERROR');
                 }
             } catch (e) {
-                LogV2.error(e, 'Stream WebSocket JSON parse ERROR');
+                Log.error(e, 'Stream WebSocket JSON parse ERROR');
             }
         });
 
         this.WebSocket.onError((error: any) => {
-            LogV2.error(error, 'Stream WebSocket ERROR');
+            Log.error(error, 'Stream WebSocket ERROR');
         });
     }
 
@@ -57,7 +57,7 @@ export class StreamConnection extends Queue {
             if (this.session.length > 0) {
                 this.pingTimeout.setTimeout(() => {
                     this.ping().catch(e => {
-                        LogV2.error(e, 'Stream: ping request failed (StreamConnection.ts:66)');
+                        Log.error(e, 'Stream: ping request failed (StreamConnection.ts:66)');
                     });
                 }, 100);
             }

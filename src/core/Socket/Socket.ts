@@ -45,7 +45,7 @@ import {
 import {SocketConnection} from './SocketConnection';
 import {XAPI} from '../XAPI';
 import {TRADE_TRANS_INFO_MODIFY} from "../../interface/Definitions";
-import {LogV2} from '../../utils/LogV2';
+import {Log} from '../../utils/Log';
 
 interface SocketListen<T> {
     (data: T, time: Time, transaction: Transaction<null, null>, jsonString: string): void
@@ -204,7 +204,7 @@ export class Socket extends SocketConnection {
                     if (cmd === undefined) {
                         return Promise.reject(new Error(error));
                     } else {
-                        LogV2.error(new Error(error));
+                        Log.error(new Error(error));
                     }
                 }
                 const transactionId = this.createTransactionId();

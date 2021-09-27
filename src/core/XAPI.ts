@@ -1,6 +1,6 @@
 import {Listener} from '../modules/Listener';
 import {Logger4V2} from 'logger4';
-import {LogV2, changeLogger} from '../utils/LogV2';
+import {Log, changeLogger} from '../utils/Log';
 import {
     CMD_FIELD,
     ConnectionStatus,
@@ -66,7 +66,7 @@ export class XAPI extends Listener {
     public orders: Orders = {};
 
     public get getLogger(): Logger4V2  {
-        return LogV2;
+        return Log;
     }
 
     public get accountType(): string | null {
@@ -421,7 +421,7 @@ export class XAPI extends Listener {
                 delete this.orders[order];
             }
         }).catch(e => {
-            LogV2.error(e);
+            Log.error(e);
         });
     }
 
@@ -488,13 +488,13 @@ export class XAPI extends Listener {
                     .then(() => {
                         this.Socket.closeConnection();
                         this.connectionProgress = false;
-                        LogV2.info(this.account.accountId + ' disconnected');
+                        Log.info(this.account.accountId + ' disconnected');
                         resolve();
                     });
             } else {
                 this.Socket.closeConnection();
                 this.connectionProgress = false;
-                LogV2.info(this.account.accountId + ' disconnected');
+                Log.info(this.account.accountId + ' disconnected');
                 resolve();
             }
         });
