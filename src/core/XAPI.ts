@@ -16,7 +16,7 @@ import {Socket} from './Socket/Socket'
 import {Stream} from './Stream/Stream'
 
 export const DefaultHostname = 'ws.xapi.pro'
-export const DefaultRateLimit = 850;
+export const DefaultRateLimit = 850
 
 export interface XAPIConfig {
   accountId: string,
@@ -50,14 +50,14 @@ export interface Orders {
 }
 
 export class XAPI extends Listener {
-  public Stream: Stream;
-  public Socket: Socket;
-  public orders: Orders = {};
-  protected account: XAPIAccount;
+  public Stream: Stream
+  public Socket: Socket
+  public orders: Orders = {}
+  protected account: XAPIAccount
   private timer: { interval: NodeJS.Timeout[], timeout: NodeJS.Timeout[] } = {
     interval: [],
     timeout: []
-  };
+  }
   private connectionProgress: boolean = false
 
   constructor({
@@ -71,10 +71,10 @@ export class XAPI extends Listener {
                 safe = undefined,
                 subscribeTrades = undefined
               }: XAPIConfig) {
-    super();
-    this._logger = logger;
+    super()
+    this._logger = logger
 
-    this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
+    this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit
     this.account = {
       type: (type.toLowerCase() === 'real') ? 'real' : 'demo',
       accountId,
@@ -82,47 +82,47 @@ export class XAPI extends Listener {
       host: host === undefined ? DefaultHostname : host,
       safe: safe === true,
       subscribeTrades: subscribeTrades !== false
-    };
+    }
 
-    this.Socket = new Socket(this, password);
-    this.Stream = new Stream(this);
+    this.Socket = new Socket(this, password)
+    this.Stream = new Stream(this)
 
     if (this.account.safe) {
-      logger.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)');
+      logger.info('[TRADING DISABLED] tradeTransaction command is disabled in config (safe = true)')
     }
 
     this.Stream.onConnectionChange(status => {
       if (status !== ConnectionStatus.CONNECTING) {
-        logger.print('debug', `${new Date().toISOString()}: Stream ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
+        logger.print('debug', `${new Date().toISOString()}: Stream ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`)
 
         if (this.Socket.status === ConnectionStatus.CONNECTED) {
           if (this.isReady) {
             this.Stream.ping().catch(e => {
               logger.error(new Error('Stream: ping request failed'))
-            });
+            })
 
             if (this.isSubscribeTrades) {
               this.Socket.send.getTrades(true).catch().then(() => {
                 if (this.isReady) {
-                  this.callListener(Listeners.xapi_onReady);
+                  this.callListener(Listeners.xapi_onReady)
                 }
-              });
+              })
             } else {
-              this.callListener(Listeners.xapi_onReady);
+              this.callListener(Listeners.xapi_onReady)
             }
           }
 
-          this.callListener(Listeners.xapi_onConnectionChange, [status]);
+          this.callListener(Listeners.xapi_onConnectionChange, [status])
         }
       }
-    });
+    })
     this.Socket.onConnectionChange(status => {
       if (status !== ConnectionStatus.CONNECTING) {
-        logger.print('debug', `${new Date().toISOString()}: Socket ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
+        logger.print('debug', `${new Date().toISOString()}: Socket ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`)
 
         if (status === ConnectionStatus.DISCONNECTED) {
           this.Stream.session = ''
-          this.stopTimer();
+          this.stopTimer()
         }
 
         if (this.Stream.status === ConnectionStatus.CONNECTED) {

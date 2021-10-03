@@ -100,7 +100,7 @@ export class Socket extends SocketConnection {
       this.addListener('command_' + 'ping', callBack, key),
     login: (callBack: SocketListen<{ streamSessionId: string }>, key: string | null = null) =>
       this.addListener('command_' + 'login', callBack, key)
-  };
+  }
   public send = {
     getAllSymbols: () => this.sendCommand<SYMBOL_RECORD[]>('getAllSymbols'),
     getCalendar: () => this.sendCommand<CALENDAR_RECORD[]>('getCalendar'),
@@ -186,9 +186,9 @@ export class Socket extends SocketConnection {
       (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {symbols}),
     getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
     tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY): Promise<TradeStatus> => {
-      const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo;
+      const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo
       return new Promise((resolve, reject) => {
-        const position = type === TYPE_FIELD.MODIFY ? this.XAPI.positions.find(p => p.position === order) : undefined;
+        const position = type === TYPE_FIELD.MODIFY ? this.XAPI.positions.find(p => p.position === order) : undefined
         if (type === TYPE_FIELD.MODIFY && position === undefined) {
           const error = (!this.XAPI.isSubscribeTrades)
             ? 'type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, '

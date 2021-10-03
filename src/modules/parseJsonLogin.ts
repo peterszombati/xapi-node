@@ -1,7 +1,7 @@
 import {XAPIConfig} from '..'
 
 export function parseJsonLogin(jsonString: string): XAPIConfig {
-  let json: any = {};
+  let json: any = {}
   try {
     json = JSON.parse(jsonString.trim())
   } catch (e) {
@@ -11,7 +11,7 @@ export function parseJsonLogin(jsonString: string): XAPIConfig {
     throw new Error(`json is not valid (typeof = ${typeof (json)})`)
   }
 
-  const {accountId, password, type, rateLimit, host, appName}: XAPIConfig = json;
+  const {accountId, password, type, rateLimit, host, appName}: XAPIConfig = json
   if (typeof (accountId) !== 'string'
     || typeof (password) !== 'string'
     || typeof (type) !== 'string'
@@ -24,5 +24,5 @@ export function parseJsonLogin(jsonString: string): XAPIConfig {
   if (['real', 'demo'].every(x => x !== type.toLowerCase())) {
     throw new Error(`json not contains valid type (it should be 'real' or 'demo')`)
   }
-  return {accountId, password, type: type.toLowerCase(), rateLimit, host, appName};
+  return {accountId, password, type: type.toLowerCase(), rateLimit, host, appName}
 }

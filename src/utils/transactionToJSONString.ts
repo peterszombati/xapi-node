@@ -3,10 +3,10 @@ import {parseStack} from 'logger4'
 
 export function transactionToJSONString(transaction: Transaction<any, any>): string {
   try {
-    const response = JSON.stringify(transaction.response.json);
-    const createdAtUTC = transaction.createdAt.getUTC();
-    const sentUTC = transaction.request.sent == null ? null : transaction.request.sent.getUTC();
-    const receivedUTC = transaction.response.received == null ? null : transaction.response.received.getUTC();
+    const response = JSON.stringify(transaction.response.json)
+    const createdAtUTC = transaction.createdAt.getUTC()
+    const sentUTC = transaction.request.sent == null ? null : transaction.request.sent.getUTC()
+    const receivedUTC = transaction.response.received == null ? null : transaction.response.received.getUTC()
     return JSON.stringify({
       ...transaction,
       createdAt: transaction.createdAt === null || createdAtUTC === null ? null : createdAtUTC.getTime(),

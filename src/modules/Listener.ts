@@ -1,6 +1,6 @@
 export class ListenerChild {
-  private listener: Listener;
-  private readonly listenerId: string;
+  private listener: Listener
+  private readonly listenerId: string
   private readonly key: string;
 
   constructor(listener: Listener, listenerId: string, key: string) {

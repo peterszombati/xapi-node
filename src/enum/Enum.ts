@@ -63,7 +63,7 @@ export const CHART_RATE_LIMIT_BY_PERIOD: any = {
   PERIOD_D1: 19200, // 52 years
   PERIOD_W1: 3840, // 73 years
   PERIOD_MN1: 960 // 80 years
-};
+}
 
 export enum TransactionStatus {
   waiting = 0,

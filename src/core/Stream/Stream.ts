@@ -34,7 +34,7 @@ export class Stream extends StreamConnection {
       this.addListener('command_' + 'trade', callBack, key),
     getTradeStatus: (callBack: StreamListen<STREAMING_TRADE_STATUS_RECORD>, key: string | null = null) =>
       this.addListener('command_' + 'tradeStatus', callBack, key),
-  };
+  }
   public subscribe = {
     getBalance: () => this.sendSubscribe('Balance'),
     getCandles: (symbol: string) => this.sendSubscribe('Candles', {symbol}),
@@ -48,7 +48,7 @@ export class Stream extends StreamConnection {
     ) => this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel}),
     getTrades: () => this.sendSubscribe('Trades'),
     getTradeStatus: () => this.sendSubscribe('TradeStatus'),
-  };
+  }
   public unSubscribe = {
     getBalance: () => this.sendUnsubscribe('Balance'),
     getCandles: (symbol: string) => this.sendUnsubscribe('Candles', {symbol}),
@@ -58,9 +58,9 @@ export class Stream extends StreamConnection {
     getTickPrices: (symbol: string) => this.sendUnsubscribe('TickPrices', {symbol}),
     getTrades: () => this.sendUnsubscribe('Trades'),
     getTradeStatus: () => this.sendUnsubscribe('TradeStatus'),
-  };
+  }
 
   constructor(XAPI: XAPI) {
-    super(XAPI, 'wss://' + XAPI.hostName + '/' + XAPI.accountType + 'Stream');
+    super(XAPI, 'wss://' + XAPI.hostName + '/' + XAPI.accountType + 'Stream')
   }
 }

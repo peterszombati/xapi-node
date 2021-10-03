@@ -17,23 +17,23 @@ export class Utils {
 
   static parseCustomTag(customTag: string | null): { transactionId: string | null, command: string | null } {
     if (customTag == null) {
-      return {transactionId: null, command: null};
+      return {transactionId: null, command: null}
     }
-    const customTagData = customTag.split('_');
+    const customTagData = customTag.split('_')
     if (customTagData.length < 2) {
-      return {transactionId: null, command: null};
+      return {transactionId: null, command: null}
     }
-    const command = customTagData[0];
-    const transactionId = customTagData[1];
-    return {transactionId, command};
+    const command = customTagData[0]
+    const transactionId = customTagData[1]
+    return {transactionId, command}
   }
 
   static getObjectChanges(from: TradePosition, to: TradePosition) {
-    const obj: any = {};
+    const obj: any = {}
     Object.keys(from).filter(key => from[key] !== to[key]).forEach(key => {
-      obj[key] = to[key];
-    });
-    return obj;
+      obj[key] = to[key]
+    })
+    return obj
   }
 
   static formatPosition(t: STREAMING_TRADE_RECORD | TRADE_RECORD): TradePosition {

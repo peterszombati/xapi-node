@@ -6,31 +6,31 @@ import {Queue} from '../Queue'
 import {XAPI} from '../XAPI'
 
 export class SocketConnection extends Queue {
-  private _password: string;
-  private loginTimeout: Timer = new Timer();
-  private pingTimeout: Timer = new Timer();
+  private _password: string
+  private loginTimeout: Timer = new Timer()
+  private pingTimeout: Timer = new Timer()
 
   constructor(XAPI: XAPI, password: string, url: string) {
-    super(XAPI, TransactionType.SOCKET);
-    this.WebSocket = new WebSocketWrapper(url);
-    this._password = password;
+    super(XAPI, TransactionType.SOCKET)
+    this.WebSocket = new WebSocketWrapper(url)
+    this._password = password
 
-    this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING));
-    this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
+    this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING))
+    this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED))
 
     this.WebSocket.onMessage((json: any) => {
-      this.lastReceivedMessage = new Time();
+      this.lastReceivedMessage = new Time()
       try {
-        const message = JSON.parse(json.toString().trim());
+        const message = JSON.parse(json.toString().trim())
         try {
-          this.handleSocketMessage(message, new Time(), json);
+          this.handleSocketMessage(message, new Time(), json)
         } catch (e) {
-          this.XAPI.logger.error(e, 'Socket WebSocket Handle Message ERROR');
+          this.XAPI.logger.error(e, 'Socket WebSocket Handle Message ERROR')
         }
       } catch (e) {
-        this.XAPI.logger.error(e, 'Socket WebSocket JSON parse ERROR');
+        this.XAPI.logger.error(e, 'Socket WebSocket JSON parse ERROR')
       }
-    });
+    })
 
     this.WebSocket.onError((error: any) => {
       this.XAPI.logger.error(error, 'Socket WebSocket ERROR');

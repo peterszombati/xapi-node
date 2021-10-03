@@ -8,48 +8,48 @@ import {XAPI} from '../XAPI'
 export class StreamConnection extends Queue {
 
   public session: string = ''
-  private pingTimeout: Timer = new Timer();
+  private pingTimeout: Timer = new Timer()
 
   constructor(XAPI: XAPI, url: string) {
-    super(XAPI, TransactionType.STREAM);
-    this.WebSocket = new WebSocketWrapper(url);
-    this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING));
-    this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
+    super(XAPI, TransactionType.STREAM)
+    this.WebSocket = new WebSocketWrapper(url)
+    this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING))
+    this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED))
 
     this.WebSocket.onMessage((json: any) => {
-      this.lastReceivedMessage = new Time();
+      this.lastReceivedMessage = new Time()
       try {
-        const message = JSON.parse(json.toString().trim());
+        const message = JSON.parse(json.toString().trim())
 
         try {
-          this.callListener('command_' + message.command, [message.data, new Time(), json]);
+          this.callListener('command_' + message.command, [message.data, new Time(), json])
         } catch (e) {
-          this.XAPI.logger.error(e, 'Stream WebSocket Handle Message ERROR');
+          this.XAPI.logger.error(e, 'Stream WebSocket Handle Message ERROR')
         }
       } catch (e) {
-        this.XAPI.logger.error(e, 'Stream WebSocket JSON parse ERROR');
+        this.XAPI.logger.error(e, 'Stream WebSocket JSON parse ERROR')
       }
-    });
+    })
 
     this.WebSocket.onError((error: any) => {
-      this.XAPI.logger.error(error, 'Stream WebSocket ERROR');
-    });
+      this.XAPI.logger.error(error, 'Stream WebSocket ERROR')
+    })
   }
 
   public connect() {
-    this.WebSocket.connect();
+    this.WebSocket.connect()
   }
 
   public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-    this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
+    this.addListener(Listeners.xapi_onConnectionChange, callBack, key)
   }
 
   public closeConnection() {
-    this.WebSocket.close();
+    this.WebSocket.close()
   }
 
   public ping() {
-    return this.sendCommand('ping', {}, true);
+    return this.sendCommand('ping', {}, true)
   }
 
   protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
@@ -69,7 +69,7 @@ export class StreamConnection extends Queue {
         reject,
         urgent,
         stack,
-      });
+      })
 
       if (transaction.request.json.length > 1000) {
         this.rejectTransaction({

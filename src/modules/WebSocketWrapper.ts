@@ -1,11 +1,11 @@
 import {Listener} from './Listener'
 import {Timer} from './Timer'
 
-export const isNodeJS = () => typeof window === 'undefined' && typeof module !== 'undefined' && module.exports;
+export const isNodeJS = () => typeof window === 'undefined' && typeof module !== 'undefined' && module.exports
 
 export class WebSocketWrapper extends Listener {
-  private ws: any = null;
-  private _tryReconnect = false;
+  private ws: any = null
+  private _tryReconnect = false
   private _connectionTimeout: Timer = new Timer();
   private url: string;
 
