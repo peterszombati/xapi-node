@@ -1,6 +1,7 @@
 import {TradePosition, Transaction} from '../interface/Interface';
 import {CMD_FIELD, STREAMING_TRADE_RECORD, TRADE_RECORD} from '..';
 import {PositionType} from '../enum/Enum';
+import {parseStack} from "logger4";
 
 export class Utils {
 
@@ -83,7 +84,8 @@ export class Utils {
                         (response.length > 1000) ? '"Too long response #xapi-node"' : response
                     )
                 },
-                transactionPromise: undefined
+                transactionPromise: undefined,
+                stack: parseStack(transaction.stack || '').slice(1),
             })
         } catch (e) {
             console.error(e)
