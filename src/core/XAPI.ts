@@ -1,14 +1,14 @@
 import {Listener} from '../modules/Listener'
 import {Logger4V2} from 'logger4'
 import {
-    CMD_FIELD,
-    ConnectionStatus,
-    PERIOD_FIELD,
-    REQUEST_STATUS_FIELD,
-    STREAMING_TRADE_RECORD,
-    Time,
-    TYPE_FIELD,
-    Utils
+  CMD_FIELD,
+  ConnectionStatus,
+  PERIOD_FIELD,
+  REQUEST_STATUS_FIELD,
+  STREAMING_TRADE_RECORD,
+  Time,
+  TYPE_FIELD,
+  Utils
 } from '..'
 import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface'
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType, RelevantCurrencies} from '../enum/Enum'
