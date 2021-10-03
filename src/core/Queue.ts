@@ -249,7 +249,6 @@ export class Queue extends Listener {
     try {
       const time: Time = new Time()
       await this.WebSocket.send(json)
-      this.XAPI.logger.track(this.type, json)
       return time
     } catch (e) {
       this.XAPI.logger.error(e, { json })
