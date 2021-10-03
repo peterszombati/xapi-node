@@ -113,21 +113,21 @@ x.Socket.send.tradeTransaction({
 }).then(({order}) => {
     console.log('Success ' + order)
 }).catch(e => {
-    console.error('Failed');
-    console.error(e);
-});
+    console.error('Failed')
+    console.error(e)
+})
 ```
 
 #### get live EURUSD price data changing
 ```ts
 x.Stream.listen.getTickPrices((data) => {
-    console.log(data.symbol + ': ' + data.ask + ' | ' + data.askVolume + ' volume | ' + data.level + ' level' );
-});
+    console.log(data.symbol + ': ' + data.ask + ' | ' + data.askVolume + ' volume | ' + data.level + ' level' )
+})
 
 x.onReady(() => {
     x.Stream.subscribe.getTickPrices('EURUSD')
-        .catch(() => { console.error('subscribe for EURUSD failed')});
-});
+        .catch(() => { console.error('subscribe for EURUSD failed')})
+})
 /* output
 EURUSD: 1.10912 | 500000 volume | 0 level
 EURUSD: 1.10913 | 1000000 volume | 1 level
@@ -144,11 +144,11 @@ x.onReady(() => {
         symbol:'EURUSD',
         period: PERIOD_FIELD.PERIOD_M1
     }).then(({candles, digits}) => {
-        console.log(candles.length);
-        console.log(candles[0]);
-        console.log('digits = ' + digits);
+        console.log(candles.length)
+        console.log(candles[0])
+        console.log('digits = ' + digits)
     })
-});
+})
 ```
 #### market buy EURUSD (1.0 lot / 100000 EUR)
 ```ts
@@ -166,12 +166,12 @@ x.onReady(() => {
         type: TYPE_FIELD.OPEN,
         volume: 1
     }).then(({order}) => {
-        console.log('Success ' + order);
+        console.log('Success ' + order)
     }).catch(e => {
-        console.error('Failed');
-        console.error(e);
-    });
-});
+        console.error('Failed')
+        console.error(e)
+    })
+})
 ```
 #### modify open position (for example set new stop loss)
 ```ts
@@ -181,18 +181,18 @@ x.onReady(() => {
         type: TYPE_FIELD.MODIFY,
         sl: 1.05, // new stop loss level
     }).then(({order}) => {
-        console.log('Success ' + order);
+        console.log('Success ' + order)
     }).catch(e => {
-        console.error('Failed');
-        console.error(e);
-    });
-});
+        console.error('Failed')
+        console.error(e)
+    })
+})
 ```
 #### How to use other log modules than Logger4
 ```ts
-import {Logger4V2} from 'logger4';
+import {Logger4V2} from 'logger4'
 
-const x = new XAPI({...loginConfig, logger: new Logger4V2()});
+const x = new XAPI({...loginConfig, logger: new Logger4V2()})
 
 const info = new Writable()
 info._write = ((chunk, encoding, next) => {

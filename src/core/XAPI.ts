@@ -587,14 +587,14 @@ export class XAPI extends Listener {
         delete this.orders[order]
       }
     }).catch(e => {
-      this.logger.error(e);
-    });
+      this.logger.error(e)
+    })
   }
 
   private stopTimer() {
-    this.timer.interval.forEach(i => clearInterval(i));
-    this.timer.timeout.forEach(i => clearTimeout(i));
-    this.timer = {interval: [], timeout: []};
+    this.timer.interval.forEach(i => clearInterval(i))
+    this.timer.timeout.forEach(i => clearTimeout(i))
+    this.timer = {interval: [], timeout: []}
   }
 
 }
