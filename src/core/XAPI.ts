@@ -163,22 +163,22 @@ export class XAPI extends Listener {
         Object.values(this._positions).forEach(t => {
           if (obj[t.position] === undefined && t.value !== null) {
             if (t.lastUpdated.elapsedMs() <= 1000) {
-              obj[t.position] = t;
+              obj[t.position] = t
             }
           }
-        });
+        })
 
-        this._positions = obj;
-        this._positionsUpdated = new Time();
+        this._positions = obj
+        this._positionsUpdated = new Time()
       } else {
         logger.print('debug', new Date().toISOString() + ': getTrades transaction (' + transaction.transactionId + ') is ignored')
       }
-    });
+    })
 
     this.Stream.listen.getTrades((t, time) => {
       if (t.cmd === CMD_FIELD.BALANCE || t.cmd === CMD_FIELD.CREDIT) {
-        this.callListener(Listeners.xapi_onBalanceChange, [t]);
-        return;
+        this.callListener(Listeners.xapi_onBalanceChange, [t])
+        return
       }
 
       if (t.type === TYPE_FIELD.PENDING
@@ -186,53 +186,53 @@ export class XAPI extends Listener {
         && t.cmd !== CMD_FIELD.SELL_LIMIT
         && t.cmd !== CMD_FIELD.BUY_STOP
         && t.cmd !== CMD_FIELD.SELL_STOP) {
-        this.callListener(Listeners.xapi_onPendingPosition, [Utils.formatPosition(t)]);
+        this.callListener(Listeners.xapi_onPendingPosition, [Utils.formatPosition(t)])
       } else if (t.state === 'Deleted') {
         if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
-          this._positions[t.position] = {value: null, lastUpdated: time};
-          this.callListener(Listeners.xapi_onDeletePosition, [Utils.formatPosition(t)]);
+          this._positions[t.position] = {value: null, lastUpdated: time}
+          this.callListener(Listeners.xapi_onDeletePosition, [Utils.formatPosition(t)])
         }
       } else if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
         if (this._positions[t.position] !== undefined) {
-          const {value} = this._positions[t.position];
+          const {value} = this._positions[t.position]
 
           if (value) {
-            const changes = Utils.getObjectChanges(value, Utils.formatPosition(t));
+            const changes = Utils.getObjectChanges(value, Utils.formatPosition(t))
             if (Object.keys(changes).length > 0) {
-              this.callListener(Listeners.xapi_onChangePosition, [Utils.formatPosition(t)]);
+              this.callListener(Listeners.xapi_onChangePosition, [Utils.formatPosition(t)])
             }
           }
         } else {
-          this.callListener(Listeners.xapi_onCreatePosition, [Utils.formatPosition(t)]);
+          this.callListener(Listeners.xapi_onCreatePosition, [Utils.formatPosition(t)])
         }
 
-        this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time};
+        this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time}
       }
-    });
+    })
 
     this.Socket.listen.getServerTime((data, time, transaction) => {
       if (transaction.response.received !== null && transaction.request.sent !== null) {
-        const dif = transaction.response.received.getDifference(transaction.request.sent);
+        const dif = transaction.response.received.getDifference(transaction.request.sent)
 
         this._serverTime = {
           timestamp: data.time,
           ping: dif,
           received: transaction.response.received
-        };
+        }
       }
-    });
+    })
 
     this.Stream.listen.getTradeStatus((s, time) => {
       if (s.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
-        const {resolve, reject} = this.orders[s.order] || {};
-        delete s.price;
+        const {resolve, reject} = this.orders[s.order] || {}
+        delete s.price
         if (resolve !== undefined && reject !== undefined) {
           if (s.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-            resolve(s);
+            resolve(s)
           } else {
-            reject(s);
+            reject(s)
           }
-          delete this.orders[s.order];
+          delete this.orders[s.order]
         } else {
           this.orders[s.order] = {
             order: s.order,
@@ -243,72 +243,72 @@ export class XAPI extends Listener {
           }
         }
       }
-    });
+    })
 
     this.onReady(() => {
-      this.stopTimer();
+      this.stopTimer()
       if (this.isSubscribeTrades) {
         this.Stream.subscribe.getTrades().catch(e => {
-          logger.error(new Error('Stream: getTrades request failed'));
-        });
+          logger.error(new Error('Stream: getTrades request failed'))
+        })
         this.Stream.subscribe.getTradeStatus().catch(e => {
-          logger.error(new Error('Stream: getTradeStatus request failed'));
-        });
+          logger.error(new Error('Stream: getTradeStatus request failed'))
+        })
       }
       this.Socket.send.getServerTime().catch(e => {
-        logger.error(new Error('Socket: getServerTime request failed'));
-      });
+        logger.error(new Error('Socket: getServerTime request failed'))
+      })
       this.timer.interval.push(setInterval(() => {
         if (this.Socket.status === ConnectionStatus.CONNECTED
           && !this.Socket.isQueueContains('ping')) {
           this.Socket.ping().catch(e => {
-            logger.error(new Error('Socket: ping request failed'));
-          });
+            logger.error(new Error('Socket: ping request failed'))
+          })
         }
         if (this.Stream.status === ConnectionStatus.CONNECTED
           && !this.Stream.isQueueContains('ping')) {
           this.Stream.ping().catch(e => {
-            logger.error(new Error('Stream: ping request failed'));
-          });
+            logger.error(new Error('Stream: ping request failed'))
+          })
         }
-        this.timer.timeout.forEach(i => clearTimeout(i));
-        this.timer.timeout = [];
+        this.timer.timeout.forEach(i => clearTimeout(i))
+        this.timer.timeout = []
         this.timer.timeout.push(setTimeout(() => {
           if (this.Socket.status === ConnectionStatus.CONNECTED
             && !this.Socket.isQueueContains('getServerTime')) {
             this.Socket.send.getServerTime().catch(e => {
-              logger.error(new Error('Socket: getServerTime request failed'));
-            });
+              logger.error(new Error('Socket: getServerTime request failed'))
+            })
           }
-        }, 1000));
+        }, 1000))
         if (this.isSubscribeTrades) {
           this.timer.timeout.push(setTimeout(() => {
             if (this.Socket.status === ConnectionStatus.CONNECTED
               && !this.Socket.isQueueContains('getTrades')) {
               this.Socket.send.getTrades(true).catch(e => {
-                logger.error(new Error('Socket: getTrades request failed'));
-              });
+                logger.error(new Error('Socket: getTrades request failed'))
+              })
             }
-          }, 2000));
+          }, 2000))
         }
-        this.Socket.rejectOldTransactions();
-        this.Stream.rejectOldTransactions();
+        this.Socket.rejectOldTransactions()
+        this.Stream.rejectOldTransactions()
         if (Object.keys(this.Socket.transactions).length > 20000) {
-          this.Socket.removeOldTransactions();
+          this.Socket.removeOldTransactions()
         }
         if (Object.keys(this.Stream.transactions).length > 20000) {
-          this.Stream.removeOldTransactions();
+          this.Stream.removeOldTransactions()
         }
-      }, 19000));
+      }, 19000))
       if (this.isSubscribeTrades) {
         this.timer.interval.push(setInterval(() => {
           this.Stream.subscribe.getTrades().catch(e => {
-            logger.error(new Error('Stream: getTrades request failed'));
-          });
+            logger.error(new Error('Stream: getTrades request failed'))
+          })
           this.Stream.subscribe.getTradeStatus().catch(e => {
-            logger.error(new Error('Stream: getTradeStatus request failed'));
-          });
-        }, 60000));
+            logger.error(new Error('Stream: getTradeStatus request failed'))
+          })
+        }, 60000))
       }
       this.timer.interval.push(setInterval(() => {
         if (this.Socket.status === ConnectionStatus.CONNECTED) {
@@ -320,94 +320,94 @@ export class XAPI extends Listener {
             }
           })
         }
-      }, 5100));
-    }, 'constructor');
+      }, 5100))
+    }, 'constructor')
   }
 
-  private _logger: Logger4V2;
+  private _logger: Logger4V2
 
   public get logger(): Logger4V2 {
-    return this._logger;
+    return this._logger
   }
 
-  private _rateLimit: number = DefaultRateLimit;
+  private _rateLimit: number = DefaultRateLimit
 
   public get rateLimit() {
-    return this._rateLimit;
+    return this._rateLimit
   }
 
-  private _tryReconnect: boolean = false;
+  private _tryReconnect: boolean = false
 
   public get tryReconnect() {
-    return this._tryReconnect;
+    return this._tryReconnect
   }
 
-  private _positions: TradePositions = {};
+  private _positions: TradePositions = {}
 
   public get positions(): TradePosition[] {
     return Object.values(this._positions)
       .filter(t => t.value !== null
         && (t.value.position_type === PositionType.limit || t.value.position_type === PositionType.open))
-      .map(t => t.value);
+      .map(t => t.value)
   }
 
-  private _positionsUpdated: Time | null = null;
+  private _positionsUpdated: Time | null = null
 
   public get positionsUpdated(): Time | null {
-    return this._positionsUpdated;
+    return this._positionsUpdated
   }
 
-  private _serverTime: { timestamp: number, ping: number, received: Time } | null = null;
+  private _serverTime: { timestamp: number, ping: number, received: Time } | null = null
 
   public get serverTime(): number {
     if (this._serverTime === null) {
-      return Date.now();
+      return Date.now()
     } else {
-      const elapsedMs = this._serverTime.received.elapsedMs();
-      return Math.floor(this._serverTime.timestamp + this._serverTime.ping + (elapsedMs === null ? 0 : elapsedMs));
+      const elapsedMs = this._serverTime.received.elapsedMs()
+      return Math.floor(this._serverTime.timestamp + this._serverTime.ping + (elapsedMs === null ? 0 : elapsedMs))
     }
   }
 
   public get accountType(): string | null {
-    return this.account.type;
+    return this.account.type
   }
 
   public get isTradingDisabled(): boolean {
-    return this.account.safe;
+    return this.account.safe
   }
 
   public get accountId(): string {
-    return this.account.accountId;
+    return this.account.accountId
   }
 
   public get appName(): string | undefined {
-    return this.account.appName;
+    return this.account.appName
   }
 
   public get hostName(): string {
-    return this.account.host;
+    return this.account.host
   }
 
   public get isSubscribeTrades() {
-    return this.account.subscribeTrades;
+    return this.account.subscribeTrades
   }
 
   public get openPositions(): TradePosition[] {
-    return this.positions.filter(t => t.position_type === PositionType.open);
+    return this.positions.filter(t => t.position_type === PositionType.open)
   }
 
   public get limitPositions(): TradePosition[] {
-    return this.positions.filter(t => t.position_type === PositionType.limit);
+    return this.positions.filter(t => t.position_type === PositionType.limit)
   }
 
   public get isConnectionReady(): boolean {
-    return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED;
+    return this.Stream.status === ConnectionStatus.CONNECTED && this.Socket.status === ConnectionStatus.CONNECTED
   }
 
   public get isReady(): boolean {
     return this.Stream.status === ConnectionStatus.CONNECTED
       && this.Socket.status === ConnectionStatus.CONNECTED
-      && this.Stream.session.length > 0;
+      && this.Stream.session.length > 0
   }
 
   public connect(params: { timeout?: number | undefined } = {}): Promise<void> {
@@ -455,28 +455,28 @@ export class XAPI extends Listener {
   public disconnect() {
     return new Promise((resolve, reject) => {
       this.Stream.session = ''
-      this._tryReconnect = false;
-      this.stopTimer();
-      this.Socket.stopTimer();
-      this.Stream.stopTimer();
-      this.Stream.closeConnection();
+      this._tryReconnect = false
+      this.stopTimer()
+      this.Socket.stopTimer()
+      this.Stream.stopTimer()
+      this.Stream.closeConnection()
       if (this.Socket.status === ConnectionStatus.CONNECTED) {
         this.Socket.logout()
           .catch(() => {
           })
           .then(() => {
-            this.Socket.closeConnection();
-            this.connectionProgress = false;
-            this.logger.info(this.account.accountId + ' disconnected');
-            resolve();
-          });
+            this.Socket.closeConnection()
+            this.connectionProgress = false
+            this.logger.info(this.account.accountId + ' disconnected')
+            resolve()
+          })
       } else {
-        this.Socket.closeConnection();
-        this.connectionProgress = false;
-        this.logger.info(this.account.accountId + ' disconnected');
-        resolve();
+        this.Socket.closeConnection()
+        this.connectionProgress = false
+        this.logger.info(this.account.accountId + ' disconnected')
+        resolve()
       }
-    });
+    })
   }
 
   public getAccountCurrencyValue(anotherCurrency: RelevantCurrencies): Promise<number> {
@@ -492,8 +492,8 @@ export class XAPI extends Listener {
           1,
         )
       ]).then((values) => {
-        return values[1].returnData.profit / values[0].returnData.contractSize;
-      });
+        return values[1].returnData.profit / values[0].returnData.contractSize
+      })
   }
 
   public getPriceHistory({
@@ -536,55 +536,55 @@ export class XAPI extends Listener {
 
   public onReady(callBack: () => void, key: string | null = null) {
     if (this.isReady) {
-      callBack();
+      callBack()
     }
-    return this.addListener(Listeners.xapi_onReady, callBack, key);
+    return this.addListener(Listeners.xapi_onReady, callBack, key)
   }
 
   public onReject(callBack: (err: any) => void, key: string | null = null) {
-    return this.addListener(Listeners.xapi_onReject, callBack, key);
+    return this.addListener(Listeners.xapi_onReject, callBack, key)
   }
 
   public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-    return this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
+    return this.addListener(Listeners.xapi_onConnectionChange, callBack, key)
   }
 
   public onCreatePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-    return this.addListener(Listeners.xapi_onCreatePosition, callBack, key);
+    return this.addListener(Listeners.xapi_onCreatePosition, callBack, key)
   }
 
   public onDeletePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-    return this.addListener(Listeners.xapi_onDeletePosition, callBack, key);
+    return this.addListener(Listeners.xapi_onDeletePosition, callBack, key)
   }
 
   public onChangePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-    return this.addListener(Listeners.xapi_onChangePosition, callBack, key);
+    return this.addListener(Listeners.xapi_onChangePosition, callBack, key)
   }
 
   public onPendingPosition(callBack: (position: TradePosition) => void, key: string | null = null) {
-    return this.addListener(Listeners.xapi_onPendingPosition, callBack, key);
+    return this.addListener(Listeners.xapi_onPendingPosition, callBack, key)
   }
 
   public onBalanceChange(callBack: (data: STREAMING_TRADE_RECORD) => void, key: string | null = null) {
-    return this.addListener(Listeners.xapi_onBalanceChange, callBack, key);
+    return this.addListener(Listeners.xapi_onBalanceChange, callBack, key)
   }
 
   private refreshOrderStatus(order: number) {
     this.Socket.send.tradeTransactionStatus(order).then(({returnData}) => {
-      const {resolve, reject} = this.orders[order] || {};
+      const {resolve, reject} = this.orders[order] || {}
       if (resolve !== undefined && reject !== undefined && returnData.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
         const obj = {
           requestStatus: returnData.requestStatus,
           order: returnData.order,
           message: returnData.message,
           customComment: returnData.customComment
-        };
-        if (returnData.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-          resolve(obj);
-        } else {
-          reject(obj);
         }
-        delete this.orders[order];
+        if (returnData.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+          resolve(obj)
+        } else {
+          reject(obj)
+        }
+        delete this.orders[order]
       }
     }).catch(e => {
       this.logger.error(e);

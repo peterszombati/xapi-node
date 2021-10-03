@@ -116,31 +116,31 @@ export class SocketConnection extends Queue {
   }
 
   private setConnectionStatus(status: ConnectionStatus) {
-    this.resetMessageTube();
-    this.openTimeout.clear();
-    this.pingTimeout.clear();
-    this.loginTimeout.clear();
-    this.status = status;
+    this.resetMessageTube()
+    this.openTimeout.clear()
+    this.pingTimeout.clear()
+    this.loginTimeout.clear()
+    this.status = status
 
     if (status === ConnectionStatus.CONNECTING) {
       this.pingTimeout.setTimeout(() => {
         this.ping().catch(e => {
-          this.XAPI.logger.error(e, 'Socket: ping request failed');
-        });
-      }, 100);
+          this.XAPI.logger.error(e, 'Socket: ping request failed')
+        })
+      }, 100)
 
       this.openTimeout.setTimeout(() => {
-        this.status = ConnectionStatus.CONNECTED;
-        this.tryLogin(2);
-      }, 1000);
+        this.status = ConnectionStatus.CONNECTED
+        this.tryLogin(2)
+      }, 1000)
     } else {
       for (const transactionId in this.transactions) {
-        const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent);
+        const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent)
         if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
           this.rejectTransaction({
             code: errorCode.XAPINODE_1,
             explain: 'Socket closed'
-          }, this.transactions[transactionId], isInterrupted);
+          }, this.transactions[transactionId], isInterrupted)
         }
       }
     }
@@ -150,33 +150,33 @@ export class SocketConnection extends Queue {
     this.login().catch(e => {
       this.XAPI.logger.error(e, 'Login is rejected (userId = ' + this.XAPI.accountId
         + ', accountType = ' + this.XAPI.accountType
-        + ') Reason:' + JSON.stringify(e));
+        + ') Reason:' + JSON.stringify(e))
 
       if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
         this.loginTimeout.setTimeout(() => {
-          this.XAPI.logger.print('debug', `${new Date().toISOString()}: Try to login (retries = ${retries})`);
-          this.tryLogin(retries - 1);
-        }, 500);
+          this.XAPI.logger.print('debug', `${new Date().toISOString()}: Try to login (retries = ${retries})`)
+          this.tryLogin(retries - 1)
+        }, 500)
       } else if (e.reason.code === errorCode.BE005) {
-        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`);
-        this.XAPI.disconnect();
+        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`)
+        this.XAPI.disconnect()
       }
 
       this.XAPI.callListener(Listeners.xapi_onReject, [e])
-    });
+    })
   }
 
   private handleError(code: any, explain: any, customTag: string | null, received: Time) {
-    const {transactionId} = Utils.parseCustomTag(customTag);
+    const {transactionId} = Utils.parseCustomTag(customTag)
 
     if (transactionId !== null && this.transactions[transactionId] !== undefined) {
-      this.rejectTransaction({code, explain}, this.transactions[transactionId], false, received);
+      this.rejectTransaction({code, explain}, this.transactions[transactionId], false, received)
     } else {
       this.XAPI.logger.print('debug', `${new Date().toISOString()}: Socket error message: ${JSON.stringify({
         code,
         explain,
         customTag
-      })}`);
+      })}`)
     }
   }
 
@@ -184,23 +184,23 @@ export class SocketConnection extends Queue {
     if (message.status) {
       const returnData = message.streamSessionId === undefined
         ? message.returnData
-        : {streamSessionId: message.streamSessionId};
+        : {streamSessionId: message.streamSessionId}
       const customTag = typeof (message.customTag) === 'string'
         ? message.customTag
-        : null;
-      const {transactionId, command} = Utils.parseCustomTag(customTag);
+        : null
+      const {transactionId, command} = Utils.parseCustomTag(customTag)
 
       if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
-        this.resolveTransaction(json, returnData, time, this.transactions[transactionId]);
-        this.callListener('command_' + command, [returnData, time, this.transactions[transactionId], json]);
+        this.resolveTransaction(json, returnData, time, this.transactions[transactionId])
+        this.callListener('command_' + command, [returnData, time, this.transactions[transactionId], json])
       } else {
-        this.XAPI.logger.error(new Error('Received a message without vaild customTag (customTag = ' + customTag + ') ' + JSON.stringify(message)));
+        this.XAPI.logger.error(new Error('Received a message without vaild customTag (customTag = ' + customTag + ') ' + JSON.stringify(message)))
       }
     } else if (message.status !== undefined && message.errorCode !== undefined) {
-      const {errorCode} = message;
-      const customTag: string | null = message.customTag === undefined ? null : message.customTag;
-      const errorDescr: string | null = message.errorDescr === undefined ? null : message.errorDescr;
-      this.handleError(errorCode, errorDescr, customTag, time);
+      const {errorCode} = message
+      const customTag: string | null = message.customTag === undefined ? null : message.customTag
+      const errorDescr: string | null = message.errorDescr === undefined ? null : message.errorDescr
+      this.handleError(errorCode, errorDescr, customTag, time)
     }
   }
 }

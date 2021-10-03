@@ -43,28 +43,28 @@ export class Listener {
       key = key === null
         ? 'g' + Object.keys(this._listeners[listenerId]).length
         : 's' + key
-      this._listeners[listenerId][key] = callBack;
-      return new ListenerChild(this, listenerId, key);
+      this._listeners[listenerId][key] = callBack
+      return new ListenerChild(this, listenerId, key)
     }
-    throw new Error('addListener "callBack" parameter is not callback');
+    throw new Error('addListener "callBack" parameter is not callback')
   }
 
   public callListener(listenerId: string, params: any[] = []): any[] {
-    let errors: any[] = [];
-    let values: any[] = [];
+    let errors: any[] = []
+    let values: any[] = []
     if (this._listeners[listenerId] !== undefined) {
       Object.keys(this._listeners[listenerId]).forEach((key: string) => {
         try {
-          values.push(this._listeners[listenerId][key](...params));
+          values.push(this._listeners[listenerId][key](...params))
         } catch (e) {
-          errors.push(e);
+          errors.push(e)
         }
-      });
+      })
     }
     if (errors.length > 0) {
-      throw errors[0];
+      throw errors[0]
     }
-    return values;
+    return values
   }
 
 }

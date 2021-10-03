@@ -96,7 +96,7 @@ export class Utils {
 
   static getProfit({openPrice, closePrice, isBuy, lot, contractSize}:
                      { openPrice: number, closePrice: number, isBuy: boolean, lot: number, contractSize: number }) {
-    return (isBuy ? closePrice - openPrice : openPrice - closePrice) * lot * contractSize;
+    return (isBuy ? closePrice - openPrice : openPrice - closePrice) * lot * contractSize
   }
 
 }

@@ -224,7 +224,7 @@ export class Socket extends SocketConnection {
           }
         }, transactionId, true).then(({returnData, time}) => {
           if (this.XAPI.isSubscribeTrades) {
-            const {data} = this.XAPI.orders[returnData.order] || {};
+            const {data} = this.XAPI.orders[returnData.order] || {}
             if (data === undefined || data === null) {
               this.XAPI.orders[returnData.order] = {
                 order: returnData.order,
@@ -235,11 +235,11 @@ export class Socket extends SocketConnection {
               }
             } else {
               if (data.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-                resolve(data);
+                resolve(data)
               } else {
-                reject(data);
+                reject(data)
               }
-              delete this.XAPI.orders[returnData.order];
+              delete this.XAPI.orders[returnData.order]
             }
           } else {
             resolve({
@@ -247,17 +247,17 @@ export class Socket extends SocketConnection {
               message: null,
               order: returnData.order,
               requestStatus: null
-            });
+            })
           }
-        }).catch(reject);
-      });
+        }).catch(reject)
+      })
     },
     tradeTransactionStatus: (order: number) => this.sendCommand<tradeTransactionStatusResponse>('tradeTransactionStatus', {
       order
     })
-  };
+  }
 
   constructor(XAPI: XAPI, password: string) {
-    super(XAPI, password, 'wss://' + XAPI.hostName + '/' + XAPI.accountType);
+    super(XAPI, password, 'wss://' + XAPI.hostName + '/' + XAPI.accountType)
   }
 }

@@ -52,67 +52,67 @@ export class WebSocketWrapper extends Listener {
         this.callListener('ws_message', [message])
       })
       this.ws.on('error', (error: any) => {
-        this.callListener('ws_error', [error]);
-      });
+        this.callListener('ws_error', [error])
+      })
     } else {
       // JavaScript browser module
-      this.ws = new WebSocket(this.url);
+      this.ws = new WebSocket(this.url)
       this.ws.onopen = () => {
         if (this._status === false) {
-          this._status = true;
-          this.callListener('ws_statusChange', [true]);
+          this._status = true
+          this.callListener('ws_statusChange', [true])
         }
-        this.callListener('ws_open');
-      };
+        this.callListener('ws_open')
+      }
       this.ws.onclose = () => {
         if (this._status) {
-          this._status = false;
-          this.callListener('ws_statusChange', [false]);
+          this._status = false
+          this.callListener('ws_statusChange', [false])
         }
-        this.callListener('ws_close');
-      };
+        this.callListener('ws_close')
+      }
       this.ws.onmessage = (event: any) => {
-        this.callListener('ws_message', [event.data]);
-      };
+        this.callListener('ws_message', [event.data])
+      }
       this.ws.onerror = (error: any) => {
-        this.callListener('ws_error', [error]);
-      };
+        this.callListener('ws_error', [error])
+      }
     }
   }
 
   onStatusChange(callback: (status: boolean) => void) {
-    this.addListener('ws_statusChange', callback);
+    this.addListener('ws_statusChange', callback)
   }
 
   onOpen(callback: () => void) {
-    this.addListener('ws_open', callback);
+    this.addListener('ws_open', callback)
   }
 
   onMessage(callback: (message: any) => void) {
-    this.addListener('ws_message', callback);
+    this.addListener('ws_message', callback)
   }
 
   onError(callback: (error: any) => void) {
-    this.addListener('ws_error', callback);
+    this.addListener('ws_error', callback)
   }
 
   onClose(callback: () => void) {
-    this.addListener('ws_close', callback);
+    this.addListener('ws_close', callback)
   }
 
   send(data: any): Promise<void> {
     if (this.status) {
-      this.ws.send(data);
-      return Promise.resolve();
+      this.ws.send(data)
+      return Promise.resolve()
     } else {
-      return Promise.reject(this.url + ' websocket is not connected');
+      return Promise.reject(this.url + ' websocket is not connected')
     }
   }
 
   close() {
-    this._connectionTimeout.clear();
-    this._tryReconnect = false;
-    this.ws && this.ws.close();
+    this._connectionTimeout.clear()
+    this._tryReconnect = false
+    this.ws && this.ws.close()
   }
 
 }
