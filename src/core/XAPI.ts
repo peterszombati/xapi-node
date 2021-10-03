@@ -1,6 +1,5 @@
 import {Listener} from '../modules/Listener';
 import {Logger4V2} from 'logger4';
-import {Log, changeLogger} from '../utils/Log';
 import {
     CMD_FIELD,
     ConnectionStatus,
@@ -53,6 +52,7 @@ export interface Orders {
 export class XAPI extends Listener {
     public Stream: Stream;
     public Socket: Socket;
+    private _logger: Logger4V2;
     private _rateLimit: number = DefaultRateLimit;
     private _tryReconnect: boolean = false;
     private _positions: TradePositions = {};
@@ -66,7 +66,7 @@ export class XAPI extends Listener {
     public orders: Orders = {};
 
     public get logger(): Logger4V2  {
-        return Log;
+        return this._logger;
     }
 
     public get accountType(): string | null {
@@ -151,7 +151,7 @@ export class XAPI extends Listener {
                     subscribeTrades = undefined
                 }: XAPIConfig) {
         super();
-        changeLogger(logger);
+        this._logger = logger;
 
         this._rateLimit = rateLimit === undefined ? DefaultRateLimit : rateLimit;
         this.account = {
@@ -421,7 +421,7 @@ export class XAPI extends Listener {
                 delete this.orders[order];
             }
         }).catch(e => {
-            Log.error(e);
+            this.logger.error(e);
         });
     }
 
@@ -488,13 +488,13 @@ export class XAPI extends Listener {
                     .then(() => {
                         this.Socket.closeConnection();
                         this.connectionProgress = false;
-                        Log.info(this.account.accountId + ' disconnected');
+                        this.logger.info(this.account.accountId + ' disconnected');
                         resolve();
                     });
             } else {
                 this.Socket.closeConnection();
                 this.connectionProgress = false;
-                Log.info(this.account.accountId + ' disconnected');
+                this.logger.info(this.account.accountId + ' disconnected');
                 resolve();
             }
         });

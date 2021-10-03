@@ -1,20 +1,17 @@
 import {TransactionResolveSocket} from '../../interface/Interface';
 import {Time, Timer, Utils} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import {Log} from '../../utils/Log';
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import {XAPI} from '../XAPI';
 
 export class SocketConnection extends Queue {
-    protected XAPI: XAPI;
     private _password: string;
     private loginTimeout: Timer = new Timer();
     private pingTimeout: Timer = new Timer();
 
     constructor(XAPI: XAPI, password: string, url: string) {
-        super(XAPI.rateLimit, TransactionType.SOCKET);
-        this.XAPI = XAPI;
+        super(XAPI, TransactionType.SOCKET);
         this.WebSocket = new WebSocketWrapper(url);
         this._password = password;
 
@@ -28,15 +25,15 @@ export class SocketConnection extends Queue {
                 try {
                     this.handleSocketMessage(message, new Time(), json);
                 } catch (e) {
-                    Log.error(e, 'Socket WebSocket Handle Message ERROR');
+                    this.XAPI.logger.error(e, 'Socket WebSocket Handle Message ERROR');
                 }
             } catch (e) {
-                Log.error(e, 'Socket WebSocket JSON parse ERROR');
+                this.XAPI.logger.error(e, 'Socket WebSocket JSON parse ERROR');
             }
         });
 
         this.WebSocket.onError((error: any) => {
-            Log.error(error, 'Socket WebSocket ERROR');
+            this.XAPI.logger.error(error, 'Socket WebSocket ERROR');
         });
     }
 
@@ -58,7 +55,7 @@ export class SocketConnection extends Queue {
         if (status === ConnectionStatus.CONNECTING) {
             this.pingTimeout.setTimeout(() => {
                 this.ping().catch(e => {
-                    Log.error(e, 'Socket: ping request failed');
+                    this.XAPI.logger.error(e, 'Socket: ping request failed');
                 });
             }, 100);
 
@@ -81,17 +78,17 @@ export class SocketConnection extends Queue {
 
     private tryLogin(retries: number = 2) {
         this.login().catch(e => {
-            Log.error(e, 'Login is rejected (userId = ' + this.XAPI.accountId
+            this.XAPI.logger.error(e, 'Login is rejected (userId = ' + this.XAPI.accountId
                 + ', accountType = ' + this.XAPI.accountType
                 + ') Reason:' + JSON.stringify(e));
 
             if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
                 this.loginTimeout.setTimeout(() => {
-                    Log.print('debug', `${new Date().toISOString()}: Try to login (retries = ${retries})`);
+                    this.XAPI.logger.print('debug', `${new Date().toISOString()}: Try to login (retries = ${retries})`);
                     this.tryLogin(retries - 1);
                 }, 500);
             } else if (e.reason.code === errorCode.BE005) {
-                Log.print('debug', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`);
+                this.XAPI.logger.print('debug', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`);
                 this.XAPI.disconnect();
             }
 
@@ -105,7 +102,7 @@ export class SocketConnection extends Queue {
         if (transactionId !== null && this.transactions[transactionId] !== undefined) {
             this.rejectTransaction({code, explain}, this.transactions[transactionId], false, received);
         } else {
-            Log.print('debug', `${new Date().toISOString()}: Socket error message: ${JSON.stringify({code, explain, customTag})}`);
+            this.XAPI.logger.print('debug', `${new Date().toISOString()}: Socket error message: ${JSON.stringify({code, explain, customTag})}`);
         }
     }
 
@@ -123,7 +120,7 @@ export class SocketConnection extends Queue {
                 this.resolveTransaction(json, returnData, time, this.transactions[transactionId]);
                 this.callListener('command_' + command, [returnData, time, this.transactions[transactionId], json]);
             } else {
-                Log.error(new Error('Received a message without vaild customTag (customTag = ' + customTag + ') ' + JSON.stringify(message)));
+                this.XAPI.logger.error(new Error('Received a message without vaild customTag (customTag = ' + customTag + ') ' + JSON.stringify(message)));
             }
         } else if (message.status !== undefined && message.errorCode !== undefined) {
             const {errorCode} = message;

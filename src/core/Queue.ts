@@ -1,12 +1,23 @@
 import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface';
 import {Listener} from '../modules/Listener';
 import {Time, Timer, Utils} from '..';
-import {Log} from "../utils/Log";
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum';
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
 import {JsonError} from "logger4";
+import {XAPI} from "./XAPI";
 
 export class Queue extends Listener {
+    protected XAPI: XAPI;
+    private rateLimit: number;
+    private type: TransactionType;
+
+    constructor(XAPI: XAPI, type: TransactionType) {
+        super();
+        this.XAPI = XAPI;
+        this.rateLimit = XAPI.rateLimit;
+        this.type = type;
+    }
+
     private _status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
     public get status() {
         return this._status;
@@ -30,7 +41,6 @@ export class Queue extends Listener {
 
     public transactions: Transactions = {};
     public lastReceivedMessage: Time | null = null;
-    private type: TransactionType;
     private messageQueues: { urgent: MessagesQueue[], normal: MessagesQueue[] } = {urgent: [], normal: []};
     private _transactionIdIncrement: number = 0;
     private messagesElapsedTime: Time[] = [];
@@ -38,18 +48,11 @@ export class Queue extends Listener {
         return this.messagesElapsedTime
     }
     private messageSender: Timer = new Timer();
-    private rateLimit: number;
     protected openTimeout: Timer = new Timer();
     protected WebSocket: WebSocketWrapper;
 
     public get queueSize() {
         return this.messageQueues.urgent.length + this.messageQueues.normal.length;
-    }
-
-    constructor(rateLimit: number, type: TransactionType) {
-        super();
-        this.rateLimit = rateLimit;
-        this.type = type;
     }
 
     public stopTimer() {
@@ -69,7 +72,7 @@ export class Queue extends Listener {
             } else {
                 this.messageQueues.normal.push({transactionId});
             }
-            Log.print('debug', `${new Date().toISOString()}:${this.type === TransactionType.STREAM ? 'Stream' : 'Socket'};${transaction.transactionId};${transaction.command}; added to queue (messages in queue = ${this.queueSize})`);
+            this.XAPI.logger.print('debug', `${new Date().toISOString()}:${this.type === TransactionType.STREAM ? 'Stream' : 'Socket'};${transaction.transactionId};${transaction.command}; added to queue (messages in queue = ${this.queueSize})`);
         }
     }
 
@@ -89,7 +92,7 @@ export class Queue extends Listener {
 
     protected resetMessageTube() {
         if (this.queueSize > 0) {
-            Log.info((this.type === TransactionType.STREAM ? 'Stream' : 'Socket')
+            this.XAPI.logger.info((this.type === TransactionType.STREAM ? 'Stream' : 'Socket')
                 + '; Message queue reseted, deleted = ' + this.queueSize);
         }
         this.messageQueues = {urgent: [], normal: []};
@@ -150,7 +153,7 @@ export class Queue extends Listener {
             this.WebSocket.send(json);
             return time;
         } catch (e) {
-            Log.error(e);
+            this.XAPI.logger.error(e);
             return null;
         }
     }
@@ -170,17 +173,17 @@ export class Queue extends Listener {
         if (resolve !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
             if (transaction.type === TransactionType.STREAM) {
-                Log.print('debug',`${new Date().toISOString()}: Stream (${transaction.transactionId}): ${transaction.command}, ${JSON.stringify(transaction.request.arguments)}`);
+                this.XAPI.logger.print('debug',`${new Date().toISOString()}: Stream (${transaction.transactionId}): ${transaction.command}, ${JSON.stringify(transaction.request.arguments)}`);
                 resolve({transaction});
             } else if (transaction.request.sent !== null) {
                 const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent);
-                Log.print('debug',`${new Date().toISOString()}: Socket (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)}, (${elapsedMs}ms)`);
+                this.XAPI.logger.print('debug',`${new Date().toISOString()}: Socket (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)}, (${elapsedMs}ms)`);
                 resolve({returnData, time, json, transaction})
             }
         }
 
         if (transaction.command !== 'ping') {
-            Log.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
+            this.XAPI.logger.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
         }
     }
 
@@ -197,7 +200,7 @@ export class Queue extends Listener {
             json
         };
 
-        Log.print('debug', `${new Date().toISOString()}:${transaction.type} message rejected (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)};Reason: ${JSON.stringify(json)}`);
+        this.XAPI.logger.print('debug', `${new Date().toISOString()}:${transaction.type} message rejected (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)};Reason: ${JSON.stringify(json)}`);
 
         const {reject} = transaction.transactionPromise;
 
@@ -211,7 +214,7 @@ export class Queue extends Listener {
             reject(error)
         }
 
-        Log.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
+        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
     }
 
     protected sendMessage(transaction: Transaction<any, any>, addQueu: boolean): boolean {

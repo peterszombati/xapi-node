@@ -1,20 +1,17 @@
 import {TransactionResolveStream} from '../../interface/Interface';
 import {Time, Timer} from '../..';
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import {Log} from "../../utils/Log";
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
 import {Queue} from '../Queue';
 import {XAPI} from '../XAPI';
 
 export class StreamConnection extends Queue {
 
-    private XAPI: XAPI;
     public session: string = '';
     private pingTimeout: Timer = new Timer();
 
     constructor(XAPI: XAPI, url: string) {
-        super(XAPI.rateLimit, TransactionType.STREAM);
-        this.XAPI = XAPI;
+        super(XAPI, TransactionType.STREAM);
         this.WebSocket = new WebSocketWrapper(url);
         this.WebSocket.onOpen(() => this.setConnectionStatus(ConnectionStatus.CONNECTING));
         this.WebSocket.onClose(() => this.setConnectionStatus(ConnectionStatus.DISCONNECTED));
@@ -27,15 +24,15 @@ export class StreamConnection extends Queue {
                 try {
                     this.callListener('command_' + message.command, [message.data, new Time(), json]);
                 } catch (e) {
-                    Log.error(e, 'Stream WebSocket Handle Message ERROR');
+                    this.XAPI.logger.error(e, 'Stream WebSocket Handle Message ERROR');
                 }
             } catch (e) {
-                Log.error(e, 'Stream WebSocket JSON parse ERROR');
+                this.XAPI.logger.error(e, 'Stream WebSocket JSON parse ERROR');
             }
         });
 
         this.WebSocket.onError((error: any) => {
-            Log.error(error, 'Stream WebSocket ERROR');
+            this.XAPI.logger.error(error, 'Stream WebSocket ERROR');
         });
     }
 
@@ -57,7 +54,7 @@ export class StreamConnection extends Queue {
             if (this.session.length > 0) {
                 this.pingTimeout.setTimeout(() => {
                     this.ping().catch(e => {
-                        Log.error(e, 'Stream: ping request failed (StreamConnection.ts:66)');
+                        this.XAPI.logger.error(e, 'Stream: ping request failed (StreamConnection.ts:66)');
                     });
                 }, 100);
             }
