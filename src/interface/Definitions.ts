@@ -1,16 +1,16 @@
 import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, REQUEST_STATUS_FIELD, STATE_FIELD, TYPE_FIELD} from '..'
 
 export interface CHART_RANGE_INFO_RECORD {
-  end: number,
-  period: PERIOD_FIELD,
-  start: number,
-  symbol: string,
+  end: number
+  period: PERIOD_FIELD
+  start: number
+  symbol: string
   ticks: number
 }
 
 export interface CHART_LAST_INFO_RECORD {
-  period: PERIOD_FIELD,
-  start: number,
+  period: PERIOD_FIELD
+  start: number
   symbol: string
 }
 

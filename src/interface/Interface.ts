@@ -10,8 +10,8 @@ export interface MessagesQueue {
 }
 
 export interface TransactionResolveSocket<T> {
-  returnData: T,
-  time: Time,
+  returnData: T
+  time: Time
   transaction: Transaction<TransactionResolveSocket<T>, null>
   json: string
 }
@@ -21,7 +21,7 @@ export interface TransactionResolveStream {
 }
 
 export interface Transaction<Resolve, Reject> {
-  status: TransactionStatus,
+  status: TransactionStatus
   command: string
   createdAt: Time
   transactionId: string
@@ -38,19 +38,19 @@ export interface Transaction<Resolve, Reject> {
     json: any
   }
   transactionPromise: {
-    resolve: null | ((resolve: Resolve | null) => void),
+    resolve: null | ((resolve: Resolve | null) => void)
     reject: null | ((reject: Reject | null) => void)
   }
   stack: string | undefined
 }
 
 export interface AddTransaction {
-  command: string,
-  json: any,
-  args: any,
-  transactionId: string,
-  resolve: any,
-  reject: any,
+  command: string
+  json: any
+  args: any
+  transactionId: string
+  resolve: any
+  reject: any
   urgent: boolean
   stack: string | undefined
 }
@@ -86,7 +86,7 @@ export interface TradePosition {
 
 export interface TradePositions {
   [position: number]: {
-    value: TradePosition | null,
+    value: TradePosition | null
     lastUpdated: Time
   }
 }

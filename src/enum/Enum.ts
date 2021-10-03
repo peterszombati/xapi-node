@@ -3,7 +3,7 @@ export enum REQUEST_STATUS_FIELD {
   ERROR = 0,
   PENDING = 1,
   ACCEPTED = 3,
-  REJECTED = 4
+  REJECTED = 4,
 }
 
 export enum DAY_FIELD {
@@ -13,7 +13,7 @@ export enum DAY_FIELD {
   THURSDAY = 4,
   FRIDAY = 5,
   SATURDAY = 6,
-  SUNDAY = 7
+  SUNDAY = 7,
 }
 
 export enum CMD_FIELD {
@@ -24,7 +24,7 @@ export enum CMD_FIELD {
   BUY_STOP = 4,
   SELL_STOP = 5,
   BALANCE = 6,
-  CREDIT = 7
+  CREDIT = 7,
 }
 
 export enum TYPE_FIELD {
@@ -32,12 +32,12 @@ export enum TYPE_FIELD {
   PENDING = 1,
   CLOSE = 2,
   MODIFY = 3,
-  DELETE = 4
+  DELETE = 4,
 }
 
 export enum STATE_FIELD {
   MODIFIED = 'Modified',
-  DELETED = 'Deleted'
+  DELETED = 'Deleted',
 }
 
 export enum PERIOD_FIELD {
@@ -62,7 +62,7 @@ export const CHART_RATE_LIMIT_BY_PERIOD: any = {
   PERIOD_H4: 1560, // 13 month
   PERIOD_D1: 19200, // 52 years
   PERIOD_W1: 3840, // 73 years
-  PERIOD_MN1: 960 // 80 years
+  PERIOD_MN1: 960, // 80 years
 }
 
 export enum TransactionStatus {
@@ -70,12 +70,12 @@ export enum TransactionStatus {
   sent = 1,
   successful = 2,
   timeout = 3,
-  interrupted = 4
+  interrupted = 4,
 }
 
 export enum TransactionType {
   SOCKET = 'Socket',
-  STREAM = 'Stream'
+  STREAM = 'Stream',
 }
 
 export enum ConnectionStatus {
@@ -88,7 +88,7 @@ export enum PositionType {
   open = 0,
   closed = 1,
   limit = 2,
-  source = 3
+  source = 3,
 }
 
 export enum Candle {
@@ -97,7 +97,7 @@ export enum Candle {
   close = 2,
   low = 3,
   high = 4,
-  volume = 5
+  volume = 5,
 }
 
 export enum errorCode {
@@ -108,7 +108,7 @@ export enum errorCode {
   XAPINODE_4 = 'XAPINODE_4', // Trading disabled
   XAPINODE_BE103 = 'XAPINODE_BE103', // User is not logged
   BE005 = 'BE005', // "userPasswordCheck: Invalid login or password"
-  BE118 = 'BE118' // User already logged
+  BE118 = 'BE118', // User already logged
 }
 
 export enum Listeners {
@@ -119,7 +119,7 @@ export enum Listeners {
   xapi_onBalanceChange = 'xapi_onBalanceChange',
   xapi_onConnectionChange = 'xapi_onConnectionChange',
   xapi_onReject = 'xapi_onReject',
-  xapi_onReady = 'xapi_onReady'
+  xapi_onReady = 'xapi_onReady',
 }
 
 export const Currency2Pair: any = {
@@ -144,7 +144,7 @@ export const Currency2Pair: any = {
   'CLP': 'USDCLP',
   'DKK': 'VWS.DK_4',
   'BTC': 'XEMBTC',
-  'ETH': 'TRXETH'
+  'ETH': 'TRXETH',
 }
 
 export type RelevantCurrencies =
