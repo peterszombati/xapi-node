@@ -506,7 +506,19 @@ export class XAPI extends Listener {
     period?: PERIOD_FIELD | undefined,
     ticks?: number | null,
     startUTC?: number | null
-  }): Promise<{ symbol: string, period: PERIOD_FIELD, candles: number[][], digits: number }> {
+  }): Promise<{
+    symbol: string
+    period: PERIOD_FIELD
+    candles: {
+      timestamp: number
+      open: number
+      close: number
+      low: number
+      high: number
+      volume: number
+    }[]
+    digits: number
+  }> {
     return (startUTC !== null && ticks === null
         ? this.Socket.send.getChartLastRequest(period, startUTC, symbol)
         : this.Socket.send.getChartRangeRequest(
@@ -520,14 +532,14 @@ export class XAPI extends Listener {
         symbol,
         period,
         candles: data.returnData.rateInfos.map((candle) => (
-          [
-            candle.ctm,
-            Math.round(candle.open),
-            Math.round(Math.round(candle.close) + Math.round(candle.open)),
-            Math.round(Math.round(candle.low) + Math.round(candle.open)),
-            Math.round(Math.round(candle.high) + Math.round(candle.open)),
-            candle.vol
-          ]
+          {
+            timestamp: candle.ctm,
+            open: Math.round(candle.open),
+            close: Math.round(Math.round(candle.close) + Math.round(candle.open)),
+            low: Math.round(Math.round(candle.low) + Math.round(candle.open)),
+            high: Math.round(Math.round(candle.high) + Math.round(candle.open)),
+            volume: candle.vol
+          }
         )),
         digits: data.returnData.digits
       }
