@@ -180,7 +180,7 @@ export class Queue extends Listener {
         }
 
         if (transaction.command !== 'ping') {
-            Log.print('hidden', `${new Date().toISOString()}:Transaction archived:${Utils.transactionToJSONString(transaction)}`);
+            Log.print('hidden', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
         }
     }
 
@@ -211,7 +211,7 @@ export class Queue extends Listener {
             reject(error)
         }
 
-        Log.print('hidden', new Date().toISOString() + ': Transaction archived:' + Utils.transactionToJSONString(transaction));
+        Log.print('hidden', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
     }
 
     protected sendMessage(transaction: Transaction<any, any>, addQueu: boolean): boolean {
