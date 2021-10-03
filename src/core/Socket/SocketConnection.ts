@@ -87,11 +87,11 @@ export class SocketConnection extends Queue {
 
             if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
                 this.loginTimeout.setTimeout(() => {
-                    Log.print('hidden', `${new Date().toISOString()}: Try to login (retries = ${retries})`);
+                    Log.print('debug', `${new Date().toISOString()}: Try to login (retries = ${retries})`);
                     this.tryLogin(retries - 1);
                 }, 500);
             } else if (e.reason.code === errorCode.BE005) {
-                Log.print('hidden', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`);
+                Log.print('debug', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`);
                 this.XAPI.disconnect();
             }
 
@@ -105,7 +105,7 @@ export class SocketConnection extends Queue {
         if (transactionId !== null && this.transactions[transactionId] !== undefined) {
             this.rejectTransaction({code, explain}, this.transactions[transactionId], false, received);
         } else {
-            Log.print('hidden', `${new Date().toISOString()}: Socket error message: ${JSON.stringify({code, explain, customTag})}`);
+            Log.print('debug', `${new Date().toISOString()}: Socket error message: ${JSON.stringify({code, explain, customTag})}`);
         }
     }
 

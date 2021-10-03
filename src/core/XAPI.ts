@@ -172,7 +172,7 @@ export class XAPI extends Listener {
 
         this.Stream.onConnectionChange(status => {
             if (status !== ConnectionStatus.CONNECTING) {
-                logger.print('hidden', `${new Date().toISOString()}: Stream ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
+                logger.print('debug', `${new Date().toISOString()}: Stream ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
 
                 if (this.Socket.status === ConnectionStatus.CONNECTED) {
                     if (this.isReady) {
@@ -197,7 +197,7 @@ export class XAPI extends Listener {
         });
         this.Socket.onConnectionChange(status => {
             if (status !== ConnectionStatus.CONNECTING) {
-                logger.print('hidden', `${new Date().toISOString()}: Socket ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
+                logger.print('debug', `${new Date().toISOString()}: Socket ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
 
                 if (status === ConnectionStatus.DISCONNECTED) {
                     this.Stream.session = '';
@@ -211,7 +211,7 @@ export class XAPI extends Listener {
         });
 
         this.Socket.listen.login((data, time, transaction) => {
-            logger.print('hidden', new Date().toISOString() + ': Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')');
+            logger.print('debug', new Date().toISOString() + ': Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')');
             this.Stream.session = data.streamSessionId;
             if (this.isReady) {
                 this.Stream.ping().catch(e => {
@@ -250,7 +250,7 @@ export class XAPI extends Listener {
                 this._positions = obj;
                 this._positionsUpdated = new Time();
             } else {
-                logger.print('hidden', new Date().toISOString() + ': getTrades transaction (' + transaction.transactionId + ') is ignored')
+                logger.print('debug', new Date().toISOString() + ': getTrades transaction (' + transaction.transactionId + ') is ignored')
             }
         });
 

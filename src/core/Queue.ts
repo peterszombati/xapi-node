@@ -69,7 +69,7 @@ export class Queue extends Listener {
             } else {
                 this.messageQueues.normal.push({transactionId});
             }
-            Log.print('hidden', `${new Date().toISOString()}:${this.type === TransactionType.STREAM ? 'Stream' : 'Socket'};${transaction.transactionId};${transaction.command}; added to queue (messages in queue = ${this.queueSize})`);
+            Log.print('debug', `${new Date().toISOString()}:${this.type === TransactionType.STREAM ? 'Stream' : 'Socket'};${transaction.transactionId};${transaction.command}; added to queue (messages in queue = ${this.queueSize})`);
         }
     }
 
@@ -170,17 +170,17 @@ export class Queue extends Listener {
         if (resolve !== null) {
             transaction.transactionPromise = {resolve: null, reject: null};
             if (transaction.type === TransactionType.STREAM) {
-                Log.print('hidden',`${new Date().toISOString()}: Stream (${transaction.transactionId}): ${transaction.command}, ${JSON.stringify(transaction.request.arguments)}`);
+                Log.print('debug',`${new Date().toISOString()}: Stream (${transaction.transactionId}): ${transaction.command}, ${JSON.stringify(transaction.request.arguments)}`);
                 resolve({transaction});
             } else if (transaction.request.sent !== null) {
                 const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent);
-                Log.print('hidden',`${new Date().toISOString()}: Socket (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)}, (${elapsedMs}ms)`);
+                Log.print('debug',`${new Date().toISOString()}: Socket (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)}, (${elapsedMs}ms)`);
                 resolve({returnData, time, json, transaction})
             }
         }
 
         if (transaction.command !== 'ping') {
-            Log.print('hidden', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
+            Log.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
         }
     }
 
@@ -197,7 +197,7 @@ export class Queue extends Listener {
             json
         };
 
-        Log.print('hidden', `${new Date().toISOString()}:${transaction.type} message rejected (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)};Reason: ${JSON.stringify(json)}`);
+        Log.print('debug', `${new Date().toISOString()}:${transaction.type} message rejected (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)};Reason: ${JSON.stringify(json)}`);
 
         const {reject} = transaction.transactionPromise;
 
@@ -211,7 +211,7 @@ export class Queue extends Listener {
             reject(error)
         }
 
-        Log.print('hidden', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
+        Log.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
     }
 
     protected sendMessage(transaction: Transaction<any, any>, addQueu: boolean): boolean {

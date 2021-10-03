@@ -25,12 +25,12 @@ describe('sandbox', () => {
     })
     x.logger.onStream('error', error)
 
-    const hidden = new Writable()
-    hidden._write = ((chunk, encoding, next) => {
+    const debug = new Writable()
+    debug._write = ((chunk, encoding, next) => {
       console.log(chunk.toString())
       next()
     })
-    x.logger.onStream('hidden', hidden)
+    x.logger.onStream('debug', debug)
 
     x.onReady(() => {
 
