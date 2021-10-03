@@ -5,6 +5,7 @@ import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionTy
 import {WebSocketWrapper} from '../modules/WebSocketWrapper';
 import {JsonError} from "logger4";
 import {XAPI} from "./XAPI";
+import {transactionToJSONString} from '../utils/transactionToJSONString';
 
 export class Queue extends Listener {
     protected XAPI: XAPI;
@@ -183,7 +184,7 @@ export class Queue extends Listener {
         }
 
         if (transaction.command !== 'ping') {
-            this.XAPI.logger.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
+            this.XAPI.logger.print('debug', `${new Date().toISOString()}: Transaction archived:${transactionToJSONString(transaction)}`);
         }
     }
 
@@ -214,7 +215,7 @@ export class Queue extends Listener {
             reject(error)
         }
 
-        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Transaction archived:${Utils.transactionToJSONString(transaction)}`);
+        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Transaction archived:${transactionToJSONString(transaction)}`);
     }
 
     protected sendMessage(transaction: Transaction<any, any>, addQueu: boolean): boolean {
