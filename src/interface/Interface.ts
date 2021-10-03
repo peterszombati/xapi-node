@@ -1,5 +1,5 @@
-import {REQUEST_STATUS_FIELD, Time} from '..';
-import {CMD_FIELD, PositionType, TransactionStatus, TransactionType} from '../enum/Enum';
+import {REQUEST_STATUS_FIELD, Time} from '..'
+import {CMD_FIELD, PositionType, TransactionStatus, TransactionType} from '../enum/Enum'
 
 export interface Transactions {
   [transactionId: string]: Transaction<any, any>

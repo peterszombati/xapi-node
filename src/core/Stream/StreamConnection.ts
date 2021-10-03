@@ -1,13 +1,13 @@
-import {TransactionResolveStream} from '../../interface/Interface';
-import {Time, Timer} from '../..';
-import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
-import {Queue} from '../Queue';
-import {XAPI} from '../XAPI';
+import {TransactionResolveStream} from '../../interface/Interface'
+import {Time, Timer} from '../..'
+import {WebSocketWrapper} from '../../modules/WebSocketWrapper'
+import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum'
+import {Queue} from '../Queue'
+import {XAPI} from '../XAPI'
 
 export class StreamConnection extends Queue {
 
-  public session: string = '';
+  public session: string = ''
   private pingTimeout: Timer = new Timer();
 
   constructor(XAPI: XAPI, url: string) {

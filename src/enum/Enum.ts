@@ -169,4 +169,4 @@ export type RelevantCurrencies =
   | 'CLP'
   | 'DKK'
   | 'BTC'
-  | 'ETH';
+  | 'ETH'

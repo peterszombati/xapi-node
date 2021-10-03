@@ -12,8 +12,8 @@ import {
     TRADE_TRANS_INFO,
     TRADING_HOURS_RECORD,
     TYPE_FIELD
-} from '../..';
-import {TradeStatus, Transaction} from '../../interface/Interface';
+} from '../..'
+import {TradeStatus, Transaction} from '../../interface/Interface'
 import {
     getChartRequestResponse,
     getCommissionDefResponse,
@@ -26,7 +26,7 @@ import {
     getVersionResponse,
     tradeTransactionResponse,
     tradeTransactionStatusResponse
-} from '../../interface/Response';
+} from '../../interface/Response'
 import {
     getCommissionDef,
     getIbsHistory,
@@ -41,10 +41,10 @@ import {
     getTradingHours,
     tradeTransaction,
     tradeTransactionStatus
-} from '../../interface/Request';
-import {SocketConnection} from './SocketConnection';
-import {XAPI} from '../XAPI';
-import {TRADE_TRANS_INFO_MODIFY} from "../../interface/Definitions";
+} from '../../interface/Request'
+import {SocketConnection} from './SocketConnection'
+import {XAPI} from '../XAPI'
+import {TRADE_TRANS_INFO_MODIFY} from '../../interface/Definitions'
 
 interface SocketListen<T> {
   (data: T, time: Time, transaction: Transaction<null, null>, jsonString: string): void

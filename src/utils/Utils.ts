@@ -1,6 +1,6 @@
-import {TradePosition, Transaction} from '../interface/Interface';
-import {CMD_FIELD, STREAMING_TRADE_RECORD, TRADE_RECORD} from '..';
-import {PositionType} from '../enum/Enum';
+import {TradePosition, Transaction} from '../interface/Interface'
+import {CMD_FIELD, STREAMING_TRADE_RECORD, TRADE_RECORD} from '..'
+import {PositionType} from '../enum/Enum'
 
 export class Utils {
 

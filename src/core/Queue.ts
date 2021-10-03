@@ -1,11 +1,11 @@
-import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface';
-import {Listener} from '../modules/Listener';
-import {Time, Timer, Utils} from '..';
-import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum';
-import {WebSocketWrapper} from '../modules/WebSocketWrapper';
-import {JsonError} from "logger4";
-import {XAPI} from "./XAPI";
-import {transactionToJSONString} from '../utils/transactionToJSONString';
+import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface'
+import {Listener} from '../modules/Listener'
+import {Time, Timer, Utils} from '..'
+import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum'
+import {WebSocketWrapper} from '../modules/WebSocketWrapper'
+import {JsonError} from 'logger4'
+import {XAPI} from './XAPI'
+import {transactionToJSONString} from '../utils/transactionToJSONString'
 
 export class Queue extends Listener {
   public transactions: Transactions = {};

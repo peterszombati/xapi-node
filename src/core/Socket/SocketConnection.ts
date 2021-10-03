@@ -1,9 +1,9 @@
-import {TransactionResolveSocket} from '../../interface/Interface';
-import {Time, Timer, Utils} from '../..';
-import {WebSocketWrapper} from '../../modules/WebSocketWrapper';
-import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum';
-import {Queue} from '../Queue';
-import {XAPI} from '../XAPI';
+import {TransactionResolveSocket} from '../../interface/Interface'
+import {Time, Timer, Utils} from '../..'
+import {WebSocketWrapper} from '../../modules/WebSocketWrapper'
+import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum'
+import {Queue} from '../Queue'
+import {XAPI} from '../XAPI'
 
 export class SocketConnection extends Queue {
   private _password: string;

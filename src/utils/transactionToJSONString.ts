@@ -1,5 +1,5 @@
-import {Transaction} from "../interface/Interface";
-import {parseStack} from "logger4";
+import {Transaction} from '../interface/Interface'
+import {parseStack} from 'logger4'
 
 export function transactionToJSONString(transaction: Transaction<any, any>): string {
   try {

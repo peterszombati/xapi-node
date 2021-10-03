@@ -1,5 +1,5 @@
-import {Listener} from '../modules/Listener';
-import {Logger4V2} from 'logger4';
+import {Listener} from '../modules/Listener'
+import {Logger4V2} from 'logger4'
 import {
     CMD_FIELD,
     ConnectionStatus,
@@ -9,13 +9,13 @@ import {
     Time,
     TYPE_FIELD,
     Utils
-} from '..';
-import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface';
-import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType, RelevantCurrencies} from '../enum/Enum';
-import {Socket} from './Socket/Socket';
-import {Stream} from './Stream/Stream';
+} from '..'
+import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface'
+import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType, RelevantCurrencies} from '../enum/Enum'
+import {Socket} from './Socket/Socket'
+import {Stream} from './Stream/Stream'
 
-export const DefaultHostname = 'ws.xapi.pro';
+export const DefaultHostname = 'ws.xapi.pro'
 export const DefaultRateLimit = 850;
 
 export interface XAPIConfig {
@@ -121,7 +121,7 @@ export class XAPI extends Listener {
         logger.print('debug', `${new Date().toISOString()}: Socket ${status === ConnectionStatus.CONNECTED ? 'open' : 'closed'}`);
 
         if (status === ConnectionStatus.DISCONNECTED) {
-          this.Stream.session = '';
+          this.Stream.session = ''
           this.stopTimer();
         }
 
@@ -454,7 +454,7 @@ export class XAPI extends Listener {
 
   public disconnect() {
     return new Promise((resolve, reject) => {
-      this.Stream.session = '';
+      this.Stream.session = ''
       this._tryReconnect = false;
       this.stopTimer();
       this.Socket.stopTimer();

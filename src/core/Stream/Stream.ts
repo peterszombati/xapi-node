@@ -8,9 +8,9 @@ import {
     STREAMING_TRADE_RECORD,
     STREAMING_TRADE_STATUS_RECORD,
     Time
-} from '../..';
-import {StreamConnection} from './StreamConnection';
-import {XAPI} from '../XAPI';
+} from '../..'
+import {StreamConnection} from './StreamConnection'
+import {XAPI} from '../XAPI'
 
 interface StreamListen<T> {
   (data: T, time: Time, jsonString: string): void
