@@ -190,23 +190,31 @@ x.onReady(() => {
 ```
 #### How to use other log modules than Logger4
 ```ts
-import Logger4 from 'logger4';
+import {Logger4V2} from 'logger4';
 
-const logger = new Logger4({
-    printEnabled: false,
-    path: null,
-    directorySizeLimitMB: null
-});
+const x = new XAPI({...loginConfig, logger: new Logger4V2()});
 
-const x = new XAPI({...loginConfig, logger});
+const info = new Writable()
+info._write = ((chunk, encoding, next) => {
+  // you can bind 'info' logger
+  console.log(chunk.toString())
+  next()
+})
+x.logger.onStream('info', info)
 
-x.logger.on((tag, log, type, params) => {
-    // You can bind your log module here
-    console.log({
-        tag,
-        log,
-        type,
-        params
-    });
-});
+const error = new Writable()
+error._write = ((chunk, encoding, next) => {
+  // you can bind 'error' logger
+  console.error(chunk.toString())
+  next()
+})
+x.logger.onStream('error', error)
+
+const debug = new Writable()
+debug._write = ((chunk, encoding, next) => {
+  // you can bind 'debug' logger
+  console.log(chunk.toString())
+  next()
+})
+x.logger.onStream('debug', debug)
 ```
