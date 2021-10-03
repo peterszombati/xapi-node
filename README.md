@@ -29,49 +29,49 @@ npm i xapi-node
 #### Authentication
 ```ts
 // TypeScript
-import XAPI from 'xapi-node';
+import XAPI from 'xapi-node'
 
 const x = new XAPI({
     accountId: '(xStation5) accountID',
     password: '(xStation5) password',
     type: 'real' // or demo
-});
+})
 
-x.connect();
+x.connect()
 
 x.onReady(() => {
-    console.log('Connection is ready');
+    console.log('Connection is ready')
     
     // Disconnect
-    x.disconnect().then(() => console.log('Disconnected'));
-});
+    x.disconnect().then(() => console.log('Disconnected'))
+})
 x.onReject((e) => {
-    console.error(e);
-});
+    console.error(e)
+})
 ```
 #### Authentication only for XTB accounts
 ```ts
 // TypeScript
-import XAPI from 'xapi-node';
+import XAPI from 'xapi-node'
 
 const x = new XAPI({
     accountId: '(xStation5) accountID',
     password: '(xStation5) password',
     host: 'ws.xtb.com', // only for XTB accounts
     type: 'real' // or demo
-});
+})
 
-x.connect();
+x.connect()
 
 x.onReady(() => {
-    console.log('Connection is ready');
+    console.log('Connection is ready')
     
     // Disconnect
-    x.disconnect().then(() => console.log('Disconnected'));
-});
+    x.disconnect().then(() => console.log('Disconnected'))
+})
 x.onReject((e) => {
-    console.error(e);
-});
+    console.error(e)
+})
 ```
 
 #### placing buy limit on BITCOIN [CFD]
@@ -89,11 +89,11 @@ x.Socket.send.tradeTransaction({
     type: TYPE_FIELD.OPEN,
     volume: 10
 }).then(({order}) => {
-    console.log('Success ' + order);
+    console.log('Success ' + order)
 }).catch(e => {
-    console.error('Failed');
-    console.error(e);
-});
+    console.error('Failed')
+    console.error(e)
+})
 ```
 
 #### placing buy limit on US30 (Dow Jones Industrial Average)
@@ -111,7 +111,7 @@ x.Socket.send.tradeTransaction({
     type: TYPE_FIELD.OPEN,
     volume: 0.2
 }).then(({order}) => {
-    console.log('Success ' + order);
+    console.log('Success ' + order)
 }).catch(e => {
     console.error('Failed');
     console.error(e);
