@@ -86,3 +86,13 @@ export {
 }
 
 export {parseJsonLogin, Utils, Time, TradePosition, Timer, TradeStatus, ListenerChild}
+
+export function getContractValue({price, lot, contractSize, currency, currencyProfit}:
+  { price: number, lot: number, contractSize: number, currency: string, currencyProfit: string }) {
+  return lot * contractSize * ((currency === currencyProfit) ? price : 1)
+}
+
+export function getProfit({openPrice, closePrice, isBuy, lot, contractSize}:
+  { openPrice: number, closePrice: number, isBuy: boolean, lot: number, contractSize: number }) {
+  return (isBuy ? closePrice - openPrice : openPrice - closePrice) * lot * contractSize
+}
