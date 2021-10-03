@@ -9,7 +9,7 @@ export class Utils {
       ...transaction,
       request: {
         ...transaction.request,
-        json: 'json contains secret information',
+        json: 'json contains sensitive information',
         arguments: {},
       }
     }

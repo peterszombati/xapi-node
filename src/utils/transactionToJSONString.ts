@@ -13,7 +13,7 @@ export function transactionToJSONString(transaction: Transaction<any, any>): str
       request: {
         sent: transaction.request.sent === null || sentUTC == null ? null : sentUTC.getTime(),
         arguments: transaction.command === 'login' ? {} : transaction.request.arguments,
-        json: transaction.command === 'login' ? '"json contains secret information"' : transaction.request.json
+        json: transaction.command === 'login' ? '"json contains sensitive information"' : transaction.request.json
       },
       response: {
         status: transaction.response.status,

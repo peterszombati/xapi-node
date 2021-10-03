@@ -145,7 +145,7 @@ export class Queue extends Listener {
         resolve({transaction})
       } else if (transaction.request.sent !== null) {
         const elapsedMs = transaction.response.received !== null && transaction.response.received.getDifference(transaction.request.sent)
-        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Socket (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)}, (${elapsedMs}ms)`)
+        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Socket (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains sensitive information)' : JSON.stringify(transaction.request.arguments)}, (${elapsedMs}ms)`)
         resolve({returnData, time, json, transaction})
       }
     }
@@ -168,7 +168,7 @@ export class Queue extends Listener {
       json
     }
 
-    this.XAPI.logger.print('debug', `${new Date().toISOString()}:${transaction.type} message rejected (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains secret information)' : JSON.stringify(transaction.request.arguments)};Reason: ${JSON.stringify(json)}`)
+    this.XAPI.logger.print('debug', `${new Date().toISOString()}:${transaction.type} message rejected (${transaction.transactionId}): ${transaction.command}, ${transaction.command === 'login' ? '(arguments contains sensitive information)' : JSON.stringify(transaction.request.arguments)};Reason: ${JSON.stringify(json)}`)
 
     const {reject} = transaction.transactionPromise
 
