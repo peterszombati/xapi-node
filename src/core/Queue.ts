@@ -185,10 +185,10 @@ export class Queue extends Listener {
     this.XAPI.logger.print('debug', `${new Date().toISOString()}: Transaction archived:${transactionToJSONString(transaction)}`)
   }
 
-  protected sendMessage(transaction: Transaction<any, any>, addQueu: boolean): boolean {
+  protected async sendMessage(transaction: Transaction<any, any>, addQueu: boolean): Promise<boolean> {
     if (!this.isRateLimitReached()) {
       if (this.queueSize === 0 || !addQueu) {
-        const sentTime = this.sendJSON(transaction.request.json)
+        const sentTime = await this.sendJSON(transaction.request.json)
         if (sentTime !== null) {
           this.addElapsedTime(sentTime)
           transaction.request.sent = sentTime
@@ -245,13 +245,14 @@ export class Queue extends Listener {
       : this.messagesElapsedTime[this.messagesElapsedTime.length - 4].elapsedMs() < this.rateLimit
   }
 
-  private sendJSON(json: string): Time | null {
+  private async sendJSON(json: string): Promise<Time | null> {
     try {
       const time: Time = new Time()
-      this.WebSocket.send(json)
+      await this.WebSocket.send(json)
+      this.XAPI.logger.track(this.type, json)
       return time
     } catch (e) {
-      this.XAPI.logger.error(e)
+      this.XAPI.logger.error(e, { json })
       return null
     }
   }

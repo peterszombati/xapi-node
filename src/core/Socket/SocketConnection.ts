@@ -110,7 +110,9 @@ export class SocketConnection extends Queue {
           explain: 'Trading disabled in login config (safe = true)'
         }, transaction)
       } else {
-        this.sendMessage(transaction, true)
+        this.sendMessage(transaction, true).catch(e => {
+          this.XAPI.logger.error(e)
+        })
       }
     })
   }

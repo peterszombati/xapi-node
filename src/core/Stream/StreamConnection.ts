@@ -87,7 +87,9 @@ export class StreamConnection extends Queue {
           explain: 'User is not logged'
         }, transaction)
       } else {
-        this.sendMessage(transaction, true)
+        this.sendMessage(transaction, true).catch(e => {
+          this.XAPI.logger.error(e)
+        })
       }
     })
   }
