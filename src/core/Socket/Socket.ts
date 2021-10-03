@@ -196,12 +196,12 @@ export class Socket extends SocketConnection {
             : 'type === MODIFY in tradeTransaction orderId = ' + order + ' not found,'
             + ' possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(',')
           if (cmd === undefined) {
-            return Promise.reject(new Error(error));
+            return Promise.reject(new Error(error))
           } else {
-            this.XAPI.logger.error(new Error(error));
+            this.XAPI.logger.error(new Error(error))
           }
         }
-        const transactionId = this.createTransactionId();
+        const transactionId = this.createTransactionId()
         return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
           'tradeTransInfo': {
             cmd: position ? cmd || position.cmd : cmd,

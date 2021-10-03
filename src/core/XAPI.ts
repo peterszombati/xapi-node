@@ -126,39 +126,39 @@ export class XAPI extends Listener {
         }
 
         if (this.Stream.status === ConnectionStatus.CONNECTED) {
-          this.callListener(Listeners.xapi_onConnectionChange, [status]);
+          this.callListener(Listeners.xapi_onConnectionChange, [status])
         }
       }
-    });
+    })
 
     this.Socket.listen.login((data, time, transaction) => {
-      logger.print('debug', new Date().toISOString() + ': Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')');
-      this.Stream.session = data.streamSessionId;
+      logger.print('debug', new Date().toISOString() + ': Login is successful (userId = ' + this.accountId + ', accountType = ' + this.accountType + ')')
+      this.Stream.session = data.streamSessionId
       if (this.isReady) {
         this.Stream.ping().catch(e => {
-          logger.error(e);
-        });
+          logger.error(e)
+        })
         this.Socket.send.getTrades(true).catch().then(() => {
           if (this.isReady) {
-            this.callListener(Listeners.xapi_onReady);
+            this.callListener(Listeners.xapi_onReady)
           }
-        });
+        })
       }
-    });
+    })
 
     this.Socket.listen.getTrades((data, time, transaction) => {
-      const {sent} = transaction.request;
+      const {sent} = transaction.request
 
       if (sent !== null && sent.elapsedMs() < 1000) {
-        const obj: TradePositions = {};
+        const obj: TradePositions = {}
         data.forEach(t => {
           if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
             obj[t.position] = {
               value: Utils.formatPosition(t),
               lastUpdated: sent
-            };
+            }
           }
-        });
+        })
 
         Object.values(this._positions).forEach(t => {
           if (obj[t.position] === undefined && t.value !== null) {

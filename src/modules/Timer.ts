@@ -23,8 +23,8 @@ export class Timer {
       this.timeout = null
     }
     if (this.interval !== null) {
-      clearInterval(this.interval);
-      this.interval = null;
+      clearInterval(this.interval)
+      this.interval = null
     }
   }
 

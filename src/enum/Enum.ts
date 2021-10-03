@@ -145,7 +145,7 @@ export const Currency2Pair: any = {
   'DKK': 'VWS.DK_4',
   'BTC': 'XEMBTC',
   'ETH': 'TRXETH'
-};
+}
 
 export type RelevantCurrencies =
   'HUF'

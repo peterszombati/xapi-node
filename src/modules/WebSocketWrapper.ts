@@ -6,51 +6,51 @@ export const isNodeJS = () => typeof window === 'undefined' && typeof module !==
 export class WebSocketWrapper extends Listener {
   private ws: any = null
   private _tryReconnect = false
-  private _connectionTimeout: Timer = new Timer();
-  private url: string;
+  private _connectionTimeout: Timer = new Timer()
+  private url: string
 
   constructor(url: string, tryReconnectOnFail: boolean = true) {
-    super();
-    this.url = url;
-    this._tryReconnect = tryReconnectOnFail;
+    super()
+    this.url = url
+    this._tryReconnect = tryReconnectOnFail
 
     this.onOpen(() => {
-      this._connectionTimeout.clear();
-    });
+      this._connectionTimeout.clear()
+    })
     this.onClose(() => {
       if (this._tryReconnect) {
         this._connectionTimeout.setTimeout(() => {
           if (this._tryReconnect) {
-            this.connect();
+            this.connect()
           }
-        }, 3000);
+        }, 3000)
       }
-    });
+    })
   }
 
-  private _status = false;
+  private _status = false
 
   get status(): boolean {
-    return this._status;
+    return this._status
   }
 
   public connect() {
-    this._connectionTimeout.clear();
+    this._connectionTimeout.clear()
     if (isNodeJS()) {
       // NodeJS module
-      const WebSocketClient = require('ws');
-      this.ws = new WebSocketClient(this.url);
+      const WebSocketClient = require('ws')
+      this.ws = new WebSocketClient(this.url)
       this.ws.on('open', () => {
-        this._status = true;
-        this.callListener('ws_open');
-      });
+        this._status = true
+        this.callListener('ws_open')
+      })
       this.ws.on('close', () => {
-        this._status = false;
-        this.callListener('ws_close');
-      });
+        this._status = false
+        this.callListener('ws_close')
+      })
       this.ws.on('message', (message: any) => {
-        this.callListener('ws_message', [message]);
-      });
+        this.callListener('ws_message', [message])
+      })
       this.ws.on('error', (error: any) => {
         this.callListener('ws_error', [error]);
       });

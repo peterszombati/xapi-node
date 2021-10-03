@@ -30,6 +30,6 @@ export class Time {
   }
 
   public getUTC(): Date {
-    return new Date(this.UTCTimestamp);
+    return new Date(this.UTCTimestamp)
   }
 }

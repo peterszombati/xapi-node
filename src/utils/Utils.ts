@@ -59,18 +59,18 @@ export class Utils {
       tp: t.tp,
       volume: t.volume,
       position_type: Utils.getPositionType({cmd: t.cmd, closed: t.closed, close_time: t.close_time})
-    };
-  };
+    }
+  }
 
   static getUTCTimestampString(): string {
-    return new Date().getTime().toString();
+    return new Date().getTime().toString()
   }
 
   static formatNumber(number: number, length: number): string {
-    let result = number.toString();
+    let result = number.toString()
     return (length - result.length > 0)
       ? '0'.repeat(length - result.length) + result
-      : result;
+      : result
   }
 
   static getPositionType({
@@ -81,17 +81,17 @@ export class Utils {
     if (cmd === CMD_FIELD.SELL || cmd === CMD_FIELD.BUY) {
       return close_time === null && !closed
         ? PositionType.open
-        : PositionType.closed;
+        : PositionType.closed
     } else {
       return cmd === CMD_FIELD.BALANCE || cmd === CMD_FIELD.CREDIT
         ? PositionType.source
-        : PositionType.limit;
+        : PositionType.limit
     }
   }
 
   static getContractValue({price, lot, contractSize, currency, currencyProfit}:
                             { price: number, lot: number, contractSize: number, currency: string, currencyProfit: string }) {
-    return lot * contractSize * ((currency === currencyProfit) ? price : 1);
+    return lot * contractSize * ((currency === currencyProfit) ? price : 1)
   }
 
   static getProfit({openPrice, closePrice, isBuy, lot, contractSize}:

@@ -75,56 +75,56 @@ export class StreamConnection extends Queue {
         this.rejectTransaction({
           code: errorCode.XAPINODE_0,
           explain: 'Each command invocation should not contain more than 1kB of data.'
-        }, transaction);
+        }, transaction)
       } else if (this.status === ConnectionStatus.DISCONNECTED) {
         this.rejectTransaction({
           code: errorCode.XAPINODE_1,
           explain: 'Stream closed'
-        }, transaction);
+        }, transaction)
       } else if (this.session.length === 0) {
         this.rejectTransaction({
           code: errorCode.XAPINODE_BE103,
           explain: 'User is not logged'
-        }, transaction);
+        }, transaction)
       } else {
-        this.sendMessage(transaction, true);
+        this.sendMessage(transaction, true)
       }
-    });
+    })
   }
 
   protected sendSubscribe(command: string, completion: any = {}) {
-    return this.sendCommand(`get${command}`, completion);
+    return this.sendCommand(`get${command}`, completion)
   }
 
   protected sendUnsubscribe(command: string, completion: any = {}) {
-    return this.sendCommand(`stop${command}`, completion);
+    return this.sendCommand(`stop${command}`, completion)
   }
 
   private setConnectionStatus(status: ConnectionStatus) {
-    this.resetMessageTube();
-    this.openTimeout.clear();
-    this.pingTimeout.clear();
-    this.status = status;
+    this.resetMessageTube()
+    this.openTimeout.clear()
+    this.pingTimeout.clear()
+    this.status = status
 
     if (status === ConnectionStatus.CONNECTING) {
       if (this.session.length > 0) {
         this.pingTimeout.setTimeout(() => {
           this.ping().catch(e => {
-            this.XAPI.logger.error(e, 'Stream: ping request failed (StreamConnection.ts:66)');
-          });
-        }, 100);
+            this.XAPI.logger.error(e, 'Stream: ping request failed (StreamConnection.ts:66)')
+          })
+        }, 100)
       }
 
       this.openTimeout.setTimeout(() => {
-        this.status = ConnectionStatus.CONNECTED;
-      }, 1000);
+        this.status = ConnectionStatus.CONNECTED
+      }, 1000)
     } else {
       for (const transactionId in this.transactions) {
         if (this.transactions[transactionId].status === TransactionStatus.waiting) {
           this.rejectTransaction({
             code: errorCode.XAPINODE_1,
             explain: 'Stream closed'
-          }, this.transactions[transactionId], false);
+          }, this.transactions[transactionId], false)
         }
       }
     }

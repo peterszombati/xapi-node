@@ -33,28 +33,28 @@ export class SocketConnection extends Queue {
     })
 
     this.WebSocket.onError((error: any) => {
-      this.XAPI.logger.error(error, 'Socket WebSocket ERROR');
-    });
+      this.XAPI.logger.error(error, 'Socket WebSocket ERROR')
+    })
   }
 
   public connect() {
-    this.WebSocket.connect();
+    this.WebSocket.connect()
   }
 
   public onConnectionChange(callBack: (status: ConnectionStatus) => void, key: string | null = null) {
-    this.addListener(Listeners.xapi_onConnectionChange, callBack, key);
+    this.addListener(Listeners.xapi_onConnectionChange, callBack, key)
   }
 
   public closeConnection() {
-    this.WebSocket.close();
+    this.WebSocket.close()
   }
 
   public ping() {
-    return this.sendCommand<null>('ping', {}, null, true);
+    return this.sendCommand<null>('ping', {}, null, true)
   }
 
   public logout() {
-    return this.sendCommand<null>('logout', {}, null, true);
+    return this.sendCommand<null>('logout', {}, null, true)
   }
 
   public login() {
@@ -62,7 +62,7 @@ export class SocketConnection extends Queue {
       'userId': this.XAPI.accountId,
       'password': this._password,
       'appName': this.XAPI.appName
-    }, null, true);
+    }, null, true)
   }
 
   protected sendCommand<T>(command: string, args: any = {}, transactionId: string | null = null, urgent: boolean = false):
@@ -70,7 +70,7 @@ export class SocketConnection extends Queue {
     const stack = new Error('').stack
     return new Promise((resolve: any, reject: any) => {
       if (transactionId === null) {
-        transactionId = this.createTransactionId();
+        transactionId = this.createTransactionId()
       }
       const transaction = this.addTransaction({
         command,
@@ -85,17 +85,17 @@ export class SocketConnection extends Queue {
         resolve,
         reject,
         stack,
-      });
+      })
       if (transaction.request.json.length > 1000) {
         this.rejectTransaction({
           code: errorCode.XAPINODE_0,
           explain: 'Each command invocation should not contain more than 1kB of data.'
-        }, transaction);
+        }, transaction)
       } else if (this.status === ConnectionStatus.DISCONNECTED) {
         this.rejectTransaction({
           code: errorCode.XAPINODE_1,
           explain: 'Socket closed'
-        }, transaction);
+        }, transaction)
       } else if (this.XAPI.Stream.session.length === 0
         && 'login' !== command
         && 'ping' !== command
@@ -103,16 +103,16 @@ export class SocketConnection extends Queue {
         this.rejectTransaction({
           code: errorCode.XAPINODE_BE103,
           explain: 'User is not logged'
-        }, transaction);
+        }, transaction)
       } else if (this.XAPI.isTradingDisabled && command === 'tradeTransaction') {
         this.rejectTransaction({
           code: errorCode.XAPINODE_4,
           explain: 'Trading disabled in login config (safe = true)'
-        }, transaction);
+        }, transaction)
       } else {
-        this.sendMessage(transaction, true);
+        this.sendMessage(transaction, true)
       }
-    });
+    })
   }
 
   private setConnectionStatus(status: ConnectionStatus) {
