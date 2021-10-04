@@ -205,7 +205,7 @@ export class Socket extends SocketConnection {
         return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
           'tradeTransInfo': {
             cmd: position ? cmd || position.cmd : cmd,
-            customComment: (customComment === undefined || customComment === null || customComment.length === 0)
+            customComment: !customComment
               ? 'x' + transactionId
               : 'x' + transactionId + '_' + customComment,
             expiration: (expiration instanceof Date)
