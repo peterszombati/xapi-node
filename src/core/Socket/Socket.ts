@@ -44,7 +44,7 @@ import {
 } from '../../interface/Request'
 import {SocketConnection} from './SocketConnection'
 import {XAPI} from '../XAPI'
-import {TRADE_TRANS_INFO_MODIFY} from '../../interface/Definitions'
+import {TRADE_TRANS_INFO_MODIFY, TRADE_TRANS_INFO_CLOSE, TRADE_TRANS_INFO_DELETE} from '../../interface/Definitions'
 
 interface SocketListen<T> {
   (data: T, time: Time, transaction: Transaction<null, null>, jsonString: string): void
@@ -185,7 +185,7 @@ export class Socket extends SocketConnection {
     getTradingHours:
       (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {symbols}),
     getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
-    tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY): Promise<TradeStatus> => {
+    tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY | TRADE_TRANS_INFO_CLOSE | TRADE_TRANS_INFO_DELETE): Promise<TradeStatus> => {
       const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo
       return new Promise((resolve, reject) => {
         const position = type === TYPE_FIELD.MODIFY ? this.XAPI.positions.find(p => p.position === order) : undefined

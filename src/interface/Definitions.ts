@@ -207,6 +207,34 @@ export interface TRADE_TRANS_INFO_MODIFY {
   volume?: number
 }
 
+export interface TRADE_TRANS_INFO_CLOSE {
+  cmd?: CMD_FIELD
+  customComment?: string | null
+  expiration?: number | Date
+  offset?: number
+  order: number
+  price: number
+  sl?: number
+  symbol: string
+  tp?: number
+  type: TYPE_FIELD.CLOSE
+  volume: number
+}
+
+export interface TRADE_TRANS_INFO_DELETE {
+  cmd?: CMD_FIELD
+  customComment?: string | null
+  expiration?: number | Date
+  offset?: number
+  order: number
+  price?: number
+  sl?: number
+  symbol: string
+  tp?: number
+  type: TYPE_FIELD.DELETE
+  volume?: number
+}
+
 export interface STREAMING_KEEP_ALIVE_RECORD {
   timestamp: number
 }
