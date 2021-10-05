@@ -9,12 +9,14 @@ import {
   Time,
   TYPE_FIELD,
 } from '..'
-import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface'
+import {TradePositions, TradeStatus} from '../interface/Interface'
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType, RelevantCurrencies} from '../enum/Enum'
 import {Socket} from './Socket/Socket'
 import {Stream} from './Stream/Stream'
+import {OpenPosition} from './OpenPosition'
+import {PendingOrder} from './PendingOrder'
+import {TradeRecord} from './TradeRecord'
 import {getObjectChanges} from '../utils/getObjectChanges'
-import {formatPosition} from '../utils/formatPosition'
 
 export const DefaultHostname = 'ws.xapi.pro'
 export const DefaultRateLimit = 850
@@ -155,7 +157,7 @@ export class XAPI extends Listener {
         data.forEach(t => {
           if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
             obj[t.position] = {
-              value: formatPosition(t),
+              value: new TradeRecord(t),
               lastUpdated: sent
             }
           }
@@ -187,27 +189,27 @@ export class XAPI extends Listener {
         && t.cmd !== CMD_FIELD.SELL_LIMIT
         && t.cmd !== CMD_FIELD.BUY_STOP
         && t.cmd !== CMD_FIELD.SELL_STOP) {
-        this.callListener(Listeners.xapi_onPendingPosition, [formatPosition(t)])
+        this.callListener(Listeners.xapi_onPendingPosition, [new TradeRecord(t)])
       } else if (t.state === 'Deleted') {
         if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
           this._positions[t.position] = {value: null, lastUpdated: time}
-          this.callListener(Listeners.xapi_onDeletePosition, [formatPosition(t)])
+          this.callListener(Listeners.xapi_onDeletePosition, [new TradeRecord(t)])
         }
       } else if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
         if (this._positions[t.position] !== undefined) {
           const {value} = this._positions[t.position]
 
           if (value) {
-            const changes = getObjectChanges(value, formatPosition(t))
+            const changes = getObjectChanges(value, new TradeRecord(t))
             if (Object.keys(changes).length > 0) {
-              this.callListener(Listeners.xapi_onChangePosition, [formatPosition(t)])
+              this.callListener(Listeners.xapi_onChangePosition, [new TradeRecord(t)])
             }
           }
         } else {
-          this.callListener(Listeners.xapi_onCreatePosition, [formatPosition(t)])
+          this.callListener(Listeners.xapi_onCreatePosition, [new TradeRecord(t)])
         }
 
-        this._positions[t.position] = {value: formatPosition(t), lastUpdated: time}
+        this._positions[t.position] = {value: new TradeRecord(t), lastUpdated: time}
       }
     })
 
@@ -345,7 +347,7 @@ export class XAPI extends Listener {
 
   private _positions: TradePositions = {}
 
-  public get positions(): TradePosition[] {
+  public get positions(): TradeRecord[] {
     return Object.values(this._positions)
       .filter(t => t.value !== null
         && (t.value.position_type === PositionType.limit || t.value.position_type === PositionType.open))
@@ -393,12 +395,12 @@ export class XAPI extends Listener {
     return this.account.subscribeTrades
   }
 
-  public get openPositions(): TradePosition[] {
-    return this.positions.filter(t => t.position_type === PositionType.open)
+  public get openPositions(): OpenPosition[] {
+    return this.positions.filter(t => t.position_type === PositionType.open).map(i => new OpenPosition(this, i))
   }
 
-  public get limitPositions(): TradePosition[] {
-    return this.positions.filter(t => t.position_type === PositionType.limit)
+  public get pendingOrders(): PendingOrder[] {
+    return this.positions.filter(t => t.position_type === PositionType.limit).map(i => new PendingOrder(this, i))
   }
 
   public get isConnectionReady(): boolean {
@@ -562,19 +564,19 @@ export class XAPI extends Listener {
     return this.addListener(Listeners.xapi_onConnectionChange, callBack, key)
   }
 
-  public onCreatePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+  public onCreatePosition(callBack: (position: TradeRecord) => void, key: string | null = null) {
     return this.addListener(Listeners.xapi_onCreatePosition, callBack, key)
   }
 
-  public onDeletePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+  public onDeletePosition(callBack: (position: TradeRecord) => void, key: string | null = null) {
     return this.addListener(Listeners.xapi_onDeletePosition, callBack, key)
   }
 
-  public onChangePosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+  public onChangePosition(callBack: (position: TradeRecord) => void, key: string | null = null) {
     return this.addListener(Listeners.xapi_onChangePosition, callBack, key)
   }
 
-  public onPendingPosition(callBack: (position: TradePosition) => void, key: string | null = null) {
+  public onPendingPosition(callBack: (position: TradeRecord) => void, key: string | null = null) {
     return this.addListener(Listeners.xapi_onPendingPosition, callBack, key)
   }
 

@@ -38,9 +38,12 @@ import {
 } from './enum/Enum'
 import {parseJsonLogin} from './modules/parseJsonLogin'
 import {Time} from './modules/Time'
-import {TradePosition, TradeStatus} from './interface/Interface'
+import {TradeStatus} from './interface/Interface'
 import {Timer} from './modules/Timer'
 import {ListenerChild} from "./modules/Listener"
+import {OpenPosition} from './core/OpenPosition'
+import {PendingOrder} from './core/PendingOrder'
+import {TradeRecord} from './core/TradeRecord'
 
 export default XAPI
 export {XAPIConfig}
@@ -84,7 +87,7 @@ export {
   errorCode,
 }
 
-export {parseJsonLogin, Time, TradePosition, Timer, TradeStatus, ListenerChild}
+export {parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, PendingOrder, TradeRecord}
 
 export function getContractValue({price, lot, contractSize, currency, currencyProfit}:
   { price: number, lot: number, contractSize: number, currency: string, currencyProfit: string }) {

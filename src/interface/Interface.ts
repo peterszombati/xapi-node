@@ -1,5 +1,6 @@
 import {REQUEST_STATUS_FIELD, Time} from '..'
-import {CMD_FIELD, PositionType, TransactionStatus, TransactionType} from '../enum/Enum'
+import {TransactionStatus, TransactionType} from '../enum/Enum'
+import {TradeRecord} from '../core/TradeRecord'
 
 export interface Transactions {
   [transactionId: string]: Transaction<any, any>
@@ -55,38 +56,9 @@ export interface AddTransaction {
   stack: string | undefined
 }
 
-export interface TradePosition {
-//  TODO:profit: number
-  close_time: number
-
-//  TODO:close_price: number
-  closed: boolean
-  cmd: CMD_FIELD
-  comment: string
-  commission: number
-  customComment: string
-  digits: number
-  expiration: number
-  margin_rate: number
-  offset: number
-  open_price: number
-  open_time: number
-  order: number
-  order2: number
-  position: number
-  sl: number
-  storage: number
-  symbol: string
-  tp: number
-  volume: number
-  position_type: PositionType
-
-  [key: string]: number | boolean | CMD_FIELD | string
-}
-
 export interface TradePositions {
   [position: number]: {
-    value: TradePosition | null
+    value: TradeRecord | null
     lastUpdated: Time
   }
 }
