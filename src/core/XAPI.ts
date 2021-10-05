@@ -8,12 +8,13 @@ import {
   STREAMING_TRADE_RECORD,
   Time,
   TYPE_FIELD,
-  Utils
 } from '..'
 import {TradePosition, TradePositions, TradeStatus} from '../interface/Interface'
 import {CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType, RelevantCurrencies} from '../enum/Enum'
 import {Socket} from './Socket/Socket'
 import {Stream} from './Stream/Stream'
+import {getObjectChanges} from '../utils/getObjectChanges'
+import {formatPosition} from '../utils/formatPosition'
 
 export const DefaultHostname = 'ws.xapi.pro'
 export const DefaultRateLimit = 850
@@ -154,7 +155,7 @@ export class XAPI extends Listener {
         data.forEach(t => {
           if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
             obj[t.position] = {
-              value: Utils.formatPosition(t),
+              value: formatPosition(t),
               lastUpdated: sent
             }
           }
@@ -186,27 +187,27 @@ export class XAPI extends Listener {
         && t.cmd !== CMD_FIELD.SELL_LIMIT
         && t.cmd !== CMD_FIELD.BUY_STOP
         && t.cmd !== CMD_FIELD.SELL_STOP) {
-        this.callListener(Listeners.xapi_onPendingPosition, [Utils.formatPosition(t)])
+        this.callListener(Listeners.xapi_onPendingPosition, [formatPosition(t)])
       } else if (t.state === 'Deleted') {
         if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
           this._positions[t.position] = {value: null, lastUpdated: time}
-          this.callListener(Listeners.xapi_onDeletePosition, [Utils.formatPosition(t)])
+          this.callListener(Listeners.xapi_onDeletePosition, [formatPosition(t)])
         }
       } else if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
         if (this._positions[t.position] !== undefined) {
           const {value} = this._positions[t.position]
 
           if (value) {
-            const changes = Utils.getObjectChanges(value, Utils.formatPosition(t))
+            const changes = getObjectChanges(value, formatPosition(t))
             if (Object.keys(changes).length > 0) {
-              this.callListener(Listeners.xapi_onChangePosition, [Utils.formatPosition(t)])
+              this.callListener(Listeners.xapi_onChangePosition, [formatPosition(t)])
             }
           }
         } else {
-          this.callListener(Listeners.xapi_onCreatePosition, [Utils.formatPosition(t)])
+          this.callListener(Listeners.xapi_onCreatePosition, [formatPosition(t)])
         }
 
-        this._positions[t.position] = {value: Utils.formatPosition(t), lastUpdated: time}
+        this._positions[t.position] = {value: formatPosition(t), lastUpdated: time}
       }
     })
 

@@ -1,9 +1,10 @@
 import {TransactionResolveSocket} from '../../interface/Interface'
-import {Time, Timer, Utils} from '../..'
+import {Time, Timer} from '../..'
 import {WebSocketWrapper} from '../../modules/WebSocketWrapper'
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum'
 import {Queue} from '../Queue'
 import {XAPI} from '../XAPI'
+import {parseCustomTag} from '../../utils/parseCustomTag'
 
 export class SocketConnection extends Queue {
   private _password: string
@@ -169,7 +170,7 @@ export class SocketConnection extends Queue {
   }
 
   private handleError(code: any, explain: any, customTag: string | null, received: Time) {
-    const {transactionId} = Utils.parseCustomTag(customTag)
+    const {transactionId} = parseCustomTag(customTag)
 
     if (transactionId !== null && this.transactions[transactionId] !== undefined) {
       this.rejectTransaction({code, explain}, this.transactions[transactionId], false, received)
@@ -190,7 +191,7 @@ export class SocketConnection extends Queue {
       const customTag = typeof (message.customTag) === 'string'
         ? message.customTag
         : null
-      const {transactionId, command} = Utils.parseCustomTag(customTag)
+      const {transactionId, command} = parseCustomTag(customTag)
 
       if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
         this.resolveTransaction(json, returnData, time, this.transactions[transactionId])

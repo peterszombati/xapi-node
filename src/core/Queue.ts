@@ -1,11 +1,14 @@
 import {AddTransaction, MessagesQueue, Transaction, Transactions} from '../interface/Interface'
 import {Listener} from '../modules/Listener'
-import {Time, Timer, Utils} from '..'
+import {Time, Timer} from '..'
 import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../enum/Enum'
 import {WebSocketWrapper} from '../modules/WebSocketWrapper'
 import {JsonError} from 'logger4'
 import {XAPI} from './XAPI'
 import {transactionToJSONString} from '../utils/transactionToJSONString'
+import {formatNumber} from '../utils/formatNumber'
+import {getUTCTimestampString} from '../utils/getUTCTimestampString'
+import {hideSecretInfo} from '../utils/hideSecretInfo'
 
 export class Queue extends Listener {
   public transactions: Transactions = {}
@@ -66,7 +69,7 @@ export class Queue extends Listener {
     if (this._transactionIdIncrement > 9999) {
       this._transactionIdIncrement = 0
     }
-    return Utils.getUTCTimestampString() + Utils.formatNumber(this._transactionIdIncrement, 4) + (this.type === TransactionType.SOCKET ? '0' : '1')
+    return getUTCTimestampString() + formatNumber(this._transactionIdIncrement, 4) + (this.type === TransactionType.SOCKET ? '0' : '1')
   }
 
   public rejectOldTransactions(): void {
@@ -176,7 +179,7 @@ export class Queue extends Listener {
       transaction.transactionPromise = {resolve: null, reject: null}
       const error = new JsonError('Transaction Rejected', {
         reason: json,
-        transaction: transaction.command === 'login' ? Utils.hideSecretInfo(transaction) : transaction
+        transaction: transaction.command === 'login' ? hideSecretInfo(transaction) : transaction
       })
       error.stack = transaction.stack
       reject(error)

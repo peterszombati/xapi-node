@@ -37,7 +37,6 @@ import {
   TYPE_FIELD,
 } from './enum/Enum'
 import {parseJsonLogin} from './modules/parseJsonLogin'
-import {Utils} from './utils/Utils'
 import {Time} from './modules/Time'
 import {TradePosition, TradeStatus} from './interface/Interface'
 import {Timer} from './modules/Timer'
@@ -85,7 +84,7 @@ export {
   errorCode,
 }
 
-export {parseJsonLogin, Utils, Time, TradePosition, Timer, TradeStatus, ListenerChild}
+export {parseJsonLogin, Time, TradePosition, Timer, TradeStatus, ListenerChild}
 
 export function getContractValue({price, lot, contractSize, currency, currencyProfit}:
   { price: number, lot: number, contractSize: number, currency: string, currencyProfit: string }) {
