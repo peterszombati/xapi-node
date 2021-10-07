@@ -5,7 +5,7 @@
 	"main": "build/index.js",
 	"types": "build/index.d.ts",
 	"dependencies": {
-		"logger4": "^2.1.4",
+		"logger4": "^2.1.5",
 		"ws": "^7.2.3"
 	},
 	"devDependencies": {
