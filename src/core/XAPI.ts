@@ -228,6 +228,7 @@ export class XAPI extends Listener {
     this.Stream.listen.getTradeStatus((s, time) => {
       if (s.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
         const {resolve, reject} = this.orders[s.order] || {}
+        // @ts-ignore: error TS2790: The operand of a 'delete' operator must be optional.
         delete s.price
         if (resolve !== undefined && reject !== undefined) {
           if (s.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
@@ -455,7 +456,7 @@ export class XAPI extends Listener {
     })
   }
 
-  public disconnect() {
+  public disconnect(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.Stream.session = ''
       this._tryReconnect = false
