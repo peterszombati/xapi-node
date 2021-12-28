@@ -76,4 +76,30 @@ export class TradeRecord {
     this.tp = params.tp
     this.volume = params.volume
   }
+
+  valueOf(): TradeRecordParams {
+    return {
+      close_time: this.close_time,
+      //TODO:close_price: this.close_price,
+      closed: this.closed,
+      cmd: this.cmd,
+      comment: this.comment,
+      commission: this.commission,
+      customComment: this.customComment,
+      digits: this.digits,
+      expiration: this.expiration,
+      margin_rate: this.margin_rate,
+      offset: this.offset,
+      open_price: this.open_price,
+      open_time: this.open_time,
+      order: this.order,
+      order2: this.order2,
+      position: this.position,
+      sl: this.sl,
+      storage: this.storage,
+      symbol: this.symbol,
+      tp: this.tp,
+      volume: this.volume,
+    }
+  }
 }
