@@ -1,5 +1,5 @@
-import {Listener} from './Listener'
-import {Timer} from './Timer'
+import { Listener } from './Listener'
+import { Timer } from './Timer'
 
 export const isNodeJS = () => typeof window === 'undefined' && typeof module !== 'undefined' && module.exports
 
@@ -9,7 +9,7 @@ export class WebSocketWrapper extends Listener {
   private _connectionTimeout: Timer = new Timer()
   private url: string
 
-  constructor(url: string, tryReconnectOnFail: boolean = true) {
+  constructor(url: string, tryReconnectOnFail = true) {
     super()
     this.url = url
     this._tryReconnect = tryReconnectOnFail
@@ -38,7 +38,7 @@ export class WebSocketWrapper extends Listener {
     this._connectionTimeout.clear()
     if (isNodeJS()) {
       // NodeJS module
-      const WebSocketClient = require('ws')
+      const WebSocketClient = import('ws')
       this.ws = new WebSocketClient(this.url)
       this.ws.on('open', () => {
         this._status = true
@@ -114,5 +114,4 @@ export class WebSocketWrapper extends Listener {
     this._tryReconnect = false
     this.ws && this.ws.close()
   }
-
 }

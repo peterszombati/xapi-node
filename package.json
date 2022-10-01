@@ -1,45 +1,48 @@
 {
-	"name": "xapi-node",
-	"version": "2.5.5",
-	"description": "This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
-	"main": "build/index.js",
-	"types": "build/index.d.ts",
-	"dependencies": {
-		"logger4": "^2.1.5",
-		"ws": "^7.2.3"
-	},
-	"devDependencies": {
-		"@types/node": "^11.15.3",
-		"typescript": "^3.4.5",
-		"ts-mocha": "^8.0.0",
-		"@types/chai": "^4.2.14",
-		"@types/mocha": "^8.0.3",
-		"chai": "^4.2.0",
-		"mocha": "^8.2.0",
-		"ts-node": "^9.0.0"
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/peterszombati/xapi-node.git"
-	},
-	"keywords": [
-		"xstation5",
-		"trading",
-		"xtb",
-		"bfbcapital",
-		"forex",
-		"trading-api",
-		"xopenhub"
-	],
-	"prepare": "npm run build",
-	"author": "Peter Szombati",
-	"license": "BSD 4-Clause",
-	"bugs": {
-		"url": "https://github.com/peterszombati/xapi-node/issues"
-	},
-	"homepage": "https://github.com/peterszombati/xapi-node#readme"
+  "name": "xapi-node",
+  "version": "2.5.5",
+  "description": "This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "dependencies": {
+    "logger4": "^2.1.5",
+    "ws": "^7.2.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.3",
+    "@types/node": "^11.15.3",
+    "@types/ws": "^8.5.3",
+    "chai": "^4.2.0",
+    "mocha": "^8.2.0",
+    "prettier": "^2.7.1",
+    "ts-mocha": "^8.0.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^3.4.5"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "ts-mocha -p ./tsconfig.json ./sandbox/tests.ts ./sandbox/sandbox.ts --exit",
+    "prettier": "prettier --check --write \"src/**/*.ts\" \"sandbox/**/*.ts\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peterszombati/xapi-node.git"
+  },
+  "keywords": [
+    "xstation5",
+    "trading",
+    "xtb",
+    "bfbcapital",
+    "forex",
+    "trading-api",
+    "xopenhub"
+  ],
+  "prepare": "npm run build",
+  "author": "Peter Szombati",
+  "license": "BSD 4-Clause",
+  "bugs": {
+    "url": "https://github.com/peterszombati/xapi-node/issues"
+  },
+  "homepage": "https://github.com/peterszombati/xapi-node#readme"
 }

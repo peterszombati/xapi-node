@@ -1,4 +1,4 @@
-import {XAPI, XAPIConfig} from './core/XAPI'
+import { XAPI, XAPIConfig } from './core/XAPI'
 import {
   CALENDAR_RECORD,
   CHART_LAST_INFO_RECORD,
@@ -36,17 +36,17 @@ import {
   STATE_FIELD,
   TYPE_FIELD,
 } from './enum/Enum'
-import {parseJsonLogin} from './modules/parseJsonLogin'
-import {Time} from './modules/Time'
-import {TradeStatus} from './interface/Interface'
-import {Timer} from './modules/Timer'
-import {ListenerChild} from "./modules/Listener"
-import {OpenPosition} from './core/OpenPosition'
-import {PendingOrder} from './core/PendingOrder'
-import {TradeRecord} from './core/TradeRecord'
+import { parseJsonLogin } from './modules/parseJsonLogin'
+import { Time } from './modules/Time'
+import { TradeStatus } from './interface/Interface'
+import { Timer } from './modules/Timer'
+import { ListenerChild } from './modules/Listener'
+import { OpenPosition } from './core/OpenPosition'
+import { PendingOrder } from './core/PendingOrder'
+import { TradeRecord } from './core/TradeRecord'
 
 export default XAPI
-export {XAPIConfig}
+export { XAPIConfig }
 
 export {
   CALENDAR_RECORD,
@@ -87,14 +87,36 @@ export {
   errorCode,
 }
 
-export {parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, PendingOrder, TradeRecord}
+export { parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, PendingOrder, TradeRecord }
 
-export function getContractValue({price, lot, contractSize, currency, currencyProfit}:
-  { price: number, lot: number, contractSize: number, currency: string, currencyProfit: string }) {
-  return lot * contractSize * ((currency === currencyProfit) ? price : 1)
+export function getContractValue({
+  price,
+  lot,
+  contractSize,
+  currency,
+  currencyProfit,
+}: {
+  price: number
+  lot: number
+  contractSize: number
+  currency: string
+  currencyProfit: string
+}) {
+  return lot * contractSize * (currency === currencyProfit ? price : 1)
 }
 
-export function getProfit({openPrice, closePrice, isBuy, lot, contractSize}:
-  { openPrice: number, closePrice: number, isBuy: boolean, lot: number, contractSize: number }) {
+export function getProfit({
+  openPrice,
+  closePrice,
+  isBuy,
+  lot,
+  contractSize,
+}: {
+  openPrice: number
+  closePrice: number
+  isBuy: boolean
+  lot: number
+  contractSize: number
+}) {
   return (isBuy ? closePrice - openPrice : openPrice - closePrice) * lot * contractSize
 }
