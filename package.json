@@ -2,8 +2,16 @@
   "name": "xapi-node",
   "version": "2.5.5",
   "description": "This project is made possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
-  "main": "build/index.js",
+  "exports": {
+    ".": {
+      "require": "./build/index.cjs",
+      "import": "./build/index.mjs"
+    }
+  },
   "types": "build/index.d.ts",
+  "files": [
+    "build/*"
+  ],
   "dependencies": {
     "logger4": "^2.1.5",
     "ws": "^7.2.3"
@@ -16,6 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "chai": "^4.2.0",
+    "esbuild": "^0.15.10",
     "eslint": "^8.24.0",
     "mocha": "^8.2.0",
     "prettier": "^2.7.1",
@@ -24,11 +33,11 @@
     "typescript": "^3.4.5"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "rm -rf ./build && tsc  --declaration --emitDeclarationOnly & node ./esbuild.config.js",
     "test": "ts-mocha -p ./tsconfig.json ./sandbox/tests.ts ./sandbox/sandbox.ts --exit",
     "prettier": "prettier --check \"src/**/*.ts\" \"sandbox/**/*.ts\"",
     "eslint": "eslint --fix \"src/**/*.ts\" \"sandbox/**/*.ts\"",
-    "lint": "pnpm run prettier && pnpm run eslint"
+    "lint": "tsc --noEmit && pnpm run prettier && pnpm run eslint"
   },
   "repository": {
     "type": "git",
@@ -43,7 +52,6 @@
     "trading-api",
     "xopenhub"
   ],
-  "prepare": "npm run build",
   "author": "Peter Szombati",
   "license": "BSD 4-Clause",
   "bugs": {
