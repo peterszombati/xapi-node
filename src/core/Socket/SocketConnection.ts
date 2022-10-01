@@ -118,19 +118,10 @@ export class SocketConnection extends Queue {
         'ping' !== command &&
         'logout' !== command
       ) {
-        this.rejectTransaction(
-          {
-            code: errorCode.XAPINODE_BE103,
-            explain: 'User is not logged',
-          },
-          transaction
-        )
+        this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction)
       } else if (this.XAPI.isTradingDisabled && command === 'tradeTransaction') {
         this.rejectTransaction(
-          {
-            code: errorCode.XAPINODE_4,
-            explain: 'Trading disabled in login config (safe = true)',
-          },
+          { code: errorCode.XAPINODE_4, explain: 'Trading disabled in login config (safe = true)' },
           transaction
         )
       } else {
