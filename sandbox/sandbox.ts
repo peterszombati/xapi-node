@@ -32,7 +32,7 @@ describe('sandbox', () => {
     }
     x.logger.onStream('debug', debug)
 
-    x.onReady(() => {})
+    //x.onReady(() => {})
 
     x.onReject(() => {
       x.disconnect()
@@ -40,6 +40,6 @@ describe('sandbox', () => {
 
     x.connect()
 
-    return await new Promise<any>(() => {})
+    return await new Promise<void>(resolve => resolve())
   })
 })

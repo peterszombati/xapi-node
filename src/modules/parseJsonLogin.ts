@@ -24,7 +24,7 @@ export function parseJsonLogin(jsonString: string): XAPIConfig {
     throw new Error('json is not valid')
   }
   if (['real', 'demo'].every(x => x !== type.toLowerCase())) {
-    throw new Error("json not contains valid type (it should be 'real' or 'demo')")
+    throw new Error('json not contains valid type (it should be "real" or "demo")')
   }
-  return { accountId, password, type: type.toLowerCase(), rateLimit, host, appName }
+  return { accountId, password, type: type.toLowerCase() as 'real' | 'demo', rateLimit, host, appName }
 }

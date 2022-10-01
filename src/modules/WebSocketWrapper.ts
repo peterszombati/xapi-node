@@ -38,21 +38,22 @@ export class WebSocketWrapper extends Listener {
     this._connectionTimeout.clear()
     if (isNodeJS()) {
       // NodeJS module
-      const WebSocketClient = import('ws')
-      this.ws = new WebSocketClient(this.url)
-      this.ws.on('open', () => {
-        this._status = true
-        this.callListener('ws_open')
-      })
-      this.ws.on('close', () => {
-        this._status = false
-        this.callListener('ws_close')
-      })
-      this.ws.on('message', (message: any) => {
-        this.callListener('ws_message', [message])
-      })
-      this.ws.on('error', (error: any) => {
-        this.callListener('ws_error', [error])
+      import('ws').then(WebSocketClient => {
+        this.ws = new WebSocketClient(this.url)
+        this.ws.on('open', () => {
+          this._status = true
+          this.callListener('ws_open')
+        })
+        this.ws.on('close', () => {
+          this._status = false
+          this.callListener('ws_close')
+        })
+        this.ws.on('message', (message: any) => {
+          this.callListener('ws_message', [message])
+        })
+        this.ws.on('error', (error: any) => {
+          this.callListener('ws_error', [error])
+        })
       })
     } else {
       // JavaScript browser module

@@ -13,7 +13,10 @@
     "@types/mocha": "^8.0.3",
     "@types/node": "^11.15.3",
     "@types/ws": "^8.5.3",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
     "chai": "^4.2.0",
+    "eslint": "^8.24.0",
     "mocha": "^8.2.0",
     "prettier": "^2.7.1",
     "ts-mocha": "^8.0.0",
@@ -23,7 +26,9 @@
   "scripts": {
     "build": "tsc",
     "test": "ts-mocha -p ./tsconfig.json ./sandbox/tests.ts ./sandbox/sandbox.ts --exit",
-    "prettier": "prettier --check --write \"src/**/*.ts\" \"sandbox/**/*.ts\""
+    "prettier": "prettier --check \"src/**/*.ts\" \"sandbox/**/*.ts\"",
+    "eslint": "eslint --fix \"src/**/*.ts\" \"sandbox/**/*.ts\"",
+    "lint": "pnpm run prettier && pnpm run eslint"
   },
   "repository": {
     "type": "git",

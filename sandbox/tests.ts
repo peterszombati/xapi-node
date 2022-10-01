@@ -12,7 +12,11 @@ async function init(): Promise<XAPI> {
 }
 
 describe('tests', () => {
-  it('stcTest', async () => {
+  it('init', async () => {
+    await init()
+  })
+
+  it('trade EURUSD', async () => {
     const x = await init()
     await tradeTest(x)
   })

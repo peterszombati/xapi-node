@@ -1,9 +1,10 @@
+/* eslint-disable */
 import { TradeRecord } from '../core/TradeRecord'
 
 export function getObjectChanges(from: TradeRecord, to: TradeRecord) {
   const obj: any = {}
-  // @ts-ignore
   Object.keys(from)
+    // @ts-ignore
     .filter(key => from[key] !== to[key])
     .forEach(key => {
       // @ts-ignore

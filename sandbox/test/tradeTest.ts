@@ -1,8 +1,8 @@
 import { XAPI } from '../../src/core/XAPI'
 import { TYPE_FIELD, CMD_FIELD } from '../../src'
 
-export function tradeTest(x: XAPI) {
-  const symbol = 'BITCOIN'
+export function tradeTest(x: XAPI): Promise<void> {
+  const symbol = 'EURUSD'
   const volume = 0.1
 
   return new Promise((resolve, reject) => {
@@ -23,7 +23,7 @@ export function tradeTest(x: XAPI) {
         })
         const position = x.openPositions.find(i => i.symbol === symbol && i.volume >= volume)
         if (!position) {
-          throw new Error('position not found;' + JSON.stringify(x.openPositions))
+          throw new Error('position not found;' + x.openPositions)
         }
         await x.Socket.send.tradeTransaction({
           cmd: CMD_FIELD.SELL,
@@ -35,7 +35,7 @@ export function tradeTest(x: XAPI) {
         })
         const position1 = x.openPositions.find(i => i.symbol === symbol && i.volume >= volume)
         if (position1) {
-          throw new Error('position found after close;' + JSON.stringify(x.openPositions))
+          throw new Error('position found after close;' + x.openPositions)
         }
         resolve()
       } catch (e) {
