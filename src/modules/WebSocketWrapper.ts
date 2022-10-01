@@ -1,7 +1,16 @@
 import { Listener } from './Listener'
 import { Timer } from './Timer'
-
+import type { WebSocket as WS } from 'ws'
 export const isNodeJS = () => typeof window === 'undefined' && typeof module !== 'undefined' && module.exports
+
+function getWS(): Promise<typeof WS> {
+  if (process.env.ES_TARGET == 'esm') {
+    return import('ws')
+  } else {
+    // eslint-disable-next-line
+    return new Promise(resolve => resolve(require('ws')))
+  }
+}
 
 export class WebSocketWrapper extends Listener {
   private ws: any = null
@@ -38,7 +47,7 @@ export class WebSocketWrapper extends Listener {
     this._connectionTimeout.clear()
     if (isNodeJS()) {
       // NodeJS module
-      import('ws').then(WebSocketClient => {
+      getWS().then(WebSocketClient => {
         this.ws = new WebSocketClient(this.url)
         this.ws.on('open', () => {
           this._status = true

@@ -16,6 +16,12 @@ for (const f of formats)
       external: Object.keys(package.dependencies),
       format: f.format,
       outfile: 'build/index' + f.extension,
+      target: 'node16',
+      define: {
+        'process.env.ES_TARGET': '"' + f.format + '"',
+      },
     })
-    .catch(() => process.exit(1))
+    .catch(e => {
+      console.log(e)
+    })
     .then(() => console.log('Successfully bundled the package in the ' + f.format + ' format'))
