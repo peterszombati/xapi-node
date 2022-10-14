@@ -155,12 +155,12 @@ export class SocketConnection extends Queue {
         + ', accountType = ' + this.XAPI.accountType
         + ') Reason:' + JSON.stringify(e))
 
-      if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
+      if (retries > 0 && (!e.reason || (e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005))) {
         this.loginTimeout.setTimeout(() => {
           this.XAPI.logger.print('debug', `${new Date().toISOString()}: Try to login (retries = ${retries})`)
           this.tryLogin(retries - 1)
         }, 500)
-      } else if (e.reason.code === errorCode.BE005) {
+      } else if (e.reason && e.reason.code === errorCode.BE005) {
         this.XAPI.logger.print('debug', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`)
         this.XAPI.disconnect()
       }
