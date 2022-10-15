@@ -1,13 +1,12 @@
-import {TransactionResolveStream} from '../../interface/Interface'
-import {Time, Timer} from '../..'
-import {WebSocketWrapper} from '../../modules/WebSocketWrapper'
-import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum'
-import {Queue} from '../Queue'
-import {XAPI} from '../XAPI'
+import { TransactionResolveStream } from '../../interface/Interface'
+import { Time, Timer } from '../..'
+import { WebSocketWrapper } from '../../modules/WebSocketWrapper'
+import { ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType } from '../../enum/Enum'
+import { Queue } from '../Queue'
+import { XAPI } from '../XAPI'
 
 export class StreamConnection extends Queue {
-
-  public session: string = ''
+  public session = ''
   private pingTimeout: Timer = new Timer()
 
   constructor(XAPI: XAPI, url: string) {
@@ -52,15 +51,14 @@ export class StreamConnection extends Queue {
     return this.sendCommand('ping', {}, true)
   }
 
-  protected sendCommand(command: string, completion: any = {}, urgent: boolean = false):
-    Promise<TransactionResolveStream> {
+  protected sendCommand(command: string, completion: any = {}, urgent = false): Promise<TransactionResolveStream> {
     const stack = new Error('').stack
     return new Promise((resolve: any, reject: any) => {
       const transaction = this.addTransaction({
         command,
         json: JSON.stringify({
           command,
-          'streamSessionId': this.session,
+          streamSessionId: this.session,
           ...completion,
         }),
         args: completion,
@@ -72,20 +70,29 @@ export class StreamConnection extends Queue {
       })
 
       if (transaction.request.json.length > 1000) {
-        this.rejectTransaction({
-          code: errorCode.XAPINODE_0,
-          explain: 'Each command invocation should not contain more than 1kB of data.'
-        }, transaction)
+        this.rejectTransaction(
+          {
+            code: errorCode.XAPINODE_0,
+            explain: 'Each command invocation should not contain more than 1kB of data.',
+          },
+          transaction
+        )
       } else if (this.status === ConnectionStatus.DISCONNECTED) {
-        this.rejectTransaction({
-          code: errorCode.XAPINODE_1,
-          explain: 'Stream closed'
-        }, transaction)
+        this.rejectTransaction(
+          {
+            code: errorCode.XAPINODE_1,
+            explain: 'Stream closed',
+          },
+          transaction
+        )
       } else if (this.session.length === 0) {
-        this.rejectTransaction({
-          code: errorCode.XAPINODE_BE103,
-          explain: 'User is not logged'
-        }, transaction)
+        this.rejectTransaction(
+          {
+            code: errorCode.XAPINODE_BE103,
+            explain: 'User is not logged',
+          },
+          transaction
+        )
       } else {
         this.sendMessage(transaction, true).catch(e => {
           this.XAPI.logger.error(e)
@@ -123,13 +130,16 @@ export class StreamConnection extends Queue {
     } else {
       for (const transactionId in this.transactions) {
         if (this.transactions[transactionId].status === TransactionStatus.waiting) {
-          this.rejectTransaction({
-            code: errorCode.XAPINODE_1,
-            explain: 'Stream closed'
-          }, this.transactions[transactionId], false)
+          this.rejectTransaction(
+            {
+              code: errorCode.XAPINODE_1,
+              explain: 'Stream closed',
+            },
+            this.transactions[transactionId],
+            false
+          )
         }
       }
     }
   }
-
 }

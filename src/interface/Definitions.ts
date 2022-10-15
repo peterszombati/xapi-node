@@ -1,4 +1,4 @@
-import {CMD_FIELD, DAY_FIELD, PERIOD_FIELD, REQUEST_STATUS_FIELD, STATE_FIELD, TYPE_FIELD} from '..'
+import { CMD_FIELD, DAY_FIELD, PERIOD_FIELD, REQUEST_STATUS_FIELD, STATE_FIELD, TYPE_FIELD } from '..'
 
 export interface CHART_RANGE_INFO_RECORD {
   end: number
@@ -90,7 +90,7 @@ export interface STREAMING_TRADE_STATUS_RECORD {
   customComment: string | null
   message: string | null
   order: number
-  price: number | null
+  price: number | null | undefined // TODO check undefined is possible or not
   requestStatus: REQUEST_STATUS_FIELD | null
 }
 

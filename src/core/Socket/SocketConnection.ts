@@ -1,10 +1,10 @@
-import {TransactionResolveSocket} from '../../interface/Interface'
-import {Time, Timer} from '../..'
-import {WebSocketWrapper} from '../../modules/WebSocketWrapper'
-import {ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType} from '../../enum/Enum'
-import {Queue} from '../Queue'
-import {XAPI} from '../XAPI'
-import {parseCustomTag} from '../../utils/parseCustomTag'
+import { TransactionResolveSocket } from '../../interface/Interface'
+import { Time, Timer } from '../..'
+import { WebSocketWrapper } from '../../modules/WebSocketWrapper'
+import { ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType } from '../../enum/Enum'
+import { Queue } from '../Queue'
+import { XAPI } from '../XAPI'
+import { parseCustomTag } from '../../utils/parseCustomTag'
 
 export class SocketConnection extends Queue {
   private _password: string
@@ -59,15 +59,24 @@ export class SocketConnection extends Queue {
   }
 
   public login() {
-    return this.sendCommand('login', {
-      'userId': this.XAPI.accountId,
-      'password': this._password,
-      'appName': this.XAPI.appName
-    }, null, true)
+    return this.sendCommand(
+      'login',
+      {
+        userId: this.XAPI.accountId,
+        password: this._password,
+        appName: this.XAPI.appName,
+      },
+      null,
+      true
+    )
   }
 
-  protected sendCommand<T>(command: string, args: any = {}, transactionId: string | null = null, urgent: boolean = false):
-    Promise<TransactionResolveSocket<T>> {
+  protected sendCommand<T>(
+    command: string,
+    args: any = {},
+    transactionId: string | null = null,
+    urgent = false
+  ): Promise<TransactionResolveSocket<T>> {
     const stack = new Error('').stack
     return new Promise((resolve: any, reject: any) => {
       if (transactionId === null) {
@@ -77,8 +86,8 @@ export class SocketConnection extends Queue {
         command,
         json: JSON.stringify({
           command,
-          arguments: (Object.keys(args).length === 0) ? undefined : args,
-          customTag: command + '_' + transactionId
+          arguments: Object.keys(args).length === 0 ? undefined : args,
+          customTag: command + '_' + transactionId,
         }),
         args,
         transactionId,
@@ -88,28 +97,33 @@ export class SocketConnection extends Queue {
         stack,
       })
       if (transaction.request.json.length > 1000) {
-        this.rejectTransaction({
-          code: errorCode.XAPINODE_0,
-          explain: 'Each command invocation should not contain more than 1kB of data.'
-        }, transaction)
+        this.rejectTransaction(
+          {
+            code: errorCode.XAPINODE_0,
+            explain: 'Each command invocation should not contain more than 1kB of data.',
+          },
+          transaction
+        )
       } else if (this.status === ConnectionStatus.DISCONNECTED) {
-        this.rejectTransaction({
-          code: errorCode.XAPINODE_1,
-          explain: 'Socket closed'
-        }, transaction)
-      } else if (this.XAPI.Stream.session.length === 0
-        && 'login' !== command
-        && 'ping' !== command
-        && 'logout' !== command) {
-        this.rejectTransaction({
-          code: errorCode.XAPINODE_BE103,
-          explain: 'User is not logged'
-        }, transaction)
+        this.rejectTransaction(
+          {
+            code: errorCode.XAPINODE_1,
+            explain: 'Socket closed',
+          },
+          transaction
+        )
+      } else if (
+        this.XAPI.Stream.session.length === 0 &&
+        'login' !== command &&
+        'ping' !== command &&
+        'logout' !== command
+      ) {
+        this.rejectTransaction({ code: errorCode.XAPINODE_BE103, explain: 'User is not logged' }, transaction)
       } else if (this.XAPI.isTradingDisabled && command === 'tradeTransaction') {
-        this.rejectTransaction({
-          code: errorCode.XAPINODE_4,
-          explain: 'Trading disabled in login config (safe = true)'
-        }, transaction)
+        this.rejectTransaction(
+          { code: errorCode.XAPINODE_4, explain: 'Trading disabled in login config (safe = true)' },
+          transaction
+        )
       } else {
         this.sendMessage(transaction, true).catch(e => {
           this.XAPI.logger.error(e)
@@ -138,30 +152,45 @@ export class SocketConnection extends Queue {
       }, 1000)
     } else {
       for (const transactionId in this.transactions) {
-        const isInterrupted = (this.transactions[transactionId].status === TransactionStatus.sent)
+        const isInterrupted = this.transactions[transactionId].status === TransactionStatus.sent
         if (this.transactions[transactionId].status === TransactionStatus.waiting || isInterrupted) {
-          this.rejectTransaction({
-            code: errorCode.XAPINODE_1,
-            explain: 'Socket closed'
-          }, this.transactions[transactionId], isInterrupted)
+          this.rejectTransaction(
+            {
+              code: errorCode.XAPINODE_1,
+              explain: 'Socket closed',
+            },
+            this.transactions[transactionId],
+            isInterrupted
+          )
         }
       }
     }
   }
 
-  private tryLogin(retries: number = 2) {
+  private tryLogin(retries = 2) {
     this.login().catch(e => {
-      this.XAPI.logger.error(e, 'Login is rejected (userId = ' + this.XAPI.accountId
-        + ', accountType = ' + this.XAPI.accountType
-        + ') Reason:' + JSON.stringify(e))
+      this.XAPI.logger.error(
+        e,
+        'Login is rejected (userId = ' +
+          this.XAPI.accountId +
+          ', accountType = ' +
+          this.XAPI.accountType +
+          ') Reason:' +
+          JSON.stringify(e)
+      )
 
-      if (retries > 0 && (!e.reason || (e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005))) {
+      if (retries > 0 && e.reason.code !== errorCode.XAPINODE_1 && e.reason.code !== errorCode.BE005) {
         this.loginTimeout.setTimeout(() => {
           this.XAPI.logger.print('debug', `${new Date().toISOString()}: Try to login (retries = ${retries})`)
           this.tryLogin(retries - 1)
         }, 500)
-      } else if (e.reason && e.reason.code === errorCode.BE005) {
-        this.XAPI.logger.print('debug', `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${e.reason.code}')`)
+      } else if (e.reason.code === errorCode.BE005) {
+        this.XAPI.logger.print(
+          'debug',
+          `${new Date().toISOString()}: Disconnect from stream and socket (reason = 'login error code is ${
+            e.reason.code
+          }')`
+        )
         this.XAPI.disconnect()
       }
 
@@ -170,37 +199,41 @@ export class SocketConnection extends Queue {
   }
 
   private handleError(code: any, explain: any, customTag: string | null, received: Time) {
-    const {transactionId} = parseCustomTag(customTag)
+    const { transactionId } = parseCustomTag(customTag)
 
     if (transactionId !== null && this.transactions[transactionId] !== undefined) {
-      this.rejectTransaction({code, explain}, this.transactions[transactionId], false, received)
+      this.rejectTransaction({ code, explain }, this.transactions[transactionId], false, received)
     } else {
-      this.XAPI.logger.print('debug', `${new Date().toISOString()}: Socket error message: ${JSON.stringify({
-        code,
-        explain,
-        customTag
-      })}`)
+      this.XAPI.logger.print(
+        'debug',
+        `${new Date().toISOString()}: Socket error message: ${JSON.stringify({
+          code,
+          explain,
+          customTag,
+        })}`
+      )
     }
   }
 
   private handleSocketMessage(message: any, time: Time, json: any) {
     if (message.status) {
-      const returnData = message.streamSessionId === undefined
-        ? message.returnData
-        : {streamSessionId: message.streamSessionId}
-      const customTag = typeof (message.customTag) === 'string'
-        ? message.customTag
-        : null
-      const {transactionId, command} = parseCustomTag(customTag)
+      const returnData =
+        message.streamSessionId === undefined ? message.returnData : { streamSessionId: message.streamSessionId }
+      const customTag = typeof message.customTag === 'string' ? message.customTag : null
+      const { transactionId, command } = parseCustomTag(customTag)
 
       if (transactionId !== null && command !== null && this.transactions[transactionId] !== undefined) {
         this.resolveTransaction(json, returnData, time, this.transactions[transactionId])
         this.callListener('command_' + command, [returnData, time, this.transactions[transactionId], json])
       } else {
-        this.XAPI.logger.error(new Error('Received a message without vaild customTag (customTag = ' + customTag + ') ' + JSON.stringify(message)))
+        this.XAPI.logger.error(
+          new Error(
+            'Received a message without vaild customTag (customTag = ' + customTag + ') ' + JSON.stringify(message)
+          )
+        )
       }
     } else if (message.status !== undefined && message.errorCode !== undefined) {
-      const {errorCode} = message
+      const { errorCode } = message
       const customTag: string | null = message.customTag === undefined ? null : message.customTag
       const errorDescr: string | null = message.errorDescr === undefined ? null : message.errorDescr
       this.handleError(errorCode, errorDescr, customTag, time)

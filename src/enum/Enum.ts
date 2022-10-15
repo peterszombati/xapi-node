@@ -49,7 +49,7 @@ export enum PERIOD_FIELD {
   PERIOD_H4 = 240,
   PERIOD_D1 = 1440,
   PERIOD_W1 = 10080,
-  PERIOD_MN1 = 43200
+  PERIOD_MN1 = 43200,
 }
 
 // xapi-node
@@ -81,7 +81,7 @@ export enum TransactionType {
 export enum ConnectionStatus {
   DISCONNECTED,
   CONNECTING,
-  CONNECTED
+  CONNECTED,
 }
 
 export enum PositionType {
@@ -122,29 +122,29 @@ export enum Listeners {
   xapi_onReady = 'xapi_onReady',
 }
 
-export const Currency2Pair: any = {
-  'HUF': 'EURHUF',
-  'USD': 'EURUSD',
-  'JPY': 'USDJPY',
-  'GBP': 'EURGBP',
-  'TRY': 'EURTRY',
-  'CHF': 'USDCHF',
-  'CZK': 'USDCZK',
-  'BRL': 'USDBRL',
-  'PLN': 'USDPLN',
-  'MXN': 'USDMXN',
-  'ZAR': 'USDZAR',
-  'RON': 'USDRON',
-  'AUD': 'EURAUD',
-  'CAD': 'USDCAD',
-  'SEK': 'USDSEK',
-  'NOK': 'EURNOK',
-  'NZD': 'EURNZD',
-  'EUR': 'DE30',
-  'CLP': 'USDCLP',
-  'DKK': 'VWS.DK_4',
-  'BTC': 'XEMBTC',
-  'ETH': 'TRXETH',
+export const Currency2Pair: Record<string, string> = {
+  HUF: 'EURHUF',
+  USD: 'EURUSD',
+  JPY: 'USDJPY',
+  GBP: 'EURGBP',
+  TRY: 'EURTRY',
+  CHF: 'USDCHF',
+  CZK: 'USDCZK',
+  BRL: 'USDBRL',
+  PLN: 'USDPLN',
+  MXN: 'USDMXN',
+  ZAR: 'USDZAR',
+  RON: 'USDRON',
+  AUD: 'EURAUD',
+  CAD: 'USDCAD',
+  SEK: 'USDSEK',
+  NOK: 'EURNOK',
+  NZD: 'EURNZD',
+  EUR: 'DE30',
+  CLP: 'USDCLP',
+  DKK: 'VWS.DK_4',
+  BTC: 'XEMBTC',
+  ETH: 'TRXETH',
 }
 
 export type RelevantCurrencies =

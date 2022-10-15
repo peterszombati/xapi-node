@@ -1,6 +1,6 @@
-import {XAPI} from './XAPI'
-import {TradeRecord, TradeRecordParams} from './TradeRecord'
-import {TYPE_FIELD} from '../enum/Enum'
+import { XAPI } from './XAPI'
+import { TradeRecord, TradeRecordParams } from './TradeRecord'
+import { TYPE_FIELD } from '../enum/Enum'
 
 export class OpenPosition extends TradeRecord {
   private XAPI: XAPI
@@ -10,23 +10,18 @@ export class OpenPosition extends TradeRecord {
     this.XAPI = XAPI
   }
 
-  close(volume: number | undefined = undefined, customComment: string = '') {
+  close(volume: number | undefined = undefined, customComment = '') {
     return this.XAPI.Socket.send.tradeTransaction({
       order: this.order,
       type: TYPE_FIELD.CLOSE,
       volume: volume === undefined ? this.volume : volume,
       symbol: this.symbol,
       price: 1,
-      customComment: customComment || undefined
+      customComment: customComment || undefined,
     })
   }
 
-  modify(params: {
-    tp?: number
-    sl?: number
-    offset?: number
-    customComment?: string
-  }) {
+  modify(params: { tp?: number; sl?: number; offset?: number; customComment?: string }) {
     return this.XAPI.Socket.send.tradeTransaction({
       order: this.order,
       type: TYPE_FIELD.MODIFY,
@@ -34,7 +29,6 @@ export class OpenPosition extends TradeRecord {
       sl: params.sl,
       offset: params.offset,
       customComment: params.customComment || undefined,
-  })
+    })
   }
-
 }

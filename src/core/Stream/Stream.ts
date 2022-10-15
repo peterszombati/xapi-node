@@ -7,10 +7,10 @@ import {
   STREAMING_TICK_RECORD,
   STREAMING_TRADE_RECORD,
   STREAMING_TRADE_STATUS_RECORD,
-  Time
+  Time,
 } from '../..'
-import {StreamConnection} from './StreamConnection'
-import {XAPI} from '../XAPI'
+import { StreamConnection } from './StreamConnection'
+import { XAPI } from '../XAPI'
 
 interface StreamListen<T> {
   (data: T, time: Time, jsonString: string): void
@@ -37,25 +37,22 @@ export class Stream extends StreamConnection {
   }
   public subscribe = {
     getBalance: () => this.sendSubscribe('Balance'),
-    getCandles: (symbol: string) => this.sendSubscribe('Candles', {symbol}),
+    getCandles: (symbol: string) => this.sendSubscribe('Candles', { symbol }),
     getKeepAlive: () => this.sendSubscribe('KeepAlive'),
     getNews: () => this.sendSubscribe('News'),
     getProfits: () => this.sendSubscribe('Profits'),
-    getTickPrices: (
-      symbol: string,
-      minArrivalTime: number = 0,
-      maxLevel: number = 6
-    ) => this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel}),
+    getTickPrices: (symbol: string, minArrivalTime = 0, maxLevel = 6) =>
+      this.sendSubscribe('TickPrices', { symbol, minArrivalTime, maxLevel }),
     getTrades: () => this.sendSubscribe('Trades'),
     getTradeStatus: () => this.sendSubscribe('TradeStatus'),
   }
   public unSubscribe = {
     getBalance: () => this.sendUnsubscribe('Balance'),
-    getCandles: (symbol: string) => this.sendUnsubscribe('Candles', {symbol}),
+    getCandles: (symbol: string) => this.sendUnsubscribe('Candles', { symbol }),
     getKeepAlive: () => this.sendUnsubscribe('KeepAlive'),
     getNews: () => this.sendUnsubscribe('News'),
     getProfits: () => this.sendUnsubscribe('Profits'),
-    getTickPrices: (symbol: string) => this.sendUnsubscribe('TickPrices', {symbol}),
+    getTickPrices: (symbol: string) => this.sendUnsubscribe('TickPrices', { symbol }),
     getTrades: () => this.sendUnsubscribe('Trades'),
     getTradeStatus: () => this.sendUnsubscribe('TradeStatus'),
   }

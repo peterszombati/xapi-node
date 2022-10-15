@@ -1,10 +1,14 @@
-import {CMD_FIELD, PositionType} from '../enum/Enum'
+import { CMD_FIELD, PositionType } from '../enum/Enum'
 
 export function getPositionType({
   cmd,
   closed,
-  close_time
-}: { cmd: CMD_FIELD, closed: boolean, close_time: number }): PositionType {
+  close_time,
+}: {
+  cmd: CMD_FIELD
+  closed: boolean
+  close_time: number
+}): PositionType {
   if (cmd === CMD_FIELD.SELL || cmd === CMD_FIELD.BUY) {
     return close_time === null && !closed
       ? PositionType.open

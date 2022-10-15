@@ -15,9 +15,6 @@ export class ListenerChild {
 }
 
 export class Listener {
-  constructor() {
-  }
-
   private _listeners: any = {}
 
   public get listeners() {
@@ -36,13 +33,13 @@ export class Listener {
   }
 
   public addListener(listenerId: string, callBack: any, key: string | null = null): ListenerChild {
-    if (typeof (callBack) === 'function') {
+    if (typeof callBack === 'function') {
       if (this._listeners[listenerId] === undefined) {
         this._listeners[listenerId] = {}
       }
       key = key === null
-        ? 'g' + Object.keys(this._listeners[listenerId]).length
-        : 's' + key
+          ? 'g' + Object.keys(this._listeners[listenerId]).length
+          : 's' + key
       this._listeners[listenerId][key] = callBack
       return new ListenerChild(this, listenerId, key)
     }
@@ -50,8 +47,8 @@ export class Listener {
   }
 
   public callListener(listenerId: string, params: any[] = []): any[] {
-    let errors: any[] = []
-    let values: any[] = []
+    const errors: any[] = []
+    const values: any[] = []
     if (this._listeners[listenerId] !== undefined) {
       Object.keys(this._listeners[listenerId]).forEach((key: string) => {
         try {
@@ -66,5 +63,4 @@ export class Listener {
     }
     return values
   }
-
 }
