@@ -1,5 +1,5 @@
-import {CMD_FIELD} from '../enum/Enum'
-import {getPositionType} from '../utils/getPositionType'
+import { CMD_FIELD } from '../enum/Enum'
+import { getPositionType } from '../utils/getPositionType'
 
 export type TradeRecordParams = {
   close_time: number
@@ -50,7 +50,7 @@ export class TradeRecord {
   public tp: number
   public volume: number
   public get position_type() {
-    return getPositionType({cmd: this.cmd, closed: this.closed, close_time: this.close_time})
+    return getPositionType({ cmd: this.cmd, closed: this.closed, close_time: this.close_time })
   }
 
   constructor(params: TradeRecordParams) {

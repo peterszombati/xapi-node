@@ -1,7 +1,16 @@
-import {Listener} from './Listener'
-import {Timer} from './Timer'
-
+import { Listener } from './Listener'
+import { Timer } from './Timer'
+import type { WebSocket as WS } from 'ws'
 export const isNodeJS = () => typeof window === 'undefined' && typeof module !== 'undefined' && module.exports
+
+function getWS(): Promise<typeof WS> {
+  if (process.env.ES_TARGET == 'esm') {
+    return import('ws')
+  } else {
+    // eslint-disable-next-line
+    return new Promise(resolve => resolve(require('ws')))
+  }
+}
 
 export class WebSocketWrapper extends Listener {
   private ws: any = null
@@ -9,7 +18,7 @@ export class WebSocketWrapper extends Listener {
   private _connectionTimeout: Timer = new Timer()
   private url: string
 
-  constructor(url: string, tryReconnectOnFail: boolean = true) {
+  constructor(url: string, tryReconnectOnFail = true) {
     super()
     this.url = url
     this._tryReconnect = tryReconnectOnFail
@@ -38,21 +47,22 @@ export class WebSocketWrapper extends Listener {
     this._connectionTimeout.clear()
     if (isNodeJS()) {
       // NodeJS module
-      const WebSocketClient = require('ws')
-      this.ws = new WebSocketClient(this.url)
-      this.ws.on('open', () => {
-        this._status = true
-        this.callListener('ws_open')
-      })
-      this.ws.on('close', () => {
-        this._status = false
-        this.callListener('ws_close')
-      })
-      this.ws.on('message', (message: any) => {
-        this.callListener('ws_message', [message])
-      })
-      this.ws.on('error', (error: any) => {
-        this.callListener('ws_error', [error])
+      getWS().then(WebSocketClient => {
+        this.ws = new WebSocketClient(this.url)
+        this.ws.on('open', () => {
+          this._status = true
+          this.callListener('ws_open')
+        })
+        this.ws.on('close', () => {
+          this._status = false
+          this.callListener('ws_close')
+        })
+        this.ws.on('message', (message: any) => {
+          this.callListener('ws_message', [message])
+        })
+        this.ws.on('error', (error: any) => {
+          this.callListener('ws_error', [error])
+        })
       })
     } else {
       // JavaScript browser module
@@ -114,5 +124,4 @@ export class WebSocketWrapper extends Listener {
     this._tryReconnect = false
     this.ws && this.ws.close()
   }
-
 }

@@ -1,5 +1,5 @@
-import {Transaction} from '../interface/Interface'
-import {parseStack} from 'logger4'
+import { Transaction } from '../interface/Interface'
+import { parseStack } from 'logger4'
 
 export function transactionToJSONString(transaction: Transaction<any, any>): string {
   try {
@@ -13,14 +13,17 @@ export function transactionToJSONString(transaction: Transaction<any, any>): str
       request: {
         sent: transaction.request.sent === null || sentUTC == null ? null : sentUTC.getTime(),
         arguments: transaction.command === 'login' ? {} : transaction.request.arguments,
-        json: transaction.command === 'login' ? '"json contains sensitive information"' : transaction.request.json
+        json: transaction.command === 'login' ? '"json contains sensitive information"' : transaction.request.json,
       },
       response: {
         status: transaction.response.status,
         received: transaction.response.received === null || receivedUTC == null ? null : receivedUTC.getTime(),
-        json: response === null || typeof (response) === 'undefined' ? null : (
-          (response.length > 1000) ? '"Too long response #xapi-node"' : response
-        )
+        json:
+          response === null || typeof response === 'undefined'
+            ? null
+            : response.length > 1000
+            ? '"Too long response #xapi-node"'
+            : response,
       },
       transactionPromise: undefined,
       stack: parseStack(transaction.stack || '').slice(1),

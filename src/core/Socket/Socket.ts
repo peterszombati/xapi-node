@@ -11,9 +11,9 @@ import {
   TRADE_RECORD,
   TRADE_TRANS_INFO,
   TRADING_HOURS_RECORD,
-  TYPE_FIELD
+  TYPE_FIELD,
 } from '../..'
-import {TradeStatus, Transaction} from '../../interface/Interface'
+import { TradeStatus, Transaction } from '../../interface/Interface'
 import {
   getChartRequestResponse,
   getCommissionDefResponse,
@@ -25,7 +25,7 @@ import {
   getTickPricesResponse,
   getVersionResponse,
   tradeTransactionResponse,
-  tradeTransactionStatusResponse
+  tradeTransactionStatusResponse,
 } from '../../interface/Response'
 import {
   getCommissionDef,
@@ -40,11 +40,11 @@ import {
   getTradesHistory,
   getTradingHours,
   tradeTransaction,
-  tradeTransactionStatus
+  tradeTransactionStatus,
 } from '../../interface/Request'
-import {SocketConnection} from './SocketConnection'
-import {XAPI} from '../XAPI'
-import {TRADE_TRANS_INFO_MODIFY, TRADE_TRANS_INFO_CLOSE, TRADE_TRANS_INFO_DELETE} from '../../interface/Definitions'
+import { SocketConnection } from './SocketConnection'
+import { XAPI } from '../XAPI'
+import { TRADE_TRANS_INFO_MODIFY, TRADE_TRANS_INFO_CLOSE, TRADE_TRANS_INFO_DELETE } from '../../interface/Definitions'
 
 interface SocketListen<T> {
   (data: T, time: Time, transaction: Transaction<null, null>, jsonString: string): void
@@ -99,102 +99,101 @@ export class Socket extends SocketConnection {
     ping: (callBack: SocketListen<any>, key: string | null = null) =>
       this.addListener('command_' + 'ping', callBack, key),
     login: (callBack: SocketListen<{ streamSessionId: string }>, key: string | null = null) =>
-      this.addListener('command_' + 'login', callBack, key)
+      this.addListener('command_' + 'login', callBack, key),
   }
   public send = {
     getAllSymbols: () => this.sendCommand<SYMBOL_RECORD[]>('getAllSymbols'),
     getCalendar: () => this.sendCommand<CALENDAR_RECORD[]>('getCalendar'),
-    getChartLastRequest: (
-      period: PERIOD_FIELD,
-      start: number,
-      symbol: string
-    ) =>
+    getChartLastRequest: (period: PERIOD_FIELD, start: number, symbol: string) =>
       this.sendCommand<getChartRequestResponse>('getChartLastRequest', {
-        'info': {
+        info: {
           period,
           start,
-          symbol
-        }
+          symbol,
+        },
       }),
-    getChartRangeRequest: (
-      end: number,
-      period: PERIOD_FIELD,
-      start: number,
-      symbol: string,
-      ticks: number = 0
-    ) => this.sendCommand<getChartRequestResponse>('getChartRangeRequest', {
-      'info': {
-        end,
-        period,
-        start,
+    getChartRangeRequest: (end: number, period: PERIOD_FIELD, start: number, symbol: string, ticks = 0) =>
+      this.sendCommand<getChartRequestResponse>('getChartRangeRequest', {
+        info: {
+          end,
+          period,
+          start,
+          symbol,
+          ticks,
+        },
+      }),
+    getCommissionDef: (symbol: string, volume: number) =>
+      this.sendCommand<getCommissionDefResponse>('getCommissionDef', {
         symbol,
-        ticks
-      }
-    }),
-    getCommissionDef: (symbol: string, volume: number) => this.sendCommand<getCommissionDefResponse>('getCommissionDef', {
-      symbol,
-      volume
-    }),
+        volume,
+      }),
     getCurrentUserData: () => this.sendCommand<getCurrentUserDataResponse>('getCurrentUserData'),
-    getIbsHistory: (start: number, end: number) => this.sendCommand<IB_RECORD[]>('getIbsHistory', {
-      end,
-      start
-    }),
+    getIbsHistory: (start: number, end: number) =>
+      this.sendCommand<IB_RECORD[]>('getIbsHistory', {
+        end,
+        start,
+      }),
     getMarginLevel: () => this.sendCommand<getMarginLevelResponse>('getMarginLevel'),
-    getMarginTrade: (symbol: string, volume: number) => this.sendCommand<getMarginTradeResponse>('getMarginTrade', {
-      symbol,
-      volume
-    }),
-    getNews: (start: number, end: number) => this.sendCommand<NEWS_TOPIC_RECORD[]>('getNews', {
-      start,
-      end
-    }),
-    getProfitCalculation: (
-      closePrice: number,
-      cmd: CMD_FIELD,
-      openPrice: number,
-      symbol: string,
-      volume: number
-    ) => this.sendCommand<getProfitCalculationResponse>('getProfitCalculation', {
-      closePrice,
-      cmd,
-      openPrice,
-      symbol,
-      volume
-    }),
+    getMarginTrade: (symbol: string, volume: number) =>
+      this.sendCommand<getMarginTradeResponse>('getMarginTrade', {
+        symbol,
+        volume,
+      }),
+    getNews: (start: number, end: number) =>
+      this.sendCommand<NEWS_TOPIC_RECORD[]>('getNews', {
+        start,
+        end,
+      }),
+    getProfitCalculation: (closePrice: number, cmd: CMD_FIELD, openPrice: number, symbol: string, volume: number) =>
+      this.sendCommand<getProfitCalculationResponse>('getProfitCalculation', {
+        closePrice,
+        cmd,
+        openPrice,
+        symbol,
+        volume,
+      }),
     getServerTime: () => this.sendCommand<getServerTimeResponse>('getServerTime', {}, null, true),
     getStepRules: () => this.sendCommand<STEP_RULE_RECORD[]>('getStepRules'),
-    getSymbol: (symbol: string) => this.sendCommand<SYMBOL_RECORD>('getSymbol', {
-      symbol
-    }),
-    getTickPrices: (symbols: string[], timestamp: number = 0, level: number = -1) => this.sendCommand<getTickPricesResponse>('getTickPrices', {
-      level,
-      symbols,
-      timestamp
-    }),
-    getTradeRecords: (orders: number[]) => this.sendCommand<TRADE_RECORD[]>('getTradeRecords', {
-      orders
-    }),
-    getTrades: (openedOnly: boolean = true) => this.sendCommand<TRADE_RECORD[]>('getTrades', {
-      openedOnly
-    }),
-    getTradesHistory: (start: number, end: number) => this.sendCommand<TRADE_RECORD[]>('getTradesHistory', {
-      end,
-      start
-    }),
-    getTradingHours:
-      (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', {symbols}),
+    getSymbol: (symbol: string) =>
+      this.sendCommand<SYMBOL_RECORD>('getSymbol', {
+        symbol,
+      }),
+    getTickPrices: (symbols: string[], timestamp = 0, level = -1) =>
+      this.sendCommand<getTickPricesResponse>('getTickPrices', {
+        level,
+        symbols,
+        timestamp,
+      }),
+    getTradeRecords: (orders: number[]) =>
+      this.sendCommand<TRADE_RECORD[]>('getTradeRecords', {
+        orders,
+      }),
+    getTrades: (openedOnly = true) =>
+      this.sendCommand<TRADE_RECORD[]>('getTrades', {
+        openedOnly,
+      }),
+    getTradesHistory: (start: number, end: number) =>
+      this.sendCommand<TRADE_RECORD[]>('getTradesHistory', {
+        end,
+        start,
+      }),
+    getTradingHours: (symbols: string[]) => this.sendCommand<TRADING_HOURS_RECORD[]>('getTradingHours', { symbols }),
     getVersion: () => this.sendCommand<getVersionResponse>('getVersion'),
-    tradeTransaction: (tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY | TRADE_TRANS_INFO_CLOSE | TRADE_TRANS_INFO_DELETE): Promise<TradeStatus> => {
-      const {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume} = tradeTransInfo
+    tradeTransaction: (
+      tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY | TRADE_TRANS_INFO_CLOSE | TRADE_TRANS_INFO_DELETE
+    ): Promise<TradeStatus> => {
+      const { customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume } = tradeTransInfo
       return new Promise((resolve, reject) => {
         const position = type === TYPE_FIELD.MODIFY ? this.XAPI.positions.find(p => p.position === order) : undefined
         if (type === TYPE_FIELD.MODIFY && position === undefined) {
-          const error = (!this.XAPI.isSubscribeTrades)
-            ? 'type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, '
-            + 'you should set subscribeTrades = true in login config'
-            : 'type === MODIFY in tradeTransaction orderId = ' + order + ' not found,'
-            + ' possible open orderIds: ' + this.XAPI.positions.map(p => p.position).join(',')
+          const error = !this.XAPI.isSubscribeTrades
+            ? 'type === MODIFY in tradeTransaction will not work with missing parameters and subscribeTrades = false, ' +
+              'you should set subscribeTrades = true in login config'
+            : 'type === MODIFY in tradeTransaction orderId = ' +
+              order +
+              ' not found,' +
+              ' possible open orderIds: ' +
+              this.XAPI.positions.map(p => p.position).join(',')
           if (cmd === undefined) {
             return Promise.reject(new Error(error))
           } else {
@@ -202,59 +201,71 @@ export class Socket extends SocketConnection {
           }
         }
         const transactionId = this.createTransactionId()
-        return this.sendCommand<tradeTransactionResponse>('tradeTransaction', {
-          'tradeTransInfo': {
-            cmd: position ? cmd || position.cmd : cmd,
-            customComment: !customComment
-              ? 'x' + transactionId
-              : 'x' + transactionId + '_' + customComment,
-            expiration: (expiration instanceof Date)
-              ? expiration.getTime()
-              : (position ? expiration || position.expiration : expiration),
-            offset: position ? offset || position.offset : offset,
-            order,
-            price: position ? price || position.open_price : price,
-            sl: position ? sl || position.sl : sl,
-            symbol: position ? symbol || position.symbol : symbol,
-            tp: position ? tp || position.tp : tp,
-            type,
-            volume: volume === undefined
-              ? (position ? parseFloat(position.volume.toFixed(2)) : undefined)
-              : parseFloat(volume.toFixed(2))
-          }
-        }, transactionId, true).then(({returnData, time}) => {
-          if (this.XAPI.isSubscribeTrades) {
-            const {data} = this.XAPI.orders[returnData.order] || {}
-            if (data === undefined || data === null) {
-              this.XAPI.orders[returnData.order] = {
-                order: returnData.order,
-                resolve,
-                reject,
-                data: null,
-                time
+        return this.sendCommand<tradeTransactionResponse>(
+          'tradeTransaction',
+          {
+            tradeTransInfo: {
+              cmd: position ? cmd || position.cmd : cmd,
+              customComment: !customComment ? 'x' + transactionId : 'x' + transactionId + '_' + customComment,
+              expiration:
+                expiration instanceof Date
+                  ? expiration.getTime()
+                  : position
+                  ? expiration || position.expiration
+                  : expiration,
+              offset: position ? offset || position.offset : offset,
+              order,
+              price: position ? price || position.open_price : price,
+              sl: position ? sl || position.sl : sl,
+              symbol: position ? symbol || position.symbol : symbol,
+              tp: position ? tp || position.tp : tp,
+              type,
+              volume:
+                volume === undefined
+                  ? position
+                    ? parseFloat(position.volume.toFixed(2))
+                    : undefined
+                  : parseFloat(volume.toFixed(2)),
+            },
+          },
+          transactionId,
+          true
+        )
+          .then(({ returnData, time }) => {
+            if (this.XAPI.isSubscribeTrades) {
+              const { data } = this.XAPI.orders[returnData.order] || {}
+              if (data === undefined || data === null) {
+                this.XAPI.orders[returnData.order] = {
+                  order: returnData.order,
+                  resolve,
+                  reject,
+                  data: null,
+                  time,
+                }
+              } else {
+                if (data.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+                  resolve(data)
+                } else {
+                  reject(data)
+                }
+                delete this.XAPI.orders[returnData.order]
               }
             } else {
-              if (data.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-                resolve(data)
-              } else {
-                reject(data)
-              }
-              delete this.XAPI.orders[returnData.order]
+              resolve({
+                customComment: null,
+                message: null,
+                order: returnData.order,
+                requestStatus: null,
+              })
             }
-          } else {
-            resolve({
-              customComment: null,
-              message: null,
-              order: returnData.order,
-              requestStatus: null
-            })
-          }
-        }).catch(reject)
+          })
+          .catch(reject)
       })
     },
-    tradeTransactionStatus: (order: number) => this.sendCommand<tradeTransactionStatusResponse>('tradeTransactionStatus', {
-      order
-    })
+    tradeTransactionStatus: (order: number) =>
+      this.sendCommand<tradeTransactionStatusResponse>('tradeTransactionStatus', {
+        order,
+      }),
   }
 
   constructor(XAPI: XAPI, password: string) {

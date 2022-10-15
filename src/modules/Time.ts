@@ -12,7 +12,7 @@ export class Time {
   protected UTCTimestamp: number
 
   constructor() {
-    this.unit = (typeof window === 'undefined') ? process.hrtime() : [performance.now(), 0]
+    this.unit = typeof window === 'undefined' ? process.hrtime() : [performance.now(), 0]
     this.UTCTimestamp = Date.now()
     return this
   }

@@ -1,6 +1,6 @@
-import {REQUEST_STATUS_FIELD, Time} from '..'
-import {TransactionStatus, TransactionType} from '../enum/Enum'
-import {TradeRecord} from '../core/TradeRecord'
+import { REQUEST_STATUS_FIELD, Time } from '..'
+import { TransactionStatus, TransactionType } from '../enum/Enum'
+import { TradeRecord } from '../core/TradeRecord'
 
 export interface Transactions {
   [transactionId: string]: Transaction<any, any>
@@ -32,7 +32,7 @@ export interface Transaction<Resolve, Reject> {
     sent: Time | null
     arguments: any
     json: string
-  },
+  }
   response: {
     status: boolean | null
     received: Time | null
