@@ -21,7 +21,7 @@ import { getObjectChanges } from '../utils/getObjectChanges'
 export const DefaultHostname = 'ws.xapi.pro'
 export const DefaultRateLimit = 850
 
-type AccountType = string
+type AccountType = 'real' | 'demo'
 export interface XAPIConfig {
   accountId: string
   password: string
