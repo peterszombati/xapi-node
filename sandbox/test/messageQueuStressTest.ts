@@ -1,11 +1,3 @@
-/* sensitive/sensitive.json
-{
-	"accountId": "",
-	"password": "",
-	"type": "real"
-}
- */
-
 import { XAPI } from '../../src/core/XAPI'
 import { Time } from '../../src'
 

@@ -21,9 +21,9 @@ export function transactionToJSONString(transaction: Transaction<any, any>): str
         json:
           response === null || typeof response === 'undefined'
             ? null
-            : response.length > 1000
-            ? '"Too long response #xapi-node"'
-            : response,
+            : (response.length > 1000
+              ? '"Too long response #xapi-node"'
+              : response),
       },
       transactionPromise: undefined,
       stack: parseStack(transaction.stack || '').slice(1),

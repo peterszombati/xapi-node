@@ -240,8 +240,9 @@ export class Queue extends Listener {
         if (sentTime !== null) {
           this.addElapsedTime(sentTime)
           transaction.request.sent = sentTime
-          transaction.status =
-            transaction.type === TransactionType.STREAM ? TransactionStatus.successful : TransactionStatus.sent
+          transaction.status = transaction.type === TransactionType.STREAM
+            ? TransactionStatus.successful
+            : TransactionStatus.sent
           if (transaction.type === TransactionType.STREAM) {
             this.resolveTransaction('', null, new Time(), transaction)
           }

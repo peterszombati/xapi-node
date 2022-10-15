@@ -37,7 +37,9 @@ export class Listener {
       if (this._listeners[listenerId] === undefined) {
         this._listeners[listenerId] = {}
       }
-      key = key === null ? 'g' + Object.keys(this._listeners[listenerId]).length : 's' + key
+      key = key === null
+          ? 'g' + Object.keys(this._listeners[listenerId]).length
+          : 's' + key
       this._listeners[listenerId][key] = callBack
       return new ListenerChild(this, listenerId, key)
     }

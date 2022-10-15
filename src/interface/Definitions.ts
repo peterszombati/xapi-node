@@ -90,7 +90,7 @@ export interface STREAMING_TRADE_STATUS_RECORD {
   customComment: string | null
   message: string | null
   order: number
-  price: number | null | undefined
+  price: number | null | undefined // TODO check undefined is possible or not
   requestStatus: REQUEST_STATUS_FIELD | null
 }
 

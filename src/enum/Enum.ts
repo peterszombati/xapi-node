@@ -122,7 +122,7 @@ export enum Listeners {
   xapi_onReady = 'xapi_onReady',
 }
 
-export const Currency2Pair: any = {
+export const Currency2Pair: Record<string, string> = {
   HUF: 'EURHUF',
   USD: 'EURUSD',
   JPY: 'USDJPY',
@@ -148,7 +148,7 @@ export const Currency2Pair: any = {
 }
 
 export type RelevantCurrencies =
-  | 'HUF'
+  'HUF'
   | 'USD'
   | 'JPY'
   | 'GBP'
