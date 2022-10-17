@@ -8,3 +8,4 @@ sensitive.json
 /logs
 
 /build
+/pnpm-lock.yaml
