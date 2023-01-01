@@ -97,7 +97,7 @@ export class Queue extends Listener {
         t =>
           t.transactionPromise.reject === null &&
           t.transactionPromise.resolve === null &&
-          t.createdAt.elapsedMs() > 86400000
+            (t.createdAt.elapsedMs() > 600000 || t.command === 'getChartLastRequest' || t.command === 'getChartRangeRequest')
       )
       .forEach(transaction => {
         delete this.transactions[transaction.transactionId]

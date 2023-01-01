@@ -323,10 +323,10 @@ export class XAPI extends Listener {
           }
           this.Socket.rejectOldTransactions()
           this.Stream.rejectOldTransactions()
-          if (Object.keys(this.Socket.transactions).length > 20000) {
+          if (Object.keys(this.Socket.transactions).length > 200) {
             this.Socket.removeOldTransactions()
           }
-          if (Object.keys(this.Stream.transactions).length > 20000) {
+          if (Object.keys(this.Stream.transactions).length > 200) {
             this.Stream.removeOldTransactions()
           }
         }, 19000)
