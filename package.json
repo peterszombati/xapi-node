@@ -4,8 +4,8 @@
   "description": "This project makes it possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection",
   "exports": {
     ".": {
-      "require": "./build/index.cjs",
-      "import": "./build/index.mjs"
+      "require": "./build/index.js",
+      "import": "./build/index.js"
     }
   },
   "types": "build/index.d.ts",
