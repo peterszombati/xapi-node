@@ -1,4 +1,6 @@
 import { XAPI, XAPIConfig } from './core/XAPI'
+import { XAPI as XAPIv2 } from './v2/core/XAPI'
+export { XAPIv2 }
 import {
   CALENDAR_RECORD,
   CHART_LAST_INFO_RECORD,
