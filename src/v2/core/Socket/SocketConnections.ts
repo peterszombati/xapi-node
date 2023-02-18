@@ -63,7 +63,7 @@ export class SocketConnections extends Listener {
     socketIdIncrement = new Increment()
     public connect(timeoutMs: number): Promise<string> {
         const socketId = `${new Date().getTime()}${this.socketIdIncrement.id}`
-        this.connections[socketId] = new SocketConnection(this.url, this.callListener, socketId)
+        this.connections[socketId] = new SocketConnection(this.url, (listenerId: string, params?: any[]) => this.callListener(listenerId, params), socketId)
         return this.connections[socketId].connect(timeoutMs)
             .then(() => socketId)
     }
