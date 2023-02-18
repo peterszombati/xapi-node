@@ -11,8 +11,8 @@ export class StreamConnection {
     public socketId: string
     public streamId: string
     private callListener: (listenerId: string, params?: any[]) => any[]
-    private connectionProgress: Transaction | null = new Transaction()
-    private disconnectionProgress: Transaction | null = new Transaction()
+    private connectionProgress: Transaction | null = null
+    private disconnectionProgress: Transaction | null = null
 
     constructor(url: string, session: string, callListener: (listenerId: string, params?: any[]) => any[], streamId: string, socketId: string) {
         this.session = session

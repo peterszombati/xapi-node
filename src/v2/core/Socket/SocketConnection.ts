@@ -15,8 +15,8 @@ export class SocketConnection {
     private queueTimer: Timer = new Timer()
     protected WebSocket: WebSocketWrapper
     private callListener: (listenerId: string, params?: any[]) => any[]
-    private connectionProgress: Transaction | null = new Transaction()
-    private disconnectionProgress: Transaction | null = new Transaction()
+    private connectionProgress: Transaction | null = null
+    private disconnectionProgress: Transaction | null = null
 
     constructor(url: string, callListener: (listenerId: string, params?: any[]) => any[], socketId: string) {
         this.socketId = socketId
