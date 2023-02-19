@@ -28,12 +28,15 @@ export class SocketConnection {
             this.connectionProgress?.resolve()
             this.disconnectionProgress?.reject(new Error('onOpen'))
             pingTimer.setInterval(() => {
-                this.send(new Transaction({
+                const t = new Transaction({
                     json: JSON.stringify({
                         command: 'ping',
                         customTag: `${'ping'}_${-1}`,
                     })
-                })).catch(() => {})
+                })
+                this.send(t)
+                    .then(() => { t.resolve() })
+                    .catch((e) => { t.reject(e) })
             }, 14500)
             this.callListener('onOpen', [socketId, this])
         })
@@ -105,12 +108,15 @@ export class SocketConnection {
         }).then((r) => {
             timer.clear()
             this.connectionProgress = null
-            this.send(new Transaction({
+            const t = new Transaction({
                 json: JSON.stringify({
                     command: 'ping',
                     customTag: `${'ping'}_${-1}`,
                 })
-            })).catch(() => {})
+            })
+            this.send(t)
+                .then(() => { t.resolve() })
+                .catch((e) => { t.reject(e) })
             return r
         })
     }
