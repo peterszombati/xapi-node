@@ -11,7 +11,7 @@ export class SocketConnection {
     public capacity: Time[] = []
     public streamId: string
     public socketId: string
-    private queue: { json: string, promise: PromiseObject<any, any>, createdAt: Time }[] = []
+    private queue: { transaction: Transaction, promise: PromiseObject<any, any> }[] = []
     private queueTimer: Timer = new Timer()
     protected WebSocket: WebSocketWrapper
     private callListener: (listenerId: string, params?: any[]) => any[]
@@ -28,9 +28,11 @@ export class SocketConnection {
             this.connectionProgress?.resolve()
             this.disconnectionProgress?.reject(new Error('onOpen'))
             pingTimer.setInterval(() => {
-                this.send(JSON.stringify({
-                    command: 'ping',
-                    customTag: 'ping_-1',
+                this.send(new Transaction({
+                    json: JSON.stringify({
+                        command: 'ping',
+                        customTag: `${'ping'}_${-1}`,
+                    })
                 })).catch(() => {})
             }, 14500)
             this.callListener('onOpen', [socketId, this])
@@ -103,9 +105,11 @@ export class SocketConnection {
         }).then((r) => {
             timer.clear()
             this.connectionProgress = null
-            this.send(JSON.stringify({
-                command: 'ping',
-                customTag: `${'ping'}_${-1}`,
+            this.send(new Transaction({
+                json: JSON.stringify({
+                    command: 'ping',
+                    customTag: `${'ping'}_${-1}`,
+                })
             })).catch(() => {})
             return r
         })
@@ -137,11 +141,11 @@ export class SocketConnection {
             }
             const jsons = this.queue.splice(0, 1)
             if (jsons.length === 1) {
-                if (jsons[0].createdAt.elapsedMs() > 9000) {
+                if (jsons[0].transaction.state.createdAt.elapsedMs() > 9000) {
                     jsons[0].promise.reject(new Error('queue overloaded'))
                 } else {
                     try {
-                        this.send(jsons[0].json, jsons[0].promise, jsons[0].createdAt)
+                        this.send(jsons[0].transaction, jsons[0].promise)
                         if (this.queue.length > 0) {
                             await sleep(250)
                         }
@@ -164,8 +168,8 @@ export class SocketConnection {
         }, 1000 - elapsedMs)
     }
 
-    public async send(json: string, promise?: PromiseObject<Time>, createdAt?: Time): Promise<Time> {
-        if (json.length > 1000) {
+    public async send(transaction: Transaction, promise?: PromiseObject<Time>): Promise<Time> {
+        if (transaction.state.json.length > 1000) {
             throw new Error('Each command invocation should not contain more than 1kB of data.')
         }
         const _promise = promise ? promise : createPromise<Time>()
@@ -173,7 +177,7 @@ export class SocketConnection {
             const time: Time = new Time()
             const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
             if (elapsedMs < 1000) {
-                this.queue.push({json,promise: _promise,createdAt: createdAt ? createdAt : new Time()})
+                this.queue.push({transaction,promise: _promise})
                 this.queueTimer.isNull() && await this.callCleaner(elapsedMs)
                 return _promise.promise
             }
@@ -182,7 +186,10 @@ export class SocketConnection {
             } else {
                 this.capacity.unshift(time)
             }
-            await this.WebSocket.send(json)
+            await this.WebSocket.send(transaction.state.json)
+            transaction.setState({
+                sent: new Time()
+            })
             _promise.resolve(time)
         } catch (e) {
             _promise.reject(e)

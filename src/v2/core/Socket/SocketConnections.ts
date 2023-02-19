@@ -119,7 +119,7 @@ export class SocketConnections extends Listener {
 
         if (socketId) {
             if (this.connections[socketId]) {
-                this.connections[socketId].send(this.transactions[transactionId].state.json)
+                this.connections[socketId].send(this.transactions[transactionId])
                     .catch(error => {
                         // @ts-ignore: invalid warning look at #104_line
                         if (this.transactions[transactionId]) {
