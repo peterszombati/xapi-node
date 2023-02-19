@@ -4,7 +4,7 @@ import {Increment} from "../../utils/Increment"
 
 export class StreamConnections extends Listener {
     public connections: Record<string, StreamConnection> = {}
-    public subscribes: Record<string /* command */, Record<string/* parameter */, string /* streamId */>>
+    public subscribes: Record<string /* command */, Record<string/* parameter */, string /* streamId */>> = {}
     private url: string
 
     constructor(url: string) {
