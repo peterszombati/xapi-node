@@ -356,9 +356,12 @@ export class Trading {
                             await this.XAPI.Socket.send.tradeTransactionStatus(returnData.order)
                         }
                     } else {
-                        delete this.orders[returnData.order]
                         if (data.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
+                            delete this.orders[returnData.order]
                             resolve(data)
+                        } else if (data.requestStatus === REQUEST_STATUS_FIELD.PENDING) {
+                            this.orders[returnData.order].resolve = resolve
+                            this.orders[returnData.order].reject = reject
                         } else {
                             reject(data)
                         }
