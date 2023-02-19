@@ -2,6 +2,7 @@ import {WebSocketWrapper} from '../../utils/WebSocketWrapper'
 import {Time} from "../../utils/Time"
 import {Transaction} from "../Transaction"
 import {Timer} from "../../utils/Timer"
+import {sleep} from "../../utils/sleep"
 
 export class StreamConnection {
     public lastReceivedMessage: Time | null = null
@@ -10,6 +11,8 @@ export class StreamConnection {
     private session: string
     public socketId: string
     public streamId: string
+    private queue: { transaction: Transaction }[] = []
+    private queueTimer: Timer = new Timer()
     private callListener: (listenerId: string, params?: any[]) => any[]
     private connectionProgress: Transaction | null = null
     private disconnectionProgress: Transaction | null = null
@@ -109,35 +112,77 @@ export class StreamConnection {
     }
 
     public ping() {
-        return this.send(
-            JSON.stringify({
-                command: 'ping',
-                streamSessionId: this.session,
-            })
-        )
+        return this.sendCommand('ping', {})
     }
 
     public async sendCommand(command: string, completion: Record<string, any> = {}): Promise<Time> {
-        return this.send(
-            JSON.stringify({
+        const t = new Transaction({
+            json: JSON.stringify({
                 command,
                 streamSessionId: this.session,
                 ...completion,
-            })
-        )
+            }),
+        })
+        return this.send(t)
     }
 
-    protected async send(json: string): Promise<Time> {
-        if (json.length > 1000) {
-            throw new Error('Each command invocation should not contain more than 1kB of data.')
+    private async cleanQueue() {
+        for (; this.queue.length > 0;) {
+            if (this.capacity[4].elapsedMs() < 1000) {
+                break
+            }
+            const jsons = this.queue.splice(0, 1)
+            if (jsons.length === 1) {
+                if (jsons[0].transaction.state.createdAt.elapsedMs() > 9000) {
+                    jsons[0].transaction.reject(new Error('queue overloaded'))
+                } else {
+                    try {
+                        this.send(jsons[0].transaction)
+                        if (this.queue.length > 0) {
+                            await sleep(250)
+                        }
+                    } catch (e) {
+                    }
+                }
+            } else {
+                break
+            }
         }
-        const time: Time = new Time()
-        if (this.capacity.length > 20) {
-            this.capacity = [time, ...this.capacity.slice(0, 4)]
-        } else {
-            this.capacity.unshift(time)
+    }
+
+    private callCleaner(elapsedMs: number): Promise<void> {
+        return this.queueTimer.setTimeout(async () => {
+            await this.cleanQueue()
+            if (this.queue.length > 0) {
+                return await this.callCleaner(this.capacity[4].elapsedMs())
+            }
+            return undefined
+        }, 1000 - elapsedMs)
+    }
+
+    protected async send(transaction: Transaction): Promise<Time> {
+        if (transaction.state.json.length > 1000) {
+            transaction.reject(new Error('Each command invocation should not contain more than 1kB of data.'))
+            return transaction.promise.then(r => r.data)
         }
-        await this.WebSocket.send(json)
-        return time
+        try {
+            const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
+            if (elapsedMs < 1000) {
+                this.queue.push({transaction})
+                this.queueTimer.isNull() && await this.callCleaner(elapsedMs)
+                return transaction.promise.then(r => r.data)
+            }
+            const time: Time = new Time()
+            if (this.capacity.length > 20) {
+                this.capacity = [time, ...this.capacity.slice(0, 4)]
+            } else {
+                this.capacity.unshift(time)
+            }
+            await this.WebSocket.send(transaction.state.json)
+            transaction.resolve(time)
+        } catch (e) {
+            transaction.reject(e)
+        }
+        return transaction.promise.then(r => r.data)
     }
 }

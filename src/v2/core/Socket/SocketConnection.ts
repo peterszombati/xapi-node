@@ -181,13 +181,13 @@ export class SocketConnection {
             return _promise.promise
         }
         try {
-            const time: Time = new Time()
             const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
             if (elapsedMs < 1000) {
                 this.queue.push({transaction,promise: _promise})
                 this.queueTimer.isNull() && await this.callCleaner(elapsedMs)
                 return _promise.promise
             }
+            const time: Time = new Time()
             if (this.capacity.length > 20) {
                 this.capacity = [time, ...this.capacity.slice(0, 4)]
             } else {
