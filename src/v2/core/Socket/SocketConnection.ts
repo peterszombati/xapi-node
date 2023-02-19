@@ -175,10 +175,11 @@ export class SocketConnection {
     }
 
     public async send(transaction: Transaction, promise?: PromiseObject<Time>): Promise<Time> {
-        if (transaction.state.json.length > 1000) {
-            throw new Error('Each command invocation should not contain more than 1kB of data.')
-        }
         const _promise = promise ? promise : createPromise<Time>()
+        if (transaction.state.json.length > 1000) {
+            _promise.reject(new Error('Each command invocation should not contain more than 1kB of data.'))
+            return _promise.promise
+        }
         try {
             const time: Time = new Time()
             const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
