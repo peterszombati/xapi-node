@@ -45,9 +45,17 @@ export class StreamConnections extends Listener {
     private getStreamId(command: string, completion: Record<string, string | number> = {}): string | undefined {
         if (this.subscribes[command]) {
             if (this.subscribes[command][JSON.stringify(completion)]) {
-                return this.subscribes[command][JSON.stringify(completion)]
+                if (this.connections[this.subscribes[command][JSON.stringify(completion)]]) {
+                    return this.subscribes[command][JSON.stringify(completion)]
+                } else {
+                    delete this.subscribes[command][JSON.stringify(completion)]
+                }
             } else if (this.subscribes[command]['{}']) {
-                return this.subscribes[command]['{}']
+                if (this.connections[this.subscribes[command]['{}']]) {
+                    return this.subscribes[command]['{}']
+                } else {
+                    delete this.subscribes[command]['{}']
+                }
             } else if (Object.keys(this.subscribes[command])[0]) {
                 return this.subscribes[command][Object.keys(this.subscribes[command])[0]]
             }
