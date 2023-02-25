@@ -179,13 +179,14 @@ export class Trading {
         })
     }
 
-    public buy({symbol, volume = 0.01, tp = 0, sl = 0, customComment = null, limit = undefined} : {
+    public buy({symbol, volume = 0.01, tp = 0, sl = 0, customComment = null, limit = undefined, expiration = undefined} : {
         symbol: string
         volume: number
         tp ?: number | undefined
         sl ?: number | undefined
         customComment ?: string | null
         limit?: number | undefined
+        expiration?: number | undefined
     }) {
         return this.tradeTransaction({
             cmd: limit == undefined ? CMD_FIELD.BUY : CMD_FIELD.BUY_LIMIT,
@@ -196,19 +197,20 @@ export class Trading {
             tp,
             sl,
             customComment,
-            expiration: limit == undefined ? new Date().getTime() + 10000 : new Date().getTime() + 60000 * 60 * 24,
+            expiration: expiration !== undefined ? expiration : (limit == undefined ? new Date().getTime() + 10000 : new Date().getTime() + 60000 * 60 * 24),
             offset: 0,
             price: limit == undefined ? 1 : limit,
         })
     }
 
-    public sell({symbol, volume = 0.01, tp = 0, sl = 0, customComment = null, limit = undefined} : {
+    public sell({symbol, volume = 0.01, tp = 0, sl = 0, customComment = null, limit = undefined, expiration = undefined} : {
         symbol: string,
         volume: number,
         tp ?: number | undefined,
         sl ?: number | undefined,
         customComment ?: string | null
         limit?: number | undefined
+        expiration?: number | undefined
     }) {
         return this.tradeTransaction({
             cmd: limit == undefined ? CMD_FIELD.SELL : CMD_FIELD.SELL_LIMIT,
@@ -219,7 +221,7 @@ export class Trading {
             tp,
             sl,
             customComment,
-            expiration: limit == undefined ? new Date().getTime() + 10000 : new Date().getTime() + 60000 * 60 * 24,
+            expiration: expiration !== undefined ? expiration : (limit == undefined ? new Date().getTime() + 10000 : new Date().getTime() + 60000 * 60 * 24),
             offset: 0,
             price: limit == undefined ? 1 : limit,
         })
