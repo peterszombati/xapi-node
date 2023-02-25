@@ -8,7 +8,7 @@ import {
   STREAMING_TRADE_RECORD,
   STREAMING_TRADE_STATUS_RECORD,
   Time,
-} from '../..'
+} from '../../../index'
 import { StreamConnection } from './StreamConnection'
 import { XAPI } from '../XAPI'
 

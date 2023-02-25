@@ -1,4 +1,4 @@
-import { CMD_FIELD } from '..'
+import { CMD_FIELD } from '../../index'
 import { TRADE_TRANS_INFO } from './Definitions'
 
 export interface getCommissionDef {

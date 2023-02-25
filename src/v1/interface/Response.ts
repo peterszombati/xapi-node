@@ -1,5 +1,5 @@
 import { RATE_INFO_RECORD, TICK_RECORD } from './Definitions'
-import { REQUEST_STATUS_FIELD } from '..'
+import { REQUEST_STATUS_FIELD } from '../../index'
 
 export interface getChartRequestResponse {
   digits: number

@@ -12,7 +12,7 @@ import {
   TRADE_TRANS_INFO,
   TRADING_HOURS_RECORD,
   TYPE_FIELD,
-} from '../..'
+} from '../../../index'
 import { TradeStatus, Transaction } from '../../interface/Interface'
 import {
   getChartRequestResponse,

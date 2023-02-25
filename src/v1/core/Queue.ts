@@ -1,6 +1,6 @@
 import { AddTransaction, MessagesQueue, Transaction, Transactions } from '../interface/Interface'
 import { Listener } from '../modules/Listener'
-import { Time, Timer } from '..'
+import { Time, Timer } from '../../index'
 import { ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType } from '../enum/Enum'
 import { WebSocketWrapper } from '../modules/WebSocketWrapper'
 import { JsonError } from 'logger4'

@@ -8,7 +8,7 @@ import {
   STREAMING_TRADE_RECORD,
   Time,
   TYPE_FIELD,
-} from '..'
+} from '../../index'
 import { TradePositions, TradeStatus } from '../interface/Interface'
 import { CHART_RATE_LIMIT_BY_PERIOD, Currency2Pair, Listeners, PositionType, RelevantCurrencies } from '../enum/Enum'
 import { Socket } from './Socket/Socket'

@@ -1,4 +1,4 @@
-import { XAPI } from '../../src/core/XAPI'
+import { XAPI } from '../../src/v1/core/XAPI'
 import { ConnectionStatus } from '../../src'
 
 export function connectionTest(x: XAPI): Promise<void> {

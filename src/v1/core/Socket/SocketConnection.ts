@@ -1,5 +1,5 @@
 import { TransactionResolveSocket } from '../../interface/Interface'
-import { Time, Timer } from '../..'
+import { Time, Timer } from '../../../index'
 import { WebSocketWrapper } from '../../modules/WebSocketWrapper'
 import { ConnectionStatus, errorCode, Listeners, TransactionStatus, TransactionType } from '../../enum/Enum'
 import { Queue } from '../Queue'

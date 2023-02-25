@@ -1,4 +1,4 @@
-import { XAPIConfig } from '..'
+import { XAPIConfig } from '../../index'
 
 export function parseJsonLogin(jsonString: string): XAPIConfig {
   let json: any = {}

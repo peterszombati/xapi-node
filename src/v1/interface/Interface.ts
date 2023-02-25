@@ -1,4 +1,4 @@
-import { REQUEST_STATUS_FIELD, Time } from '..'
+import { REQUEST_STATUS_FIELD, Time } from '../../index'
 import { TransactionStatus, TransactionType } from '../enum/Enum'
 import { TradeRecord } from '../core/TradeRecord'
 

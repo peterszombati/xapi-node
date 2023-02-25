@@ -1,6 +1,6 @@
 import { XAPI } from './XAPI'
 import { TradeRecord, TradeRecordParams } from './TradeRecord'
-import { TYPE_FIELD } from '..'
+import { TYPE_FIELD } from '../../index'
 
 export class PendingOrder extends TradeRecord {
   private XAPI: XAPI
