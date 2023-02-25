@@ -57,11 +57,13 @@ export class XAPI extends Listener {
         })
 
         this.Socket.listen.getServerTime((data, time, transaction) => {
-            const dif = time.getDifference(transaction.state.createdAt)
-            this._serverTime = {
-                timestamp: data.time,
-                ping: dif,
-                received: time,
+            if (transaction?.state?.sent) {
+                const dif = time.getDifference(transaction.state.sent)
+                this._serverTime = {
+                    timestamp: data.time,
+                    ping: dif,
+                    received: time,
+                }
             }
         })
     }
