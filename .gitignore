@@ -4,7 +4,6 @@
 sensitive*.json
 sensitive.json
 /sensitive
-/sandbox/test/tests.ts
 /logs
 
 /build

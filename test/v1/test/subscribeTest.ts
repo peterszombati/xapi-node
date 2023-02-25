@@ -1,5 +1,5 @@
-import { XAPI } from '../../src/v1/core/XAPI'
-import { ConnectionStatus } from '../../src'
+import { XAPI } from '../../../src/v1/core/XAPI'
+import { ConnectionStatus } from '../../../src'
 
 export function subscribeTest(x: XAPI): Promise<void> {
   return new Promise((resolve, reject) => {

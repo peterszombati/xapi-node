@@ -1,6 +1,6 @@
 import * as path from 'path'
 import { Logger4V2 } from 'logger4'
-import XAPI from '../src'
+import XAPI from '../../src'
 import { parseLoginFile } from './parseLoginFile'
 import { Writable } from 'stream'
 

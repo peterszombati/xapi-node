@@ -1,5 +1,5 @@
-import { XAPI } from '../../src/v1/core/XAPI'
-import { TYPE_FIELD, CMD_FIELD } from '../../src'
+import { XAPI } from '../../../src/v1/core/XAPI'
+import { TYPE_FIELD, CMD_FIELD } from '../../../src'
 
 export function tradeTest(x: XAPI): Promise<void> {
   const symbol = 'EURUSD'

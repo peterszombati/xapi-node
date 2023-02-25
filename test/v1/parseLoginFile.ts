@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import { parseJsonLogin, XAPIConfig } from '../src'
+import { parseJsonLogin, XAPIConfig } from '../../src'
 
 export function parseLoginFile(loginJsonFile: string): XAPIConfig {
   if (!fs.existsSync(loginJsonFile)) {

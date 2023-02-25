@@ -1,5 +1,5 @@
-import { XAPI } from '../../src/v1/core/XAPI'
-import { Time } from '../../src'
+import { XAPI } from '../../../src/v1/core/XAPI'
+import { Time } from '../../../src'
 
 export function messageQueuStressTest(x: XAPI): Promise<void> {
   return new Promise((resolve, reject) => {

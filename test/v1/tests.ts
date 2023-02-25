@@ -1,6 +1,6 @@
 import { parseLoginFile } from './parseLoginFile'
 import * as path from 'path'
-import XAPI from '../src'
+import XAPI from '../../src'
 import { Logger4V2 } from 'logger4'
 import { tradeTest } from './test/tradeTest'
 import { connectionTest } from './test/connectionTest'

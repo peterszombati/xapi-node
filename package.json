@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "rm -rf ./build && tsc  --declaration --emitDeclarationOnly & node ./esbuild.config.js",
-    "test": "ts-mocha -p ./tsconfig.json ./sandbox/tests.ts ./sandbox/sandbox.ts --exit",
+    "test": "ts-mocha -p ./tsconfig.json ./test/v1/tests.ts test/v1/sandbox.ts --exit",
     "prettier": "prettier --check \"src/**/*.ts\" \"sandbox/**/*.ts\"",
     "eslint": "eslint --fix \"src/**/*.ts\" \"sandbox/**/*.ts\"",
     "lint": "tsc --noEmit && npm run prettier && npm run eslint"
