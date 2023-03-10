@@ -1,5 +1,7 @@
+const isNodeJS = typeof window === 'undefined'
+
 function calculateElapsedTime(time: [number, number]): number {
-    if (typeof window === 'undefined') {
+    if (isNodeJS) {
         const hrtime = process.hrtime(time)
         return Math.floor(hrtime[0] * 1000 + hrtime[1] / 1000000)
     } else {
@@ -12,7 +14,7 @@ export class Time {
     protected UTCTimestamp: number
 
     constructor() {
-        this.unit = typeof window === 'undefined' ? process.hrtime() : [performance.now(), 0]
+        this.unit = isNodeJS ? process.hrtime() : [performance.now(), 0]
         this.UTCTimestamp = Date.now()
         return this
     }

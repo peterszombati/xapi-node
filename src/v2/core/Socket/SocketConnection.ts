@@ -7,6 +7,7 @@ import {createPromise, PromiseObject} from "../../utils/createPromise"
 import {sleep} from "../../utils/sleep"
 
 export class SocketConnection {
+    public connectedTime: Time | null = null
     public lastReceivedMessage: Time | null = null
     public capacity: Time[] = []
     public streamId: string
@@ -25,6 +26,7 @@ export class SocketConnection {
 
         const pingTimer = new Timer()
         this.WebSocket.onOpen(() => {
+            this.connectedTime = new Time()
             this.connectionProgress?.resolve()
             this.disconnectionProgress?.reject(new Error('onOpen'))
             pingTimer.setInterval(() => {
@@ -41,6 +43,7 @@ export class SocketConnection {
             this.callListener('onOpen', [socketId, this])
         })
         this.WebSocket.onClose(() => {
+            this.connectedTime = null
             this.disconnectionProgress?.resolve()
             this.connectionProgress?.reject(new Error('onClose'))
             pingTimer.clear()

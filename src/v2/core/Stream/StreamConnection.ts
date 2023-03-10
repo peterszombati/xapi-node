@@ -5,6 +5,7 @@ import {Timer} from "../../utils/Timer"
 import {sleep} from "../../utils/sleep"
 
 export class StreamConnection {
+    public connectedTime: Time | null = null
     public lastReceivedMessage: Time | null = null
     public capacity: Time[] = []
     protected WebSocket: WebSocketWrapper
@@ -26,6 +27,7 @@ export class StreamConnection {
 
         const pingTimer = new Timer()
         this.WebSocket.onOpen(() => {
+            this.connectedTime = new Time()
             this.connectionProgress?.resolve()
             this.disconnectionProgress?.reject(new Error('onOpen'))
             pingTimer.setInterval(() => {
@@ -34,6 +36,7 @@ export class StreamConnection {
             this.callListener('onOpen', [streamId, this])
         })
         this.WebSocket.onClose(() => {
+            this.connectedTime = null
             this.disconnectionProgress?.resolve()
             this.connectionProgress?.reject(new Error('onClose'))
             pingTimer.clear()
