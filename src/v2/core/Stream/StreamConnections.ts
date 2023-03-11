@@ -70,10 +70,15 @@ export class StreamConnections extends Listener {
         }).sort((a,b) => a.point - b.point)[0]?.connection?.streamId
     }
 
-    protected sendSubscribe(command: string, completion: Record<string, string | number> = {}) {
-        const streamId = this.getStreamId(command)
+    protected sendSubscribe(command: string, completion: Record<string, string | number> = {}, streamId: string | undefined = undefined) {
         if (!streamId) {
-            throw new Error('there is no connected stream')
+            streamId = this.getStreamId(command)
+            if (!streamId) {
+                throw new Error('there is no connected stream '+JSON.stringify({streamId}))
+            }
+        }
+        if (!this.connections[streamId]) {
+            throw new Error('there is no connected stream '+JSON.stringify({streamId}))
         }
         const promise = this.connections[streamId].sendCommand('get' + command, completion)
         if (this.subscribes[command]) {

@@ -35,15 +35,15 @@ export class Stream extends StreamConnections {
             this.addListener('command_tradeStatus', callBack, key),
     }
     public subscribe = {
-        getBalance: () => this.sendSubscribe('Balance'),
-        getCandles: (symbol: string) => this.sendSubscribe('Candles', {symbol}),
-        getKeepAlive: () => this.sendSubscribe('KeepAlive'),
-        getNews: () => this.sendSubscribe('News'),
-        getProfits: () => this.sendSubscribe('Profits'),
-        getTickPrices: (symbol: string, minArrivalTime = 0, maxLevel = 6) =>
-            this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel}),
-        getTrades: () => this.sendSubscribe('Trades'),
-        getTradeStatus: () => this.sendSubscribe('TradeStatus'),
+        getBalance: (streamId: string | undefined = undefined) => this.sendSubscribe('Balance', {}, streamId),
+        getCandles: (symbol: string, streamId: string | undefined = undefined) => this.sendSubscribe('Candles', {symbol}, streamId),
+        getKeepAlive: (streamId: string | undefined = undefined) => this.sendSubscribe('KeepAlive', {}, streamId),
+        getNews: (streamId: string | undefined = undefined) => this.sendSubscribe('News', {}, streamId),
+        getProfits: (streamId: string | undefined = undefined) => this.sendSubscribe('Profits', {}, streamId),
+        getTickPrices: (symbol: string, minArrivalTime = 0, maxLevel = 6, streamId: string | undefined = undefined) =>
+            this.sendSubscribe('TickPrices', {symbol, minArrivalTime, maxLevel}, streamId),
+        getTrades: (streamId: string | undefined = undefined) => this.sendSubscribe('Trades', {}, streamId),
+        getTradeStatus: (streamId: string | undefined = undefined) => this.sendSubscribe('TradeStatus', {}, streamId),
     }
     public unSubscribe = {
         getBalance: () => this.sendUnsubscribe('Balance'),

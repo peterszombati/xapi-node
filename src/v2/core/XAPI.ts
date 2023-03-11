@@ -102,11 +102,11 @@ export class XAPI extends Listener {
         ]
     }
 
-    public connect({timeout}: { timeout: number } = {timeout: 15000}): Promise<void> {
+    public connect({timeout}: { timeout: number } = {timeout: 15000}): Promise<{socketId: string,streamId: string}> {
         if (isNaN(timeout) || timeout < 0) {
             throw new Error('invalid "timeout" parameter')
         }
-        return new Promise<void>(async (resolve,reject) => {
+        return new Promise<{socketId: string,streamId: string}>(async (resolve,reject) => {
             let socketId
             let streamId
             try {
@@ -118,7 +118,7 @@ export class XAPI extends Listener {
                 } else {
                     throw new Error('Socket not exists after Stream connected')
                 }
-                resolve()
+                resolve({socketId,streamId})
             } catch (e) {
                 reject(e)
                 try {
