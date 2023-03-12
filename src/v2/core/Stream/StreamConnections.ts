@@ -1,10 +1,16 @@
 import {Listener} from '../../utils/Listener'
 import {StreamConnection} from "./StreamConnection"
 import {Increment} from "../../utils/Increment"
+import {Time} from "../../utils/Time"
 
 export class StreamConnections extends Listener {
     public connections: Record<string, StreamConnection> = {}
-    public subscribes: Record<string /* command */, Record<string/* parameter */, string /* streamId */>> = {}
+    public subscribes: Record<
+        string /* command */,
+        Record<string /* parameter */,
+            Record<string /* streamId */, Time /* createdAt */>
+        >
+    > = {}
     private url: string
 
     constructor(url: string) {
@@ -12,9 +18,11 @@ export class StreamConnections extends Listener {
         this.url = url
         this.addListener('onClose', (streamId: string) => {
             for (const command of Object.keys(this.subscribes)) {
-                for (const [parameter,_streamId] of Object.entries(this.subscribes[command])) {
-                    if (_streamId === streamId) {
-                        delete this.subscribes[command][parameter]
+                for (const [parameter, _streamIdObject] of Object.entries(this.subscribes[command])) {
+                    for (const [_streamId, createdAt] of Object.entries(_streamIdObject)) {
+                        if (_streamId === streamId) {
+                            delete this.subscribes[command][parameter][_streamId]
+                        }
                     }
                 }
             }
@@ -45,19 +53,33 @@ export class StreamConnections extends Listener {
     private getStreamId(command: string, completion: Record<string, string | number> = {}): string | undefined {
         if (this.subscribes[command]) {
             if (this.subscribes[command][JSON.stringify(completion)]) {
-                if (this.connections[this.subscribes[command][JSON.stringify(completion)]]?.status === 'CONNECTED') {
-                    return this.subscribes[command][JSON.stringify(completion)]
-                } else {
-                    delete this.subscribes[command][JSON.stringify(completion)]
+                const streamIds = Object.entries(this.subscribes[command][JSON.stringify(completion)])
+                for (const [streamId] of streamIds) {
+                    if (this.connections[streamId]?.status === 'CONNECTED') {
+                        return streamId
+                    } else {
+                        delete this.subscribes[command][JSON.stringify(completion)][streamId]
+                    }
                 }
             } else if (this.subscribes[command]['{}']) {
-                if (this.connections[this.subscribes[command]['{}']]?.status === 'CONNECTED') {
-                    return this.subscribes[command]['{}']
-                } else {
-                    delete this.subscribes[command]['{}']
+                const streamIds = Object.entries(this.subscribes[command]['{}'])
+                for (const [streamId] of streamIds) {
+                    if (this.connections[streamId]?.status === 'CONNECTED') {
+                        return streamId
+                    } else {
+                        delete this.subscribes[command]['{}'][streamId]
+                    }
                 }
-            } else if (Object.keys(this.subscribes[command])[0] && this.connections[Object.keys(this.subscribes[command])[0]]?.status === 'CONNECTED') {
-                return this.subscribes[command][Object.keys(this.subscribes[command])[0]]
+            } else if (Object.keys(this.subscribes[command])[0]) {
+                const firstKey = Object.keys(this.subscribes[command])[0]
+                const streamIds = Object.entries(this.subscribes[command][firstKey])
+                for (const [streamId] of streamIds) {
+                    if (this.connections[streamId]?.status === 'CONNECTED') {
+                        return streamId
+                    } else {
+                        delete this.subscribes[command][firstKey][streamId]
+                    }
+                }
             }
         }
         return Object.entries(this.connections).map(([_,c]) => {
@@ -82,10 +104,14 @@ export class StreamConnections extends Listener {
         }
         const promise = this.connections[streamId].sendCommand('get' + command, completion)
         if (this.subscribes[command]) {
-            this.subscribes[command][JSON.stringify(completion)] = streamId
+            const completionKey = JSON.stringify(completion)
+            if (!this.subscribes[command][completionKey]) {
+                this.subscribes[command][completionKey] = {}
+            }
+            this.subscribes[command][completionKey][streamId] = new Time()
         } else {
             this.subscribes[command] = {
-                [JSON.stringify(completion)]: streamId
+                [JSON.stringify(completion)]: { streamId: new Time() }
             }
         }
         return promise
@@ -95,13 +121,12 @@ export class StreamConnections extends Listener {
         if (!this.subscribes[command]) {
             return Promise.resolve(undefined)
         }
-        const streamId = this.subscribes[command][JSON.stringify(completion)]
-        if (!streamId) {
+        const streamIds = Object.entries(this.subscribes[command][JSON.stringify(completion)])
+        if (streamIds.length === 0) {
             return Promise.resolve(undefined)
         }
-        if (!this.connections[streamId]) {
-            return Promise.resolve(undefined)
-        }
-        return this.connections[streamId].sendCommand('stop' + command, completion)
+        return Promise.allSettled(streamIds
+            .filter(([streamId]) => this.connections[streamId])
+            .map(([streamId]) => this.connections[streamId].sendCommand('stop' + command, completion)))
     }
 }
