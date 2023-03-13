@@ -190,13 +190,30 @@ export class XAPI extends Listener {
         }))
     }
 
-    public disconnect(): Promise<PromiseSettledResult<any>[]> {
+    public disconnect(socketId: string | undefined = undefined): Promise<PromiseSettledResult<any>[]> {
         const promiseList: Promise<any>[] = []
-        for (const i of Object.entries(this.Socket.connections)) {
-            promiseList.push(i[1].close())
-        }
-        for (const i of Object.entries(this.Stream.connections)) {
-            promiseList.push(i[1].close())
+        if (socketId) {
+            for (const i of Object.entries(this.Socket.connections)) {
+                if (i[1].socketId === socketId) {
+                    promiseList.push(i[1].close())
+                    if (i[1].streamId) {
+                        for (const k of Object.entries(this.Stream.connections)) {
+                            if (k[1].streamId === i[1].streamId) {
+                                promiseList.push(k[1].close())
+                                break
+                            }
+                        }
+                    }
+                    break
+                }
+            }
+        } else {
+            for (const i of Object.entries(this.Socket.connections)) {
+                promiseList.push(i[1].close())
+            }
+            for (const i of Object.entries(this.Stream.connections)) {
+                promiseList.push(i[1].close())
+            }
         }
         return Promise.allSettled(promiseList)
     }
