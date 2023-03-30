@@ -69,8 +69,8 @@ export class XAPI extends Listener {
     }
 
     public onClose(callback: (params: {
-        socket?: { socketId: string, connection: SocketConnection | null }
-        stream?: { streamId: string, connection: StreamConnection | null }
+        socket: { socketId: string, connection: SocketConnection | null }
+        stream: { streamId: string, connection: StreamConnection | null }
     }) => void): ListenerChild[] {
         return [
             this.Stream.onClose((streamId, connection) => {
