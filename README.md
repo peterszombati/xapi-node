@@ -1,5 +1,3 @@
-[![Logo](https://github.com/peterszombati/xapi-node/raw/master/docs/bfb-logo.png)](https://my.bfb.by/#/registration?ref=3030057)
-
 [![Logo](https://github.com/peterszombati/xapi-node/raw/master/docs/xtb-logo.png)](https://www.xtb.com/en)
 
 # xapi-node
@@ -215,9 +213,3 @@ debug._write = ((chunk, encoding, next) => {
 })
 x.logger.onStream('debug', debug)
 ```
-
-#### Buy Me A Coffee! :coffee:
-
-If you can contribute or you want to, feel free to do it at [__Buy me a coffee! :coffee:__](https://www.buymeacoffee.com/peterszombati)
-
-##### Be careful and donate just if it is within your possibilities, because there is no refund system. And remember that you don't need to donate, it is just a free choice for you. Thank you!
