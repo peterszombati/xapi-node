@@ -4,7 +4,7 @@
 
 This project makes it possible to get data from Forex market, execute market or limit order with NodeJS/JS through WebSocket connection
 
-This module may can be used for [BFB Capital](https://my.bfb.by/#/registration?ref=3030057) and [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
+This module may can be used for [X-Trade Brokers](https://www.xtb.com/en) xStation5 accounts
 
 WebSocket protocol description: https://peterszombati.github.io/xapi-node/
 
