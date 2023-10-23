@@ -1,12 +1,12 @@
 import {createPromise} from "../utils/createPromise"
 import {Time} from "../utils/Time"
 
-export class Transaction {
+export class Transaction<Init = Record<string | number, any>, State = Init | Record<string | number, any>> {
     public state: Record<string | number, any>
     private _resolve: (data?: any) => any
     private _reject: (error?: any) => void
 
-    constructor(state: Record<string | number, any> = {}) {
+    constructor(state?: Init & State) {
         const {resolve, reject, promise} = createPromise()
         this._resolve = resolve
         this._reject = reject
@@ -19,11 +19,11 @@ export class Transaction {
 
     private _promise: Promise<any>
 
-    public get promise(): Promise<{ transaction: Transaction, data: any }> {
+    public get promise(): Promise<{ transaction: Transaction<Init, State>, data: any }> {
         return this._promise
     }
 
-    public setState(state: Record<string | number, any>) {
+    public setState(state: Init | State) {
         this.state = {...this.state, state}
     }
 

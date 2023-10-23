@@ -118,8 +118,8 @@ export class StreamConnection {
         return this.sendCommand('ping', {})
     }
 
-    public async sendCommand(command: string, completion: Record<string, any> = {}): Promise<Time> {
-        const t = new Transaction({
+    public async sendCommand(command: string, completion: Record<string, any> = {}): Promise<{ transaction: Transaction<{json: string},{sent?: Time}>, data: any}> {
+        const t = new Transaction<{json: string},{sent?: Time}>({
             json: JSON.stringify({
                 command,
                 streamSessionId: this.session,
@@ -163,7 +163,7 @@ export class StreamConnection {
         }, 1000 - elapsedMs)
     }
 
-    protected async send(transaction: Transaction): Promise<Time> {
+    protected async send(transaction: Transaction<{json: string},{sent?: Time}>): Promise<{ transaction: Transaction<{json: string},{sent?: Time}>, data: any}> {
         if (transaction.state.json.length > 1000) {
             transaction.reject(new Error('Each command invocation should not contain more than 1kB of data.'))
             return transaction.promise.then(r => r.data)
@@ -182,10 +182,13 @@ export class StreamConnection {
                 this.capacity.unshift(time)
             }
             await this.WebSocket.send(transaction.state.json)
+            transaction.setState({
+                sent: new Time()
+            })
             transaction.resolve(time)
         } catch (e) {
             transaction.reject(e)
         }
-        return transaction.promise.then(r => r.data)
+        return transaction.promise
     }
 }
