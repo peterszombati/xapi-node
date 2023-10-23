@@ -251,6 +251,11 @@ export class Trading {
             } })
         const position = this.positions?.find(x => x.position === modify.order)
         if (!position) {
+            this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'modify', data: {
+                    input: [ modify ],
+                    result: { error: { message: `position is not found by id (${modify.order})` }},
+                    state: 'end'
+                } })
             return Promise.reject(new Error(`position is not found by id (${modify.order})`))
         }
         const tp: undefined | number = modify.tp === null ? undefined : (modify.tp === undefined ? position.tp : modify.tp)
