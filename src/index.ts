@@ -1,4 +1,4 @@
-import { XAPI, XAPIConfig } from './v1/core/XAPI'
+import { XAPI, XAPIConfig } from './v2/core/XAPI'
 import { XAPI as XAPIv2 } from './v2/core/XAPI'
 export { XAPIv2 }
 import {
@@ -25,27 +25,26 @@ import {
   TRADE_TRANS_INFO,
   TRADING_HOURS_RECORD,
   TRADING_RECORD,
-} from './v1/interface/Definitions'
+} from './v2/interface/Definitions'
 import {
   Candle,
   CHART_RATE_LIMIT_BY_PERIOD,
   CMD_FIELD,
-  ConnectionStatus,
   DAY_FIELD,
   errorCode,
   PERIOD_FIELD,
   REQUEST_STATUS_FIELD,
   STATE_FIELD,
   TYPE_FIELD,
-} from './v1/enum/Enum'
-import { parseJsonLogin } from './v1/modules/parseJsonLogin'
-import { Time } from './v1/modules/Time'
-import { TradeStatus } from './v1/interface/Interface'
-import { Timer } from './v1/modules/Timer'
-import { ListenerChild } from './v1/modules/Listener'
-import { OpenPosition } from './v1/core/OpenPosition'
-import { PendingOrder } from './v1/core/PendingOrder'
-import { TradeRecord } from './v1/core/TradeRecord'
+} from './v2/interface/Enum'
+import { parseJsonLogin } from './v2/utils/parseJsonLogin'
+import { Time } from './v2/utils/Time'
+import { TradeStatus } from './v2/interface/Interface'
+import { Timer } from './v2/utils/Timer'
+import { ListenerChild } from './v2/utils/Listener'
+import { OpenPosition } from './v2/core/Trading/OpenPosition'
+import { LimitPosition } from './v2/core/Trading/LimitPosition'
+import { TradeRecord } from './v2/core/TradeRecord'
 
 export default XAPI
 export { XAPIConfig }
@@ -84,12 +83,11 @@ export {
   STATE_FIELD,
   REQUEST_STATUS_FIELD,
   CHART_RATE_LIMIT_BY_PERIOD,
-  ConnectionStatus,
   Candle,
   errorCode,
 }
 
-export { parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, PendingOrder, TradeRecord }
+export { parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, LimitPosition, TradeRecord }
 
 export function getContractValue({
   price,
