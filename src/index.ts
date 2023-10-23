@@ -45,6 +45,7 @@ import { ListenerChild } from './v2/utils/Listener'
 import { OpenPosition } from './v2/core/Trading/OpenPosition'
 import { LimitPosition } from './v2/core/Trading/LimitPosition'
 import { TradeRecord } from './v2/core/TradeRecord'
+import { Logger } from './v2/utils/Logger'
 
 export default XAPI
 export { XAPIConfig }
@@ -87,7 +88,7 @@ export {
   errorCode,
 }
 
-export { parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, LimitPosition, TradeRecord }
+export { parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, LimitPosition, TradeRecord, Logger }
 
 export function getContractValue({
   price,

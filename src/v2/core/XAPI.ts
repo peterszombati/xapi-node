@@ -6,6 +6,7 @@ import {SocketConnection} from "./Socket/SocketConnection"
 import {StreamConnection} from "./Stream/StreamConnection"
 import {Trading} from "./Trading/Trading"
 import {Time} from "../utils/Time"
+import {Logger} from "../utils/Logger"
 
 export const DefaultHost = 'ws.xapi.pro'
 export const DefaultRateLimit = 850
@@ -23,14 +24,16 @@ export class XAPI extends Listener {
     public Stream: Stream
     public Socket: Socket
     public trading: Trading
+    public logger: Logger
     private _serverTime: {
         timestamp: number
         ping: number
         received: Time
     } | null = null
 
-    constructor(config: XAPIConfig) {
+    constructor(config: XAPIConfig, logger?: Logger) {
         super()
+        this.logger = logger || new Logger()
         if (config.rateLimit === undefined) {
             config.rateLimit = DefaultRateLimit
         }
@@ -40,9 +43,9 @@ export class XAPI extends Listener {
         if (config.tradingDisabled === undefined) {
             config.tradingDisabled = false
         }
-        this.Socket = new Socket(config.accountType, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
+        this.Socket = new Socket(this, config.accountType, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
         this.Stream = new Stream(config.accountType, config.host)
-        this.trading = new Trading(this, this.callListener)
+        this.trading = new Trading(this, (listenerId: string, params: any[] = []) => this.fetchListener(listenerId, params))
         this.Stream.onClose((streamId, connection) => {
             if (connection.socketId && this.Socket.connections[connection.socketId]) {
                 this.Socket.connections[connection.socketId].close()

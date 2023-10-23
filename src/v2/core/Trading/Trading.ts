@@ -188,6 +188,10 @@ export class Trading {
         limit?: number | undefined
         expiration?: number | undefined
     }) {
+        this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'buy', data: {
+                input: [{symbol,volume,tp,sl,customComment,limit,expiration}],
+                state: 'before'
+            } })
         return this.tradeTransaction({
             cmd: limit == undefined ? CMD_FIELD.BUY : CMD_FIELD.BUY_LIMIT,
             type: TYPE_FIELD.OPEN,
@@ -212,6 +216,10 @@ export class Trading {
         limit?: number | undefined
         expiration?: number | undefined
     }) {
+        this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'sell', data: {
+                input: [{symbol,volume,tp,sl,customComment,limit,expiration}],
+                state: 'before'
+            } })
         return this.tradeTransaction({
             cmd: limit == undefined ? CMD_FIELD.SELL : CMD_FIELD.SELL_LIMIT,
             type: TYPE_FIELD.OPEN,
@@ -237,6 +245,10 @@ export class Trading {
         volume?: number
         customComment ?: string | null | undefined
     }) {
+        this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'modify', data: {
+            input: [ modify ],
+            state: 'before'
+            } })
         const position = this.positions?.find(x => x.position === modify.order)
         if (!position) {
             return Promise.reject(new Error(`position is not found by id (${modify.order})`))
@@ -264,8 +276,17 @@ export class Trading {
     }
 
     public close(order: number, volume: number | null = null, customComment: string | null = null) {
+        this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'close', data: {
+                input: [ order, volume, customComment ],
+                state: 'before'
+            } })
         const trade = this.positions?.find(x => x.position === order)
         if (!trade) {
+            this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'close', data: {
+                    input: [ order, volume, customComment ],
+                    result: { error: { message: `position is not found by id (${order})` } },
+                    state: 'end'
+                } })
             return Promise.reject(new Error(`position is not found by id (${order})`))
         }
         const {cmd, symbol} = trade

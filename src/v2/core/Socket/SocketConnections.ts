@@ -63,7 +63,7 @@ export class SocketConnections extends Listener {
     socketIdIncrement = new Increment()
     public connect(timeoutMs: number): Promise<string> {
         const socketId = `${new Date().getTime()}${this.socketIdIncrement.id}`
-        this.connections[socketId] = new SocketConnection(this.url, (listenerId: string, params?: any[]) => this.callListener(listenerId, params), socketId)
+        this.connections[socketId] = new SocketConnection(this.url, (listenerId: string, params?: any[]) => this.fetchListener(listenerId, params), socketId)
         return this.connections[socketId].connect(timeoutMs)
             .then(() => socketId)
     }
@@ -121,11 +121,11 @@ export class SocketConnections extends Listener {
             if (this.connections[socketId]) {
                 this.connections[socketId].send(this.transactions[transactionId])
                     .catch(error => {
-                        // @ts-ignore: invalid warning look at #104_line
+                        // @ts-ignore: invalid warning look at #103_line
                         if (this.transactions[transactionId]) {
-                            // @ts-ignore: invalid warning look at #104_line
+                            // @ts-ignore: invalid warning look at #103_line
                             this.transactions[transactionId].reject(error)
-                            // @ts-ignore: invalid warning look at #104_line
+                            // @ts-ignore: invalid warning look at #103_line
                             delete this.transactions[transactionId]
                         }
                     })

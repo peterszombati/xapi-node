@@ -1,20 +1,6 @@
 import {Increment} from "./Increment"
 
-export class ListenerChild {
-    private listener: Listener
-    private readonly listenerId: string
-    private readonly key: string
-
-    constructor(listener: Listener, listenerId: string, key: string) {
-        this.listener = listener
-        this.listenerId = listenerId
-        this.key = key
-    }
-
-    public stopListen() {
-        this.listener.remove(this.listenerId, this.key)
-    }
-}
+export type ListenerChild = { stopListen: () => void}
 
 export class Listener {
     private increment = new Increment()
@@ -35,7 +21,7 @@ export class Listener {
         }
     }
 
-    public addListener(listenerId: string, callBack: any, key: string | null = null): ListenerChild {
+    protected addListener(listenerId: string, callBack: any, key: string | null = null): { stopListen: () => void } {
         if (typeof callBack === 'function') {
             if (this._listeners[listenerId] === undefined) {
                 this._listeners[listenerId] = {}
@@ -44,12 +30,26 @@ export class Listener {
                 ? `g${new Date().getTime()}${this.increment.id}`
                 : `s${key}`
             this._listeners[listenerId][key] = callBack
-            return new ListenerChild(this, listenerId, key)
+            return {
+                // @ts-ignore
+                stopListen: () => this.remove(listenerId, key)
+            }
         }
         throw new Error('addListener "callBack" parameter is not callback')
     }
 
-    public callListener(listenerId: string, params: any[] = []): ({ key: any, data: any } | { key: any, error: any })[] {
+    protected callListener(listenerId: string, params: any[] = []): void {
+        if (this._listeners[listenerId] !== undefined) {
+            Object.keys(this._listeners[listenerId]).forEach((key: string) => {
+                try {
+                    this._listeners[listenerId][key](...params)
+                } catch (e) {
+                }
+            })
+        }
+    }
+
+    protected fetchListener(listenerId: string, params: any[] = []): ({ key: any, data: any } | { key: any, error: any })[] {
         const values: any[] = []
         if (this._listeners[listenerId] !== undefined) {
             Object.keys(this._listeners[listenerId]).forEach((key: string) => {

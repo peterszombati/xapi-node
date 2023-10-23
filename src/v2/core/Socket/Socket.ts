@@ -43,6 +43,7 @@ import {SocketConnections} from './SocketConnections'
 import {Time} from "../../utils/Time"
 import {CMD_FIELD, PERIOD_FIELD} from "../../interface/Enum"
 import {Transaction} from "../Transaction"
+import { XAPI } from '../XAPI'
 
 interface SocketListen<T> {
     (returnData: T, jsonReceived: Time, transaction: Transaction, jsonString: string, socketId: string): void
@@ -176,9 +177,18 @@ export class Socket extends SocketConnections {
         tradeTransaction: (
             {customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume}: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY | TRADE_TRANS_INFO_CLOSE | TRADE_TRANS_INFO_DELETE
         ) => {
+            this.XAPI.logger.transaction({ source: 'src/v2/core/Socket/Socket.ts', function: 'send.tradeTransaction', data: {
+                    input: [{customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume}],
+                    state: 'before'
+                } })
             if (this.tradingDisabled) {
                 const t = new Transaction()
                 t.reject(new Error('trading disabled (tradingDisabled === true)'))
+                this.XAPI.logger.transaction({ source: 'src/v2/core/Socket/Socket.ts', function: 'send.tradeTransaction', data: {
+                        input: [{customComment, expiration, cmd, offset, order, price, sl, symbol, tp, type, volume}],
+                        result: { error: { message: 'trading disabled (tradingDisabled === true)' } },
+                        state: 'end'
+                    } })
                 return t.promise
             }
             const transactionId = this.createTransactionId()
@@ -236,12 +246,14 @@ export class Socket extends SocketConnections {
         ),
     }
 
+    private XAPI: XAPI
     private tradingDisabled: boolean
     private accountId: string
     private password: string
     private appName?: string
-    constructor(accountType: string, host: string, tradingDisabled: boolean, accountId: string, password: string, appName?: string) {
+    constructor(xapi: XAPI, accountType: string, host: string, tradingDisabled: boolean, accountId: string, password: string, appName?: string) {
         super(`wss://${host}/${accountType}`)
+        this.XAPI = xapi
         this.tradingDisabled = tradingDisabled
         this.accountId = accountId
         this.password = password
