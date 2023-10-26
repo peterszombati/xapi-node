@@ -13,7 +13,8 @@ export const DefaultRateLimit = 850
 export type XAPIConfig = {
     accountId: string
     password: string
-    accountType: 'real' | 'demo'
+    accountType?: 'real' | 'demo'
+    type?: 'real' | 'demo'
     rateLimit?: number
     host?: string
     appName?: string
@@ -43,8 +44,11 @@ export class XAPI extends Listener {
         if (config.tradingDisabled === undefined) {
             config.tradingDisabled = false
         }
-        this.Socket = new Socket(this, config.accountType, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
-        this.Stream = new Stream(config.accountType, config.host)
+        if (!config.accountType || !config.type) {
+            throw new Error('invalid config type or accountType missing')
+        }
+        this.Socket = new Socket(this, config.accountType || config.type, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
+        this.Stream = new Stream(config.accountType || config.type, config.host)
         this.trading = new Trading(this, (listenerId: string, params: any[] = []) => this.fetchListener(listenerId, params))
         this.Stream.onClose((streamId, connection) => {
             if (connection.socketId && this.Socket.connections[connection.socketId]) {
