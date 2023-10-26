@@ -120,7 +120,7 @@ x.Stream.listen.getTickPrices((data) => {
 })
 
 x.onReady(() => {
-    x.Stream.subscribe.getTickPrices('EURUSD')
+    x.Stream.subscribe().getTickPrices('EURUSD')
         .catch(() => { console.error('subscribe for EURUSD failed')})
 })
 /* output
