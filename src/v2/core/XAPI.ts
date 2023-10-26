@@ -35,6 +35,10 @@ export class XAPI extends Listener {
     constructor(config: XAPIConfig, logger?: Logger) {
         super()
         this.logger = logger || new Logger()
+        const accountType = config.accountType || config.type || ''
+        if (!['real','demo'].includes(accountType)) {
+            throw new Error('invalid "accountType" config it should be demo or real')
+        }
         if (config.rateLimit === undefined) {
             config.rateLimit = DefaultRateLimit
         }
@@ -44,11 +48,8 @@ export class XAPI extends Listener {
         if (config.tradingDisabled === undefined) {
             config.tradingDisabled = false
         }
-        if (!config.accountType || !config.type) {
-            throw new Error('invalid config type or accountType missing')
-        }
-        this.Socket = new Socket(this, config.accountType || config.type, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
-        this.Stream = new Stream(config.accountType || config.type, config.host)
+        this.Socket = new Socket(this, accountType, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
+        this.Stream = new Stream(accountType, config.host)
         this.trading = new Trading(this, (listenerId: string, params: any[] = []) => this.fetchListener(listenerId, params))
         this.Stream.onClose((streamId, connection) => {
             if (connection.socketId && this.Socket.connections[connection.socketId]) {
