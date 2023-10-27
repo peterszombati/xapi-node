@@ -32,12 +32,15 @@ export class Trading {
     private _positionsUpdated: Time | null = null
     public orders: Orders = {}
 
-    constructor(XAPI: XAPI, callListener: (listenerId: string, params: any[]) => ({ key: any, data: any } | { key: any, error: any })[]) {
+    constructor(XAPI: XAPI, callListener: (listenerId: string, params: any[]) => void) {
         this.XAPI = XAPI
 
         this.XAPI.Stream.listen.getTrades((t, time) => {
             if (t.cmd === CMD_FIELD.BALANCE || t.cmd === CMD_FIELD.CREDIT) {
-                callListener('onBalanceChange', [t]) //TODO listener
+                callListener('onTransactionUpdate', [{
+                    key: 'BALANCE',
+                    trade: t,
+                }])
                 return
             }
             if (!this._positions) {
@@ -52,14 +55,14 @@ export class Trading {
                 t.cmd !== CMD_FIELD.BUY_STOP &&
                 t.cmd !== CMD_FIELD.SELL_STOP
             ) {
-                callListener('onPositionUpdate', [{//TODO listener
+                callListener('onTransactionUpdate', [{
                     key: 'PENDING',
                     trade: tradeRecord,
                 }])
             } else if (t.state === 'Deleted') {
                 if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
                     this._positions[t.position] = { value: null, lastUpdated: time }
-                    callListener('onPositionUpdate', [{
+                    callListener('onTransactionUpdate', [{
                         key: 'DELETE',
                         trade: tradeRecord,
                     }])
@@ -71,14 +74,14 @@ export class Trading {
                     if (value) {
                         const changes = getObjectChanges(value, new TradeRecord(t))
                         if (Object.keys(changes).length > 0) {
-                            callListener('onPositionUpdate', [{
+                            callListener('onTransactionUpdate', [{
                                 key: 'MODIFY',
                                 trade: tradeRecord,
                             }])
                         }
                     }
                 } else {
-                    callListener('onPositionUpdate', [{
+                    callListener('onTransactionUpdate', [{
                         key: 'CREATED',
                         trade: tradeRecord,
                     }])
@@ -280,15 +283,20 @@ export class Trading {
         })
     }
 
-    public close(order: number, volume: number | null = null, customComment: string | null = null) {
+    public close({order,volume,customComment,expiration}: {
+        order: number
+        volume?: number | undefined
+        customComment?: string | undefined
+        expiration?: number | undefined
+    }) {
         this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'close', data: {
-                input: [ order, volume, customComment ],
+                input: {order,volume,customComment,expiration},
                 state: 'before'
             } })
         const trade = this.positions?.find(x => x.position === order)
         if (!trade) {
             this.XAPI.logger.transaction({ source: 'src/v2/core/Trading/Trading.ts', function: 'close', data: {
-                    input: [ order, volume, customComment ],
+                    input: {order,volume,customComment,expiration},
                     result: { error: { message: `position is not found by id (${order})` } },
                     state: 'end'
                 } })
@@ -301,12 +309,12 @@ export class Trading {
             tp: 0,
             sl: 0,
             offset: 0,
-            expiration: new Date().getTime() + 10000, // TODO serverTime ?
+            expiration: expiration === undefined ? new Date().getTime() + 10000 : expiration, // TODO xApi server time ?
             order,
             price: 1.0,
             symbol,
-            customComment: customComment === null ? '' : customComment,
-            volume: (volume === null) ? trade.volume : Math.min(volume, trade.volume)
+            customComment: !customComment ? '' : customComment,
+            volume: (volume === undefined) ? trade.volume : Math.min(volume, trade.volume)
         })
     }
 

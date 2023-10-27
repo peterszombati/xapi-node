@@ -7,6 +7,7 @@ import {StreamConnection} from "./Stream/StreamConnection"
 import {Trading} from "./Trading/Trading"
 import {Time} from "../utils/Time"
 import {Logger} from "../utils/Logger"
+import {TradeRecord} from "./TradeRecord";
 
 export const DefaultHost = 'ws.xapi.pro'
 export const DefaultRateLimit = 850
@@ -50,7 +51,7 @@ export class XAPI extends Listener {
         }
         this.Socket = new Socket(this, accountType, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
         this.Stream = new Stream(accountType, config.host)
-        this.trading = new Trading(this, (listenerId: string, params: any[] = []) => this.fetchListener(listenerId, params))
+        this.trading = new Trading(this, (listenerId: string, params: any[] = []) => this.callListener(listenerId, params))
         this.Stream.onClose((streamId, connection) => {
             if (connection.socketId && this.Socket.connections[connection.socketId]) {
                 this.Socket.connections[connection.socketId].close()
@@ -108,6 +109,13 @@ export class XAPI extends Listener {
                 }
             }),
         ]
+    }
+
+    public onTransactionUpdate(callback: (params: {
+        key: 'BALANCE' | 'PENDING' | 'DELETE' | 'MODIFY' | 'CREATED',
+        trade: TradeRecord,
+    }) => void, key: string | null = null): ListenerChild {
+        return this.addListener('onTransactionUpdate', callback, key)
     }
 
     public connect({timeout}: { timeout: number } = {timeout: 15000}): Promise<{socketId: string,streamId: string}> {
