@@ -32,16 +32,12 @@ const x = new XAPI({
     type: 'real' // or demo
 })
 
-x.connect()
-
-x.onReady(() => {
-    console.log('Connection is ready')
-    
-    // Disconnect
-    x.disconnect().then(() => console.log('Disconnected'))
-})
-x.onReject((e) => {
-    console.error(e)
+(async () => {
+  await x.connect()
+  console.log('Connection is ready')
+  x.disconnect().then(() => console.log('Disconnected'))
+})().catch((e) => {
+  console.error(e)
 })
 ```
 #### Authentication only for XTB accounts
@@ -56,16 +52,11 @@ const x = new XAPI({
     type: 'real' // or demo
 })
 
-x.connect()
-
-x.onReady(() => {
-    console.log('Connection is ready')
-    
-    // Disconnect
-    x.disconnect().then(() => console.log('Disconnected'))
-})
-x.onReject((e) => {
-    console.error(e)
+(async () => {
+  await x.connect()
+  x.disconnect().then(() => console.log('Disconnected'))
+})().catch((e) => {
+  console.error(e)
 })
 ```
 
@@ -119,10 +110,12 @@ x.Stream.listen.getTickPrices((data) => {
     console.log(data.symbol + ': ' + data.ask + ' | ' + data.askVolume + ' volume | ' + data.level + ' level' )
 })
 
-x.onReady(() => {
-    x.Stream.subscribe.getTickPrices('EURUSD')
-        .catch(() => { console.error('subscribe for EURUSD failed')})
-})
+(async () => {
+  await x.connect()
+  x.Stream.subscribe.getTickPrices('EURUSD')
+    .catch(() => { console.error('subscribe for EURUSD failed')})
+})()
+
 /* output
 EURUSD: 1.10912 | 500000 volume | 0 level
 EURUSD: 1.10913 | 1000000 volume | 1 level
@@ -134,82 +127,59 @@ EURUSD: 1.10931 | 3500000 volume | 4 level
 ```
 #### get EURUSD M1 price history
 ```ts
-x.onReady(() => {
-    x.getPriceHistory({
-        symbol:'EURUSD',
-        period: PERIOD_FIELD.PERIOD_M1
-    }).then(({candles, digits}) => {
-        console.log(candles.length)
-        console.log(candles[0])
-        console.log('digits = ' + digits)
-    })
-})
+(async () => {
+  await x.connect()
+  x.getPriceHistory({
+    symbol:'EURUSD',
+    period: PERIOD_FIELD.PERIOD_M1
+  }).then(({candles, digits}) => {
+    console.log(candles.length)
+    console.log(candles[0])
+    console.log('digits = ' + digits)
+  })
+})()
 ```
 #### market buy EURUSD (1.0 lot / 100000 EUR)
 ```ts
-x.onReady(() => {
-    x.Socket.send.tradeTransaction({
-        cmd: CMD_FIELD.BUY,
-        customComment: null,
-        expiration: x.serverTime + 5000,
-        offset: 0,
-        order: 0,
-        price: 1,
-        symbol: 'EURUSD',
-        tp: 0,
-        sl: 0,
-        type: TYPE_FIELD.OPEN,
-        volume: 1
-    }).then(({order}) => {
-        console.log('Success ' + order)
-    }).catch(e => {
-        console.error('Failed')
-        console.error(e)
-    })
-})
+(async () => {
+  await x.connect()
+  x.Socket.send.tradeTransaction({
+    cmd: CMD_FIELD.BUY,
+    customComment: null,
+    expiration: x.serverTime + 5000,
+    offset: 0,
+    order: 0,
+    price: 1,
+    symbol: 'EURUSD',
+    tp: 0,
+    sl: 0,
+    type: TYPE_FIELD.OPEN,
+    volume: 1
+  }).then(({order}) => {
+    console.log('Success ' + order)
+  }).catch(e => {
+    console.error('Failed')
+    console.error(e)
+  })
+})()
 ```
 #### modify open position (for example set new stop loss)
 ```ts
-x.onReady(() => {
-    x.Socket.send.tradeTransaction({
-        order: 1234, // position number you can find it in (x.positions)
-        type: TYPE_FIELD.MODIFY,
-        sl: 1.05, // new stop loss level
-    }).then(({order}) => {
-        console.log('Success ' + order)
-    }).catch(e => {
-        console.error('Failed')
-        console.error(e)
-    })
-})
+(async () => {
+  await x.connect()
+  x.Socket.send.tradeTransaction({
+    order: 1234, // position number you can find it in (x.positions)
+    type: TYPE_FIELD.MODIFY,
+    sl: 1.05, // new stop loss level
+  }).then(({order}) => {
+    console.log('Success ' + order)
+  }).catch(e => {
+    console.error('Failed')
+    console.error(e)
+  })
+})()
 ```
 #### How to use other log modules than Logger4
 ```ts
-import {Logger4V2} from 'logger4'
-
-const x = new XAPI({...loginConfig, logger: new Logger4V2()})
-
-const info = new Writable()
-info._write = ((chunk, encoding, next) => {
-  // you can bind 'info' logger
-  console.log(chunk.toString())
-  next()
-})
-x.logger.onStream('info', info)
-
-const error = new Writable()
-error._write = ((chunk, encoding, next) => {
-  // you can bind 'error' logger
-  console.error(chunk.toString())
-  next()
-})
-x.logger.onStream('error', error)
-
-const debug = new Writable()
-debug._write = ((chunk, encoding, next) => {
-  // you can bind 'debug' logger
-  console.log(chunk.toString())
-  next()
-})
-x.logger.onStream('debug', debug)
+// TODO
 ```
