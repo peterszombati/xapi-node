@@ -88,7 +88,7 @@ export class SocketConnections extends Listener {
         command: string,
         args: any = {},
         transactionId: string | null = null,
-        priority = false, //TODO: currently this property is ignored
+        priority = false,
         socketId?: string,
         // @ts-ignore
     ): Promise<{
@@ -115,6 +115,7 @@ export class SocketConnections extends Listener {
                 customTag: `${command}_${transactionId}`,
             }),
             socketId,
+            priority,
         })
 
         if (socketId) {

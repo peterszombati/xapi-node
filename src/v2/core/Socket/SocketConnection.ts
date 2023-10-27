@@ -186,7 +186,12 @@ export class SocketConnection {
         try {
             const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
             if (elapsedMs < 1000) {
-                this.queue.push({transaction,promise: _promise})
+                if (transaction.state.priority) {
+                    const index = this.queue.findIndex(i => !i.transaction.state.priority)
+                    this.queue.splice(index === -1 ? 0 : index,  0, {transaction,promise: _promise})
+                } else {
+                    this.queue.push({transaction,promise: _promise})
+                }
                 this.queueTimer.isNull() && await this.callCleaner(elapsedMs)
                 return _promise.promise
             }
