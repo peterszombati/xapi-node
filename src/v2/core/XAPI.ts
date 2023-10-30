@@ -149,12 +149,10 @@ export class XAPI extends Listener {
                 resolve({socketId,streamId})
             } catch (e) {
                 reject(e)
-                try {
-                    socketId && await this.Socket.connections[socketId]?.close()
-                } catch (e) {}
-                try {
-                    streamId && await this.Stream.connections[streamId]?.close()
-                } catch (e) {}
+                await Promise.allSettled([
+                    socketId ? this.Socket.connections[socketId]?.close() : Promise.resolve(),
+                    streamId ? this.Stream.connections[streamId]?.close() : Promise.resolve(),
+                ])
                 this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'connect', error: e})
             }
         })
