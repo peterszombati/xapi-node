@@ -53,12 +53,18 @@ export class XAPI extends Listener {
         this.Stream = new Stream(accountType, config.host)
         this.trading = new Trading(this, (listenerId: string, params: any[] = []) => this.callListener(listenerId, params))
         this.Stream.onClose((streamId, connection) => {
+            this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'constructor', data: {
+                    'this.Stream.onClose': { streamId }
+                } })
             if (connection.socketId && this.Socket.connections[connection.socketId]) {
                 this.Socket.connections[connection.socketId].close()
             }
             delete this.Stream.connections[streamId]
         })
         this.Socket.onClose((socketId, connection) => {
+            this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'constructor', data: {
+                    'this.Socket.onClose': { socketId }
+                } })
             if (connection.streamId && this.Stream.connections[connection.streamId]) {
                 this.Stream.connections[connection.streamId].close()
             }
@@ -119,6 +125,9 @@ export class XAPI extends Listener {
     }
 
     public connect({timeout}: { timeout: number } = {timeout: 15000}): Promise<{socketId: string,streamId: string}> {
+        this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'connect', data: {
+                input: { timeout }
+            } })
         if (isNaN(timeout) || timeout < 0) {
             throw new Error('invalid "timeout" parameter')
         }
@@ -134,6 +143,9 @@ export class XAPI extends Listener {
                 } else {
                     throw new Error('Socket not exists after Stream connected')
                 }
+                this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'connect', data: {
+                        created: { socketId, streamId }
+                    } })
                 resolve({socketId,streamId})
             } catch (e) {
                 reject(e)
@@ -143,6 +155,7 @@ export class XAPI extends Listener {
                 try {
                     streamId && await this.Stream.connections[streamId]?.close()
                 } catch (e) {}
+                this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'connect', error: e})
             }
         })
     }
@@ -207,6 +220,9 @@ export class XAPI extends Listener {
     }
 
     public disconnect(socketId: string | undefined = undefined): Promise<PromiseSettledResult<any>[]> {
+        this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'disconnect', data: {
+                input: { socketId }
+            } })
         const promiseList: Promise<any>[] = []
         if (socketId) {
             for (const i of Object.entries(this.Socket.connections)) {
