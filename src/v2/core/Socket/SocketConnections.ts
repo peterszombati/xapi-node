@@ -25,6 +25,7 @@ export class SocketConnections extends Listener {
                         json: params.json,
                     })
                 } else {
+                    this.XAPI.counter.count(['data', 'SocketConnections', 'incomingData'], params.json.length)
                     this.transactions[params.transactionId].resolve({
                         returnData: params.returnData,
                         jsonReceived: params.time,
