@@ -7,7 +7,8 @@ import {StreamConnection} from "./Stream/StreamConnection"
 import {Trading} from "./Trading/Trading"
 import {Time} from "../utils/Time"
 import {Logger} from "../utils/Logger"
-import {TradeRecord} from "./TradeRecord";
+import {TradeRecord} from "./TradeRecord"
+import {Counter} from "../utils/Counter"
 
 export const DefaultHost = 'ws.xapi.pro'
 export const DefaultRateLimit = 850
@@ -27,15 +28,17 @@ export class XAPI extends Listener {
     public Socket: Socket
     public trading: Trading
     public logger: Logger
+    public counter: Counter
     private _serverTime: {
         timestamp: number
         ping: number
         received: Time
     } | null = null
 
-    constructor(config: XAPIConfig, logger?: Logger) {
+    constructor(config: XAPIConfig, logger?: Logger, counter?: Counter) {
         super()
         this.logger = logger || new Logger()
+        this.counter = counter || new Counter()
         const accountType = config.accountType || config.type || ''
         if (!['real','demo'].includes(accountType)) {
             throw new Error('invalid "accountType" config it should be demo or real')
