@@ -2,6 +2,7 @@ import {Listener} from '../../utils/Listener'
 import {StreamConnection} from "./StreamConnection"
 import {Increment} from "../../utils/Increment"
 import {Time} from "../../utils/Time"
+import {XAPI} from "../XAPI"
 
 export class StreamConnections extends Listener {
     public connections: Record<string, StreamConnection> = {}
@@ -12,10 +13,12 @@ export class StreamConnections extends Listener {
         >
     > = {}
     private url: string
+    protected XAPI: XAPI
 
-    constructor(url: string) {
+    constructor(url: string, XAPI: XAPI) {
         super()
         this.url = url
+        this.XAPI = XAPI
         this.addListener('onClose', (streamId: string) => {
             for (const command of Object.keys(this.subscribes)) {
                 for (const [parameter, _streamIdObject] of Object.entries(this.subscribes[command])) {
@@ -45,7 +48,7 @@ export class StreamConnections extends Listener {
     streamIdIncrement = new Increment()
     public async connect(timeoutMs: number, session: string, socketId: string): Promise<string> {
         const streamId = `${new Date().getTime()}${this.streamIdIncrement.id}`
-        this.connections[streamId] = new StreamConnection(this.url, session, (listenerId: string, params?: any[]) => this.fetchListener(listenerId, params), streamId, socketId)
+        this.connections[streamId] = new StreamConnection(this.url, session, (listenerId: string, params?: any[]) => this.fetchListener(listenerId, params), streamId, socketId, this.XAPI)
         await this.connections[streamId].connect(timeoutMs)
         return streamId
     }

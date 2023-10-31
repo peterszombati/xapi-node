@@ -124,7 +124,7 @@ export class SocketConnections extends Listener {
 
         if (socketId) {
             if (this.connections[socketId]) {
-                this.XAPI.counter.count(['data', 'sendCommand', command])
+                this.XAPI.counter.count(['data', 'SocketConnections.sendCommand', command])
                 this.connections[socketId].send(this.transactions[transactionId])
                     .catch(error => {
                         // @ts-ignore: invalid warning look at #103_line

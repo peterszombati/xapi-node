@@ -10,6 +10,7 @@ import {
 } from '../../interface/Definitions'
 import {Time} from '../../utils/Time'
 import {StreamConnections} from './StreamConnections'
+import {XAPI} from "../XAPI"
 
 interface StreamListen<T> {
     (data: T, time: Time, jsonString: string, streamId: string): void
@@ -71,7 +72,7 @@ export class Stream extends StreamConnections {
         getTradeStatus: () => this.sendUnsubscribe('TradeStatus'),
     }
 
-    constructor(accountType: string, host: string) {
-        super(`wss://${host}/${accountType}Stream`)
+    constructor(accountType: string, host: string, XAPI: XAPI) {
+        super(`wss://${host}/${accountType}Stream`, XAPI)
     }
 }

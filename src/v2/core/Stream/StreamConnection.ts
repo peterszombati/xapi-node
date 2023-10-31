@@ -3,6 +3,7 @@ import {Time} from "../../utils/Time"
 import {Transaction} from "../Transaction"
 import {Timer} from "../../utils/Timer"
 import {sleep} from "../../utils/sleep"
+import {XAPI} from "../XAPI"
 
 export class StreamConnection {
     public connectedTime: Time | null = null
@@ -17,12 +18,14 @@ export class StreamConnection {
     private callListener: (listenerId: string, params?: any[]) => any[]
     private connectionProgress: Transaction | null = null
     private disconnectionProgress: Transaction | null = null
+    private XAPI: XAPI
 
-    constructor(url: string, session: string, callListener: (listenerId: string, params?: any[]) => any[], streamId: string, socketId: string) {
+    constructor(url: string, session: string, callListener: (listenerId: string, params?: any[]) => any[], streamId: string, socketId: string, XAPI: XAPI) {
         this.session = session
         this.socketId = socketId
         this.streamId = streamId
         this.callListener = callListener
+        this.XAPI = XAPI
         this.WebSocket = new WebSocketWrapper(url)
 
         const pingTimer = new Timer()
@@ -47,6 +50,7 @@ export class StreamConnection {
             this.lastReceivedMessage = new Time()
             try {
                 const message = JSON.parse(json.toString().trim())
+                this.XAPI.counter.count(['data', 'StreamConnection', 'incomingData'], json.length)
 
                 try {
                     this.callListener(`command_${message.command}`, [message.data, new Time(), json, streamId])
@@ -54,6 +58,7 @@ export class StreamConnection {
                     console.error(e)
                 }
             } catch (e) {
+                this.XAPI.counter.count(['error', 'StreamConnection', 'handleMessage'], 1)
                 this.callListener(`handleMessage`, [{error: e, time: new Time(), json, streamId}])
             }
         })
@@ -126,6 +131,7 @@ export class StreamConnection {
                 ...completion,
             }),
         })
+        this.XAPI.counter.count(['data', 'StreamConnection.sendCommand', command])
         return this.send(t)
     }
 
