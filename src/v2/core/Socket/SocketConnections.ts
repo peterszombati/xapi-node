@@ -3,18 +3,22 @@ import {SocketConnection} from './SocketConnection'
 import {Transaction} from '../Transaction'
 import {Time} from '../../utils/Time'
 import {Increment} from "../../utils/Increment"
+import {XAPI} from "../XAPI"
 
 export class SocketConnections extends Listener {
     public connections: Record<string, SocketConnection> = {}
     public transactions: Record<string, Transaction> = {}
     private url: string
+    protected XAPI: XAPI
 
-    constructor(url: string) {
+    constructor(url: string, XAPI: XAPI) {
         super()
         this.url = url
+        this.XAPI = XAPI
         this.addListener('handleMessage', (params: {command: string, error?: any, returnData?: any, time: Time, transactionId: string, json: string, socketId: string}) => {
             if (this.transactions[params.transactionId]) {
                 if (params.error) {
+                    this.XAPI.counter.count(['error', 'SocketConnections', 'handleMessage'], 1)
                     this.transactions[params.transactionId].reject({
                         error: params.error,
                         jsonReceived: params.time,

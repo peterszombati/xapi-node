@@ -246,14 +246,18 @@ export class Socket extends SocketConnections {
         ),
     }
 
-    private XAPI: XAPI
     private tradingDisabled: boolean
     private accountId: string
     private password: string
     private appName?: string
-    constructor(xapi: XAPI, accountType: string, host: string, tradingDisabled: boolean, accountId: string, password: string, appName?: string) {
-        super(`wss://${host}/${accountType}`)
-        this.XAPI = xapi
+    constructor(XAPI: XAPI,
+                accountType: string,
+                host: string,
+                tradingDisabled: boolean,
+                accountId: string,
+                password: string,
+                appName?: string) {
+        super(`wss://${host}/${accountType}`, XAPI)
         this.tradingDisabled = tradingDisabled
         this.accountId = accountId
         this.password = password
