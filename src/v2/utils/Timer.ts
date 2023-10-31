@@ -25,6 +25,9 @@ export class Timer {
                         p.resolve(data)
                     })
                     result?.catch(e => {
+                        if (timeoutId === this.timeout) {
+                            this.timeout = null
+                        }
                         p.reject(e)
                     })
                 } else if (timeoutId === this.timeout) {
