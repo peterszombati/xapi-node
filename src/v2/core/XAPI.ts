@@ -53,7 +53,7 @@ export class XAPI extends Listener {
             config.tradingDisabled = false
         }
         this.Socket = new Socket(this, accountType, config.host, config.tradingDisabled, config.accountId, config.password, config.appName)
-        this.Stream = new Stream(accountType, config.host)
+        this.Stream = new Stream(accountType, config.host, this)
         this.trading = new Trading(this, (listenerId: string, params: any[] = []) => this.callListener(listenerId, params))
         this.Stream.onClose((streamId, connection) => {
             this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'constructor', data: {
