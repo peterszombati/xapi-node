@@ -241,11 +241,11 @@ export class XAPI extends Listener {
                 }
             }
         } else {
-            for (const i of Object.entries(this.Socket.connections)) {
-                promiseList.push(i[1].close())
+            for (const i of Object.values(this.Socket.connections)) {
+                promiseList.push(i.close())
             }
-            for (const i of Object.entries(this.Stream.connections)) {
-                promiseList.push(i[1].close())
+            for (const i of Object.values(this.Stream.connections)) {
+                promiseList.push(i.close())
             }
         }
         return Promise.allSettled(promiseList)

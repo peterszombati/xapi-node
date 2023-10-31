@@ -162,15 +162,15 @@ export class Trading {
         const t = new Timer()
 
         this.XAPI.onClose(() => {
-            if (Object.entries(this.XAPI.Socket.connections).every(([_,c]) => c.status === 'DISCONNECTED')) {
+            if (Object.values(this.XAPI.Socket.connections).every((c) => c.status === 'DISCONNECTED')) {
                 t.clear()
             }
         })
 
         this.XAPI.Stream.onOpen(() => {
-            if (t.isNull() && Object.entries(this.XAPI.Socket.connections).some(([_,c]) => c.lastReceivedMessage !== null && c.status !== 'DISCONNECTED')) {
+            if (t.isNull() && Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status !== 'DISCONNECTED')) {
                 t.setInterval(() => {
-                    if (Object.entries(this.XAPI.Socket.connections).some(([_,c]) => c.lastReceivedMessage !== null && c.status === 'CONNECTED')) {
+                    if (Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status === 'CONNECTED')) {
                         Object.values(this.orders).forEach(order => {
                             if (order.time.elapsedMs() > 5000 && order.resolve !== undefined && order.reject !== undefined) {
                                 this.XAPI.Socket.send.tradeTransactionStatus(order.order)

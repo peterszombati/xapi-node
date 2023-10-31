@@ -79,12 +79,11 @@ export class SocketConnections extends Listener {
     }
 
     private getSocketId(): string | undefined {
-        return Object.entries(this.connections).map(([_,c]) => {
-            const times = c.capacity.filter(i => i.elapsedMs() < 1500)
-            const point = times.length <= 4 ? times.length : (5 + (1500 - times[4].elapsedMs()))
+        return Object.values(this.connections).map((connection) => {
+            const times = connection.capacity.filter(i => i.elapsedMs() < 1500)
             return {
-                point,
-                connection: c,
+                point: times.length <= 4 ? times.length : (5 + (1500 - times[4].elapsedMs())),
+                connection,
             }
         }).sort((a,b) => a.point - b.point)[0]?.connection?.socketId
     }
