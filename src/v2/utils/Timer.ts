@@ -17,7 +17,7 @@ export class Timer {
         const timeoutId = setTimeout(() => {
             try {
                 const result = callback()
-                if (typeof result?.then === 'function') {
+                if (result instanceof Promise) {
                     result.then((data) => {
                         if (timeoutId === this.timeout) {
                             this.timeout = null
