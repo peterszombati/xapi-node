@@ -10,20 +10,15 @@ export function messageQueuStressTest(x: XAPI): Promise<void> {
       x.Socket.listen.getVersion(_ => {
         console.log('Test: getVersion')
         received += 1
-        if (received === 10) {
-          console.log('Test: successful - 10th message arrived after ' + start?.elapsedMs() + 'ms')
+        if (received === 30) {
+          console.log('Test: successful - 30th message arrived after ' + start?.elapsedMs() + 'ms')
           return resolve()
         }
       })
       start = new Time()
       console.log('Test: started.')
-      for (let i = 0; i < 10; i++) {
-        /** this await is mandatory! otherwise:
-         * 1.the connection would get jammed and the server would disconnect
-         * 2. XAPI would restart the connection and call
-         * 3. the onReady event would be fired creating an infinite loop
-         */
-        await x.Socket.send.getVersion()
+      for (let i = 0; i < 30; i++) {
+        x.Socket.send.getVersion()
       }
     } catch (e) {
       reject(e)
