@@ -154,7 +154,7 @@ export class SocketConnection {
             const jsons = this.queue.splice(0, 1)
             if (jsons.length === 1) {
                 if (jsons[0].transaction.state.createdAt.elapsedMs() > 9000) {
-                    jsons[0].promise.reject(new Error('queue overloaded'))
+                    jsons[0].promise.reject(new Error('timeout due to queue overloaded'))
                 } else {
                     try {
                         this.send(jsons[0].transaction, jsons[0].promise)
