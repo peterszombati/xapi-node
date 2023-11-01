@@ -63,28 +63,23 @@ describe('tests', () => {
     this.timeout(8000)
     const x = await init()
     await messageQueuStressTest(x)
-    x.disconnect()
   })
 
   it('candleTest', async function () {
     this.timeout(8000)
     const x = await init()
     await getCandlesTest(x)
-    x.disconnect()
   })
-
 
   it('subscribeTest', async function () {
     this.timeout(8000)
     const x = await init()
     await subscribeTest(x)
-    x.disconnect()
   })
 
   it('trade EURUSD', async function () {
     this.timeout(8000)
     const x = await init()
     await tradeTest(x)
-    x.disconnect()
   })
 })
