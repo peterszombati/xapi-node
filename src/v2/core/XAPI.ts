@@ -147,12 +147,28 @@ export class XAPI extends Listener {
             try {
                 socketId = await this.Socket.connect(timeout)
                 const streamSessionId = (await this.Socket.send.login(socketId)).data.returnData.streamSessionId
-                streamId = await this.Stream.connect(timeout, streamSessionId, socketId)
-                if (this.Socket.connections[socketId]) {
-                    this.Socket.connections[socketId].streamId = streamId
-                } else {
+                const result = await Promise.allSettled([
+                    this.trading.positionsUpdated === null ? this.Socket.send.getTrades() : Promise.resolve(undefined),
+                    this._serverTime === null ? this.Socket.send.getServerTime() : Promise.resolve(undefined),
+                    this.Stream.connect(timeout, streamSessionId, socketId),
+                ])
+                // @ts-ignore
+                if (result[2].value) {
+                    // @ts-ignore
+                    streamId = result[2].value
+                }
+                const error = result.some(i => i.status !== 'fulfilled')
+                if (error) {
+                    // @ts-ignore
+                    throw error.reason
+                }
+                if (!streamId || !this.Stream.connections[streamId]) {
+                    throw new Error('Stream not exists after Socket connected')
+                }
+                if (!this.Socket.connections[socketId]) {
                     throw new Error('Socket not exists after Stream connected')
                 }
+                this.Socket.connections[socketId].streamId = streamId
                 this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'connect', data: {
                         created: { socketId, streamId }
                     } })
