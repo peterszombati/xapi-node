@@ -1,10 +1,9 @@
-import {CMD_FIELD} from '../interface/Enum'
+import {CMD_FIELD, PositionType} from '../interface/Enum'
 import {getPositionType} from '../utils/getPositionType'
 
 export type TradeRecordParams = {
     close_time: number
-
-    //TODO:close_price: number
+    close_price?: number | undefined
     closed: boolean
     cmd: CMD_FIELD
     comment: string
@@ -29,7 +28,7 @@ export type TradeRecordParams = {
 export class TradeRecord {
     public close_time: number
 
-    //TODO:public close_price: number
+    public close_price: number | undefined
     public closed: boolean
     public cmd: CMD_FIELD
     public comment: string
@@ -52,7 +51,6 @@ export class TradeRecord {
 
     constructor(params: TradeRecordParams) {
         this.close_time = params.close_time
-        //TODO:this.close_price = params.close_price
         this.closed = params.closed
         this.cmd = params.cmd
         this.comment = params.comment
@@ -72,6 +70,7 @@ export class TradeRecord {
         this.symbol = params.symbol
         this.tp = params.tp
         this.volume = params.volume
+        this.close_price = this.position_type === PositionType.closed ? params.close_price : undefined
     }
 
     public get position_type() {
@@ -81,7 +80,7 @@ export class TradeRecord {
     valueOf(): TradeRecordParams {
         return {
             close_time: this.close_time,
-            //TODO:close_price: this.close_price,
+            close_price: this.close_price,
             closed: this.closed,
             cmd: this.cmd,
             comment: this.comment,
