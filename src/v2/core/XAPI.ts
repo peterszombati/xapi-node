@@ -86,6 +86,13 @@ export class XAPI extends Listener {
         })
     }
 
+    public get Time(): null | Date {
+        if (!this._serverTime) {
+            return null
+        }
+        return new Date(this._serverTime.received.elapsedMs() + this._serverTime.timestamp + this._serverTime.ping)
+    }
+
     public onClose(callback: (params: {
         socket: { socketId: string, connection: SocketConnection | null }
         stream: { streamId: string, connection: StreamConnection | null }
