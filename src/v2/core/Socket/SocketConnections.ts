@@ -15,7 +15,9 @@ export class SocketConnections extends Listener {
         super()
         this.url = url
         this.XAPI = XAPI
-        this.addListener('handleMessage', (params: {command: string, error?: any, returnData?: any, time: Time, transactionId: string, json: string, socketId: string}) => {
+        this.addListener('handleMessage', (params: {
+            command: string, error?: any, returnData?: any, time: Time, transactionId: string, json: string, socketId: string
+        }) => {
             if (this.transactions[params.transactionId]) {
                 if (params.error) {
                     this.XAPI.counter.count(['error', 'SocketConnections', 'handleMessage'], 1)
@@ -68,7 +70,12 @@ export class SocketConnections extends Listener {
     socketIdIncrement = new Increment()
     public connect(timeoutMs: number): Promise<string> {
         const socketId = `${new Date().getTime()}${this.socketIdIncrement.id}`
-        this.connections[socketId] = new SocketConnection(this.url, (listenerId: string, params?: any[]) => this.fetchListener(listenerId, params), socketId)
+        this.connections[socketId] = new SocketConnection(
+          this.url,
+          (listenerId: string, params?: any[]) => this.fetchListener(listenerId, params),
+          socketId,
+          this.XAPI
+        )
         return this.connections[socketId].connect(timeoutMs)
             .then(() => socketId)
     }
@@ -124,9 +131,10 @@ export class SocketConnections extends Listener {
 
         if (socketId) {
             if (this.connections[socketId]) {
-                this.XAPI.counter.count(['data', 'SocketConnections.sendCommand', command])
+                this.XAPI.counter.count(['data', 'SocketConnections', 'sendCommand', command])
                 this.connections[socketId].send(this.transactions[transactionId])
                     .catch(error => {
+                        this.XAPI.counter.count(['error', 'SocketConnections', 'sendCommand', command], 1)
                         // @ts-ignore: invalid warning look at #103_line
                         if (this.transactions[transactionId]) {
                             // @ts-ignore: invalid warning look at #103_line

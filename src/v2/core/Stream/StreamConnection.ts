@@ -131,7 +131,7 @@ export class StreamConnection {
                 ...completion,
             }),
         })
-        this.XAPI.counter.count(['data', 'StreamConnection.sendCommand', command])
+        this.XAPI.counter.count(['data', 'StreamConnection', 'sendCommand', command])
         return this.send(t)
     }
 
@@ -191,6 +191,7 @@ export class StreamConnection {
             transaction.setState({
                 sent: new Time()
             })
+            this.XAPI.counter.count(['data', 'StreamConnection', 'outgoingData'], transaction.state.json.length)
             transaction.resolve(time)
         } catch (e) {
             transaction.reject(e)

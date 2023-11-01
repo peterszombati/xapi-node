@@ -5,6 +5,7 @@ import {Transaction} from '../Transaction'
 import {Timer} from "../../utils/Timer"
 import {createPromise, PromiseObject} from "../../utils/createPromise"
 import {sleep} from "../../utils/sleep"
+import {XAPI} from "../XAPI"
 
 export class SocketConnection {
     public connectedTime: Time | null = null
@@ -18,10 +19,12 @@ export class SocketConnection {
     private callListener: (listenerId: string, params?: any[]) => any[]
     private connectionProgress: Transaction | null = null
     private disconnectionProgress: Transaction | null = null
+    private XAPI: XAPI
 
-    constructor(url: string, callListener: (listenerId: string, params?: any[]) => any[], socketId: string) {
+    constructor(url: string, callListener: (listenerId: string, params?: any[]) => any[], socketId: string, XAPI: XAPI) {
         this.socketId = socketId
         this.callListener = callListener
+        this.XAPI = XAPI
         this.WebSocket = new WebSocketWrapper(url)
 
         const pingTimer = new Timer()
@@ -205,6 +208,7 @@ export class SocketConnection {
             transaction.setState({
                 sent: new Time()
             })
+            this.XAPI.counter.count(['data', 'SocketConnection', 'outgoingData'], transaction.state.json.length)
             _promise.resolve(time)
         } catch (e) {
             _promise.reject(e)
