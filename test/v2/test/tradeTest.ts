@@ -14,7 +14,7 @@ export function tradeTest(x: XAPI): Promise<void> {
       if (!position) {
         throw new Error('position not found;' + x.trading.openPositions)
       }
-      await x.trading.close(position.order)
+      await x.trading.close({ order: position.order })
       const position1 = x.trading.openPositions?.find(i => i.symbol === symbol && i.volume >= volume)
       if (position1) {
         throw new Error('position found after close;' + x.trading.openPositions)
