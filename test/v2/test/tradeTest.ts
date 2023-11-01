@@ -2,7 +2,7 @@ import {XAPI} from '../../../src/v2/core/XAPI'
 
 export function tradeTest(x: XAPI): Promise<void> {
   const symbol = 'EURUSD'
-  const volume = 0.1
+  const volume = 0.01
 
   return new Promise(async (resolve, reject) => {
     try {
