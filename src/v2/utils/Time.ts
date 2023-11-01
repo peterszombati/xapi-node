@@ -1,13 +1,9 @@
 const isNodeJS = typeof window === 'undefined'
 
-function calculateElapsedTime(time: [number, number]): number {
-    if (isNodeJS) {
-        const hrtime = process.hrtime(time)
-        return Math.floor(hrtime[0] * 1000 + hrtime[1] / 1000000)
-    } else {
-        return performance.now() - time[0]
-    }
-}
+const calculateElapsedTime = isNodeJS ? ((time: [number, number]): number => {
+      const hrtime = process.hrtime(time)
+      return Math.floor(hrtime[0] * 1000 + hrtime[1] / 1000000)
+  }) : ((time: [number, number]): number => performance.now() - time[0])
 
 export class Time {
     protected unit: [number, number]
