@@ -18,22 +18,40 @@ export class SocketConnections extends Listener {
         this.addListener('handleMessage', (params: {
             command: string, error?: any, returnData?: any, time: Time, transactionId: string, json: string, socketId: string
         }) => {
-            if (this.transactions[params.transactionId]) {
+            const transaction = this.transactions[params.transactionId]
+            if (transaction) {
+                const elapsedMs = transaction.state?.sent?.elapsedMs()
                 if (params.error) {
-                    this.XAPI.counter.count(['error', 'SocketConnections', 'handleMessage'], 1)
-                    this.transactions[params.transactionId].reject({
+                    this.XAPI.counter.count(['error', 'SocketConnections', 'handleMessage'])
+                    elapsedMs !== undefined && this.XAPI.counter.count(
+                      ['data', 'SocketConnection', 'responseTime', 'handleMessage', transaction.state.command || 'undefined_command'],
+                      elapsedMs
+                    )
+                    this.XAPI.counter.count(
+                      ['data', 'SocketConnection', 'responseTime2', 'handleMessage', transaction.state.command || 'undefined_command'],
+                      transaction.state.createdAt.elapsedMs()
+                    )
+                    transaction.reject({
                         error: params.error,
                         jsonReceived: params.time,
                         json: params.json,
                     })
                 } else {
                     this.XAPI.counter.count(['data', 'SocketConnections', 'incomingData'], params.json.length)
-                    this.transactions[params.transactionId].resolve({
+                    elapsedMs !== undefined && this.XAPI.counter.count(
+                      ['data', 'SocketConnection', 'responseTime', 'handleMessage', transaction.state.command || 'undefined_command'],
+                      elapsedMs
+                    )
+                    this.XAPI.counter.count(
+                      ['data', 'SocketConnection', 'responseTime2', 'handleMessage', transaction.state.command || 'undefined_command'],
+                      transaction.state.createdAt.elapsedMs()
+                    )
+                    transaction.resolve({
                         returnData: params.returnData,
                         jsonReceived: params.time,
                         json: params.json,
                     })
-                    this.callListener(`command_${params.command}`, [params.returnData, params.time, this.transactions[params.transactionId], params.json, params.socketId])
+                    this.callListener(`command_${params.command}`, [params.returnData, params.time, transaction, params.json, params.socketId])
                 }
                 delete this.transactions[params.transactionId]
             }
@@ -120,11 +138,13 @@ export class SocketConnections extends Listener {
 
         this.transactions[transactionId] = new Transaction({
             transactionId,
+            command,
             json: JSON.stringify({
                 command,
                 arguments: Object.keys(args).length === 0 ? undefined : args,
                 customTag: `${command}_${transactionId}`,
             }),
+            args,
             socketId,
             priority,
         })
@@ -134,7 +154,7 @@ export class SocketConnections extends Listener {
                 this.XAPI.counter.count(['data', 'SocketConnections', 'sendCommand', command])
                 this.connections[socketId].send(this.transactions[transactionId])
                     .catch(error => {
-                        this.XAPI.counter.count(['error', 'SocketConnections', 'sendCommand', command], 1)
+                        this.XAPI.counter.count(['error', 'SocketConnections', 'sendCommand', command])
                         // @ts-ignore: invalid warning look at #103_line
                         if (this.transactions[transactionId]) {
                             // @ts-ignore: invalid warning look at #103_line

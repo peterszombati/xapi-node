@@ -155,6 +155,10 @@ export class SocketConnection {
             if (jsons.length === 1) {
                 if (jsons[0].transaction.state.createdAt.elapsedMs() > 9000) {
                     jsons[0].promise.reject(new Error('timeout due to queue overloaded'))
+                    this.XAPI.counter.count(
+                      ['data', 'SocketConnection', 'send', 'queue', 'timeout'],
+                      1
+                    )
                 } else {
                     try {
                         this.send(jsons[0].transaction, jsons[0].promise)
@@ -189,6 +193,10 @@ export class SocketConnection {
         try {
             const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
             if (elapsedMs < 1000) {
+                this.XAPI.counter.count(
+                  ['data', 'SocketConnection', 'send', 'queue', 'add'],
+                  1
+                )
                 if (transaction.state.priority) {
                     const index = this.queue.findIndex(i => !i.transaction.state.priority)
                     this.queue.splice(index === -1 ? 0 : index,  0, {transaction,promise: _promise})
@@ -205,6 +213,17 @@ export class SocketConnection {
                 this.capacity.unshift(time)
             }
             await this.WebSocket.send(transaction.state.json)
+            this.XAPI.counter.count(
+              ['data', 'SocketConnection', 'send', 'waitingTime'],
+              transaction.state.createdAt.elapsedMs()
+            )
+            this.XAPI.logger.debug({ source: 'src/v2/core/Socket/SocketConnection.ts', function: 'send', data: {
+                command: transaction.state.command,
+                args: transaction.state.command === 'login' ? {
+                    ...transaction.state.args,
+                    password: typeof transaction.state?.args?.password == 'string' ? '*' : undefined,
+                } : transaction.state.args,
+                } })
             transaction.setState({
                 sent: new Time()
             })

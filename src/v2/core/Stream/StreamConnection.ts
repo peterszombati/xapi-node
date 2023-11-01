@@ -58,7 +58,7 @@ export class StreamConnection {
                     console.error(e)
                 }
             } catch (e) {
-                this.XAPI.counter.count(['error', 'StreamConnection', 'handleMessage'], 1)
+                this.XAPI.counter.count(['error', 'StreamConnection', 'handleMessage'])
                 this.callListener(`handleMessage`, [{error: e, time: new Time(), json, streamId}])
             }
         })
