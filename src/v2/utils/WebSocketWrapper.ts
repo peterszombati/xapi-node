@@ -135,16 +135,11 @@ export class WebSocketWrapper extends Listener {
         this.addListener('ws_close', callback)
     }
 
-    send(data: any): Promise<void> {
+    async send(data: any): Promise<void> {
         if (this.status) {
-            try {
-                this.ws.send(data)
-            } catch (e) {
-                return Promise.reject(e)
-            }
-            return Promise.resolve()
+            this.ws.send(data)
         } else {
-            return Promise.reject(this.url + ' websocket is not connected')
+            throw new Error(this.url + ' websocket is not connected')
         }
     }
 
