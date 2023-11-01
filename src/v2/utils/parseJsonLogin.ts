@@ -9,15 +9,17 @@ export function parseJsonLogin(jsonString: string): { accountId: string, passwor
         throw new Error(`json is not valid (typeof = ${typeof json})`)
     }
 
-    const {
+    let {
         accountId,
         password,
         accountType,
+        type,
         rateLimit,
         host,
         appName,
         tradingDisabled
-    }: { accountId: string, password: string, accountType: 'real' | 'demo', rateLimit?: number, host?: string, appName?: string, tradingDisabled?: boolean } = json
+    }: { accountId: string, password: string, accountType?: 'real' | 'demo', type?: 'real' | 'demo', rateLimit?: number, host?: string, appName?: string, tradingDisabled?: boolean } = json
+    accountType ||= type
     if (
         typeof accountId !== 'string' ||
         typeof password !== 'string' ||
@@ -30,8 +32,8 @@ export function parseJsonLogin(jsonString: string): { accountId: string, passwor
     ) {
         throw new Error('json is not valid')
     }
-    if (['real', 'demo'].every(x => x !== accountType.toLowerCase())) {
-        throw new Error('json not contains valid type (it should be "real" or "demo")')
+    if (!accountType || ['real', 'demo'].every(x => x !== accountType?.toLowerCase())) {
+        throw new Error('json not contains valid "accountType" (it should be "real" or "demo")')
     }
     return {
         accountId,
