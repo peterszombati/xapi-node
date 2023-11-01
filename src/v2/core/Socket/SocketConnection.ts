@@ -227,7 +227,7 @@ export class SocketConnection {
             } else {
                 this.callListener('handleMessage', [{
                     command,
-                    error: {errorDescr: 'Received a message without vaild customTag', errorCode: -1},
+                    error: {errorDescr: 'Received a message without valid customTag', errorCode: -1},
                     time,
                     transactionId,
                     json,
