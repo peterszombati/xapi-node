@@ -7,7 +7,9 @@ export class Timer {
     setInterval(callback: () => void, ms: number) {
         this.clear()
         this.interval = setInterval(() => {
-            callback()
+            try { // ignore errors
+                callback()
+            } catch (e) {}
         }, ms)
     }
 
