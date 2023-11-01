@@ -9,6 +9,7 @@ export function tradeTest(x: XAPI): Promise<void> {
       await x.trading.buy({
         symbol,
         volume,
+        limit: 0.1
       })
       const position = x.trading.openPositions?.find(i => i.symbol === symbol && i.volume >= volume)
       if (!position) {
