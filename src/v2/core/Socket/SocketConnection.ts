@@ -128,7 +128,7 @@ export class SocketConnection {
     }
 
     public close() {
-        if (!this.WebSocket.status || !this.WebSocket.connecting) {
+        if (!this.WebSocket.status && !this.WebSocket.connecting) {
             return Promise.resolve()
         }
         if (this.disconnectionProgress) {
