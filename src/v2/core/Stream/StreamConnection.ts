@@ -172,14 +172,14 @@ export class StreamConnection {
     protected async send(transaction: Transaction<{json: string},{sent?: Time}>): Promise<{ transaction: Transaction<{json: string},{sent?: Time}>, data: any}> {
         if (transaction.state.json.length > 1000) {
             transaction.reject(new Error('Each command invocation should not contain more than 1kB of data.'))
-            return transaction.promise.then(r => r.data)
+            return transaction.promise
         }
         try {
             const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
             if (elapsedMs < 1000) {
                 this.queue.push({transaction})
                 this.queueTimer.isNull() && await this.callCleaner(elapsedMs)
-                return transaction.promise.then(r => r.data)
+                return transaction.promise
             }
             const time: Time = new Time()
             if (this.capacity.length > 20) {
