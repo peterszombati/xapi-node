@@ -41,14 +41,7 @@ export class Trading {
                     key: 'BALANCE',
                     trade: t,
                 }])
-                return
-            }
-            if (!this._positions) {
-                return
-            }
-
-            const tradeRecord = new TradeRecord(t)
-            if (
+            } else if (
                 t.type === TYPE_FIELD.PENDING &&
                 t.cmd !== CMD_FIELD.BUY_LIMIT &&
                 t.cmd !== CMD_FIELD.SELL_LIMIT &&
@@ -57,37 +50,45 @@ export class Trading {
             ) {
                 callListener('onTransactionUpdate', [{
                     key: 'PENDING',
-                    trade: tradeRecord,
+                    trade: new TradeRecord(t),
                 }])
             } else if (t.state === 'Deleted') {
+                if (!this._positions) {
+                    return
+                }
                 if (this._positions[t.position] !== undefined && this._positions[t.position].value !== null) {
                     this._positions[t.position] = { value: null, lastUpdated: time }
                     callListener('onTransactionUpdate', [{
                         key: 'DELETE',
-                        trade: tradeRecord,
+                        trade: new TradeRecord(t),
                     }])
                 }
-            } else if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
-                if (this._positions[t.position] !== undefined) {
-                    const { value } = this._positions[t.position]
+            } else {
+                if (!this._positions) {
+                    return
+                }
+                if (this._positions[t.position] === undefined || this._positions[t.position].value !== null) {
+                    if (this._positions[t.position] !== undefined) {
+                        const { value } = this._positions[t.position]
 
-                    if (value) {
-                        const changes = getObjectChanges(value, new TradeRecord(t))
-                        if (Object.keys(changes).length > 0) {
-                            callListener('onTransactionUpdate', [{
-                                key: 'MODIFY',
-                                trade: tradeRecord,
-                            }])
+                        if (value) {
+                            const changes = getObjectChanges(value, new TradeRecord(t))
+                            if (Object.keys(changes).length > 0) {
+                                callListener('onTransactionUpdate', [{
+                                    key: 'MODIFY',
+                                    trade: new TradeRecord(t),
+                                }])
+                            }
                         }
+                    } else {
+                        callListener('onTransactionUpdate', [{
+                            key: 'CREATED',
+                            trade: new TradeRecord(t),
+                        }])
                     }
-                } else {
-                    callListener('onTransactionUpdate', [{
-                        key: 'CREATED',
-                        trade: tradeRecord,
-                    }])
-                }
 
-                this._positions[t.position] = { value: new TradeRecord(t), lastUpdated: time }
+                    this._positions[t.position] = { value: new TradeRecord(t), lastUpdated: time }
+                }
             }
         })
 
