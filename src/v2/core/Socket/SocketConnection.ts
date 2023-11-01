@@ -155,8 +155,7 @@ export class SocketConnection {
             if (jsons.length === 1) {
                 if (jsons[0].transaction.state.createdAt.elapsedMs() > 9000) {
                     jsons[0].promise.reject(new Error('timeout due to queue overloaded'))
-                    this.XAPI.counter.count(
-                      ['data', 'SocketConnection', 'send', 'queue', 'timeout'],
+                    this.XAPI.counter.count(['data', 'SocketConnection', 'send', 'queue', 'timeout'],
                       1
                     )
                 } else {
@@ -193,8 +192,7 @@ export class SocketConnection {
         try {
             const elapsedMs = this.capacity.length > 4 ? this.capacity[4].elapsedMs() : 1001
             if (elapsedMs < 1000) {
-                this.XAPI.counter.count(
-                  ['data', 'SocketConnection', 'send', 'queue', 'add'],
+                this.XAPI.counter.count(['data', 'SocketConnection', 'send', 'queue', 'add'],
                   1
                 )
                 if (transaction.state.priority) {
@@ -213,8 +211,7 @@ export class SocketConnection {
                 this.capacity.unshift(time)
             }
             await this.WebSocket.send(transaction.state.json)
-            this.XAPI.counter.count(
-              ['data', 'SocketConnection', 'send', 'waitingTime'],
+            this.XAPI.counter.count(['data', 'SocketConnection', 'send', 'waitingTime'],
               transaction.state.createdAt.elapsedMs()
             )
             this.XAPI.logger.debug({ source: 'src/v2/core/Socket/SocketConnection.ts', function: 'send', data: {

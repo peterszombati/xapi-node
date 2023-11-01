@@ -23,12 +23,11 @@ export class SocketConnections extends Listener {
                 const elapsedMs = transaction.state?.sent?.elapsedMs()
                 if (params.error) {
                     this.XAPI.counter.count(['error', 'SocketConnections', 'handleMessage'])
-                    elapsedMs !== undefined && this.XAPI.counter.count(
-                      ['data', 'SocketConnection', 'responseTime', 'handleMessage', transaction.state.command || 'undefined_command'],
+                    elapsedMs !== undefined && this.XAPI.counter.count(['data', 'SocketConnection', 'responseTime', 'handleMessage',
+                          transaction.state.command || 'undefined_command'],
                       elapsedMs
                     )
-                    this.XAPI.counter.count(
-                      ['data', 'SocketConnection', 'responseTime2', 'handleMessage', transaction.state.command || 'undefined_command'],
+                    this.XAPI.counter.count(['data', 'SocketConnection', 'responseTime2', 'handleMessage', transaction.state.command || 'undefined_command'],
                       transaction.state.createdAt.elapsedMs()
                     )
                     transaction.reject({
@@ -38,12 +37,12 @@ export class SocketConnections extends Listener {
                     })
                 } else {
                     this.XAPI.counter.count(['data', 'SocketConnections', 'incomingData'], params.json.length)
-                    elapsedMs !== undefined && this.XAPI.counter.count(
-                      ['data', 'SocketConnection', 'responseTime', 'handleMessage', transaction.state.command || 'undefined_command'],
+                    elapsedMs !== undefined && this.XAPI.counter.count(['data', 'SocketConnection', 'responseTime', 'handleMessage',
+                          transaction.state.command || 'undefined_command'],
                       elapsedMs
                     )
-                    this.XAPI.counter.count(
-                      ['data', 'SocketConnection', 'responseTime2', 'handleMessage', transaction.state.command || 'undefined_command'],
+                    this.XAPI.counter.count(['data', 'SocketConnection', 'responseTime2', 'handleMessage',
+                          transaction.state.command || 'undefined_command'],
                       transaction.state.createdAt.elapsedMs()
                     )
                     transaction.resolve({
