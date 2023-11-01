@@ -24,7 +24,7 @@ export class Timer {
                         }
                         p.resolve(data)
                     })
-                    result?.catch(e => {
+                    result.catch(e => {
                         if (timeoutId === this.timeout) {
                             this.timeout = null
                         }
