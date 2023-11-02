@@ -163,7 +163,7 @@ export class Trading {
         const t = new Timer()
 
         this.XAPI.onClose(() => {
-            if (Object.values(this.XAPI.Socket.connections).every((c) => c.status === 'DISCONNECTED')) {
+            if (Object.values(this.XAPI.Stream.connections).every((c) => c.status === 'DISCONNECTED')) {
                 t.clear()
             }
         })
@@ -390,7 +390,14 @@ export class Trading {
 
                         if (!this.XAPI.Stream.subscribes['TradeStatus']) {
                             await sleep(499)
-                            await this.XAPI.Socket.send.tradeTransactionStatus(returnData.order)
+                            const r = (await this.XAPI.Socket.send.tradeTransactionStatus(returnData.order)).data
+                            const status = r.returnData.requestStatus
+                            if (status === REQUEST_STATUS_FIELD.ACCEPTED) {
+                                delete this.orders[returnData.order]
+                                resolve(r.returnData)
+                            } else if (status !== REQUEST_STATUS_FIELD.PENDING) {
+                                reject(r.returnData)
+                            }
                         }
                     } else {
                         if (data.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
