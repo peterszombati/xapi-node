@@ -11,6 +11,7 @@ export class SocketConnection {
     public connectedTime: Time | null = null
     public lastReceivedMessage: Time | null = null
     public capacity: Time[] = []
+    public loggedIn: boolean
     public streamId: string
     public socketId: string
     private queue: { transaction: Transaction, promise: PromiseObject<any, any> }[] = []
@@ -33,7 +34,7 @@ export class SocketConnection {
             this.connectionProgress?.resolve()
             this.disconnectionProgress?.reject(new Error('onOpen'))
             pingTimer.setInterval(() => {
-                this.status === 'CONNECTED' && this.XAPI.Socket.send.ping(this.socketId)
+                this.status === 'CONNECTED' && this.loggedIn && this.XAPI.Socket.send.ping(this.socketId)
                   .catch(() => {})
             }, 14500)
             this.callListener('onOpen', [socketId, this])

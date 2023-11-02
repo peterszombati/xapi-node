@@ -146,7 +146,11 @@ export class XAPI extends Listener {
             let streamId
             try {
                 socketId = await this.Socket.connect(timeout)
-                const streamSessionId = (await this.Socket.send.login(socketId)).data.returnData.streamSessionId
+                const streamSessionId = (await this.Socket.send.login(socketId)).data?.returnData?.streamSessionId
+                if (!streamSessionId) {
+                    throw new Error('invalid streamSessionId')
+                }
+                this.Socket.connections[socketId].loggedIn = true
                 const result = await Promise.allSettled([
                     this.trading.positionsUpdated === null ? this.Socket.send.getTrades() : Promise.resolve(undefined),
                     this._serverTime === null ? this.Socket.send.getServerTime() : Promise.resolve(undefined),
