@@ -15,6 +15,8 @@ import {
 } from "../../interface/Definitions"
 import {getPositionType} from "../../utils/getPositionType"
 import {sleep} from "../../utils/sleep"
+import {Transaction} from "../Transaction"
+import {tradeTransactionResponse, tradeTransactionStatusResponse} from "../../interface/Response"
 
 export interface Orders {
     [order: number]: {
@@ -30,7 +32,7 @@ export class Trading {
     private XAPI: XAPI
     private _positions: TradePositions | null = null
     private _positionsUpdated: Time | null = null
-    public orders: Orders = {}
+    public pendingOrders: Orders = {}
 
     constructor(XAPI: XAPI, callListener: (listenerId: string, params: any[]) => void) {
         this.XAPI = XAPI
@@ -122,13 +124,13 @@ export class Trading {
         })
 
         this.XAPI.Socket.listen.tradeTransactionStatus((returnData, time, transaction) => {
-            const {resolve, reject} = this.orders[returnData.order] || {}
+            const {resolve, reject} = this.pendingOrders[returnData.order] || {}
             if (
                 resolve !== undefined &&
                 reject !== undefined &&
                 returnData.requestStatus !== REQUEST_STATUS_FIELD.PENDING
             ) {
-                delete this.orders[returnData.order]
+                delete this.pendingOrders[returnData.order]
                 if (returnData.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
                     resolve(returnData)
                 } else {
@@ -139,17 +141,17 @@ export class Trading {
 
         this.XAPI.Stream.listen.getTradeStatus((s, time) => {
             if (s.requestStatus !== REQUEST_STATUS_FIELD.PENDING) {
-                const { resolve, reject } = this.orders[s.order] || {}
+                const { resolve, reject } = this.pendingOrders[s.order] || {}
                 delete s.price
                 if (resolve !== undefined && reject !== undefined) {
-                    delete this.orders[s.order]
+                    delete this.pendingOrders[s.order]
                     if (s.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
                         resolve(s)
                     } else {
                         reject(s)
                     }
                 } else {
-                    this.orders[s.order] = {
+                    this.pendingOrders[s.order] = {
                         order: s.order,
                         reject: undefined,
                         resolve: undefined,
@@ -168,16 +170,32 @@ export class Trading {
             }
         })
 
+        const updateStuckOrders = () => {
+            if (Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status === 'CONNECTED')) {
+                Object.values(this.pendingOrders).forEach(order => {
+                    if (order.createdAt.elapsedMs() > 90000) {
+                        order?.reject(new Error('timeout: 90000ms'))
+                        return
+                    }
+                    if (order.createdAt.elapsedMs() > 5000 && order.resolve !== undefined && order.reject !== undefined) {
+                        this.XAPI.Socket.send.tradeTransactionStatus(order.order)
+                    }
+                })
+            }
+        }
+
         this.XAPI.Stream.onOpen(() => {
             if (t.isNull() && Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status !== 'DISCONNECTED')) {
                 t.setInterval(() => {
-                    if (Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status === 'CONNECTED')) {
-                        Object.values(this.orders).forEach(order => {
-                            if (order.time.elapsedMs() > 5000 && order.resolve !== undefined && order.reject !== undefined) {
-                                this.XAPI.Socket.send.tradeTransactionStatus(order.order)
-                            }
-                        })
-                    }
+                    updateStuckOrders()
+                }, 5100)
+            }
+        })
+
+        this.XAPI.Socket.onOpen(() => {
+            if (t.isNull() && Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status !== 'DISCONNECTED')) {
+                t.setInterval(() => {
+                    updateStuckOrders()
                 }, 5100)
             }
         })
@@ -301,7 +319,10 @@ export class Trading {
                     result: { error: { message: `position is not found by id (${order})` } },
                     state: 'end'
                 } })
-            return Promise.reject(new Error(`position is not found by id (${order})`))
+            return {
+                transaction: Promise.reject(new Error(`position is not found by id (${order})`)),
+                transactionStatus: Promise.reject(new Error(`position is not found by id (${order})`)),
+            }
         }
         const {cmd, symbol} = trade
         return this.tradeTransaction({
@@ -343,7 +364,22 @@ export class Trading {
 
     public tradeTransaction(
         tradeTransInfo: TRADE_TRANS_INFO | TRADE_TRANS_INFO_MODIFY | TRADE_TRANS_INFO_CLOSE | TRADE_TRANS_INFO_DELETE
-    ) {
+    ): {
+        transaction: Promise<{
+            transaction: Transaction
+            data: {
+                returnData: tradeTransactionResponse
+                jsonReceived: Time
+                json: string
+            }
+        }>
+        transactionStatus: Promise<tradeTransactionStatusResponse | {
+            customComment: string | null
+            message: string | null
+            order: number
+            requestStatus: REQUEST_STATUS_FIELD | null
+        }>
+    } {
         let position = undefined
         if (!tradeTransInfo.cmd || !tradeTransInfo.symbol) {
             if (tradeTransInfo.type === TYPE_FIELD.MODIFY) {
@@ -381,9 +417,9 @@ export class Trading {
             transactionStatus: new Promise(async (resolve, reject) => {
                 try {
                     const {data:{returnData,jsonReceived:time}} = await transaction
-                    const { data } = this.orders[returnData.order] || {}
-                    if (data === undefined || data === null) {
-                        this.orders[returnData.order] = {
+                    const { data } = this.pendingOrders[returnData.order] || {}
+                    if (!data) {
+                        this.pendingOrders[returnData.order] = {
                             order: returnData.order,
                             resolve,
                             reject,
@@ -393,23 +429,28 @@ export class Trading {
 
                         if (!this.XAPI.Stream.subscribes['TradeStatus']) {
                             await sleep(499)
-                            const r = (await this.XAPI.Socket.send.tradeTransactionStatus(returnData.order)).data
-                            const status = r.returnData.requestStatus
-                            if (status === REQUEST_STATUS_FIELD.ACCEPTED) {
-                                delete this.orders[returnData.order]
-                                resolve(r.returnData)
-                            } else if (status !== REQUEST_STATUS_FIELD.PENDING) {
-                                reject(r.returnData)
+                            let { reject, resolve } = this.pendingOrders[returnData.order]
+                            if (resolve !== undefined && reject !== undefined) {
+                                const r = (await this.XAPI.Socket.send.tradeTransactionStatus(returnData.order)).data
+                                const status = r.returnData.requestStatus
+                                if (status === REQUEST_STATUS_FIELD.ACCEPTED) {
+                                    delete this.pendingOrders[returnData.order]
+                                    resolve(r.returnData)
+                                } else if (status !== REQUEST_STATUS_FIELD.PENDING) {
+                                    delete this.pendingOrders[returnData.order]
+                                    reject(r.returnData)
+                                }
                             }
                         }
                     } else {
                         if (data.requestStatus === REQUEST_STATUS_FIELD.ACCEPTED) {
-                            delete this.orders[returnData.order]
+                            delete this.pendingOrders[returnData.order]
                             resolve(data)
                         } else if (data.requestStatus === REQUEST_STATUS_FIELD.PENDING) {
-                            this.orders[returnData.order].resolve = resolve
-                            this.orders[returnData.order].reject = reject
+                            this.pendingOrders[returnData.order].resolve = resolve
+                            this.pendingOrders[returnData.order].reject = reject
                         } else {
+                            delete this.pendingOrders[returnData.order]
                             reject(data)
                         }
                     }

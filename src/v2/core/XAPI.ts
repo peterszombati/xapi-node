@@ -226,6 +226,7 @@ export class XAPI extends Listener {
             volume: number
         }[]
         digits: number
+        json: string
     }> {
         return (
             startUTC !== null && ticks === null
@@ -250,6 +251,7 @@ export class XAPI extends Listener {
                 volume: candle.vol,
             })),
             digits: data.returnData.digits,
+            json: data.json,
         }))
     }
 
