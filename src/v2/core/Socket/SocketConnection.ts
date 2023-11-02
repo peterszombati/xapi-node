@@ -33,15 +33,8 @@ export class SocketConnection {
             this.connectionProgress?.resolve()
             this.disconnectionProgress?.reject(new Error('onOpen'))
             pingTimer.setInterval(() => {
-                const t = new Transaction({
-                    json: JSON.stringify({
-                        command: 'ping',
-                        customTag: `${'ping'}_${-1}`,
-                    })
-                })
-                this.send(t)
-                    .then(() => { t.resolve() })
-                    .catch((e) => { t.reject(e) })
+                this.status === 'CONNECTED' && this.XAPI.Socket.send.ping(this.socketId)
+                  .catch(() => {})
             }, 14500)
             this.callListener('onOpen', [socketId, this])
         })
@@ -114,15 +107,8 @@ export class SocketConnection {
         }).then((r) => {
             timer.clear()
             this.connectionProgress = null
-            const t = new Transaction({
-                json: JSON.stringify({
-                    command: 'ping',
-                    customTag: `${'ping'}_${-1}`,
-                })
-            })
-            this.send(t)
-                .then(() => { t.resolve() })
-                .catch((e) => { t.reject(e) })
+            this.XAPI.Socket.send.ping(this.socketId)
+                .catch(() => {})
             return r
         })
     }
