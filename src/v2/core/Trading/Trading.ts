@@ -373,11 +373,14 @@ export class Trading {
                     : undefined
                 : parseFloat(tradeTransInfo.volume.toFixed(2)),
         }
-        return this.XAPI.Socket.send
-            // @ts-ignore
-            .tradeTransaction(tradeTransInfoParams)
-            .then(({data:{returnData,jsonReceived:time}}) => {
-                return new Promise(async (resolve,reject) => {
+
+        // @ts-ignore
+        const transaction = this.XAPI.Socket.send.tradeTransaction(tradeTransInfoParams)
+        return {
+            transaction,
+            transactionStatus: new Promise(async (resolve, reject) => {
+                try {
+                    const {data:{returnData,jsonReceived:time}} = await transaction
                     const { data } = this.orders[returnData.order] || {}
                     if (data === undefined || data === null) {
                         this.orders[returnData.order] = {
@@ -410,7 +413,10 @@ export class Trading {
                             reject(data)
                         }
                     }
-                })
+                } catch (e) {
+                    reject(e)
+                }
             })
+        }
     }
 }

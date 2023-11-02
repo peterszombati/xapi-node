@@ -11,7 +11,7 @@ export function tradeTest(x: XAPI): Promise<void> {
         symbol,
         volume,
         limit: 0.0987
-      })
+      }).transactionStatus
       const position = x.trading.limitPositions?.find(i => i.symbol === symbol && i.volume >= volume && i.open_price === 0.0987)
       if (!position) {
         throw new Error('position not found;' + x.trading.openPositions)
