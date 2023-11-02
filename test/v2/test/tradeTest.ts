@@ -6,17 +6,18 @@ export function tradeTest(x: XAPI): Promise<void> {
 
   return new Promise(async (resolve, reject) => {
     try {
+      await x.Stream.subscribe.getTrades()
       await x.trading.buy({
         symbol,
         volume,
-        limit: 0.1
+        limit: 0.0987
       })
-      const position = x.trading.openPositions?.find(i => i.symbol === symbol && i.volume >= volume)
+      const position = x.trading.limitPositions?.find(i => i.symbol === symbol && i.volume >= volume && i.open_price === 0.0987)
       if (!position) {
         throw new Error('position not found;' + x.trading.openPositions)
       }
       await x.trading.close({ order: position.order })
-      const position1 = x.trading.openPositions?.find(i => i.symbol === symbol && i.volume >= volume)
+      const position1 = x.trading.limitPositions?.find(i => i.symbol === symbol && i.volume >= volume && i.open_price === 0.0987)
       if (position1) {
         throw new Error('position found after close;' + JSON.stringify(x.trading.openPositions?.map(i => i.valueOf())))
       }
