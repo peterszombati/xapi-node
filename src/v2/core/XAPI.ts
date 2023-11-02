@@ -34,6 +34,7 @@ export class XAPI extends Listener {
         ping: number
         received: Time
     } | null = null
+    public connections: Record<string /* socketId */, { socket: SocketConnection, stream: StreamConnection }> = {}
 
     constructor(config: XAPIConfig, logger?: Logger, counter?: Counter) {
         super()
@@ -72,6 +73,7 @@ export class XAPI extends Listener {
                 this.Stream.connections[connection.streamId].close()
             }
             delete this.Socket.connections[socketId]
+            delete this.connections[socketId]
         })
 
         this.Socket.listen.getServerTime((data, time, transaction) => {
@@ -176,6 +178,7 @@ export class XAPI extends Listener {
                 this.logger.debug({ source: 'src/v2/core/XAPI.ts', function: 'connect', data: {
                         created: { socketId, streamId }
                     } })
+                this.connections[socketId] = { socket: this.Socket.connections[socketId], stream: this.Stream.connections[socketId] }
                 resolve({socketId,streamId})
             } catch (e) {
                 reject(e)
@@ -204,11 +207,13 @@ export class XAPI extends Listener {
                                period = PERIOD_FIELD.PERIOD_M1,
                                ticks = null,
                                startUTC = null,
+                               socketId = undefined,
                            }: {
         symbol: string
         period?: PERIOD_FIELD | undefined
         ticks?: number | null
         startUTC?: number | null
+        socketId?: string | undefined
     }): Promise<{
         symbol: string
         period: PERIOD_FIELD
@@ -224,13 +229,14 @@ export class XAPI extends Listener {
     }> {
         return (
             startUTC !== null && ticks === null
-                ? this.Socket.send.getChartLastRequest(period, startUTC, symbol)
+                ? this.Socket.send.getChartLastRequest(period, startUTC, symbol, socketId)
                 : this.Socket.send.getChartRangeRequest(
                     0,
                     period,
                     startUTC !== null ? startUTC : new Date().getTime(),
                     symbol,
-                    ticks === null ? -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]] : ticks
+                    ticks === null ? -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]] : ticks,
+                    socketId,
                 )
         ).then(({data}) => ({
             symbol,

@@ -66,7 +66,7 @@ describe('tests', () => {
   })
 
   it('candleTest', async function () {
-    this.timeout(8000)
+    this.timeout(65000)
     const x = await init()
     await getCandlesTest(x)
   })

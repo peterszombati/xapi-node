@@ -102,7 +102,7 @@ export class SocketConnections extends Listener {
         return `${new Date().getTime()}${this.transactionIncrement.id}`
     }
 
-    private getSocketId(): string | undefined {
+    public getSocketId(): string | undefined {
         return Object.values(this.connections).map((connection) => {
             const times = connection.capacity.filter(i => i.elapsedMs() < 1500)
             return {
@@ -117,7 +117,7 @@ export class SocketConnections extends Listener {
         args: any = {},
         transactionId: string | null = null,
         priority = false,
-        socketId?: string,
+        socketId?: string | undefined,
         // @ts-ignore
     ): Promise<{
         transaction: Transaction

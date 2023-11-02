@@ -99,15 +99,15 @@ export class Socket extends SocketConnections {
     public send = {
         getAllSymbols: () => this.sendCommand<SYMBOL_RECORD[]>('getAllSymbols'),
         getCalendar: () => this.sendCommand<CALENDAR_RECORD[]>('getCalendar'),
-        getChartLastRequest: (period: PERIOD_FIELD, start: number, symbol: string) =>
+        getChartLastRequest: (period: PERIOD_FIELD, start: number, symbol: string, socketId: string | undefined = undefined) =>
             this.sendCommand<getChartRequestResponse>('getChartLastRequest', {
                 info: {
                     period,
                     start,
                     symbol,
                 },
-            }),
-        getChartRangeRequest: (end: number, period: PERIOD_FIELD, start: number, symbol: string, ticks = 0) =>
+            }, null, false, socketId),
+        getChartRangeRequest: (end: number, period: PERIOD_FIELD, start: number, symbol: string, ticks = 0, socketId: string | undefined = undefined) =>
             this.sendCommand<getChartRequestResponse>('getChartRangeRequest', {
                 info: {
                     end,
@@ -116,7 +116,7 @@ export class Socket extends SocketConnections {
                     symbol,
                     ticks,
                 },
-            }),
+            }, null, false, socketId),
         getCommissionDef: (symbol: string, volume: number) =>
             this.sendCommand<getCommissionDefResponse>('getCommissionDef', {
                 symbol,

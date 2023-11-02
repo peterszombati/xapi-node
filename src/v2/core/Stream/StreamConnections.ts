@@ -53,7 +53,7 @@ export class StreamConnections extends Listener {
         return streamId
     }
 
-    private getStreamId(command: string, completion: Record<string, string | number> = {}): string | undefined {
+    public getStreamId(command: string, completion: Record<string, string | number> = {}): string | undefined {
         if (this.subscribes[command]) {
             if (this.subscribes[command][JSON.stringify(completion)]) {
                 const streamIds = Object.keys(this.subscribes[command][JSON.stringify(completion)])
