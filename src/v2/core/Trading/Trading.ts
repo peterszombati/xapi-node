@@ -175,6 +175,7 @@ export class Trading {
                 Object.values(this.pendingOrders).forEach(order => {
                     if (order.createdAt.elapsedMs() > 90000) {
                         order?.reject(new Error('timeout: 90000ms'))
+                        delete this.pendingOrders[order.order]
                         return
                     }
                     if (order.createdAt.elapsedMs() > 5000 && order.resolve !== undefined && order.reject !== undefined) {
