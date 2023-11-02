@@ -429,8 +429,8 @@ export class Trading {
 
                         if (!this.XAPI.Stream.subscribes['TradeStatus']) {
                             await sleep(499)
-                            let { reject, resolve } = this.pendingOrders[returnData.order]
-                            if (resolve !== undefined && reject !== undefined) {
+                            let { reject: reject2, resolve: resolve2 } = this.pendingOrders[returnData.order]
+                            if (resolve2 !== undefined && reject2 !== undefined) {
                                 const r = (await this.XAPI.Socket.send.tradeTransactionStatus(returnData.order)).data
                                 const status = r.returnData.requestStatus
                                 if (status === REQUEST_STATUS_FIELD.ACCEPTED) {
