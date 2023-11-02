@@ -1,17 +1,12 @@
-import { parseLoginFile } from './parseLoginFile'
+import {parseLoginFile} from './parseLoginFile'
 import * as path from 'path'
-//import { tradeTest } from './test/tradeTest'
-import { connectionTest } from './test/connectionTest'
-//import { messageQueuStressTest } from './test/messageQueuStressTest'
-//import { subscribeTest } from './test/subscribeTest'
-//import { getCandlesTest } from './test/getCandlesTest'
-import {XAPI} from "../../src/v2/core/XAPI"
-import {tradeTest} from "./test/tradeTest";
-import {subscribeTest} from "./test/subscribeTest";
-import {getCandlesTest} from "./test/getCandlesTest";
-import {messageQueuStressTest} from "./test/messageQueuStressTest";
-import { Logger } from '../../src';
-import { Counter } from '../../src';
+import {connectionTest} from './test/connectionTest'
+import {XAPI} from '../../src/v2/core/XAPI'
+import {tradeTest} from './test/tradeTest'
+import {subscribeTest} from './test/subscribeTest'
+import {getCandlesTest} from './test/getCandlesTest'
+import {messageQueuStressTest} from './test/messageQueuStressTest'
+import {Counter, Logger} from '../../src'
 
 const jsonPath = path.join(process.cwd(), 'sensitive', 'sensitive-demo-login.json')
 /* sensitive/sensitive-demo-login.json
@@ -23,6 +18,7 @@ const jsonPath = path.join(process.cwd(), 'sensitive', 'sensitive-demo-login.jso
  */
 
 let x: XAPI | null = null
+
 async function init(): Promise<XAPI> {
   if (!x || Object.keys(x.Socket.connections).length === 0) {
     const login = parseLoginFile(jsonPath)
@@ -45,9 +41,9 @@ async function init(): Promise<XAPI> {
     })
     const c = new Counter()
     c.on({
-      callback: ({key,time,count}) => console.log(time.get().toISOString()+':'+key.join(':')+':'+count)
+      callback: ({key, time, count}) => console.log(time.get().toISOString() + ':' + key.join(':') + ':' + count)
     })
-    x = new XAPI({...login},l,c)
+    x = new XAPI({...login}, l, c)
     await x.connect()
   }
   return x
