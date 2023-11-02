@@ -108,8 +108,6 @@ export class SocketConnection {
         }).then((r) => {
             timer.clear()
             this.connectionProgress = null
-            this.XAPI.Socket.send.ping(this.socketId)
-                .catch(() => {})
             return r
         })
     }
