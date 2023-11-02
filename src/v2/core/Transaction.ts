@@ -24,7 +24,7 @@ export class Transaction<Init = Record<string | number, any>, State = Init | Rec
     }
 
     public setState(state: Init | State) {
-        this.state = {...this.state, state}
+        this.state = {...this.state, ...state}
     }
 
     public resolve(data?: any): Error | undefined | void {
