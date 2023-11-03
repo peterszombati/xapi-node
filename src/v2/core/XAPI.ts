@@ -261,13 +261,13 @@ export class XAPI extends Listener {
             } })
         const promiseList: Promise<any>[] = []
         if (socketId) {
-            for (const i of Object.entries(this.Socket.connections)) {
-                if (i[1].socketId === socketId) {
-                    promiseList.push(i[1].close())
-                    if (i[1].streamId) {
-                        for (const k of Object.entries(this.Stream.connections)) {
-                            if (k[1].streamId === i[1].streamId) {
-                                promiseList.push(k[1].close())
+            for (const i of Object.values(this.Socket.connections)) {
+                if (i.socketId === socketId) {
+                    promiseList.push(i.close())
+                    if (i.streamId) {
+                        for (const k of Object.values(this.Stream.connections)) {
+                            if (k.streamId === i.streamId) {
+                                promiseList.push(k.close())
                                 break
                             }
                         }
