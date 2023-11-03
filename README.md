@@ -179,7 +179,31 @@ EURUSD: 1.10931 | 3500000 volume | 4 level
   })
 })()
 ```
-#### How to use other log modules than Logger4
+#### How to use logger
 ```ts
-// TODO
+import {Logger,XAPI} from 'xapi-node'
+
+const l = new Logger()
+l.on({
+  type: 'debug',
+  callback: data => console.log(data)
+})
+l.on({
+  type: 'transaction',
+  callback: data => console.log(data)
+})
+l.on({
+  type: 'error',
+  callback: data => console.log(data)
+})
+l.on({
+  type: 'info',
+  callback: data => console.log(data)
+})
+
+const x = new XAPI({
+  accountId: '(xStation5) accountID',
+  password: '(xStation5) password',
+  type: 'real' // or demo
+}, l)
 ```
