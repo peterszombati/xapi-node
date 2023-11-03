@@ -36,7 +36,6 @@ export class SocketConnections extends Listener {
                         json: params.json,
                     })
                 } else {
-                    this.XAPI.counter.count(['data', 'SocketConnections', 'incomingData'], params.json.length)
                     elapsedMs !== undefined && this.XAPI.counter.count(['data', 'SocketConnection', 'responseTime', 'handleMessage',
                           transaction.state.command || 'undefined_command'],
                       elapsedMs
@@ -89,7 +88,7 @@ export class SocketConnections extends Listener {
         const socketId = `${new Date().getTime()}${this.socketIdIncrement.id}`
         this.connections[socketId] = new SocketConnection(
           this.url,
-          (listenerId: string, params?: any[]) => this.fetchListener(listenerId, params),
+          (listenerId: string, params?: any[]) => this.callListener(listenerId, params),
           socketId,
           this.XAPI
         )

@@ -15,12 +15,12 @@ export class StreamConnection {
     public streamId: string
     private queue: { transaction: Transaction }[] = []
     private queueTimer: Timer = new Timer()
-    private callListener: (listenerId: string, params?: any[]) => any[]
+    private callListener: (listenerId: string, params?: any[]) => void
     private connectionProgress: Transaction | null = null
     private disconnectionProgress: Transaction | null = null
     private XAPI: XAPI
 
-    constructor(url: string, session: string, callListener: (listenerId: string, params?: any[]) => any[], streamId: string, socketId: string, XAPI: XAPI) {
+    constructor(url: string, session: string, callListener: (listenerId: string, params?: any[]) => void, streamId: string, socketId: string, XAPI: XAPI) {
         this.session = session
         this.socketId = socketId
         this.streamId = streamId
@@ -52,11 +52,7 @@ export class StreamConnection {
                 const message = JSON.parse(json.toString().trim())
                 this.XAPI.counter.count(['data', 'StreamConnection', 'incomingData'], json.length)
 
-                try {
-                    this.callListener(`command_${message.command}`, [message.data, new Time(), json, streamId])
-                } catch (e) {
-                    console.error(e)
-                }
+                this.callListener(`command_${message.command}`, [message.data, new Time(), json, streamId])
             } catch (e) {
                 this.XAPI.counter.count(['error', 'StreamConnection', 'handleMessage'])
                 this.callListener(`handleMessage`, [{error: e, time: new Time(), json, streamId}])

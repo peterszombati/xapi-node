@@ -17,12 +17,12 @@ export class SocketConnection {
     private queue: { transaction: Transaction, promise: PromiseObject<any, any> }[] = []
     private queueTimer: Timer = new Timer()
     protected WebSocket: WebSocketWrapper
-    private callListener: (listenerId: string, params?: any[]) => any[]
+    private callListener: (listenerId: string, params?: any[]) => void
     private connectionProgress: Transaction | null = null
     private disconnectionProgress: Transaction | null = null
     private XAPI: XAPI
 
-    constructor(url: string, callListener: (listenerId: string, params?: any[]) => any[], socketId: string, XAPI: XAPI) {
+    constructor(url: string, callListener: (listenerId: string, params?: any[]) => void, socketId: string, XAPI: XAPI) {
         this.socketId = socketId
         this.callListener = callListener
         this.XAPI = XAPI
@@ -51,13 +51,11 @@ export class SocketConnection {
             this.lastReceivedMessage = new Time()
             try {
                 const message = JSON.parse(json.toString().trim())
+                this.XAPI.counter.count(['data', 'SocketConnection', 'incomingData'], json.length)
 
-                try {
-                    this.handleMessage(message, new Time(), json, socketId)
-                } catch (e) {
-                    console.error(e)
-                }
+                this.handleMessage(message, new Time(), json, socketId)
             } catch (e) {
+                this.XAPI.counter.count(['error', 'SocketConnection', 'handleMessage'])
                 this.callListener('handleMessage', [{
                     command: null,
                     error: e,

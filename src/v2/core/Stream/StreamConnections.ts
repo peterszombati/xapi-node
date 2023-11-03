@@ -48,7 +48,7 @@ export class StreamConnections extends Listener {
     streamIdIncrement = new Increment()
     public async connect(timeoutMs: number, session: string, socketId: string): Promise<string> {
         const streamId = `${new Date().getTime()}${this.streamIdIncrement.id}`
-        this.connections[streamId] = new StreamConnection(this.url, session, (listenerId: string, params?: any[]) => this.fetchListener(listenerId, params), streamId, socketId, this.XAPI)
+        this.connections[streamId] = new StreamConnection(this.url, session, (listenerId: string, params?: any[]) => this.callListener(listenerId, params), streamId, socketId, this.XAPI)
         await this.connections[streamId].connect(timeoutMs)
         return streamId
     }
