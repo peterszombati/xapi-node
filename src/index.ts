@@ -89,7 +89,7 @@ export {
   errorCode,
 }
 
-export { parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, LimitPosition, TradeRecord, Logger, Counter }
+export { XAPI, parseJsonLogin, Time, Timer, TradeStatus, ListenerChild, OpenPosition, LimitPosition, TradeRecord, Logger, Counter }
 
 export function getContractValue({
   price,
