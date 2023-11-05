@@ -286,7 +286,7 @@ export class Trading {
         const offset: undefined | number = modify.offset === null ? undefined : (modify.offset === undefined ? position.offset : modify.offset)
         const volume: number = modify.volume === undefined ? position.volume : modify.volume
         const expiration: Date | number | undefined | null= modify.expiration === undefined
-            ? (position.position_type === PositionType.limit ? position.expiration : new Date().getTime() + 10000) // TODO serverTime ?
+            ? (position.position_type === PositionType.limit ? position.expiration : (this.XAPI.Time?.getTime() || new Date().getTime()) + 10000)
             : (modify.expiration === null ? undefined : modify.expiration)
         return this.tradeTransaction({
             cmd: position.cmd,
@@ -332,7 +332,7 @@ export class Trading {
             tp: 0,
             sl: 0,
             offset: 0,
-            expiration: expiration === undefined ? new Date().getTime() + 10000 : expiration, // TODO xApi server time ?
+            expiration: expiration === undefined ? (this.XAPI.Time?.getTime() || new Date().getTime()) + 10000 : expiration,
             order,
             price: 1.0,
             symbol,

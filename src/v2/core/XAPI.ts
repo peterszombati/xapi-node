@@ -76,9 +76,16 @@ export class XAPI extends Listener {
             delete this.connections[socketId]
         })
 
-        this.Socket.listen.getServerTime((data, time, transaction) => {
+        this.Socket.listen.getServerTime((data, time, transaction, jsonString, socketId) => {
             if (transaction?.state?.sent) {
                 const dif = time.getDifference(transaction.state.sent)
+                if (data.time % 1 !== 0 || data.time < 1699184959218) {
+                    this.logger.warn({ source: 'src/v2/core/XAPI.ts', function: 'constructor', data: {
+                            'this.Socket.listen.getServerTime': { socketId },
+                            message: 'invalid data.time, this._serverTime variable change skipped'
+                        } })
+                    return
+                }
                 this._serverTime = {
                     timestamp: data.time,
                     ping: dif,
@@ -234,7 +241,7 @@ export class XAPI extends Listener {
                 : this.Socket.send.getChartRangeRequest(
                     0,
                     period,
-                    startUTC !== null ? startUTC : new Date().getTime(),
+                    startUTC !== null ? startUTC : (this.Time?.getTime() || new Date().getTime()),
                     symbol,
                     ticks === null ? -CHART_RATE_LIMIT_BY_PERIOD[PERIOD_FIELD[period]] : ticks,
                     socketId,
