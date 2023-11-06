@@ -170,25 +170,36 @@ export class Trading {
             }
         })
 
-        const updateStuckOrders = () => {
+        const updateStuckOrders = async () => {
+            const start = new Time()
             if (Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status === 'CONNECTED')) {
-                Object.values(this.pendingOrders).forEach(order => {
+                for (const order of Object.values(this.pendingOrders)) {
                     if (order.createdAt.elapsedMs() > 90000) {
                         order?.reject(new Error('timeout: 90000ms'))
                         delete this.pendingOrders[order.order]
                         return
                     }
                     if (order.createdAt.elapsedMs() > 5000 && order.resolve !== undefined && order.reject !== undefined) {
-                        this.XAPI.Socket.send.tradeTransactionStatus(order.order)
+                        await this.XAPI.Socket.send.tradeTransactionStatus(order.order)
                     }
-                })
+                    if (start.elapsedMs() > 5000) {
+                        return
+                    }
+                }
             }
         }
 
         this.XAPI.Stream.onOpen(() => {
             if (t.isNull() && Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status !== 'DISCONNECTED')) {
                 t.setInterval(() => {
-                    updateStuckOrders()
+                    updateStuckOrders().catch(error => {
+                        this.XAPI.logger.warn({
+                            source: 'src/v2/core/Trading/Trading.ts',
+                            function: 'updateStuckOrders',
+                            data: {
+                                error
+                            }})
+                    })
                 }, 5100)
             }
         })
@@ -196,7 +207,14 @@ export class Trading {
         this.XAPI.Socket.onOpen(() => {
             if (t.isNull() && Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status !== 'DISCONNECTED')) {
                 t.setInterval(() => {
-                    updateStuckOrders()
+                    updateStuckOrders().catch(error => {
+                        this.XAPI.logger.warn({
+                            source: 'src/v2/core/Trading/Trading.ts',
+                            function: 'updateStuckOrders',
+                            data: {
+                                error
+                            }})
+                    })
                 }, 5100)
             }
         })
