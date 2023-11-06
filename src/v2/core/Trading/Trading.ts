@@ -17,6 +17,7 @@ import {getPositionType} from "../../utils/getPositionType"
 import {sleep} from "../../utils/sleep"
 import {Transaction} from "../Transaction"
 import {tradeTransactionResponse, tradeTransactionStatusResponse} from "../../interface/Response"
+import {isEmpty} from "../../utils/Object";
 
 export interface Orders {
     [order: number]: {
@@ -171,6 +172,9 @@ export class Trading {
         })
 
         const updateStuckOrders = async () => {
+            if (isEmpty(this.pendingOrders)) {
+                return
+            }
             const start = new Time()
             if (Object.values(this.XAPI.Socket.connections).some((c) => c.lastReceivedMessage !== null && c.status === 'CONNECTED')) {
                 for (const order of Object.values(this.pendingOrders)) {
