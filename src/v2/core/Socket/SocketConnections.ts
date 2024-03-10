@@ -134,7 +134,7 @@ export class SocketConnections extends Listener {
             socketId = this.getSocketId()
         }
 
-        this.transactions[transactionId] = new Transaction({
+        const t = this.transactions[transactionId] = new Transaction({
             transactionId,
             command,
             json: JSON.stringify({
@@ -170,6 +170,6 @@ export class SocketConnections extends Listener {
             delete this.transactions[transactionId]
         }
 
-        return this.transactions[transactionId].promise
+        return t.promise
     }
 }
