@@ -40,25 +40,6 @@ const x = new XAPI({
   console.error(e)
 })
 ```
-#### Authentication only for XTB accounts
-```ts
-// TypeScript
-import XAPI from 'xapi-node'
-
-const x = new XAPI({
-    accountId: '(xStation5) accountID',
-    password: '(xStation5) password',
-    host: 'ws.xtb.com', // only for XTB accounts
-    type: 'real' // or demo
-})
-
-(async () => {
-  await x.connect()
-  x.disconnect().then(() => console.log('Disconnected'))
-})().catch((e) => {
-  console.error(e)
-})
-```
 
 #### placing buy limit on BITCOIN [CFD]
 ```ts
